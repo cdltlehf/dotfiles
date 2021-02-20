@@ -187,6 +187,10 @@ defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 # Photos
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 
+# iTerm 2
+open "${HOME}/init/iterm/Dracula.itermcolors"
+defaults write com.googlecode.iterm2 PromptOnQuit -bool false
+
 # Kill affected applications
 for app in "Activity Monitor" \
 	"cfprefsd" \
