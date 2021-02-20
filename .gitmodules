@@ -1,0 +1,3 @@
+[submodule "init/iterm"]
+	path = init/iterm
+	url = https://github.com/dracula/iterm/tree/3844329c0a2a058dbca956ba44e98c20bec7a17e
