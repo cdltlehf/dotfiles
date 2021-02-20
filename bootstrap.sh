@@ -8,7 +8,7 @@ fi
 cd "$(dirname "${BASH_SOURCE}")";
 xcode-select --install
 
-git pull origin main;
+git pull origin main
 git config --global user.email "28900401+cdltlehf@users.noreply.github.com"
 git config --global user.name "Sicheol Sung"
 
