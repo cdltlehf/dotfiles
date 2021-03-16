@@ -6,6 +6,7 @@ if &g:compatible
 endif
 
 syntax enable
+let g:dracula_italic=0
 colorscheme dracula
 
 set termguicolors
@@ -14,6 +15,12 @@ let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 
 nnoremap [b :bprev<CR>
 nnoremap ]b :bnext<CR>
+
+set backspace=indent,eol,start
+set smartindent
+set expandtab
+set tabstop=4
+set shiftwidth=4
 
 " set laststatus=2
 " set showtabline=2
@@ -78,5 +85,6 @@ augroup filetype=vim
 augroup END
 
 set foldlevelstart=0
+nnoremap <leader>g :silent execute "grep -R" . shellescape(expand("<cWORD>")) . " ."<cr>:copen 5<cr>
 
-" }}}
+
