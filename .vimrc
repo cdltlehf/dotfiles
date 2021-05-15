@@ -22,10 +22,12 @@ set expandtab
 set tabstop=4
 set shiftwidth=4
 
+set nowrap
+
 " set laststatus=2
 " set showtabline=2
 
-" Learn Vimscript the Hard Way {{{
+"" Learn Vimscript the Hard Way
 " echo ">^.^<"
 
 set number
@@ -87,4 +89,7 @@ augroup END
 set foldlevelstart=0
 nnoremap <leader>g :silent execute "grep -R" . shellescape(expand("<cWORD>")) . " ."<cr>:copen 5<cr>
 
+"
 
+nnoremap <Space>/ :<C-u>nohlsearch<CR>
+set hidden
