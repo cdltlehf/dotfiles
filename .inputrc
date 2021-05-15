@@ -1,0 +1,17 @@
+# vi mode
+set editing-mode vi
+set show-mode-in-prompt on
+set keyseq-timeout 0
+
+# set vi-ins-mode-string "[I]"
+# set vi-cmd-mode-string "[N]"
+
+set colored-stats On
+set completion-ignore-case On
+set completion-prefix-display-length 3
+set show-all-if-ambiguous On
+set show-all-if-unmodified On
+set visible-stats On
+
+set bell-style visible
+
