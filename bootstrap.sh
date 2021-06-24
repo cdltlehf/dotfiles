@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-DIR=$(dirname $0)
-echo $DIR
+SCRIPTPATH="$(cd -- "$(dirname $0)" ; pwd -P )"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     cd "$(dirname "${BASH_SOURCE}")";
@@ -33,16 +32,23 @@ fi;
 
 # vim dracula
 mkdir -p ~/.vim/pack/themes/start
-git clone https://github.com/dracula/vim.git ~/.vim/pack/themes/start/dracula
+if [[ ! -d "$HOME/.vim/pack/themes/start/dracula/" ]]; then
+    git clone https://github.com/dracula/vim.git ~/.vim/pack/themes/start/dracula
+fi;
 
-for file in $DIR/.*; do
-    # echo $file 
-    # echo "$HOME/$(basename $file)"
-    ln -is $file "$HOME/$(basename $file)"
+for file in $SCRIPTPATH/.*; do
+    if [[ -f $file ]]; then
+        if [[ $(basename $file) == ".gitmodules" ]]; then 
+        continue 
+    fi;
+        ln -is "$SCRIPTPATH/$(basename $file)" "$HOME/$(basename $file)"
+        # echo "$SCRIPTPATH/$(basename $file)" 
+        # echo "$HOME/$(basename $file)"
+    fi;
 done;
 
 # tpm
-if [[ ! -d ~/.tmux/plugins/tpm ]]; then 
+if [[ ! -d $HOME/.tmux/plugins/tpm/ ]]; then 
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi;
 
