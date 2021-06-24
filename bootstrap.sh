@@ -1,31 +1,48 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "${BASH_SOURCE}")";
-xcode-select --install
+DIR=$(dirname $0)
+echo $DIR
 
-git pull origin main
-git config --global user.email "cdltlehf@naver.com"
-git config --golobal user.name "sungsicheol"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    cd "$(dirname "${BASH_SOURCE}")";
+    xcode-select --install
 
-# brew
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # brew
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-brew update
-brew upgrade
-brew bundle
-brew cleanup
+    brew update
+    brew upgrade
+    brew bundle
+    brew cleanup
 
-# oh-my-zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    # oh-my-zsh
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-if ! fgrep -q "$(brew --prefix)/bin/zsh" /etc/shells; then
-  echo "Run follow commands";
-  echo "echo $(brew --prefix)/bin/zsh | sudo tee -a /etc/shells";
-  echo "chsh -s $(brew --prefix)/bin/zsh";
-else
-  chsh -s "$(brew --prefix)/bin/zsh";
+    if ! fgrep -q "$(brew --prefix)/bin/zsh" /etc/shells; then
+        echo "Run follow commands";
+        echo "echo $(brew --prefix)/bin/zsh | sudo tee -a /etc/shells";
+        echo "chsh -s $(brew --prefix)/bin/zsh";
+    else
+        chsh -s "$(brew --prefix)/bin/zsh";
+    fi;
 fi;
 
+# git pull origin main
+# git config --global user.email "cdltlehf@naver.com"
+# git config --golobal user.name "sungsicheol"
+
+# vim dracula
+mkdir -p ~/.vim/pack/themes/start
+git clone https://github.com/dracula/vim.git ~/.vim/pack/themes/start/dracula
+
+for file in $DIR/.*; do
+    # echo $file 
+    # echo "$HOME/$(basename $file)"
+    ln -is $file "$HOME/$(basename $file)"
+done;
+
 # tpm
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+if [[ ! -d ~/.tmux/plugins/tpm ]]; then 
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi;
 

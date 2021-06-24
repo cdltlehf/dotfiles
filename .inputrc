@@ -11,7 +11,7 @@ set completion-ignore-case On
 set completion-prefix-display-length 3
 set show-all-if-ambiguous On
 set show-all-if-unmodified On
-set visible-stats On
+# set visible-stats On
 
 set bell-style visible
 

@@ -34,7 +34,14 @@ nvidia-ps() {
     unset _pids
 }
 
+# alias podman to docker
+if ! command docker >/dev/null; then
+    alias docker='podman'
+    alias docker-run='podman-run'
+fi
+
 # for safety...
 alias mv='mv -i'
 alias rm='rm -i'
 alias cp='cp -i'
+
