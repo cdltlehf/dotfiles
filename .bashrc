@@ -35,7 +35,7 @@ nvidia-ps() {
 }
 
 # alias podman to docker
-if ! command docker >/dev/null; then
+if ! command docker 2> /dev/null; then
     alias docker='podman'
     alias docker-run='podman-run'
 fi
