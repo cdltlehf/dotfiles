@@ -1,3 +1,18 @@
+" Dracula Color Pallette
+" https://spec.draculatheme.com/
+let background='#282a36'
+let foreground='#f8f8f2'
+let selection='#44475a'
+let comment='#6272a4'
+
+let red='#ff5555'
+let orange='#ffb86c'
+let yellow='#f1fa8c'
+let green='#50fa7b'
+let purple='#bd93f9'
+let cyan='#8be9fd'
+let pink='#ff79c6'
+
 " settings from tpope/vim-sensible
 if has('autocmd')
     filetype plugin indent on
@@ -83,7 +98,84 @@ set termguicolors
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 
-" personal setting
+" tab (buffer)  line
+set showtabline=1
+
+" status line
+function! StatusLineMode()
+    let l:mode = mode(1)
+    if l:mode ==# 'n' "Normal, Terminal-Normal
+        highlight link StatusLineMode StatusLineNormal
+        return 'NORMAL'
+    elseif l:mode ==# 'no' "Operator-pending
+    elseif l:mode ==# 'v' "Visual by character
+        highlight link StatusLineMode StatusLineVisual
+        return 'VISUAL'
+    elseif l:mode ==# 'V' "Visual by line
+        highlight link StatusLineMode StatusLineVisual
+        return 'VISUAL LINE'
+    " elseif l:mode ==# 'CTRL-V' "Visual blockwise
+    elseif l:mode ==# "\<C-V>" "Visual blockwise
+        highlight link StatusLineMode StatusLineVisual
+        return 'VISUAL BLOCK'
+    elseif l:mode ==# 's' "Select by character
+    elseif l:mode ==# 'S' "Select by line
+    " elseif l:mode ==# 'CTRL-S' "Select blockwise
+    elseif l:mode ==# '\<C-S>' "Select blockwise
+    elseif l:mode ==# 'i' "Insert
+        highlight link StatusLineMode StatusLineInsert
+        return 'INSERT'
+    elseif l:mode ==# 'ic' "Insert mode completion |compl-generic|
+        highlight link StatusLineMode StatusLineInsert
+        return 'INSERT'
+    elseif l:mode ==# 'ix' "Insert mode |i_CTRL-X| completion
+        highlight link StatusLineMode StatusLineInsert
+        return 'INSERT*'
+    elseif l:mode ==# 'R' "Replace |R|
+        highlight link StatusLineMode StatusLineInsert
+        return 'REPLACE'
+    elseif l:mode ==# 'Rc' "Replace mode completion |compl-generic|
+        highlight link StatusLineMode StatusLineInsert
+        return 'REPLACE*'
+    elseif l:mode ==# 'Rv' "Virtual Replace |gR|
+    elseif l:mode ==# 'Rx' "Replace mode |i_CTRL-X| completion
+    elseif l:mode ==# 'c' "Command-line editing
+        highlight link StatusLineMode StatusLineCommand
+        return 'SEARCH'
+    elseif l:mode ==# 'cv' "Vim Ex mode |gQ|
+    elseif l:mode ==# 'ce' "Normal Ex mode |Q|
+    elseif l:mode ==# 'r' "Hit-enter prompt
+    elseif l:mode ==# 'rm' "The -- more -- prompt
+    elseif l:mode ==# 'r?' "A |:confirm| query of some sort
+    elseif l:mode ==# '!' "Shell or external command is executing
+    elseif l:mode ==# 't' "Terminal-Job mode: keys go to the job
+    endif
+
+    highlight link StatusLineMode StatusLineUnknown
+    return 'UNKNOWN('.l:mode.')'
+endfunction
+
+augroup statusline_highlight
+    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineNormal guibg=' . green . ' guifg=' . background
+    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineInsert guibg=' . yellow . ' guifg=' . background
+    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineVisual guibg=' . purple . ' guifg=' . background
+    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineCommand guibg=' . cyan . ' guifg=' . background
+    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineUnknown guibg=' . red . ' guifg=' . background
+
+    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineRight1 guibg=' . cyan . ' guifg=' . background
+    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineRight2 guibg=' . orange . ' guifg=' . background
+
+    autocmd ColorScheme,VimEnter * execute 'highlight StatusLine guibg=' . selection . ' guifg=' . foreground
+augroup END
+
+set laststatus=2
+set statusline=%#StatusLineMode#\ %{StatusLineMode()}\ %#StatusLine#\ 
+set statusline+=%f%m\ 
+set statusline+=%=
+" set statusline+=%#StatusLineRight1#\ %3.P\ 
+set statusline+=%#StatusLineRight2#\ %3.p%%\ \|\ %4.l/%L\ :\ %2.c\ 
+
+" miscellaneous settings
 augroup commentmap
     autocmd!
     autocmd FileType javascript nnoremap <Leader>c<Space> I// <ESC>$
@@ -103,4 +195,15 @@ set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
 set showbreak=>\ 
 set list listchars=tab:\|\ ,trail:·,nbsp:~,extends:>,precedes:<
 
-inoremap jj <ESC>
+" echo functions
+function! EchoWarning(msg)
+    echohl ErrorMsg
+    echo a:msg
+    echohl None
+endfunction
+
+inoremap jj <ESC>dsf
+inoremap <ESC> <ESC>:call EchoWarning("Train yourself to use CTRL-[ (or jj)")<CR>
+nnoremap <Leader>R :source ~/.vimrc<CR>:echo "source ~/.vimrc done"<CR>
+
+
