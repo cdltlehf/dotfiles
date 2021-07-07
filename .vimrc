@@ -28,37 +28,42 @@ set smarttab
 
 " set nrformats-=octal
 
-if !has('nvim') && &ttimeoutlen == -1
-    set ttimeout
-    set ttimeoutlen=100
-endif
+" if !has('nvim') && &ttimeoutlen == -1
+    " set ttimeout
+    " set ttimeoutlen=100
+" endif
 
 set incsearch
 
 " :nohlsearch<C-L>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 nnoremap <silent> <C-L> :nohlsearch<CR>
 
-if !&scrolloff
-    set scrolloff=1
-endif
-if !&sidescrolloff
-    set sidescrolloff=5
-endif
-set display+=lastline
+" if !&scrolloff
+    " set scrolloff=1
+" endif
+" if !&sidescrolloff
+    " set sidescrolloff=5
+" endif
+" set display+=lastline
 
 if &encoding==# 'latin1' && has('gui_running')
     set encoding=utf-8
 endif
 
 " settings from tpopte/vim-unimpaired
+" argument
 nnoremap [a :prev<CR>
 nnoremap ]a :next<CR>
+" buffer
 nnoremap [b :bprev<CR>
 nnoremap ]b :bnext<CR>
-nnoremap [l :lprev<CR>
-nnoremap ]l :lnext<CR>
+" location list
+" nnoremap [l :lprev<CR>
+" nnoremap ]l :lnext<CR>
+" quickfix
 nnoremap [q :cprev<CR>
 nnoremap ]q :cnext<CR>
+" tab page
 nnoremap [t :tprev<CR>
 nnoremap ]t :tnext<CR>
 
@@ -72,14 +77,14 @@ nnoremap ]oh :set<Space>nohlsearch<CR>
 nnoremap [oi :set<Space>ignorecase<CR>
 nnoremap ]oi :set<Space>noignorecase<CR>
 
-nnoremap [ol :setlocal<Space>list<CR>
-nnoremap ]ol :setlocal<Space>nolist<CR>
+" nnoremap [ol :setlocal<Space>list<CR>
+" nnoremap ]ol :setlocal<Space>nolist<CR>
 nnoremap [on :setlocal<Space>number<CR>
 nnoremap ]on :setlocal<Space>nonumber<CR>
 nnoremap [or :setlocal<Space>relativenumber<CR>
 nnoremap ]or :setlocal<Space>norelativenumber<CR>
-nnoremap [os :setlocal<Space>spell<CR>
-nnoremap ]os :setlocal<Space>nospell<CR>
+" nnoremap [os :setlocal<Space>spell<CR>
+" nnoremap ]os :setlocal<Space>nospell<CR>
 nnoremap [ow :setlocal<Space>wrap<CR>
 nnoremap ]ow :setlocal<Space>nowrap<CR>
 
@@ -98,8 +103,45 @@ set termguicolors
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 
-" tab (buffer)  line
-set showtabline=1
+" tab (buffer) line
+augroup tabline_highlight
+    autocmd!
+    autocmd ColorScheme,VimEnter * execute 'highlight TabLineSelNR guibg=' . background . ' guifg=' . green
+    autocmd ColorScheme,VimEnter * execute 'highlight TabLineSel guibg=' . background . ' guifg=' . foreground
+    autocmd ColorScheme,VimEnter * execute 'highlight TabLine gui=NONE cterm=NONE guibg=' . selection . ' guifg=' . foreground
+    autocmd ColorScheme,VimEnter * execute 'highlight TabLineFill guibg=' . selection . ' guifg=' . selection
+augroup END
+
+function! TabLine()
+    if tabpagenr('$') == 1 
+        return BufLine()
+    else 
+        return ''
+    endif
+endfunction
+
+function! BufLine()
+    let s = ''
+    for i in filter(range(1, bufnr('$')), 'buflisted(v:val)')
+        if i == bufnr('%')
+            let s .= '%#TabLineSelNR# '
+            let s .= i
+            let s .= ' %#TabLineSel#'
+        else
+            let s .= '%#TabLine# '
+            let s .= i
+            let s .= ' '
+        endif
+        let s .= '%{fnamemodify(bufname(' . i . '), ":~:.")}'
+        let s .= '%{getbufvar(' . i . ', "&nomodifiable") ? "[-]" : (getbufinfo(' . i . ')[0].changed ? "[+]" : "")}'
+        let s .= ' '
+    endfor
+    let s .= '%#TabLineFill#'
+    return s
+endfunction
+
+set showtabline=2
+set tabline=%!TabLine()
 
 " status line
 function! StatusLineMode()
@@ -152,10 +194,11 @@ function! StatusLineMode()
     endif
 
     highlight link StatusLineMode StatusLineUnknown
-    return 'UNKNOWN('.l:mode.')'
+    return 'UNKNOWN(' . l:mode . ')'
 endfunction
 
 augroup statusline_highlight
+    autocmd!
     autocmd ColorScheme,VimEnter * execute 'highlight StatusLineNormal guibg=' . green . ' guifg=' . background
     autocmd ColorScheme,VimEnter * execute 'highlight StatusLineInsert guibg=' . yellow . ' guifg=' . background
     autocmd ColorScheme,VimEnter * execute 'highlight StatusLineVisual guibg=' . purple . ' guifg=' . background
@@ -202,8 +245,9 @@ function! EchoWarning(msg)
     echohl None
 endfunction
 
-inoremap jj <ESC>dsf
-inoremap <ESC> <ESC>:call EchoWarning("Train yourself to use CTRL-[ (or jj)")<CR>
-nnoremap <Leader>R :source ~/.vimrc<CR>:echo "source ~/.vimrc done"<CR>
+inoremap jj <ESC>
+" inoremap <ESC> <ESC>:call EchoWarning("Train yourself to use CTRL-[ (or jj)")<CR>
+nnoremap <Leader>r<Space> :source ~/.vimrc<CR>:echo "source ~/.vimrc done"<CR>
+nnoremap <Leader>b<Space> :ls <CR>:b<Space>
 
 
