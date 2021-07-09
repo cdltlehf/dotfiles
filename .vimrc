@@ -67,7 +67,8 @@ nnoremap ]q :cnext<CR>
 nnoremap [t :tprev<CR>
 nnoremap ]t :tnext<CR>
 
-nnoremap [<Space> O<ESC>j<C-e>
+
+nnoremap [<Space> O<ESC>j<C-E>
 nnoremap ]<Space> o<ESC>k
 nnoremap [e ddkP
 nnoremap ]e ddp
@@ -106,10 +107,10 @@ let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 " tab (buffer) line
 augroup tabline_highlight
     autocmd!
-    autocmd ColorScheme,VimEnter * execute 'highlight TabLineSelNR guibg=' . background . ' guifg=' . green
-    autocmd ColorScheme,VimEnter * execute 'highlight TabLineSel guibg=' . background . ' guifg=' . foreground
-    autocmd ColorScheme,VimEnter * execute 'highlight TabLine gui=NONE cterm=NONE guibg=' . selection . ' guifg=' . foreground
-    autocmd ColorScheme,VimEnter * execute 'highlight TabLineFill guibg=' . selection . ' guifg=' . selection
+    autocmd ColorScheme * execute 'highlight TabLineSelNR guibg=' . background . ' guifg=' . green
+    autocmd ColorScheme * execute 'highlight TabLineSel guibg=' . background . ' guifg=' . foreground
+    autocmd ColorScheme * execute 'highlight TabLine gui=NONE cterm=NONE guibg=' . selection . ' guifg=' . foreground
+    autocmd ColorScheme * execute 'highlight TabLineFill guibg=' . selection . ' guifg=' . selection
 augroup END
 
 function! TabLine()
@@ -146,10 +147,14 @@ set tabline=%!TabLine()
 " status line
 function! StatusLineMode()
     let l:mode = mode(1)
+
+    " Normal mode
     if l:mode ==# 'n' "Normal, Terminal-Normal
         highlight link StatusLineMode StatusLineNormal
         return 'NORMAL'
     elseif l:mode ==# 'no' "Operator-pending
+
+    " Visual mode
     elseif l:mode ==# 'v' "Visual by character
         highlight link StatusLineMode StatusLineVisual
         return 'VISUAL'
@@ -160,10 +165,14 @@ function! StatusLineMode()
     elseif l:mode ==# "\<C-V>" "Visual blockwise
         highlight link StatusLineMode StatusLineVisual
         return 'VISUAL BLOCK'
+
+    " Select mode
     elseif l:mode ==# 's' "Select by character
     elseif l:mode ==# 'S' "Select by line
     " elseif l:mode ==# 'CTRL-S' "Select blockwise
     elseif l:mode ==# '\<C-S>' "Select blockwise
+
+    " Insert mode
     elseif l:mode ==# 'i' "Insert
         highlight link StatusLineMode StatusLineInsert
         return 'INSERT'
@@ -172,24 +181,34 @@ function! StatusLineMode()
         return 'INSERT'
     elseif l:mode ==# 'ix' "Insert mode |i_CTRL-X| completion
         highlight link StatusLineMode StatusLineInsert
-        return 'INSERT*'
+        return 'INSERT'
     elseif l:mode ==# 'R' "Replace |R|
         highlight link StatusLineMode StatusLineInsert
         return 'REPLACE'
     elseif l:mode ==# 'Rc' "Replace mode completion |compl-generic|
         highlight link StatusLineMode StatusLineInsert
-        return 'REPLACE*'
+        return 'REPLACE'
     elseif l:mode ==# 'Rv' "Virtual Replace |gR|
+        highlight link StatusLineMode StatusLineInsert
+        return 'VREPLACE'
     elseif l:mode ==# 'Rx' "Replace mode |i_CTRL-X| completion
+        highlight link StatusLineMode StatusLineInsert
+        return 'REPLACE'
+
+    " Cmdline mode
     elseif l:mode ==# 'c' "Command-line editing
         highlight link StatusLineMode StatusLineCommand
         return 'SEARCH'
+
+    " Ex mode
     elseif l:mode ==# 'cv' "Vim Ex mode |gQ|
     elseif l:mode ==# 'ce' "Normal Ex mode |Q|
     elseif l:mode ==# 'r' "Hit-enter prompt
     elseif l:mode ==# 'rm' "The -- more -- prompt
     elseif l:mode ==# 'r?' "A |:confirm| query of some sort
     elseif l:mode ==# '!' "Shell or external command is executing
+
+    " Terminal-Job mode
     elseif l:mode ==# 't' "Terminal-Job mode: keys go to the job
     endif
 
@@ -197,26 +216,27 @@ function! StatusLineMode()
     return 'UNKNOWN(' . l:mode . ')'
 endfunction
 
-augroup statusline_highlight
+augroup statusline
     autocmd!
-    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineNormal guibg=' . green . ' guifg=' . background
-    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineInsert guibg=' . yellow . ' guifg=' . background
-    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineVisual guibg=' . purple . ' guifg=' . background
-    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineCommand guibg=' . cyan . ' guifg=' . background
-    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineUnknown guibg=' . red . ' guifg=' . background
+    autocmd ColorScheme * execute 'highlight StatusLineNormal guibg=' . green . ' guifg=' . background
+    autocmd ColorScheme * execute 'highlight StatusLineInsert guibg=' . yellow . ' guifg=' . background
+    autocmd ColorScheme * execute 'highlight StatusLineVisual guibg=' . purple . ' guifg=' . background
+    autocmd ColorScheme * execute 'highlight StatusLineCommand guibg=' . cyan . ' guifg=' . background
+    autocmd ColorScheme * execute 'highlight StatusLineUnknown guibg=' . red . ' guifg=' . background
 
-    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineRight1 guibg=' . cyan . ' guifg=' . background
-    autocmd ColorScheme,VimEnter * execute 'highlight StatusLineRight2 guibg=' . orange . ' guifg=' . background
+    autocmd ColorScheme * execute 'highlight StatusLineRight1 guibg=' . cyan . ' guifg=' . background
+    autocmd ColorScheme * execute 'highlight StatusLineRight2 guibg=' . orange . ' guifg=' . background
 
-    autocmd ColorScheme,VimEnter * execute 'highlight StatusLine guibg=' . selection . ' guifg=' . foreground
+    autocmd ColorScheme * execute 'highlight StatusLine guibg=' . selection . ' guifg=' . foreground
 augroup END
 
 set laststatus=2
 set statusline=%#StatusLineMode#\ %{StatusLineMode()}\ %#StatusLine#\ 
-set statusline+=%f%m\ 
+set statusline+=%<%f\ %h%m%r
 set statusline+=%=
 " set statusline+=%#StatusLineRight1#\ %3.P\ 
 set statusline+=%#StatusLineRight2#\ %3.p%%\ \|\ %4.l/%L\ :\ %2.c\ 
+" set statusline+=%#StatusLineRight2#%-14.(%l,%c%V%)\ %P
 
 " miscellaneous settings
 augroup commentmap
@@ -237,6 +257,23 @@ set smartcase
 set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
 set showbreak=>\ 
 set list listchars=tab:\|\ ,trail:·,nbsp:~,extends:>,precedes:<
+set wildmenu
+
+" nnoremap <silent> i i<C-N><C-P>
+" nnoremap <silent> a a<C-N><C-P>
+" nnoremap <silent> R R<C-N><C-P>
+inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : "\<C-G>u\<CR>"
+inoremap <expr> <TAB> pumvisible() ? "\<C-Y>" : "\<C-G>u\<TAB>"
+inoremap <expr> <ESC> pumvisible() ? "\<C-E>\<ESC>" : "\<ESC>"
+inoremap <expr> <C-N> pumvisible() ? "\<DOWN>" : "\<C-N>\<C-P>\<LT>DOWN>"
+inoremap <expr> <C-P> pumvisible() ? "\<UP>" : "\<C-N>\<C-P>\<LT>DOWN>"
+set completeopt=menuone
+set pumheight=15
+
+augroup popupmenu
+    autocmd!
+    autocmd ColorScheme,VimEnter * execute 'highlight PmenuSel guibg='. purple .' guifg=#21222c'
+augroup END
 
 " echo functions
 function! EchoWarning(msg)
