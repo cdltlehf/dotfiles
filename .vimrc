@@ -134,7 +134,7 @@ function! BufLine()
             let s .= ' '
         endif
         let s .= '%{fnamemodify(bufname(' . i . '), ":~:.")}'
-        let s .= '%{getbufvar(' . i . ', "&nomodifiable") ? "[-]" : (getbufinfo(' . i . ')[0].changed ? "[+]" : "")}'
+        let s .= '%{!getbufvar(' . i . ', "&modifiable") ? "[-]" : (getbufinfo(' . i . ')[0].changed ? "[+]" : "")}'
         let s .= ' '
     endfor
     let s .= '%#TabLineFill#'
