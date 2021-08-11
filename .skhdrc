@@ -1,79 +1,106 @@
 # https://github.com/koekeishiya/yabai/blob/master/examples/yabairc
-alt - return : open -a /Applications/iTerm.app
-alt + shift - return : open -a /Applications/Google\ Chrome.app
 
-alt - o : \
-  if [ `yabai -m query --windows --window | jq '."zoom-fullscreen"'` = 1 ]; then\
-    yabai -m window --toggle zoom-fullscreen; \
-  fi; \
-  yabai -m window --focus next || yabai -m window --focus first
-alt - h : \
-  if [ `yabai -m query --windows --window | jq '."zoom-fullscreen"'` = 1 ]; then\
-    yabai -m window --toggle zoom-fullscreen; \
-  fi; \
-  yabai -m window --focus west
-alt - j : \
-  if [ `yabai -m query --windows --window | jq '."zoom-fullscreen"'` = 1 ]; then\
-    yabai -m window --toggle zoom-fullscreen; \
-  fi; \
-  yabai -m window --focus south
-alt - k : \
-  if [ `yabai -m query --windows --window | jq '."zoom-fullscreen"'` = 1 ]; then\
-    yabai -m window --toggle zoom-fullscreen; \
-  fi; \
-  yabai -m window --focus north;
-alt - l : \
-  if [ `yabai -m query --windows --window | jq '."zoom-fullscreen"'` = 1 ]; then\
-    yabai -m window --toggle zoom-fullscreen; \
-  fi; \
-  yabai -m window --focus east;
+# modal definition
+:: default : yabai -m config active_window_border_color 0xffbd93f9
+:: active @ : yabai -m config active_window_border_color 0xfff1fa8c
 
-shift + alt - o : yabai -m window --swap next || yabai -m window --swap first
-shift + alt - h : \
+default < cmd + ctrl - a; active
+active < cmd + ctrl - a; default
+active < escape; default
+
+# shortcut
+cmd - return : open -a /Applications/iTerm.app
+cmd + shift - return : open -a /Applications/Google\ Chrome.app
+
+# focus window
+active < o : \
+  if [ `yabai -m query --windows --window | jq '."zoom-fullscreen"'` = 1 ]; then\
+    yabai -m window --toggle zoom-fullscreen; \
+  fi; \
+  yabai -m window --focus next || yabai -m window --focus first; \
+  skhd -k 'escape';
+active < h : \
+  if [ `yabai -m query --windows --window | jq '."zoom-fullscreen"'` = 1 ]; then\
+    yabai -m window --toggle zoom-fullscreen; \
+  fi; \
+  yabai -m window --focus west; \
+  skhd -k 'escape';
+active < j : \
+  if [ `yabai -m query --windows --window | jq '."zoom-fullscreen"'` = 1 ]; then\
+    yabai -m window --toggle zoom-fullscreen; \
+  fi; \
+  yabai -m window --focus south \
+  skhd -k 'escape';
+active < k : \
+  if [ `yabai -m query --windows --window | jq '."zoom-fullscreen"'` = 1 ]; then\
+    yabai -m window --toggle zoom-fullscreen; \
+  fi; \
+  yabai -m window --focus north; \
+  skhd -k 'escape';
+active < l : \
+  if [ `yabai -m query --windows --window | jq '."zoom-fullscreen"'` = 1 ]; then\
+    yabai -m window --toggle zoom-fullscreen; \
+  fi; \
+  yabai -m window --focus east; \
+  skhd -k 'escape';
+
+# rotate windows
+active < shift - o : yabai -m window --swap next || yabai -m window --swap first; \
+  skhd -k 'escape';
+
+# swap window / fill half
+active < shift - h : \
   if [ `yabai -m query --windows --window | jq .floating` = 0 ]; then\
     yabai -m window --swap west; \
   else \
     yabai -m window --grid 1:2:0:0:1:1; \
-  fi;
+  fi; \
+  skhd -k 'escape';
 
-shift + alt - j : \
+active < shift - j : \
   if [ `yabai -m query --windows --window | jq .floating` = 0 ]; then\
     yabai -m window --swap south; \
   else \
     yabai -m window --grid 4:4:1:1:2:2; \
-  fi;
+  fi; \
+  skhd -k 'escape';
 
-shift + alt - k : \
+active < shift - k : \
   if [ `yabai -m query --windows --window | jq .floating` = 0 ]; then\
     yabai -m window --swap north; \
   else \
     yabai -m window --grid 1:1:0:0:1:1; \
-  fi;
+  fi; \
+  skhd -k 'escape';
 
-shift + alt - l : \
+active < shift - l : \
   if [ `yabai -m query --windows --window | jq .floating` = 0 ]; then\
     yabai -m window --swap east; \
   else \
     yabai -m window --grid 1:2:1:0:1:1; \
-  fi;
+  fi; \
+  skhd -k 'escape';
 
-shift + alt - 0 : yabai -m space --balance
+# balance space
+active < 0 : yabai -m space --balance; skhd -k 'escape';
 
-alt - n : yabai -m space --focus next
-alt - p : yabai -m space --focus prev
+# move space
+active < n : yabai -m space --focus next; skhd -k 'escape';
+active < p : yabai -m space --focus prev; skhd -k 'escape';
 
-shift + alt - n : yabai -m window --space next; yabai -m space --focus next
-shift + alt - p : yabai -m window --space prev; yabai -m space --focus prev
+# move space and focus
+active < shift - n : yabai -m window --space next; yabai -m space --focus next; skhd -k 'escape';
+active < shift - p : yabai -m window --space prev; yabai -m space --focus prev; skhd -k 'escape';
 
-alt - z : yabai -m window --toggle zoom-fullscreen
-alt - f : yabai -m window --toggle native-fullscreen
+# zoom/fullscreen
+active < z : yabai -m window --toggle zoom-fullscreen; skhd -k 'escape';
+active < f : yabai -m window --toggle native-fullscreen; skhd -k 'escape';
 
-ctrl + alt - h : yabai -m window --insert west
-ctrl + alt - j : yabai -m window --insert south
-ctrl + alt - k : yabai -m window --insert north
-ctrl + alt - l : yabai -m window --insert east
+# toggle split
+active < e : yabai -m window --toggle split; skhd -k 'escape';
 
-alt - e : yabai -m window --toggle split
+# toggle float
+active < t : yabai -m window --toggle float; \
+          yabai -m window --grid 4:4:1:1:2:2; \
+          skhd -k 'escape';
 
-alt - t : yabai -m window --toggle float;\
-          yabai -m window --grid 4:4:1:1:2:2

@@ -11,11 +11,11 @@ zplug 'dracula/zsh', as:theme
 
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zdharma/fast-syntax-highlighting"
-zplug "plugins/vi-mode, from:oh-my-zsh"
+zplug "plugins/vi-mode", from:oh-my-zsh
+zplug "plugins/tmux", from:oh-my-zsh
+zplug "plugins/git", from:oh-my-zsh
 
 # zplug "lib/key-bindings", from:oh-my-zsh
-# zplug "plugins/git", from:oh-my-zsh
-# zplug "plugins/tmux", from:oh-my-zsh
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
@@ -24,5 +24,6 @@ if ! zplug check --verbose; then
     fi
 fi
 
-zplug load --verbose
+zplug load
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="/usr/local/sbin:$PATH"
