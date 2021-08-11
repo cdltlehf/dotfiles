@@ -238,16 +238,17 @@ set statusline+=%=
 set statusline+=%#StatusLineRight2#\ %3.p%%\ \|\ %4.l/%L\ :\ %2.c\ 
 " set statusline+=%#StatusLineRight2#%-14.(%l,%c%V%)\ %P
 
-" miscellaneous settings
+" comment map
 augroup commentmap
     autocmd!
-    autocmd FileType javascript nnoremap <Leader>c<Space> I// <ESC>$
-    autocmd FileType c nnoremap <Leader>c<Space> I// <ESC>$
-    autocmd FileType cpp nnoremap <Leader>c<Space> I// <ESC>$
-    autocmd FileType python nnoremap <Leader>c<Space> I# <ESC>$
-    autocmd FileType vim nnoremap <Leader>c<Space> I" <ESC>$
+    autocmd FileType javascript nnoremap <Leader>c<Space> mcI// <ESC>`c
+    autocmd FileType c nnoremap <Leader>c<Space> mcI// <ESC>`c
+    autocmd FileType cpp nnoremap <Leader>c<Space> mcI// <ESC>`c
+    autocmd FileType python nnoremap <Leader>c<Space> mcI# <ESC>`c
+    autocmd FileType vim nnoremap <Leader>c<Space> mcI" <ESC>`c
 augroup END
 
+" miscellaneous settings
 set number
 set relativenumber
 set background=dark
@@ -258,10 +259,14 @@ set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
 set showbreak=>\ 
 set list listchars=tab:\|\ ,trail:·,nbsp:~,extends:>,precedes:<
 set wildmenu
+vnoremap < <gv
+vnoremap > >gv
 
+" pum
 " nnoremap <silent> i i<C-N><C-P>
 " nnoremap <silent> a a<C-N><C-P>
 " nnoremap <silent> R R<C-N><C-P>
+" TODO when pum not opened
 inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : "\<C-G>u\<CR>"
 inoremap <expr> <TAB> pumvisible() ? "\<C-Y>" : "\<C-G>u\<TAB>"
 inoremap <expr> <ESC> pumvisible() ? "\<C-E>\<ESC>" : "\<ESC>"
