@@ -253,11 +253,13 @@ set relativenumber
 set background=dark
 set nowrap
 set hidden
+set ignorecase
 set smartcase
 set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
 set showbreak=>\ 
 set list listchars=tab:\|\ ,trail:·,nbsp:~,extends:>,precedes:<
 set wildmenu
+set belloff=all
 
 " nnoremap <silent> i i<C-N><C-P>
 " nnoremap <silent> a a<C-N><C-P>
