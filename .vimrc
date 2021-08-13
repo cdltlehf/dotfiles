@@ -260,12 +260,9 @@ set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
 set showbreak=>\ 
 set list listchars=tab:\|\ ,trail:·,nbsp:~,extends:>,precedes:<
 set wildmenu
-<<<<<<< HEAD
 set belloff=all
-=======
 vnoremap < <gv
 vnoremap > >gv
->>>>>>> 7427bcdd43488ef7f361dee995b8e2a00ef38f79
 
 " pum
 " nnoremap <silent> i i<C-N><C-P>
