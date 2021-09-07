@@ -20,12 +20,14 @@ export PATH
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-stty stop '' # disable Ctrl-s special behavior
-stty start '' # disable Ctrl-q special behavior
+if tty >/dev/null 2>&1; then
+    stty stop '' # disable Ctrl-s special behavior
+    stty start '' # disable Ctrl-q special behavior
+fi
 
 # inspect processes on GPUs
 nvidia-ps() {
-    _pids="$(nvidia-smi pmon -c 1 | awk '/^#/{next}{if ($2 != ''-'') print $2}')"
+    _pids="$(nvidia-smi pmon -c 1 | awk '/^#/{next}{if ($2 != "-") print $2}')"
     if  [ -n "$_pids" ]; then
         echo "$_pids" | xargs ps "$@"
     else
