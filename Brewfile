@@ -4,11 +4,16 @@ tap "homebrew/cask-fonts"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "koekeishiya/formulae"
-
+brew "unbound", restart_service: true
+brew "emacs", restart_service: true
 brew "cask"
+brew "fzf"
 brew "python@3.9"
+brew "glib"
 brew "openjdk"
 brew "gradle"
+brew "libheif"
+brew "imagemagick"
 brew "jq"
 brew "mas"
 brew "neofetch"
@@ -30,12 +35,12 @@ cask "hammerspoon"
 cask "iterm2"
 cask "notion"
 cask "sublime-text"
+cask "temurin"
 cask "the-unarchiver"
 cask "ubersicht"
 cask "vlc"
 cask "vox"
 cask "zoom"
-
 mas "Keynote", id: 409183694
 mas "Microsoft Excel", id: 462058435
 mas "Microsoft PowerPoint", id: 462062816
