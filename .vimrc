@@ -36,7 +36,7 @@ set smarttab
 set incsearch
 
 " :nohlsearch<C-L>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
-nnoremap <silent> <C-L> :nohlsearch<CR>
+nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
 
 " if !&scrolloff
     " set scrolloff=1
@@ -66,7 +66,6 @@ nnoremap ]q :cnext<CR>
 " tab page
 nnoremap [t :tprev<CR>
 nnoremap ]t :tnext<CR>
-
 
 nnoremap [<Space> O<ESC>j<C-E>
 nnoremap ]<Space> o<ESC>k

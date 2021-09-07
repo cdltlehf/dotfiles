@@ -1,4 +1,5 @@
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/
+export PATH=$JAVA_HOME/bin:$HOME/bin:/usr/local/bin:$PATH
 export ZSH="/Users/cdltlehf/.oh-my-zsh"
 
 source $ZSH/oh-my-zsh.sh
