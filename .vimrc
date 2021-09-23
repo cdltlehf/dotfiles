@@ -33,6 +33,7 @@ set smarttab
     " set ttimeoutlen=100
 " endif
 
+" set hlsearch
 set incsearch
 
 " :nohlsearch<C-L>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
@@ -290,7 +291,19 @@ endfunction
 
 inoremap jj <ESC>
 " inoremap <ESC> <ESC>:call EchoWarning("Train yourself to use CTRL-[ (or jj)")<CR>
-nnoremap <Leader>r<Space> :source ~/.vimrc<CR>:echo "source ~/.vimrc done"<CR>
+
+augroup runcmd
+    autocmd!
+    autocmd FileType vim nnoremap <buffer> <Leader>r<Space> :source ~/.vimrc<CR>:echo "source ~/.vimrc done"<CR>
+    autocmd FileType python nnoremap <buffer> <Leader>r<Space> :!python %<CR>
+    autocmd FileType tex nnoremap <buffer> <Leader>r<Space> :!pdflatex %<CR>
+augroup END
+
+augroup tex
+    autocmd!
+    autocmd FileType tex inoremap <buffer> <Leader>tbf<Space> \textbf{}<ESC>i
+augroup END
+
 nnoremap <Leader>b<Space> :ls <CR>:b<Space>
 
 
