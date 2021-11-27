@@ -58,6 +58,25 @@ for file in ./.*; do
         if [[ $(basename $file) == ".gitmodules" ]]; then 
             continue 
         fi;
+        if [[ "$OS" == "Darwin" ]]; then
+	    git submodule init
+	    git submodule update
+	    if [[ $(basename $file) == ".BS_Store" ]]; then 
+		continue 
+            fi;
+	    if [[ $(basename $file) == ".macos" ]]; then 
+		continue 
+            fi;
+	    if [[ $(basename $file) == ".hammerspoon" ]]; then 
+		continue 
+            fi;
+	    if [[ $(basename $file) == ".ubersichtrc" ]]; then 
+		continue 
+            fi;
+	    if [[ $(basename $file) == ".yabairc" ]]; then 
+		continue 
+            fi;
+        fi;
     fi;
     ln -is "$(pwd)/$(basename $file)" "$HOME/$(basename $file)"
 done;

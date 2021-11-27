@@ -1,4 +1,4 @@
-" Dracula Color Pallette
+" Dracula Color Palette {{{
 " https://spec.draculatheme.com/
 let background='#282a36'
 let foreground='#f8f8f2'
@@ -12,46 +12,29 @@ let green='#50fa7b'
 let purple='#bd93f9'
 let cyan='#8be9fd'
 let pink='#ff79c6'
+" }}}
 
-" settings from tpope/vim-sensible
+" tpope/vim-sensible {{{
 if has('autocmd')
     filetype plugin indent on
 endif
+
 if has('syntax') && !exists('g:syntax_on')
     syntax enable
 endif
 
 set autoindent
 set backspace=indent,eol,start
-" set complete-=i
 set smarttab
-
-" set nrformats-=octal
-
-" if !has('nvim') && &ttimeoutlen == -1
-    " set ttimeout
-    " set ttimeoutlen=100
-" endif
-
-" set hlsearch
 set incsearch
-
-" :nohlsearch<C-L>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
-
-" if !&scrolloff
-    " set scrolloff=1
-" endif
-" if !&sidescrolloff
-    " set sidescrolloff=5
-" endif
-" set display+=lastline
 
 if &encoding==# 'latin1' && has('gui_running')
     set encoding=utf-8
 endif
+" }}}
 
-" settings from tpopte/vim-unimpaired
+" tpope/vim-unimpaired {{{
 " argument
 nnoremap [a :prev<CR>
 nnoremap ]a :next<CR>
@@ -67,9 +50,10 @@ nnoremap ]q :cnext<CR>
 " tab page
 nnoremap [t :tprev<CR>
 nnoremap ]t :tnext<CR>
-
+" add newline
 nnoremap [<Space> O<ESC>j<C-E>
 nnoremap ]<Space> o<ESC>k
+" move line
 nnoremap [e ddkP
 nnoremap ]e ddp
 
@@ -77,34 +61,37 @@ nnoremap [oh :set<Space>hlsearch<CR>
 nnoremap ]oh :set<Space>nohlsearch<CR>
 nnoremap [oi :set<Space>ignorecase<CR>
 nnoremap ]oi :set<Space>noignorecase<CR>
-
 " nnoremap [ol :setlocal<Space>list<CR>
 " nnoremap ]ol :setlocal<Space>nolist<CR>
 nnoremap [on :setlocal<Space>number<CR>
 nnoremap ]on :setlocal<Space>nonumber<CR>
 nnoremap [or :setlocal<Space>relativenumber<CR>
 nnoremap ]or :setlocal<Space>norelativenumber<CR>
-" nnoremap [os :setlocal<Space>spell<CR>
-" nnoremap ]os :setlocal<Space>nospell<CR>
+nnoremap [os :setlocal<Space>spell<CR>
+nnoremap ]os :setlocal<Space>nospell<CR>
 nnoremap [ow :setlocal<Space>wrap<CR>
 nnoremap ]ow :setlocal<Space>nowrap<CR>
-
 nnoremap [ob :set<Space>background=dark<CR>
 nnoremap ]ob :set<Space>background=light<CR>
+" }}}
 
-" Dracula
+" Dracula {{{
 packadd! dracula
 let g:dracula_italic=0
 colorscheme dracula
+" }}}
 
+" compatible, termguicolors, etc... {{{
 if &g:compatible
     set nocompatible
 endif
 set termguicolors
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+" }}}
 
-" tab (buffer) line
+" tab (buffer) line {{{
+" tab line highlight {{{
 augroup tabline_highlight
     autocmd!
     autocmd ColorScheme * execute 'highlight TabLineSelNR guibg=' . background . ' guifg=' . green
@@ -112,16 +99,18 @@ augroup tabline_highlight
     autocmd ColorScheme * execute 'highlight TabLine gui=NONE cterm=NONE guibg=' . selection . ' guifg=' . foreground
     autocmd ColorScheme * execute 'highlight TabLineFill guibg=' . selection . ' guifg=' . selection
 augroup END
+" }}}
 
+" tab line, buffer line {{{
 function! TabLine()
-    if tabpagenr('$') == 1 
-        return BufLine()
-    else 
+    if tabpagenr('$') == 1
+        return BufferLine()
+    else
         return ''
     endif
 endfunction
 
-function! BufLine()
+function! BufferLine()
     let s = ''
     for i in filter(range(1, bufnr('$')), 'buflisted(v:val)')
         if i == bufnr('%')
@@ -133,18 +122,32 @@ function! BufLine()
             let s .= i
             let s .= ' '
         endif
-        let s .= '%{fnamemodify(bufname(' . i . '), ":~:.")}'
-        let s .= '%{!getbufvar(' . i . ', "&modifiable") ? "[-]" : (getbufinfo(' . i . ')[0].changed ? "[+]" : "")}'
+        let filename = '%{'
+        if i != bufnr('%')
+            let filename .= 'substitute('
+        endif
+        let filename .= 'fnamemodify(bufname(' . i . '), ":~:.")'
+        if i != bufnr('%')
+            let filename .= ', "\\([^/]\\)[^/]*/", "\\1/", "g")'
+        endif
+        let filename .= '}'
+        let s .= filename
+        let s .= '%{!getbufvar(' . i . ', "&modifiable") ?'
+        let s .= ' "[-]" :' 
+        let s .= ' (getbufinfo(' . i . ')[0].changed ? "[+]" : "")}'
         let s .= ' '
     endfor
     let s .= '%#TabLineFill#'
     return s
 endfunction
+" }}}
 
 set showtabline=2
 set tabline=%!TabLine()
+" }}}
 
-" status line
+" status line {{{
+" status line mode {{{
 function! StatusLineMode()
     let l:mode = mode(1)
 
@@ -215,7 +218,9 @@ function! StatusLineMode()
     highlight link StatusLineMode StatusLineUnknown
     return 'UNKNOWN(' . l:mode . ')'
 endfunction
+" }}}
 
+" status line highlight {{{
 augroup statusline
     autocmd!
     autocmd ColorScheme * execute 'highlight StatusLineNormal guibg=' . green . ' guifg=' . background
@@ -229,16 +234,20 @@ augroup statusline
 
     autocmd ColorScheme * execute 'highlight StatusLine guibg=' . selection . ' guifg=' . foreground
 augroup END
+" }}}
 
 set laststatus=2
 set statusline=%#StatusLineMode#\ %{StatusLineMode()}\ %#StatusLine#\ 
 set statusline+=%<%f\ %h%m%r
-set statusline+=%=
-" set statusline+=%#StatusLineRight1#\ %3.P\ 
-set statusline+=%#StatusLineRight2#\ %3.p%%\ \|\ %4.l/%L\ :\ %2.c\ 
-" set statusline+=%#StatusLineRight2#%-14.(%l,%c%V%)\ %P
 
-" comment map
+set statusline+=%=
+
+set statusline+=%Y\ 
+set statusline+=%#StatusLineRight1#\ %{&fileencoding}[%{&fileformat}]\ 
+set statusline+=%#StatusLineRight2#\ %3.p%%\ :\%5.l/%L:%2.c\ 
+" }}}
+
+" comment map {{{
 augroup commentmap
     autocmd!
     autocmd FileType javascript nnoremap <Leader>c<Space> mcI// <ESC>`c
@@ -247,8 +256,9 @@ augroup commentmap
     autocmd FileType python nnoremap <Leader>c<Space> mcI# <ESC>`c
     autocmd FileType vim nnoremap <Leader>c<Space> mcI" <ESC>`c
 augroup END
+" }}}
 
-" miscellaneous settings
+" miscellaneous settings {{{
 set number
 set relativenumber
 set background=dark
@@ -261,40 +271,42 @@ set showbreak=>\
 set list listchars=tab:\|\ ,trail:·,nbsp:~,extends:>,precedes:<
 set wildmenu
 set belloff=all
+
 vnoremap < <gv
 vnoremap > >gv
+vnoremap * y/<C-R>"<CR>
 
-" pum
-" nnoremap <silent> i i<C-N><C-P>
-" nnoremap <silent> a a<C-N><C-P>
-" nnoremap <silent> R R<C-N><C-P>
-" TODO when pum not opened
-inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : "\<C-G>u\<CR>"
-inoremap <expr> <TAB> pumvisible() ? "\<C-Y>" : "\<C-G>u\<TAB>"
-inoremap <expr> <ESC> pumvisible() ? "\<C-E>\<ESC>" : "\<ESC>"
-inoremap <expr> <C-N> pumvisible() ? "\<DOWN>" : "\<C-N>\<C-P>\<LT>DOWN>"
-inoremap <expr> <C-P> pumvisible() ? "\<UP>" : "\<C-N>\<C-P>\<LT>DOWN>"
-set completeopt=menuone
-set pumheight=15
+nnoremap Q @@
+nnoremap Y y$
+
+nnoremap <Leader>b<Space> :ls <CR>:b<Space>
+" }}}
+
+" set text width 79 {{{
+set colorcolumn=80
+set textwidth=79
+" }}}
+
+" pop up menu {{{
+set completeopt=noinsert,preview,menuone
+set pumheight=5
+
+"TODO
+augroup completion
+    autocmd!
+    "autocmd CursorMovedI * execute('if pumvisible() normal! a')
+    "
+augroup END
 
 augroup popupmenu
     autocmd!
     autocmd ColorScheme,VimEnter * execute 'highlight PmenuSel guibg='. purple .' guifg=#21222c'
 augroup END
-
-" echo functions
-function! EchoWarning(msg)
-    echohl ErrorMsg
-    echo a:msg
-    echohl None
-endfunction
-
-inoremap jj <ESC>
-" inoremap <ESC> <ESC>:call EchoWarning("Train yourself to use CTRL-[ (or jj)")<CR>
+" }}}
 
 augroup runcmd
     autocmd!
-    autocmd FileType vim nnoremap <buffer> <Leader>r<Space> :source ~/.vimrc<CR>:echo "source ~/.vimrc done"<CR>
+    autocmd FileType vim nnoremap <buffer> <Leader>r<Space> :source $HOME/.vimrc<CR>:echo "source $HOME/.vimrc done"<CR>
     autocmd FileType python nnoremap <buffer> <Leader>r<Space> :!python %<CR>
     autocmd FileType tex nnoremap <buffer> <Leader>r<Space> :!pdflatex %<CR>
 augroup END
@@ -304,6 +316,43 @@ augroup tex
     autocmd FileType tex inoremap <buffer> <Leader>tbf<Space> \textbf{}<ESC>i
 augroup END
 
-nnoremap <Leader>b<Space> :ls <CR>:b<Space>
+" make .vim folder (0700) {{{
+if empty(glob($HOME . "/.vim"))
+    call mkdir($HOME . "/.vim", 0700)
+endif
+" }}}
 
+" set spellcheck {{{
+if empty(glob($HOME . "/.vim/spell"))
+    call mkdir($HOME . "/.vim/spell", 0700)
+endif
+set spell
+set spellfile=$HOME/.vim/spell/spell.utf-8.add
+" }}}
+
+" set swap {{{
+if empty(glob($HOME . "/.vim/swap"))
+    call mkdir($HOME . "/.vim/swap", 0700)
+endif
+set directory=$HOME/.vim/swap
+" }}}
+
+" set undo {{{
+if empty(glob($HOME . "/.vim/undodir"))
+    call mkdir($HOME . "/.vim/undodir", 0700)
+endif
+set undodir=$HOME/.vim/undodir
+set undofile
+" }}}
+
+" set fold (zR to open all folds) {{{
+set foldcolumn=2
+execute 'highlight FoldColumn guibg=' . background . ' guifg=' . comment
+augroup fold
+    autocmd!
+    autocmd BufRead * normal zR
+    autocmd FileType vim setlocal foldmethod=marker
+    autocmd FileType python setlocal foldmethod=indent
+augroup END
+" }}} (zM to close all folds)
 
