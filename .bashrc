@@ -47,3 +47,6 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias cp='cp -i'
 
+# set default editor as vim
+EDITOR=$(command -v vim)
+
