@@ -284,7 +284,7 @@ nnoremap <Leader>b<Space> :ls <CR>:b<Space>
 
 " set text width 79 {{{
 set colorcolumn=80
-set textwidth=79
+" set textwidth=79
 " }}}
 
 " pop up menu {{{
