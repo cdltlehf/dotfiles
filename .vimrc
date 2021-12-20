@@ -248,13 +248,27 @@ set statusline+=%#StatusLineRight2#\ %3.p%%\ :\%5.l/%L:%2.c\
 " }}}
 
 " comment map {{{
+" TODO: unify these
+function! SetPythonCommentMap()
+    nnoremap <Leader>c<Space> mcI# <ESC>`c
+    vnoremap <Leader>c<Space> :s\/^\/#\ 
+endfunction
+
+function! SetVimCommentMap()
+    nnoremap <Leader>c<Space> mcI" <ESC>`c
+    vnoremap <Leader>c<Space> :s/^/"\ <CR>
+endfunction
+
 augroup commentmap
     autocmd!
-    autocmd FileType javascript nnoremap <Leader>c<Space> mcI// <ESC>`c
-    autocmd FileType c nnoremap <Leader>c<Space> mcI// <ESC>`c
-    autocmd FileType cpp nnoremap <Leader>c<Space> mcI// <ESC>`c
-    autocmd FileType python nnoremap <Leader>c<Space> mcI# <ESC>`c
-    autocmd FileType vim nnoremap <Leader>c<Space> mcI" <ESC>`c
+    autocmd FileType javascript 
+          \ nnoremap <Leader>c<Space> mcI// <ESC>`c
+    autocmd FileType c 
+          \ nnoremap <Leader>c<Space> mcI// <ESC>`c
+    autocmd FileType cpp 
+          \ nnoremap <Leader>c<Space> mcI// <ESC>`c
+    autocmd FileType python call SetPythonCommentMap()
+    autocmd FileType vim call SetVimCommentMap()
 augroup END
 " }}}
 
@@ -278,6 +292,9 @@ vnoremap * y/<C-R>"<CR>
 
 nnoremap Q @@
 nnoremap Y y$
+
+nnoremap n nzz
+nnoremap N Nzz
 
 nnoremap <Leader>b<Space> :ls <CR>:b<Space>
 " }}}
