@@ -1,32 +1,56 @@
-space_indicators = {}
-activate_indicators = {}
+-- global leader
+leader = { "ctrl", "cmd" }
 
-hs.ipc.cliInstall()
-
+-- Alert style {{{1
+-- TODO: set it as a local configuration?
 hs.alert.defaultStyle.fillColor = { white = 0.17, alpha = 0.9 }
 hs.alert.defaultStyle.strokeColor = { white = 0.1, alpha = 0 }
 hs.alert.defaultStyle.radius = 10
 hs.alert.defaultStyle.fadeInDuration = 0.1
-hs.alert.defaultStyle.fadeOutDuration = 0.1
+hs.alert.defaultStyle.fadeOutDuration = 0.3
+-- }}}
 
-hs.keycodes.inputSourceChanged(function()
-    if hs.keycodes.currentSourceID() == last_alerted_IM_ID then return end
-    hs.alert.closeSpecific(last_IM_alert_uuid)
-    last_alerted_IM_ID = hs.keycodes.currentSourceID()
-    last_IM_alert_uuid = hs.alert.show(
-        (function()
-            if last_alerted_IM_ID == "com.apple.keylayout.ABC" then
-                return "ABC"
-            elseif last_alerted_IM_ID == "com.apple.inputmethod.Korean.2SetKorean" then
-                return "두벌식"
-            else 
-                return last_alerted_IM_ID
-            end
-        end)(),
-        0.2
-    )
-end)
+do -- Input source changer {{{1
+    local inputSource = {
+        english = "com.apple.keylayout.ABC",
+        korean = "com.apple.inputmethod.Korean.2SetKorean",
+    }
+    local sourceNameTable = {
+        [inputSource.english] = "ABC",
+        [inputSource.korean] = "두벌식",
+    }
+    local getName = function(source)
+        if sourceNameTable[source] == nil then 
+            return source
+        end
+        return sourceNameTable[source]
+    end
+    local escape_bind
+    local escape_callback = function()
+        hs.keycodes.currentSourceID(inputSource.english)
 
+        escape_bind:disable()
+        hs.eventtap.keyStroke({}, 'escape', 0)
+        escape_bind:enable()
+    end
+    escape_bind = hs.hotkey.new({}, 'escape', escape_callback)
+    escape_bind:enable()
+
+    hs.keycodes.inputSourceChanged(function()
+        if hs.keycodes.currentSourceID() == last_alerted_IM_ID then 
+            return end
+
+        hs.alert.closeSpecific(last_IM_alert_uuid)
+        last_alerted_IM_ID = hs.keycodes.currentSourceID()
+        last_IM_alert_uuid = hs.alert.show(getName(last_alerted_IM_ID), 0.2)
+    end)
+end -- }}}
+
+-- Space/Activate indicators {{{
+-- TODO: make it as a module?
+hs.ipc.cliInstall()
+space_indicators = {}
+activate_indicators = {}
 function skhd_activate() 
     hs.task.new(
         '/usr/local/bin/yabai', 
@@ -158,10 +182,57 @@ function hide_space_indicator()
         indicator:hide(0.2)
     end)
 end
+-- }}}
 
-hs.spaces.watcher.new(update_space_indicator):start()
+do -- Window manager {{{1
+    local function setFocusedWindowRatio(x, y, w, h, padding, duration)
+        if padding == nil then padding = 0 end
+        if duration == nil then duration = 0 end
 
+        local window = hs.window.focusedWindow()
+        local frame = window:frame()
+        local screen_frame = window:screen():frame()
+
+        screen_frame.x = screen_frame.x + padding / 2
+        screen_frame.y = screen_frame.y + padding / 2
+        screen_frame.w = screen_frame.w - padding
+        screen_frame.h = screen_frame.h - padding
+
+        frame.x = screen_frame.x + screen_frame.w * x + padding / 2
+        frame.y = screen_frame.y + screen_frame.h * y + padding / 2
+
+        frame.w = screen_frame.w * w - padding
+        frame.h = screen_frame.h * h - padding
+
+        window:setFrame(frame, duration)
+    end
+
+    local padding = 5
+    local duration = 0
+
+    hs.hotkey.bind(leader, "h", function()
+        setFocusedWindowRatio(0, 0, 0.5, 1, padding, duration)
+    end)
+    hs.hotkey.bind(leader, "l", function()
+        setFocusedWindowRatio(0.5, 0, 0.5, 1, padding, duration)
+    end)
+    hs.hotkey.bind(leader, "k", function()
+        setFocusedWindowRatio(0, 0, 1, 1, padding, duration)
+    end)
+    hs.hotkey.bind(leader, "j", function()
+        setFocusedWindowRatio(0.25, 0.25, 0.5, 0.5, padding, duration)
+    end)
+
+end -- }}}
+
+-- hammer spoon reload {{{1
+hs.hotkey.bind(leader, "r", function()
+    hs.reload()
+end)
 hs.alert.show("Hammer spoon loaded")
-init_space_indicator()
-init_activate_indicator()
-update_space_indicator()
+-- }}}
+
+-- hs.spaces.watcher.new(update_space_indicator):start()
+-- init_space_indicator()
+-- init_activate_indicator()
+-- update_space_indicator()
