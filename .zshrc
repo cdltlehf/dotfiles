@@ -4,7 +4,12 @@ export PATH=$JAVA_HOME/bin:$HOME/bin:/usr/local/bin:$PATH
 export ZSH="/Users/cdltlehf/.oh-my-zsh"
 
 source $ZSH/oh-my-zsh.sh
-export EDITOR='vim'
+
+export VISUAL='vim'
+export EDITOR='vim -E'
+export PAGER='less'
+
+export KEYTIMEOUT=1
 
 export ZPLUG_HOME=$(brew --prefix)/opt/zplug
 source $ZPLUG_HOME/init.zsh
