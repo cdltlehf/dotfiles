@@ -236,3 +236,5 @@ hs.alert.show("Hammer spoon loaded")
 -- init_space_indicator()
 -- init_activate_indicator()
 -- update_space_indicator()
+
+-- vim:ts=2:sts=2:sw=2:et:sta:fdm=marker:fdl=0
