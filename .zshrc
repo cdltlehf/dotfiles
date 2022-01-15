@@ -1,0 +1,117 @@
+#!/bin/env zsh
+
+# history {{{1
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+unsetopt beep
+# }}}
+
+# vi-mode {{{1
+bindkey -v
+# https://github.com/spaceship-prompt/spaceship-prompt/issues/91
+bindkey "^?" backward-delete-char
+export KEYTIMEOUT=1
+# }}}
+
+# export editors {{{1
+export VISUAL='vim'
+export EDITOR='vim -E'
+export PAGER='less'
+# }}}
+
+# prompt {{{1
+# TODO: What happened if hex color not supported?
+
+setopt PROMPT_SUBST
+
+# color {{{2
+background=#44475a
+current_line=#44475a
+foreground=#f8f8f2
+comment=#6272a4
+cyan=#8be9fd
+green=#50fa7b
+orange=#ffb86c
+pink=#ff79c6
+purple=#bd93f9
+red=#ff5555
+yellow=#f1fa8c
+# }}}
+
+# git prompt {{{
+function prompt_git {
+  local git_branch='';
+  local prompt=''
+
+  git rev-parse --is-inside-work-tree &> /dev/null || return;
+
+  # git_branch=$(git branch --show-current 2> /dev/null)
+  git_branch=$(git symbolic-ref --quiet --short HEAD 2> /dev/null)
+  prompt+=" on %F{${1}}${git_branch}"
+
+  echo $prompt
+  return
+
+  # FIXME: below code is too slow...
+  
+  local git_status=$(git -c color.status=false status --short | cut -c 1-2)
+
+  local uncommitted=$(echo $git_status | grep "[^ ?\!]." | wc -l | tr -d ' ')
+  local unstaged=$(echo $git_status | grep ".[^ ?\!]" | wc -l | tr -d ' ')
+  local untracked=$(echo $git_status | grep "??" | wc -l | tr -d ' ')
+  local stashed=$(git stash list | wc -l | tr -d ' ')
+
+  if [[ $(($uncommitted + $unstaged + $untracked + $stashed)) -eq 0 ]]; then
+    echo $prompt
+    return
+  fi
+
+  prompt+="%F{${2}} ["
+  [[ $uncommitted -eq 0 ]] || prompt+="${uncommitted}+"
+  [[ $unstaged -eq 0 ]] || prompt+="${unstaged}+"
+  [[ $untracked -eq 0 ]] || prompt+="${untracked}?"
+  [[ $stashed -eq 0 ]] || prompt+="${stashed}$"
+  prompt+="]%f"
+
+  echo $prompt
+}
+  
+# }}}
+
+# PS {{{2
+PS1=$'\n'
+PS1+="%F{${pink}}%n%f at "
+PS1+="%F{${yellow}}%m%f in "
+PS1+="%F{${green}}%~%f"
+PS1+='$(prompt_git ${cyan} ${purple})'
+PS1+=$'\n'
+PS1+="%F{${foreground}}$ %f"
+PS2="%F{${comment}}> %f"
+# }}}
+
+# RPS (vi-mode indicator) {{{2
+function zle-line-init zle-keymap-select {
+    case $KEYMAP in
+        vicmd|viopp ) RPS1="%F{${green}}[N]%k%f" ;;
+        viins|main ) RPS1="%F{${yellow}}[I]%k%f" ;;
+        isearch ) RPS1="%F{$cyan}[/]%k%f" ;;
+        * ) RPS1="%F{${red}}[UNK]%k%f" ;;
+    esac
+    RPS2=$RPS1
+    zle reset-prompt
+}
+
+function zle-line-finish { 
+    RPS1=""
+    RPS2="" 
+    zle reset-prompt 
+}
+
+zle -N zle-line-init
+zle -N zle-line-finish
+zle -N zle-keymap-select
+# }}}
+# }}}
+
+# vim:ts=2:sts=2:sw=2:et:sta:fdm=marker:fdl=0
