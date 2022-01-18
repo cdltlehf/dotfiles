@@ -1,18 +1,18 @@
-" Dracula Color Palette {{{1
-" https://spec.draculatheme.com/
-let background='#282a36'
-let foreground='#f8f8f2'
-let selection='#44475a'
-let comment='#6272a4'
-
-let red='#ff5555'
-let orange='#ffb86c'
-let yellow='#f1fa8c'
-let green='#50fa7b'
-let purple='#bd93f9'
-let cyan='#8be9fd'
-let pink='#ff79c6'
-
+" " Dracula Color Palette {{{1
+" " https://spec.draculatheme.com/
+" let background='#282a36'
+" let foreground='#f8f8f2'
+" let selection='#44475a'
+" let comment='#6272a4'
+" 
+" let red='#ff5555'
+" let orange='#ffb86c'
+" let yellow='#f1fa8c'
+" let green='#50fa7b'
+" let purple='#bd93f9'
+" let cyan='#8be9fd'
+" let pink='#ff79c6'
+" 
 " compatible, termguicolors, etc... {{{1
 if &g:compatible
   set nocompatible
@@ -102,19 +102,58 @@ augroup END
 
 augroup popupmenu "{{{1
   autocmd!
-  autocmd ColorScheme,VimEnter * execute 'highlight PmenuSel guibg='. purple .' guifg=#21222c'
+  autocmd ColorScheme,VimEnter * 
+        \ execute 'highlight PmenuSel guibg='. purple .' guifg=#21222c'
 augroup END
 
 augroup runcmd "{{{1
-  autocmd!
-  autocmd FileType vim nnoremap <buffer> <Leader>r<Space> :source %<CR>:echo "sourcing done"<CR>
   autocmd FileType python nnoremap <buffer> <Leader>r<Space> :!python %<CR>
-  autocmd FileType tex nnoremap <buffer> <Leader>r<Space> :!pdflatex %<CR>
 augroup END
 
-augroup tex "{{{1
+augroup filetype_vim "{{{1
+  " TODO: make each comment maps use 'comments' or 'commentstring'
   autocmd!
-  autocmd FileType tex inoremap <buffer> <Leader>tbf<Space> \textbf{}<ESC>i
+  autocmd FileType vim
+        \ nnoremap <silent> <buffer> 
+        \ <Leader>c<Space> 
+        \ :if match(getline('.'), '^\s*" \?') ==# -1 <CR>:s/^\s*/\0" /<CR>
+        \ :else<CR>:s/^\(\s*\)" \?/\1/<CR>
+        \ :end<CR>
+
+  autocmd FileType vim
+        \ vnoremap <silent> <buffer> 
+        \ <Leader>c<Space> 
+        \ :s/^\s*/\0" /<CR>
+
+  autocmd FileType vim nnoremap <buffer> <Leader>r<Space> 
+        \ :source %<CR>:echo "sourcing done"<CR>
+
+  autocmd FileType vim set tabstop=2 softtabstop=2 shiftwidth=2
+augroup END
+
+augroup filetype_tex "{{{1
+  " TODO: add some kind of snippets
+  " TODO: add some input mode maps
+  autocmd!
+  " autocmd FileType tex inoremap <buffer> <Leader>tbf<Space> \textbf{}<ESC>i
+  autocmd FileType tex syntax spell toplevel
+
+  autocmd FileType tex
+        \ nnoremap <silent> <buffer> 
+        \ <Leader>c<Space> 
+        \ :if match(getline('.'), '^\s*% \?') ==# -1 <CR>:s/^\s*/\0% /<CR>
+        \ :else<CR>:s/^\(\s*\)% \?/\1/<CR>
+        \ :end<CR>
+
+  autocmd FileType tex
+        \ vnoremap <silent> <buffer> 
+        \ <Leader>c<Space> 
+        \ :s/^\s*/\0% /<CR>
+
+  autocmd FileType tex
+        \ nnoremap <buffer> <Leader>r<Space>
+        \ :!pdflatex -interaction=nonstopmode %<CR>
+  autocmd FileType tex set tabstop=2 softtabstop=2 shiftwidth=2
 augroup END
 
 " make .vim folder (0700) {{{1
