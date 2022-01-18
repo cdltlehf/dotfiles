@@ -1,0 +1,156 @@
+" Dracula Color Palette {{{1
+" https://spec.draculatheme.com/
+let background='#282a36'
+let foreground='#f8f8f2'
+let selection='#44475a'
+let comment='#6272a4'
+
+let red='#ff5555'
+let orange='#ffb86c'
+let yellow='#f1fa8c'
+let green='#50fa7b'
+let purple='#bd93f9'
+let cyan='#8be9fd'
+let pink='#ff79c6'
+
+" compatible, termguicolors, etc... {{{1
+if &g:compatible
+  set nocompatible
+endif
+set termguicolors
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+
+" Dracula {{{1
+packadd! dracula
+let g:dracula_italic=0
+" FIXME: 'colorscheme dracula' seems that execute `set background=dark`, which
+" overrides highlight link
+colorscheme dracula
+
+" comment map {{{1
+" TODO: unify these
+function! SetPythonCommentMap() abort
+  nnoremap <Leader>c<Space> mcI# <ESC>`c
+  vnoremap <Leader>c<Space> :s\/^\/#\ 
+
+  nnoremap gcc mcI# <ESC>`c
+  vnoremap gc :s\/^\/#\
+endfunction
+
+function! SetVimCommentMap() abort
+  nnoremap <Leader>c<Space> mcI" <ESC>`c
+  vnoremap <Leader>c<Space> :s/^/"\ <CR>
+
+  nnoremap gcc mcI" <ESC>`c
+  vnoremap gc :s\/^\/"\
+endfunction
+
+augroup commentmap
+  autocmd!
+  autocmd FileType javascript 
+        \ nnoremap <Leader>c<Space> mcI// <ESC>`c
+  autocmd FileType c 
+        \ nnoremap <Leader>c<Space> mcI// <ESC>`c
+  autocmd FileType cpp 
+        \ nnoremap <Leader>c<Space> mcI// <ESC>`c
+  autocmd FileType python call SetPythonCommentMap()
+  autocmd FileType vim call SetVimCommentMap()
+augroup END
+
+" miscellaneous settings {{{1
+set number
+set relativenumber
+" set background=dark
+set nowrap
+set hidden
+set ignorecase
+set smartcase
+set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
+set list
+set showbreak=>\ 
+set belloff=all
+
+vnoremap < <gv
+vnoremap > >gv
+vnoremap * y/<C-R>"<CR>
+
+nnoremap Q @@
+nnoremap Y y$
+
+nnoremap n nzz
+nnoremap N Nzz
+
+nnoremap <Leader>b<Space> :buffers <CR>:buffer
+" nnoremap <Leader>b<Space> :ls <CR>:b
+nnoremap <Leader><Leader> :b#<CR>
+
+" set text width 79 {{{1
+set colorcolumn=80
+" set textwidth=79
+
+" pop up menu {{{1
+set completeopt=noinsert,preview,menuone
+set pumheight=5
+
+"TODO
+augroup completion "{{{1
+  autocmd!
+  "autocmd CursorMovedI * execute('if pumvisible() normal! a')
+  "
+augroup END
+
+augroup popupmenu "{{{1
+  autocmd!
+  autocmd ColorScheme,VimEnter * execute 'highlight PmenuSel guibg='. purple .' guifg=#21222c'
+augroup END
+
+augroup runcmd "{{{1
+  autocmd!
+  autocmd FileType vim nnoremap <buffer> <Leader>r<Space> :source %<CR>:echo "sourcing done"<CR>
+  autocmd FileType python nnoremap <buffer> <Leader>r<Space> :!python %<CR>
+  autocmd FileType tex nnoremap <buffer> <Leader>r<Space> :!pdflatex %<CR>
+augroup END
+
+augroup tex "{{{1
+  autocmd!
+  autocmd FileType tex inoremap <buffer> <Leader>tbf<Space> \textbf{}<ESC>i
+augroup END
+
+" make .vim folder (0700) {{{1
+if empty(glob($HOME . "/.vim"))
+  call mkdir($HOME . "/.vim", 0700)
+endif
+
+" set spellcheck {{{1
+if empty(glob($HOME . "/.vim/spell"))
+  call mkdir($HOME . "/.vim/spell", 0700)
+endif
+set spell
+set spellfile=$HOME/.vim/spell/spell.utf-8.add
+
+" set swap {{{1
+if empty(glob($HOME . "/.vim/swap"))
+  call mkdir($HOME . "/.vim/swap", 0700)
+endif
+set directory=$HOME/.vim/swap
+
+" set undo {{{1
+if empty(glob($HOME . "/.vim/undodir"))
+  call mkdir($HOME . "/.vim/undodir", 0700)
+endif
+set undodir=$HOME/.vim/undodir
+set undofile
+
+" set fold (zR/zM to open/close all folds) {{{1
+set foldcolumn=2
+execute 'highlight FoldColumn guibg=' . background . ' guifg=' . comment
+augroup fold
+  autocmd!
+  autocmd BufRead * normal zR
+  autocmd FileType vim setlocal foldmethod=marker
+  autocmd FileType python setlocal foldmethod=indent
+augroup END
+" }}}
+
+" vim: set ft=vim fdm=marker ts=2 sts=2 sw=2 fdl=0:
