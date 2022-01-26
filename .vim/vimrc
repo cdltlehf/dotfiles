@@ -1,18 +1,18 @@
 " " Dracula Color Palette {{{1
-" " https://spec.draculatheme.com/
-" let background='#282a36'
-" let foreground='#f8f8f2'
-" let selection='#44475a'
-" let comment='#6272a4'
-" 
-" let red='#ff5555'
-" let orange='#ffb86c'
-" let yellow='#f1fa8c'
-" let green='#50fa7b'
-" let purple='#bd93f9'
-" let cyan='#8be9fd'
-" let pink='#ff79c6'
-" 
+" https://spec.draculatheme.com/
+let background='#282a36'
+let foreground='#f8f8f2'
+let selection='#44475a'
+let comment='#6272a4'
+
+let red='#ff5555'
+let orange='#ffb86c'
+let yellow='#f1fa8c'
+let green='#50fa7b'
+let purple='#bd93f9'
+let cyan='#8be9fd'
+let pink='#ff79c6'
+
 " compatible, termguicolors, etc... {{{1
 if &g:compatible
   set nocompatible
@@ -38,14 +38,6 @@ function! SetPythonCommentMap() abort
   vnoremap gc :s\/^\/#\
 endfunction
 
-function! SetVimCommentMap() abort
-  nnoremap <Leader>c<Space> mcI" <ESC>`c
-  vnoremap <Leader>c<Space> :s/^/"\ <CR>
-
-  nnoremap gcc mcI" <ESC>`c
-  vnoremap gc :s\/^\/"\
-endfunction
-
 augroup commentmap
   autocmd!
   autocmd FileType javascript 
@@ -54,8 +46,6 @@ augroup commentmap
         \ nnoremap <Leader>c<Space> mcI// <ESC>`c
   autocmd FileType cpp 
         \ nnoremap <Leader>c<Space> mcI// <ESC>`c
-  autocmd FileType python call SetPythonCommentMap()
-  autocmd FileType vim call SetVimCommentMap()
 augroup END
 
 " miscellaneous settings {{{1
@@ -113,47 +103,77 @@ augroup END
 augroup filetype_vim "{{{1
   " TODO: make each comment maps use 'comments' or 'commentstring'
   autocmd!
-  autocmd FileType vim
+  autocmd FileType vim 
         \ nnoremap <silent> <buffer> 
         \ <Leader>c<Space> 
-        \ :if match(getline('.'), '^\s*" \?') ==# -1 <CR>:s/^\s*/\0" /<CR>
-        \ :else<CR>:s/^\(\s*\)" \?/\1/<CR>
+        \ :if match(getline('.'), '^\s*" \?') ==# -1 <CR>:s/^\s*/\0" /<CR> 
+        \ :else<CR>:s/^\(\s*\)" \?/\1/<CR> 
         \ :end<CR>
 
-  autocmd FileType vim
+  autocmd FileType vim 
         \ vnoremap <silent> <buffer> 
         \ <Leader>c<Space> 
         \ :s/^\s*/\0" /<CR>
 
-  autocmd FileType vim nnoremap <buffer> <Leader>r<Space> 
+  autocmd FileType vim nnoremap <buffer> <Leader>r<Space>  
         \ :source %<CR>:echo "sourcing done"<CR>
 
-  autocmd FileType vim set tabstop=2 softtabstop=2 shiftwidth=2
+  autocmd FileType vim 
+        \ setlocal tabstop=2 softtabstop=2 shiftwidth=2
 augroup END
 
 augroup filetype_tex "{{{1
-  " TODO: add some kind of snippets
+  " TODO: set snippet from file
   " TODO: add some input mode maps
   autocmd!
-  " autocmd FileType tex inoremap <buffer> <Leader>tbf<Space> \textbf{}<ESC>i
+  autocmd FileType tex
+        \ setlocal tabstop=2 softtabstop=2 shiftwidth=2
   autocmd FileType tex syntax spell toplevel
 
-  autocmd FileType tex
-        \ nnoremap <silent> <buffer> 
-        \ <Leader>c<Space> 
+  " snippets {{{2
+  " https://github.com/honza/vim-snippets/blob/master/snippets/tex.snippets
+  " PREAMBLE
+  autocmd FileType tex iabbrev <buffer> _nc
+        \ \newcommand{<C-o>m1}[<C-o>m2]]{<C-o>m3}
+        \<ESC>`1a
+
+  " DOCUMENT
+  " autocmd FileType tex iabbrev <buffer> _begin
+        " \ \begin{<CR><C-o>m1}{c}<CR><C-o>m0<CR>\end{tabular}<ESC>
+        " \<ESC>`1a
+
+  autocmd FileType tex iabbrev <buffer> _mkt
+        \ \maketitle
+
+  autocmd FileType tex iabbrev <buffer> _tab
+        \ \begin{tabular}{c}<CR><C-o>m1<CR>\end{tabular}<ESC>
+        \<ESC>`1a
+
+  autocmd FileType tex iabbrev <buffer> _center
+        \ \begin{center}{c}<CR><C-o>m1\end{center}<ESC>
+        \<ESC>`1a
+
+  autocmd FileType tex iabbrev <buffer> _item
+        \ \begin{itemize}<CR>\item<C-o>m1<CR>\end{itemize}<ESC>
+        \<ESC>`1a
+
+  autocmd FileType tex iabbrev <buffer> _enum
+        \ \begin{enumerate}<CR>\item<C-o>m1<CR>\end{enumerate}<ESC>
+        \<ESC>`1a
+
+  " }}}
+
+  " comment
+  autocmd FileType tex nnoremap <silent> <buffer> <Leader>c<Space>
         \ :if match(getline('.'), '^\s*% \?') ==# -1 <CR>:s/^\s*/\0% /<CR>
         \ :else<CR>:s/^\(\s*\)% \?/\1/<CR>
         \ :end<CR>
 
-  autocmd FileType tex
-        \ vnoremap <silent> <buffer> 
-        \ <Leader>c<Space> 
+  autocmd FileType tex vnoremap <silent> <buffer> <Leader>c<Space>
         \ :s/^\s*/\0% /<CR>
 
-  autocmd FileType tex
-        \ nnoremap <buffer> <Leader>r<Space>
+  autocmd FileType tex nnoremap <buffer> <Leader>r<Space>
         \ :!pdflatex -interaction=nonstopmode %<CR>
-  autocmd FileType tex set tabstop=2 softtabstop=2 shiftwidth=2
 augroup END
 
 " make .vim folder (0700) {{{1
