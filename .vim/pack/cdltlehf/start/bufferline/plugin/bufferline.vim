@@ -1,4 +1,18 @@
 " tab (buffer) line
+" Dracula Color Palette {{{1
+" https://spec.draculatheme.com/
+let background='#282a36'
+let foreground='#f8f8f2'
+let selection='#44475a'
+let comment='#6272a4'
+
+let red='#ff5555'
+let orange='#ffb86c'
+let yellow='#f1fa8c'
+let green='#50fa7b'
+let purple='#bd93f9'
+let cyan='#8be9fd'
+let pink='#ff79c6'
 
 set showtabline=2
 set tabline=%!TabLine()
