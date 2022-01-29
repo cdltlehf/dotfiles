@@ -4,11 +4,12 @@ osascript -e 'tell application "System Preferences" to quit'
 sudo -v
 
 # General UI/UX
-sudo scutil --set ComputerName "cdltlehf"
-sudo scutil --set HostName "cdltlehf"
-sudo scutil --set LocalHostName "cdltlehf"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "cdltlehf"
-
+sudo scutil --set ComputerName
+sudo scutil --set HostName
+sudo scutil --set LocalHostName
+# sudo defaults write \
+    # /Library/Preferences/SystemConfiguration/com.apple.smb.server \
+    # NetBIOSName cdltlehf
 sudo nvram SystemAudioVolume=" "
 
 defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
@@ -144,8 +145,8 @@ defaults write com.apple.systemuiserver menuExtras -array \
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
-chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
-sudo chflags nohidden /Volumes
+# chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
+# sudo chflags nohidden /Volumes
 
 defaults write com.apple.finder FXInfoPanesExpanded -dict \
 	General -bool true \
@@ -153,21 +154,22 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 	Privileges -bool true
 
 # Dock, Dashboard
-defaults write com.apple.dock mouse-over-hilite-stack -bool true
-defaults write com.apple.dock tilesize -int 52
-defaults write com.apple.dock mineffect -string "suck"
-defaults write com.apple.dock minimize-to-application -bool true
-defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
-defaults write com.apple.dock show-process-indicators -bool true
-#defaults write com.apple.dock persistent-apps -array
+defaults write com.apple.dock '{
+    "autohide" = true;
+    "autohide-delay" = 0;
+    "dashboard-in-overlay" = true;
+    "enable-spring-load-actions-on-all-items" = 1;
+    "mouse-overhilite-stack" = true;
+    "orientation = bottom";
+    "persistent-apps" = -array ();
+    "persistent-others" = -array ();
+    "recent-apps" = -array ();
+    "show-recents" = false;
+    "showhidden" = 1;
+    "tilesize" = 56;
+}'
 
 defaults write com.apple.dashboard mcx-disabled -bool true
-defaults write com.apple.dock dashboard-in-overlay -bool true
-defaults write com.apple.dock mru-spaces -bool false
-
-defaults write com.apple.dock autohide-delay -float 0
-defaults write com.apple.dock autohide -bool true
-defaults write com.apple.dock showhidden -bool true
 
 sudo ln -sf "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app" "/Applications/Simulator.app"
 sudo ln -sf "/Applications/Xcode.app/Contents/Developer/Applications/Simulator (Watch).app" "/Applications/Simulator (Watch).app"

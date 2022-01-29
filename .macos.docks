@@ -1,0 +1,34 @@
+#!/usr/bin/env zsh
+# https://developer.apple.com/documentation/devicemanagement/dock
+
+# Dock, Dashboard
+defaults delete com.apple.dock
+defaults write com.apple.dock static-only -bool true
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock show-process-indicators -bool false
+defaults write com.apple.dock persistent-others -array-add \
+"<dict>
+    <key>tile-data</key>
+    <dict>
+        <key>arrangement</key>
+        <integer>1</integer>
+        <key>displayas</key>
+        <integer>0</integer>
+        <key>file-data</key>
+        <dict>
+            <key>_CFURLString</key>
+            <string>file://${HOME}/Downloads/</string>
+            <key>_CFURLStringType</key>
+            <integer>15</integer>
+        </dict>
+        <key>file-type</key>
+        <integer>2</integer>
+        <key>showas</key>
+        <integer>0</integer>
+    </dict>
+    <key>tile-type</key>
+    <string>directory-tile</string>
+</dict>"
+
+killall Dock;
+defaults read com.apple.dock
