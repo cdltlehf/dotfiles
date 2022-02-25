@@ -47,6 +47,25 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias cp='cp -i'
 
-# set default editor as vim
-EDITOR=$(command -v vim)
+# color {{{1
+background=40\;42\;54
+current_line=68\;71\;90
+foreground=248\;248\;242
+comment=98\;114\;164
+cyan=139\;233\;253
+green=80\;250\;123
+orange=255\;184\;108
+pink=255\;121\;198
+purple=189\;147\;249
+red=255\;85\;85
+yellow=241\;250\;140
+# }}}
 
+PS1=$'\n'
+PS1+=$"\[\033[38;2;${pink}m\]\u\[\033[0m\] at "
+PS1+=$"\[\033[38;2;${yellow}m\]\h\[\033[0m\] in "
+PS1+=$"\[\033[38;2;${green}m\]\w\[\033[0m\]"
+# PS1+='$(prompt_git ${cyan} ${purple})'
+PS1+=$'\n'
+PS1+=$"\[\033[38;2;${foreground}m\]$ \[\033[0m\]"
+# PS2="%F{${comment}}> %f"
