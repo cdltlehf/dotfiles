@@ -3,18 +3,20 @@ set editing-mode vi
 set show-mode-in-prompt on
 set keyseq-timeout 0
 
+set vi-ins-mode-string "\033[38;2;241;250;140m[I]\033[0m "
+set vi-cmd-mode-string "\033[38;2;80;250;123m[N]\033[0m "
+
 set keymap vi-command
 "\C-x\C-r": re-read-init-file
+# TAB: menu-complete
+TAB: complete
 
-set vi-ins-mode-string "[I]"
-set vi-cmd-mode-string "[N]"
-
-set colored-stats On
-set completion-ignore-case On
+set colored-stats on
+set completion-ignore-case on
 set completion-prefix-display-length 3
-set show-all-if-ambiguous On
-set show-all-if-unmodified On
-# set visible-stats On
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+set visible-stats on
 
 set bell-style visible
 
