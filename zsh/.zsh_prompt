@@ -1,31 +1,7 @@
-#!/bin/env zsh
-
-# history {{{1
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-unsetopt beep
-# }}}
-
-# vi-mode {{{1
-bindkey -v
-# https://github.com/spaceship-prompt/spaceship-prompt/issues/91
-bindkey "^?" backward-delete-char
-export KEYTIMEOUT=1
-# }}}
-
-# export editors {{{1
-export VISUAL='vim'
-export EDITOR='vim -E'
-export PAGER='less'
-# }}}
-
-# prompt {{{1
 # TODO: What happened if hex color not supported?
-
 setopt PROMPT_SUBST
 
-# color {{{2
+# Colors {{{
 background=#44475a
 current_line=#44475a
 foreground=#f8f8f2
@@ -76,10 +52,9 @@ function prompt_git {
 
   echo $prompt
 }
-  
 # }}}
 
-# PS {{{2
+# PS {{{
 PS1=$'\n'
 PS1+="%F{${pink}}%n%f at "
 PS1+="%F{${yellow}}%m%f in "
@@ -90,7 +65,7 @@ PS1+="%F{${foreground}}$ %f"
 PS2="%F{${comment}}> %f"
 # }}}
 
-# RPS (vi-mode indicator) {{{2
+# RPS (vi-mode indicator) {{{1
 function zle-line-init zle-keymap-select {
     case $KEYMAP in
         vicmd|viopp ) RPS1="%F{${green}}[N]%k%f" ;;
@@ -111,7 +86,6 @@ function zle-line-finish {
 zle -N zle-line-init
 zle -N zle-line-finish
 zle -N zle-keymap-select
-# }}}
 # }}}
 
 # vim:ts=2:sts=2:sw=2:et:sta:fdm=marker:fdl=0
