@@ -85,16 +85,33 @@ function! StatusLineMode() abort "{{{1
   return 'UNKNOWN(' . l:mode . ')'
 endfunction
 
+highlight clear StatusLineNormal
+highlight clear StatusLineInsert
+highlight clear StatusLineVisual
+highlight clear StatusLineCommand
+highlight clear StatusLineUnknown
+highlight clear StatusLineRight1
+highlight clear StatusLineRight2
+highlight clear StatusLine
 augroup statusline "{{{1
   autocmd!
-  autocmd ColorScheme * execute 'highlight StatusLineNormal guibg=' . green . ' guifg=' . background
-  autocmd ColorScheme * execute 'highlight StatusLineInsert guibg=' . yellow . ' guifg=' . background
-  autocmd ColorScheme * execute 'highlight StatusLineVisual guibg=' . purple . ' guifg=' . background
-  autocmd ColorScheme * execute 'highlight StatusLineCommand guibg=' . cyan . ' guifg=' . background
-  autocmd ColorScheme * execute 'highlight StatusLineUnknown guibg=' . red . ' guifg=' . background
-  autocmd ColorScheme * execute 'highlight StatusLineRight1 guibg=' . cyan . ' guifg=' . background
-  autocmd ColorScheme * execute 'highlight StatusLineRight2 guibg=' . orange . ' guifg=' . background
-  autocmd ColorScheme * execute 'highlight StatusLine guibg=' . selection . ' guifg=' . foreground
+  autocmd ColorScheme,VimEnter *
+        \ execute 'highlight StatusLineNormal '
+        \ . 'guibg=' . green . ' guifg=' . background |
+        \ execute 'highlight StatusLineInsert '
+        \ . 'guibg=' . yellow . ' guifg=' . background |
+        \ execute 'highlight StatusLineVisual '
+        \ . 'guibg=' . purple . ' guifg=' . background |
+        \ execute 'highlight StatusLineCommand '
+        \ . 'guibg=' . cyan . ' guifg=' . background |
+        \ execute 'highlight StatusLineUnknown '
+        \ . 'guibg=' . red . ' guifg=' . background |
+        \ execute 'highlight StatusLineRight1 '
+        \ . 'guibg=' . cyan . ' guifg=' . background |
+        \ execute 'highlight StatusLineRight2 '
+        \ . 'guibg=' . orange . ' guifg=' . background |
+        \ execute 'highlight StatusLine '
+        \ . 'guibg=' . selection . ' guifg=' . foreground
 augroup END
 " }}}
 

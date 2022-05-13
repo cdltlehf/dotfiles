@@ -75,4 +75,4 @@ echo "Done. Restart your login shell with \`exec \$SHELL --login\`."
 unset UNAME
 unset BASEDIR
 
-# vim:ft=bash:ts=2:sts=2:sw=2:et:sta
+# vim:ft=sh:ts=2:sts=2:sw=2:et:sta

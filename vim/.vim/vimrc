@@ -24,8 +24,6 @@ let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 " Dracula {{{1
 packadd! dracula
 let g:dracula_italic=0
-" FIXME: 'colorscheme dracula' seems that execute `set background=dark`, which
-" overrides highlight link
 colorscheme dracula
 
 " comment map {{{1
@@ -207,5 +205,11 @@ augroup fold
   autocmd FileType python setlocal foldmethod=indent
 augroup END
 " }}}
+" add packages {{{1
+packadd! sensible
+packadd! statusline
+packadd! unimpaired
+packadd! bufferline
+" }}}
 
-" vim: set ft=vim fdm=marker ts=2 sts=2 sw=2 fdl=0:
+" vim:ft=vim:fdm=marker:ts=2:sts=2:sw=2:
