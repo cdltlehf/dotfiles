@@ -8,9 +8,9 @@ alias .....="cd ../../../.."
 
 # Fool-proof aliases
 alias rm="rm --interactive=always"
-alias mv="mv --interactive=always"
-alias cp="cp --interactive=always"
-alias ln="ln --interactive=always"
+alias mv="mv --interactive"
+alias cp="cp --interactive"
+alias ln="ln --interactive"
 
 # Colorize `ls`
 alias ls="ls --color=auto"

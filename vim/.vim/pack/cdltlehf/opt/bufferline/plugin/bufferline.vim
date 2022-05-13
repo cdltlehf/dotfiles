@@ -17,12 +17,21 @@ let pink='#ff79c6'
 set showtabline=2
 set tabline=%!TabLine()
 
+" highlight clear TabLineSelNR
+" highlight clear TabLineSel
+" highlight clear TabLine
+" highlight clear TabLineFill
 augroup tabline_highlight "{{{1
   autocmd!
-  autocmd ColorScheme * execute 'highlight TabLineSelNR guibg=' . background . ' guifg=' . green
-  autocmd ColorScheme * execute 'highlight TabLineSel guibg=' . background . ' guifg=' . foreground
-  autocmd ColorScheme * execute 'highlight TabLine gui=NONE cterm=NONE guibg=' . selection . ' guifg=' . foreground
-  autocmd ColorScheme * execute 'highlight TabLineFill guibg=' . selection . ' guifg=' . selection
+  autocmd ColorScheme,VimEnter * 
+        \ execute 'highlight TabLineSelNR '
+        \ . 'guibg=' . background . ' guifg=' . green |
+        \ execute 'highlight TabLineSel '
+        \ . 'guibg=' . background . ' guifg=' . foreground |
+        \ execute 'highlight TabLine '
+        \ . 'guibg=' . selection . ' guifg=' . foreground |
+        \ execute 'highlight TabLineFill '
+        \ . 'guibg=' . selection . ' guifg=' . selection
 augroup END
 
 function! TabLine() abort "{{{1
