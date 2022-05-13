@@ -4,3 +4,6 @@
 [submodule "ubersicht-morning.widget"]
 	path = ubersicht-morning.widget
 	url = https://github.com/imRohan/ubersicht-morning.widget.git
+[submodule "vim/pack/themes/opt/dracula"]
+	path = vim/pack/themes/opt/dracula
+	url = https://github.com/dracula/vim.git

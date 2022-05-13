@@ -188,18 +188,14 @@ endif
 set spell
 set spellfile=$HOME/.vim/spell/spell.utf-8.add
 
-" set swap {{{1
-if empty(glob($HOME . "/.vim/swap"))
-  call mkdir($HOME . "/.vim/swap", 0700)
-endif
-set directory=$HOME/.vim/swap
-
-" set undo {{{1
-if empty(glob($HOME . "/.vim/undodir"))
-  call mkdir($HOME . "/.vim/undodir", 0700)
-endif
-set undodir=$HOME/.vim/undodir
+" set backup, swap and undo {{{1
+let &backupdir = expand('~/.local/share/vim/backup/')
+let &directory = expand('~/.local/share/vim/swap/')
+let &undodir = expand('~/.local/share/vim/undo/')
 set undofile
+if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p') | endif
+if !isdirectory(&directory) | call mkdir(&directory, 'p') | endif
+if !isdirectory(&undodir) | call mkdir(&undodir, 'p') | endif
 
 " set fold (zR/zM to open/close all folds) {{{1
 set foldcolumn=2

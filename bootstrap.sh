@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
 # Treat unset variables and parameters as an error
-set -o nounset # (= `set -u`)
+# (= `set -u`)
+set -o nounset 
 
 # Exit immediately
-set -o errexit # (= `set -e`)
+# (= `set -e`)
+set -o errexit 
 
 # Print a trace of commands
 # set -o xtrace # (= `set -x`)
@@ -47,7 +49,7 @@ DOTFILES_DARWIN=(
 # Make symbolic links for common dotfiles
 for dotfile in "${DOTFILES_COMMON[@]}"; do
   basename="$(basename "$dotfile")"
-  if [[ -f "$dotfile" ]]; then
+  if [[ -e "$dotfile" ]]; then
     ln --interactive --symbolic "$dotfile" "$HOME/$basename"
   fi
   unset basename
@@ -60,7 +62,7 @@ case $UNAME in
   "Darwin")
     for dotfile in "${DOTFILES_DARWIN[@]}"; do
       basename="$(basename "$dotfile")"
-      if [[ -f "$dotfile" ]]; then
+      if [[ -e "$dotfile" ]]; then
         ln --interactive --symbolic "$dotfile" "$HOME/$basename"
       fi
       unset basename
@@ -73,4 +75,4 @@ echo "Done. Restart your login shell with \`exec \$SHELL --login\`."
 unset UNAME
 unset BASEDIR
 
-# vim:ft=sh:ts=2:sts=2:sw=2:et:sta
+# vim:ft=bash:ts=2:sts=2:sw=2:et:sta
