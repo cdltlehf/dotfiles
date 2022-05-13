@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+# Fool-proof aliases
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+alias ln='ln -i'
+
+# Colorize the ls output
+alias ls='ls --color=auto'
+
+# Colorize the grep output
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+# Reload the shell as login shell
+alias reload="exec ${SHELL} --login"
+
+# Print PATH entries
+alias path='echo -e ${PATH//:/\\n}'
+
+# vim:ft=sh:ts=2:sts=2:sw=2:et:sta
