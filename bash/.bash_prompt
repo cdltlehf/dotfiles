@@ -19,4 +19,4 @@ PS1+=$"\[\033[38;2;${green}m\]\w\[\033[0m\]"
 PS1+=$'\n'
 PS1+=$"\[\033[38;2;${foreground}m\]$ \[\033[0m\]"
 
-# vim:ts=2:sts=2:sw=2:et:sta:fdm=marker:fdl=0
+# vim:ft=bash:ts=2:sts=2:sw=2:et:sta

@@ -16,7 +16,7 @@ if tty >/dev/null 2>&1; then
 fi
 
 # Inspect processes on GPUs
-nvidia-ps() {
+nvidia_ps() {
 _pids="$(nvidia-smi pmon -c 1 | awk '/^#/{next}{if ($2 != "-") print $2}')"
 if [[ -n "$_pids" ]]; then
   echo "$_pids" | xargs ps "$@"
@@ -25,6 +25,7 @@ else
 fi
 unset _pids
 }
+alias -- nvidia-ps=nvidia_ps
 
 # Alias podman to docker
 if ! command docker 2> /dev/null; then
@@ -33,9 +34,9 @@ if ! command docker 2> /dev/null; then
 fi
 
 # Source shell-independent dotfiles
-for file in "$HOME"/.{aliases}; do
+for file in "$HOME"/.aliases; do
   [ -f "$file" ] && . "$file"
 done;
 unset file;
 
-# vim:ts=2:sts=2:sw=2:et:sta:fdm=marker:fdl=0
+# vim:ft=sh:ts=2:sts=2:sw=2:et:sta

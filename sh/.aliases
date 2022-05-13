@@ -1,23 +1,32 @@
 #!/usr/bin/env sh
 
+# Easier navigation
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
 # Fool-proof aliases
-alias rm='rm -i'
-alias mv='mv -i'
-alias cp='cp -i'
-alias ln='ln -i'
+alias rm="rm --interactive=always"
+alias mv="mv --interactive=always"
+alias cp="cp --interactive=always"
+alias ln="ln --interactive=always"
 
-# Colorize the ls output
-alias ls='ls --color=auto'
+# Colorize `ls`
+alias ls="ls --color=auto"
+alias l="ls -l --classify"
+alias la="ls -l --classify --almost-all"
+alias lsd="ls -l --classify | grep --color=never '^d'"
 
-# Colorize the grep output
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
+# Colorize `grep`
+alias grep="grep --color=auto"
+alias egrep="egrep --color=auto"
+alias fgrep="fgrep --color=auto"
 
 # Reload the shell as login shell
 alias reload="exec ${SHELL} --login"
 
 # Print PATH entries
-alias path='echo -e ${PATH//:/\\n}'
+alias path="echo -e ${PATH//:/\\n}"
 
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta
