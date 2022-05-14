@@ -1,12 +1,22 @@
 #!/usr/bin/env bash
+## $HOME/.bashrc
+## Bash startup file for interactive non-login shells
+## Since $HOME/.bash_profile sources this file,
+## it sourced for interactive login shells
 
-# Source the global bash configuration
+# Source the global bash startup file
 [[ -f "/etc/bashrc" ]] && source "/etc/bashrc";
 
-# Source the shell-independent configuration
+## Source the shell-independent startup file
 [[ -f "$HOME/.shrc" ]] && source "$HOME/.shrc";
 
-# Source the local bash profile if the shell is interactive
-[[ -n "$PS1" ]] && [[ -f "$HOME/.bash_profile" ]] && source "$HOME/.bash_profile";
+# Place bash-dependent startup configurations here.
+##
+
+# Source bash-dependent external configurations
+for file in "$HOME/.bash_prompt"; do
+  [[ -f "$file" ]] && source "$file";
+done
+unset file;
 
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta

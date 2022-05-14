@@ -15,7 +15,7 @@ set -o errexit
 BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Get kernel name
-UNAME=$(uname --kernel-name)
+UNAME=$(uname)
 
 # Update dotfiles
 # command -v git > /dev/null && (cd "$BASEDIR" && git pull origin main);
@@ -30,6 +30,7 @@ DOTFILES_COMMON=(
 
   "$BASEDIR/sh/.aliases"
   "$BASEDIR/sh/.profile"
+  "$BASEDIR/sh/.shrc"
 
   "$BASEDIR/tmux/.tmux.conf"
 
@@ -41,18 +42,37 @@ DOTFILES_COMMON=(
 
 # Array of dotfiles for Darwin (macos)
 DOTFILES_DARWIN=(
-  "$BASEDIR/macos/.skhdrc"
   "$BASEDIR/macos/.hammerspoon/"
+  "$BASEDIR/macos/.skhdrc"
+  "$BASEDIR/macos/.ubersichtrc"
   "$BASEDIR/macos/.yabairc"
 )
 
+symlink_home() {
+  local source_file=${1}
+
+  # If $source_file not exists, return
+  if ! [[ -f "$source_file" ]]; then return 1; fi
+  local target_file="$HOME/$(basename "$source_file")"
+
+  # If $target_file exists, ask to replace or not
+  if [[ -e "$target_file" || -h "$target_file" ]]; then
+    local yn
+    read -p "replace $target_file? " yn
+    case $yn in
+      [Yy]* ) rm "$target_file" ;;
+      * ) return 1 ;;
+    esac
+  fi
+
+  # Make a target symlink verbosely
+  ln -s "$source_file" "$target_file"
+  echo "$target_file -> $source_file"
+}
+
 # Make symbolic links for common dotfiles
 for dotfile in "${DOTFILES_COMMON[@]}"; do
-  basename="$(basename "$dotfile")"
-  if [[ -e "$dotfile" ]]; then
-    ln --interactive --symbolic "$dotfile" "$HOME/$basename"
-  fi
-  unset basename
+  symlink_home "$dotfile" || true
 done
 unset dotfile
 
@@ -61,17 +81,14 @@ case $UNAME in
   # Do configurations for Darwin (macos)
   "Darwin")
     for dotfile in "${DOTFILES_DARWIN[@]}"; do
-      basename="$(basename "$dotfile")"
-      if [[ -e "$dotfile" ]]; then
-        ln --interactive --symbolic "$dotfile" "$HOME/$basename"
-      fi
-      unset basename
+      symlink_home "$dotfile" || true
     done
     unset dotfile
     ;;
 esac
 
-echo "Done. Restart your login shell with \`exec \$SHELL --login\`."
+echo "Done. Restart your login shell with \`exec \"\$SHELL\" --login\`."
+unset -f symlink_home
 unset UNAME
 unset BASEDIR
 
