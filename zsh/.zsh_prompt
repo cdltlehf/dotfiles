@@ -1,4 +1,5 @@
 # TODO: What happened if hex color not supported?
+# TODO: Unset colors
 setopt PROMPT_SUBST
 
 # Colors {{{
