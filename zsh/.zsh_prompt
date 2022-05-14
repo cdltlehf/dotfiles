@@ -61,7 +61,7 @@ PS1+="%F{${yellow}}%m%f in "
 PS1+="%F{${green}}%~%f"
 PS1+='$(prompt_git ${cyan} ${purple})'
 PS1+=$'\n'
-PS1+="%F{${foreground}}$ %f"
+PS1+="%(?.%F{${foreground}}$ %f.%F{${red}}?%? %f)"
 PS2="%F{${comment}}> %f"
 # }}}
 
