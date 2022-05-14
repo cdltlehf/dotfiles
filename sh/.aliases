@@ -29,6 +29,13 @@ alias fgrep="fgrep --color=auto"
 alias reload="exec ${SHELL} --login"
 
 # Print PATH entries
-alias path="echo -e ${PATH//:/\\n}"
+case $0 in
+  *zsh)
+    alias path="printf \"${PATH:gs/:/\\n}\\n\""
+    ;;
+  *bash)
+    alias path="printf \"${PATH//:/\\n}\\n\""
+    ;;
+esac
 
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta

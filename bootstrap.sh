@@ -28,6 +28,8 @@ DOTFILES_COMMON=(
 
   "$BASEDIR/etc/.inputrc"
 
+  "$BASEDIR/git/.gitconfig"
+
   "$BASEDIR/sh/.aliases"
   "$BASEDIR/sh/.profile"
   "$BASEDIR/sh/.shrc"
