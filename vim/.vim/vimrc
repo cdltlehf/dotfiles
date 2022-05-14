@@ -190,6 +190,7 @@ set spellfile=$HOME/.vim/spell/spell.utf-8.add
 let &backupdir = expand('~/.local/share/vim/backup/')
 let &directory = expand('~/.local/share/vim/swap/')
 let &undodir = expand('~/.local/share/vim/undo/')
+let g:netrw_home = expand('~/.local/share/vim/')
 set undofile
 if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p') | endif
 if !isdirectory(&directory) | call mkdir(&directory, 'p') | endif

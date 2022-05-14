@@ -77,10 +77,10 @@ function zle-line-init zle-keymap-select {
     zle reset-prompt
 }
 
-function zle-line-finish { 
+function zle-line-finish {
     RPS1=""
-    RPS2="" 
-    zle reset-prompt 
+    RPS2=""
+    zle reset-prompt
 }
 
 zle -N zle-line-init
