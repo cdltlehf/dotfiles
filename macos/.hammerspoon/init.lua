@@ -1,5 +1,5 @@
 -- global leader
-leader = { "ctrl", "cmd" }
+local leader = { "ctrl", "cmd" }
 
 -- Alert style {{{1
 -- TODO: set it as a local configuration?
@@ -185,7 +185,7 @@ function hide_space_indicator()
 end
 -- }}}
 
-require('.modules.window_manager')
+local window_manager = require('.modules.window_manager')
 -- hammer spoon reload {{{1
 hs.hotkey.bind(leader, "r", function()
     hs.reload()
