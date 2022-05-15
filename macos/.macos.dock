@@ -1,14 +1,16 @@
 #!/usr/bin/env zsh
-# https://developer.apple.com/documentation/devicemanagement/dock
+## Custom defaults for dock
+## https://developer.apple.com/documentation/devicemanagement/dock
 
-# Dock, Dashboard
+# Delete defaults
 defaults delete com.apple.dock
 
+# Custom defaults of dock
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock autohide-immutable -bool true
 defaults write com.apple.dock contents-immutable -bool true
 
-defaults write com.apple.dock dblclickbehavior -string "none"
+defaults write com.apple.dock dblclickbehavior -string "minimize"
 defaults write com.apple.dock dblclickbehavior-immutable -bool true
 
 defaults write com.apple.dock largesize -integer 16
@@ -45,6 +47,7 @@ defaults write com.apple.dock static-apps -array {}
 defaults write com.apple.dock static-only -bool true
 defaults write com.apple.dock static-others -array {}
 
+# TODO: Reformat these with json. It works
 arrangement=1; displayas=1; showas=2; filetype=2
 tmp="$(mktemp)" || exit
 cat <<EOF > "$tmp"
@@ -65,6 +68,7 @@ cat <<EOF > "$tmp"
   <key>tile-type</key> <string>directory-tile</string>
 </dict>
 EOF
+
 value="$(cat "$tmp")" || exit
 defaults write com.apple.dock static-others -array-add "$value"
 unset tmp; unset value;
@@ -74,5 +78,7 @@ defaults write com.apple.dock tilesize -integer 64
 defaults write com.apple.dock windowtabbing -string "manual"
 defaults write com.apple.dock windowtabbing-immutable -bool true
 
+# Restart dock
 killall Dock;
+# Print defaults of dock
 defaults read com.apple.dock
