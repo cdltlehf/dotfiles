@@ -1,3 +1,6 @@
+local leader = { "ctrl", "cmd" }
+-- FIXME: add some kind of set_leader to set leader from outside
+
 local function setFocusedWindowRatio(x, y, w, h, padding, duration)
     if padding == nil then padding = 0 end
     if duration == nil then duration = 0 end
@@ -34,4 +37,7 @@ hs.hotkey.bind(leader, "k", function()
 end)
 hs.hotkey.bind(leader, "j", function()
     setFocusedWindowRatio(0.25, 0.25, 0.5, 0.5, padding, duration)
+end)
+hs.hotkey.bind({ "shift", table.unpack(leader) }, "l", function()
+  hs.caffeinate.lockScreen()
 end)

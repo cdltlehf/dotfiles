@@ -25,6 +25,8 @@ let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 packadd! dracula
 let g:dracula_italic=0
 colorscheme dracula
+" XXX: IDK how dangerous it is, but its for the iterm2's opaque setting :P
+autocmd ColorScheme,VimEnter * hi Normal guibg=NONE ctermbg=NONE
 
 " comment map {{{1
 " TODO: unify these
