@@ -1,12 +1,12 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -eu
 
 # Treat unset variables and parameters as an error
 # (= `set -u`)
-set -o nounset 
+set -o nounset
 
 # Exit immediately
 # (= `set -e`)
-set -o errexit 
+set -o errexit
 
 # Print a trace of commands
 # set -o xtrace # (= `set -x`)
@@ -53,16 +53,16 @@ DOTFILES_DARWIN=(
 symlink_home() {
   local source_file=${1}
 
-  # If $source_file not exists, return
-  if ! [[ -f "$source_file" ]]; then return 1; fi
+  # If $source_file not exists, return with an error
+  if [[ ! -e "$source_file" ]]; then return 1; fi
   local target_file="$HOME/$(basename "$source_file")"
 
   # If $target_file exists, ask to replace or not
-  if [[ -e "$target_file" || -h "$target_file" ]]; then
+  if [[ -e "$target_file" ]]; then
     local yn
     read -p "replace $target_file? " yn
     case $yn in
-      [Yy]* ) rm "$target_file" ;;
+      [Yy]* ) rm -rf "$target_file" ;;
       * ) return 1 ;;
     esac
   fi
@@ -81,6 +81,7 @@ unset dotfile
 # Do platform dependent configurations
 case $UNAME in
   # Do configurations for Darwin (macos)
+  # TODO: Brew things, macos defaults things, ...
   "Darwin")
     for dotfile in "${DOTFILES_DARWIN[@]}"; do
       symlink_home "$dotfile" || true

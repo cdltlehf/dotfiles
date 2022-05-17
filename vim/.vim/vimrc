@@ -23,8 +23,9 @@ let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 
 " Dracula {{{1
 packadd! dracula
-let g:dracula_italic=0
-colorscheme dracula
+if exists('g:colors_name') && g:colors_name ==# 'draula'
+  colorscheme dracula
+endif
 " XXX: IDK how dangerous it is, but its for the iterm2's opaque setting :P
 autocmd ColorScheme,VimEnter * hi Normal guibg=NONE ctermbg=NONE
 
