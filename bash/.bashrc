@@ -2,7 +2,7 @@
 ## $HOME/.bashrc
 ## Bash startup file for interactive non-login shells
 ## Since $HOME/.bash_profile sources this file,
-## it sourced for interactive login shells
+## it sourced for interactive login shells too
 
 # Source the global bash startup file
 [[ -f "/etc/bashrc" ]] && source "/etc/bashrc";
