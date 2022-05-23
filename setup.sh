@@ -102,7 +102,10 @@ case $UNAME in
 
   # XXX: In general, the below code is redundant, since it is needed for git.
   xcode-select --install &> /dev/null || true
-  if [[ -d $HOME/.ssh ]] && ; then
+
+  # If there is no ssh key, make one.
+  # XXX: Is it a best way to check whether a directory is empty?
+  if [[ -d $HOME/.ssh ]] && [[ "$(ls -A $HOME/.ssh)" ]]; then
     true
   else
     if command -v ssh-keygen; then
