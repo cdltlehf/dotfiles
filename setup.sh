@@ -29,6 +29,13 @@ symlink_home() {
 
   # If $target_file exists, ask to replace or not
   if [[ -e "$target_file" ]]; then
+
+    # If symlink exists, return 0
+    if [[ -L "$target_file" ]] &&
+      [[ $(readlink "$target_file") == "$source_file" ]]; then
+          return 0;
+    fi
+
     local yn
     read -p "replace $target_file? (y/n) " yn
     case $yn in
@@ -69,7 +76,7 @@ for dotfile in "${DOTFILES_COMMON[@]}"; do
   symlink_home "$dotfile" || true
 done
 unset dotfile
-echo "Done.\n"
+echo "Done."
 
 # Array of dotfiles for Darwin (macos)
 DOTFILES_DARWIN=(
@@ -106,7 +113,7 @@ case $UNAME in
   for dotfile in "${DOTFILES_DARWIN[@]}"; do
     symlink_home "$dotfile" || true
   done
-  echo "Done.\n"
+  echo "Done."
   unset dotfile
 
   # XXX: In general, the below code is redundant, since it is needed for git.
@@ -126,13 +133,15 @@ case $UNAME in
 
   # Install Homebrew
   if ! command -v brew &> /dev/null; then
+    echo "Install Homebrew"
     /bin/bash -c \
       "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval $(/opt/homebrew/bin/brew shellenv)
   fi
-  [[ -e "/opt/homebrew/bin/brew" ]] && eval $(/opt/homebrew/bin/brew shellenv)
 
   # TODO: Check and run `softwareupdate --all --install --force`
-  sudo sotwareupdate --install-rosetta || true
+  echo "Install rosetta"
+  sudo softwareupdate --install-rosetta || true
 
   echo "Install brew packages in $BASEDIR/macos/Brewfile"
   command -v brew &> /dev/null && brew bundle --file "$BASEDIR/macos/Brewfile"
