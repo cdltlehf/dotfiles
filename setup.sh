@@ -102,6 +102,14 @@ case $UNAME in
 
   # XXX: In general, the below code is redundant, since it is needed for git.
   xcode-select --install &> /dev/null || true
+  if [[ -d $HOME/.ssh ]] && ; then
+    true
+  else
+    if command -v ssh-keygen; then
+      # https://stribika.github.io/2015/01/04/secure-secure-shell.html
+      ssh-keygen -t ed25519 -a 100
+    fi
+  fi
 
   # Install Homebrew
   if ! command -v brew &> /dev/null; then
