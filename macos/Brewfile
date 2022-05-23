@@ -61,15 +61,15 @@ cask "notion"
 cask "sublime-text"
 cask "temurin"
 cask "the-unarchiver"
-cask "twitch"
+# cask "twitch"
 cask "ubersicht"
 cask "visual-studio-code"
 cask "vlc"
 cask "vox"
 cask "zoom"
-mas "GarageBand", id: 682658836
+# mas "GarageBand", id: 682658836
 mas "Hancom Office HWP 2014 VP Viewer", id: 416746898
-mas "iMovie", id: 408981434
+# mas "iMovie", id: 408981434
 mas "KakaoTalk", id: 869223134
 mas "Keynote", id: 409183694
 mas "Microsoft Excel", id: 462058435

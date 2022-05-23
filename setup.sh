@@ -89,9 +89,18 @@ MACOS_DEFAULTS=(
 
 # Do platform dependent configurations
 case $UNAME in
+  # TODO: Be sudoer for some commands
+
   # Do configurations of Darwin (macos)
   # TODO: Brew things, macos defaults things, ...
   "Darwin")
+
+  # XXX: These default files should be package independent
+  echo "Set default configurations for macos."
+  for defaults in "${MACOS_DEFAULTS}"; do
+    command zsh $defaults
+  done
+  unset defaults
 
   echo "Make symbolic links of dotfiles for macos..."
   for dotfile in "${DOTFILES_DARWIN[@]}"; do
@@ -123,13 +132,17 @@ case $UNAME in
   fi
   [[ -f "/opt/homebrew/bin/brew" ]] && eval $(/opt/homebrew/bin/brew shellenv)
 
+  # TODO: Check and run `softwareupdate --all --install --force`
+  # TODO: Check and run `sudo sotwareupdate --install-rosetta`
+
   echo "Install brew packages in $BASEDIR/macos/Brewfile"
   command -v brew &> /dev/null && brew bundle --file "$BASEDIR/macos/Brewfile"
 
-  echo "Set default configurations for macos."
-  for defaults in "${MACOS_DEFAULTS}"; do
-    command zsh $defaults
-  done
+  # TODO: Do package dependent things
+  # Make the following applications default:
+  # Google Chrome, iTerm, VLC, VOX, The Unarchiver
+  # Set the following applications: Alfred4(?), Ubersicht, Hammerspoon
+  # Run BetterDiscord
 
   ;;
 esac
