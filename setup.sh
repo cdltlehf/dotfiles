@@ -126,14 +126,13 @@ case $UNAME in
 
   # Install Homebrew
   if ! command -v brew &> /dev/null; then
-    # XXX: Instead of using `command bash`, it uses `/bin/bash`
     /bin/bash -c \
       "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
-  [[ -f "/opt/homebrew/bin/brew" ]] && eval $(/opt/homebrew/bin/brew shellenv)
+  [[ -e "/opt/homebrew/bin/brew" ]] && eval $(/opt/homebrew/bin/brew shellenv)
 
   # TODO: Check and run `softwareupdate --all --install --force`
-  # TODO: Check and run `sudo sotwareupdate --install-rosetta`
+  sudo sotwareupdate --install-rosetta || true
 
   echo "Install brew packages in $BASEDIR/macos/Brewfile"
   command -v brew &> /dev/null && brew bundle --file "$BASEDIR/macos/Brewfile"
