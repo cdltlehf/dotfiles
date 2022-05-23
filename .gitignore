@@ -1,6 +1,2 @@
-*.swp
 Brewfile.lock.json
 .DS_Store
-vim/.vim/spell/
-vim/.vim/swap/
-vim/.vim/undodir/
