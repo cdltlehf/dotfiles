@@ -3,6 +3,7 @@
 ## Zsh startup file for interactive shells
 
 # brew environment
+# XXX: Manual says that put this line to zprofile
 [[ -f "/opt/homebrew/bin/brew" ]] && eval $(/opt/homebrew/bin/brew shellenv)
 
 # Source the shell-independent startup file

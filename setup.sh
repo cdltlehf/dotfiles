@@ -107,6 +107,7 @@ case $UNAME in
   # XXX: Is it a best way to check whether a directory is empty?
   if [[ -d $HOME/.ssh ]] && [[ "$(ls -A $HOME/.ssh)" ]]; then
     true
+
   else
     if command -v ssh-keygen; then
       # https://stribika.github.io/2015/01/04/secure-secure-shell.html
@@ -116,17 +117,18 @@ case $UNAME in
 
   # Install Homebrew
   if ! command -v brew &> /dev/null; then
-    # XXX: Instead of using `command bash`, it uses /bin/bash
+    # XXX: Instead of using `command bash`, it uses `/bin/bash`
     /bin/bash -c \
       "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
+  [[ -f "/opt/homebrew/bin/brew" ]] && eval $(/opt/homebrew/bin/brew shellenv)
 
   echo "Install brew packages in $BASEDIR/macos/Brewfile"
   command -v brew &> /dev/null && brew bundle --file "$BASEDIR/macos/Brewfile"
 
   echo "Set default configurations for macos."
   for defaults in "${MACOS_DEFAULTS}"; do
-    command zsh defaults
+    command zsh $defaults
   done
 
   ;;
