@@ -25,7 +25,17 @@ let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 packadd! dracula
 colorscheme dracula
 " XXX: IDK how dangerous it is, but its for the iterm2's opaque setting :P
-autocmd ColorScheme,VimEnter * hi Normal guibg=NONE ctermbg=NONE
+augroup dracula_customization
+  autocmd!
+  autocmd ColorScheme,VimEnter * 
+        \ hi Normal guibg=NONE ctermbg=NONE |
+        \ hi VertSplit term=NONE cterm=NONE gui=NONE |
+        \ hi link VertSplit DraculaComment |
+        \ hi link FoldColumn DraculaComment
+augroup END
+
+"Set fillchars {{{1
+set fillchars+=vert:│,foldsep:│,foldopen:┌
 
 " comment map {{{1
 " TODO: unify these
@@ -198,8 +208,7 @@ if !isdirectory(&directory) | call mkdir(&directory, 'p') | endif
 if !isdirectory(&undodir) | call mkdir(&undodir, 'p') | endif
 
 " set fold (zR/zM to open/close all folds) {{{1
-set foldcolumn=2
-execute 'highlight FoldColumn guibg=' . background . ' guifg=' . comment
+set foldcolumn=1
 augroup fold
   autocmd!
   autocmd BufRead * normal zR

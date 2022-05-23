@@ -3,5 +3,7 @@
 ## Installation
 
 ```bash
-git clone https://github.com/cdltlehf/dotfiles.git && cd dotfiles && source bootstrap.sh
+git clone https://github.com/cdltlehf/dotfiles.git -recurse-submodules &&
+cd dotfiles &&
+bash bootstrap.sh
 ```
