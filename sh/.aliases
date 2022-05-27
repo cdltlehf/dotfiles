@@ -1,40 +1,41 @@
-#!/usr/bin/env sh
+#!/usr/bin/sh
 ## $HOME/.aliases
 ## Shell-independent aliases
 
 # Easier navigation
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 
 # Fool-proof aliases
-alias rm="rm -i"
-alias mv="mv -i"
-alias cp="cp -i"
-alias ln="ln -i"
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+alias ln='ln -i'
 
 # Colorize `ls`
-alias ls="ls --color=auto"
-alias l="ls -lF"
-alias la="ls -lFA"
-alias lsd="ls -lF | grep --color=never '^d'"
+alias ls='ls --color=auto'
+alias l='ls -lF'
+alias la='ls -lFA'
+alias lsd='ls -lF | grep --color=never '\''^d'\'''
 
 # Colorize `grep`
-alias grep="grep --color=auto"
-alias egrep="egrep --color=auto"
-alias fgrep="fgrep --color=auto"
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
 
 # Reload the shell as login shell
-alias reload="exec ${SHELL} --login"
+alias reload='exec ${SHELL} --login'
 
 # Print PATH entries
+# FIXME
 case $0 in
   *zsh)
-    alias path="printf \"${PATH:gs/:/\\n}\\n\""
+    alias path='printf \"${PATH:gs/:/\\n}\\n\"'
     ;;
   *bash)
-    alias path="printf \"${PATH//:/\\n}\\n\""
+    alias path='printf \"${PATH//:/\\n}\\n\"'
     ;;
 esac
 

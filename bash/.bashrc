@@ -4,6 +4,9 @@
 ## Since $HOME/.bash_profile sources this file,
 ## it sourced for interactive login shells too
 
+# shellcheck disable=SC1090
+# shellcheck disable=SC1091
+
 # Source the global bash startup file
 [[ -f "/etc/bashrc" ]] && source "/etc/bashrc";
 
@@ -14,7 +17,8 @@
 ##
 
 # Source bash-dependent external configurations
-for file in "$HOME/.bash_prompt"; do
+# shellcheck disable=SC2043
+for file in "$HOME"/.bash_prompt; do
   [[ -f "$file" ]] && source "$file";
 done
 unset file;
@@ -32,9 +36,9 @@ PREFIX="$HOME/.local"
 NAME="bash-completion"
 
 # Install
-# FIXME
+# FIXME: It needs autoreconf to build
+if false; then
 # if [[ ! -f "$PREFIX/share/$NAME" ]]; then
-if [[ ! true ]]; then
   echo -n "Install $NAME...";
   # (git clone --quiet --depth=1 \
   (git clone --depth=1 \

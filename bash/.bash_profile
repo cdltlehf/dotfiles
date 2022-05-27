@@ -2,6 +2,8 @@
 ## $HOME/.bash_profile
 ## Bash startup file for login shells
 
+# shellcheck disable=SC1091
+
 # Source the shell-independent startup file for login shells
 [[ -f "$HOME/.profile" ]] && source "$HOME/.profile";
 
