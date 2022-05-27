@@ -3,8 +3,8 @@ set editing-mode vi
 set show-mode-in-prompt on
 set keyseq-timeout 0
 
-set vi-ins-mode-string "\1\033[38;2;241;250;140m\2[I]\1\033[0m\2 "
-set vi-cmd-mode-string "\1\033[38;2;80;250;123m\2[N]\1\033[0m\2 "
+set vi-ins-mode-string "\1\033[1;33m\2[I]\1\033[0m\2 "
+set vi-cmd-mode-string "\1\033[1;32m\2[N]\1\033[0m\2 "
 
 set keymap vi-command
 "\C-x\C-r": re-read-init-file

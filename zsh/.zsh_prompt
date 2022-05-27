@@ -2,35 +2,6 @@
 # TODO: Unset colors
 setopt PROMPT_SUBST
 
-# Colors {{{
-# NOTE: It works in ZSH V5.1+
-if [[ $(zsh --version | awk '{print $2}') > "5.7" ]]; then
-  background=#44475a
-  current_line=#44475a
-  foreground=#f8f8f2
-  comment=#6272a4
-  cyan=#8be9fd
-  green=#50fa7b
-  orange=#ffb86c
-  pink=#ff79c6
-  purple=#bd93f9
-  red=#ff5555
-  yellow=#f1fa8c
-else
-  background=236
-  current_line=239
-  foreground=253
-  comment=61
-  cyan=117
-  green=84
-  orange=215
-  pink=212
-  purple=141
-  red=203
-  yellow=228
-fi
-# }}}
-
 # git prompt {{{
 function prompt_git {
   local git_branch='';
@@ -40,13 +11,13 @@ function prompt_git {
 
   # git_branch=$(git branch --show-current 2> /dev/null)
   git_branch=$(git symbolic-ref --quiet --short HEAD 2> /dev/null)
-  prompt+=" on %F{${1}}${git_branch}"
+  prompt+=" on %B%F{${1}}${git_branch}%f%b"
 
   echo $prompt
   return
 
   # FIXME: below code is too slow...
-  
+
   local git_status=$(git -c color.status=false status --short | cut -c 1-2)
 
   local uncommitted=$(echo $git_status | grep "[^ ?\!]." | wc -l | tr -d ' ')
@@ -72,22 +43,22 @@ function prompt_git {
 
 # PS {{{
 PS1=$'\n'
-PS1+="%F{${pink}}%n%f at "
-PS1+="%F{${yellow}}%m%f in "
-PS1+="%F{${green}}%~%f"
-PS1+='$(prompt_git ${cyan} ${purple})'
+PS1+="%B%F{5}%n%f%b at "
+PS1+="%B%F{3}%m%f%b in "
+PS1+="%B%F{2}%~%f%b"
+PS1+='$(prompt_git 6 4)'
 PS1+=$'\n'
-PS1+="%(?.%F{${foreground}}$ %f.%F{${red}}?%? %f)"
-PS2="%F{${comment}}> %f"
+PS1+="%(?.%f$ %f.%B%F{1}?%? %f%b)"
+PS2="%F{103}> %f" # Note that it uses 256-color
 # }}}
 
 # RPS (vi-mode indicator) {{{1
 function zle-line-init zle-keymap-select {
     case $KEYMAP in
-        vicmd|viopp ) RPS1="%F{${green}}[N]%k%f" ;;
-        viins|main ) RPS1="%F{${yellow}}[I]%k%f" ;;
-        isearch ) RPS1="%F{$cyan}[/]%k%f" ;;
-        * ) RPS1="%F{${red}}[UNK]%k%f" ;;
+        vicmd|viopp ) RPS1="%B%F{2}[N]%k%f%b" ;;
+        viins|main ) RPS1="%B%F{3}[I]%k%f%b" ;;
+        isearch ) RPS1="%B%F{6}[/]%k%f%b" ;;
+        * ) RPS1="%B%F{1}[UNK]%k%f%b" ;;
     esac
     RPS2=$RPS1
     zle reset-prompt

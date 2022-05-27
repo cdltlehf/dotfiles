@@ -5,28 +5,18 @@ PROMPT_COMMAND=__prompt_command
 __prompt_command() {
   local EXIT="$?"
 
-  local background=40\;42\;54
-  local current_line=68\;71\;90
-  local foreground=248\;248\;242
-  local comment=98\;114\;164
-  local cyan=139\;233\;253
-  local green=80\;250\;123
-  local orange=255\;184\;108
-  local pink=255\;121\;198
-  local purple=189\;147\;249
-  local red=255\;85\;85
-  local yellow=241\;250\;140
-
   PS1=$'\n'
-  PS1+=$"\[\033[38;2;${pink}m\]\u\[\033[0m\] at "
-  PS1+=$"\[\033[38;2;${yellow}m\]\h\[\033[0m\] in "
-  PS1+=$"\[\033[38;2;${green}m\]\w\[\033[0m\]"
+  PS1+=$"\[\033[1;35m\]\u\[\033[0m\] at "
+  PS1+=$"\[\033[1;33m\]\h\[\033[0m\] in "
+  PS1+=$"\[\033[1;32m\]\w\[\033[0m\]"
   PS1+=$'\n'
   if [ $EXIT == 0 ]; then
-    PS1+=$"\[\033[38;2;${foreground}m\]$ \[\033[0m\]"
+    PS1+=$"$ "
   else
-    PS1+=$"\[\033[38;2;${red}m\]?$EXIT \[\033[0m\]"
+    PS1+=$"\[\033[1;31m\]?$EXIT \[\033[0m\]"
   fi
+
+  PS2=$"\[\033[38;5;103m\]> \[\033[0m\]" # 256-color
 }
 
 # vim:ft=bash:ts=2:sts=2:sw=2:et:sta
