@@ -1,0 +1,59 @@
+#!/bin/bash
+# It does not use database like terminfo. 
+# Refer:
+# https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
+
+echo -e "\033[0mnormal\033[0m"
+echo -e "\033[1mbold\033[0m"
+echo -e "\033[2mdim\033[0m"
+echo -e "\033[3mitalic\033[0m"
+echo -e "\033[4munderline\033[0m"
+echo -e "\033[4:1mstraight underline\033[0m"
+echo -e "\033[4:2mdouble underline\033[0m"
+echo -e "\033[4:3mcurly underline\033[0m"
+echo -e "\033[4:4mdotted underline\033[0m"
+echo -e "\033[4:5mdashed underline\033[0m"
+echo -e "\033[5mslow blink\033[0m"
+echo -e "\033[6mrapid blink\033[0m"
+echo -e "\033[7minvert\033[0m"
+echo -e "\033[8mhide\033[0m <- hide"
+echo -e "\033[9mstrike\033[0m"
+# 10 -- 20: Font. Omitted
+echo -e "\033[21minvert\033[0m"
+echo -e "\033[22mdouble underline\033[0m"
+
+# 22 -- 29: Not {bold, ..., underlined}. Omitted
+
+# 30 -- 37: Set foreground color (16-color)
+echo -e "\033[31mforeground color (16-color: red)\033[0m"
+# 38: Set foreground color (5;n: 256-color, 2;r;g;b: true-color)
+echo -e "\033[38;5;203mforeground color (256-color: 203)\033[0m"
+echo -e "\033[38;2;255;85;85mforeground color (true-color: #FF5555)\033[0m"
+# 39: Default foreground color. Omitted
+
+# 40 -- 47: Set background color (16-color)
+echo -e "\033[30;46mbackground color (16-color: cyan)\033[0m"
+# 48: Set background color (5;n: 256-color, 2;r;g;b: true-color)
+echo -e "\033[30;48;5;117mbackground color (256-color: 117)\033[0m"
+echo -e "\033[30;48;2;139;233;253mbackground color (true-color: #8BE9FD)\033[0m"
+# 49: Default background color. Omitted
+
+# 50: Disable proportional spacing. Omitted
+
+echo -e "\033[51mframed\033[0m"
+echo -e "\033[52mencircled\033[0m"
+echo -e "\033[53moverlined\033[0m"
+# 54 -- 55: Not framed nor encircled [not overlined]. Omitted.
+
+echo -e "\033[4;58;5;84munderline color (non-standard, 256-color: 84)\033[0m"
+echo -e "\033[4;58;2;80;250;123munderline color (non-standard, true-color: #50FA7B)\033[0m"
+# 59: Default underline color. Omitted
+
+# 60 -- 65: Ideogram xxx. Omitted
+
+# 73 -- 75: Superscript/Subscript. Omitted
+
+# 90 -- 97: Set bright foreground color
+echo -e "\033[94mbright foreground color (non-standard, 16-color: bright blue)\033[0m"
+# 100 -- 107: Set bright background color
+echo -e "\033[30;104mbright background color (non-standard, 16-color: bright blue)\033[0m"
