@@ -1,37 +1,31 @@
-" " Dracula Color Palette {{{1
-" https://spec.draculatheme.com/
-let background='#282a36'
-let foreground='#f8f8f2'
-let selection='#44475a'
-let comment='#6272a4'
-
-let red='#ff5555'
-let orange='#ffb86c'
-let yellow='#f1fa8c'
-let green='#50fa7b'
-let purple='#bd93f9'
-let cyan='#8be9fd'
-let pink='#ff79c6'
-
-" compatible, termguicolors, etc... {{{1
+" Set nocompatible {{{1
 if &g:compatible
   set nocompatible
 endif
+
+" Add packages {{{1
+packadd! sensible
+packadd! statusline
+packadd! unimpaired
+packadd! bufferline
+
+packadd! dracula
+" packadd! gitgutter
+
+" termguicolors, etc... {{{1
 set termguicolors
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 
-" Dracula {{{1
-packadd! dracula
+" Customize Dracula {{{1
 colorscheme dracula
-" XXX: IDK how dangerous it is, but its for the iterm2's opaque setting :P
 augroup dracula_customization
   autocmd!
-  autocmd ColorScheme,VimEnter * 
+  autocmd ColorScheme dracula
         \ hi Normal guibg=NONE ctermbg=NONE |
-        \ hi VertSplit term=NONE cterm=NONE gui=NONE |
-        \ hi link VertSplit DraculaComment |
-        \ hi link FoldColumn DraculaComment
+        \ hi DraculaComment cterm=italic |
+        \ hi link VertSplit DraculaCommentBold |
+        \ hi link FoldColumn DraculaCommentBold
 augroup END
 
 "Set fillchars {{{1
@@ -112,19 +106,19 @@ augroup END
 augroup filetype_vim "{{{1
   " TODO: make each comment maps use 'comments' or 'commentstring'
   autocmd!
-  autocmd FileType vim 
+  autocmd FileType vim
         \ nnoremap <silent> <buffer> 
-        \ <Leader>c<Space> 
+        \ <Leader>c<Space>
         \ :if match(getline('.'), '^\s*" \?') ==# -1 <CR>:s/^\s*/\0" /<CR> 
         \ :else<CR>:s/^\(\s*\)" \?/\1/<CR> 
         \ :end<CR>
 
-  autocmd FileType vim 
-        \ vnoremap <silent> <buffer> 
-        \ <Leader>c<Space> 
+  autocmd FileType vim
+        \ vnoremap <silent> <buffer>
+        \ <Leader>c<Space>
         \ :s/^\s*/\0" /<CR>
 
-  autocmd FileType vim nnoremap <buffer> <Leader>r<Space>  
+  autocmd FileType vim nnoremap <buffer> <Leader>r<Space>
         \ :source %<CR>:echo "sourcing done"<CR>
 
   autocmd FileType vim 
@@ -185,27 +179,25 @@ augroup filetype_tex "{{{1
         \ :!pdflatex -interaction=nonstopmode %<CR>
 augroup END
 
-" make .vim folder (0700) {{{1
-if empty(glob($HOME . "/.vim"))
-  call mkdir($HOME . "/.vim", 0700)
-endif
 
-" set spellcheck {{{1
-if empty(glob($HOME . "/.vim/spell"))
-  call mkdir($HOME . "/.vim/spell", 0700)
-endif
+
+" set backup, spellcheck, swap and undo {{{1
 set spell
-set spellfile=$HOME/.vim/spell/spell.utf-8.add
+set undofile
 
-" set backup, swap and undo {{{1
 let &backupdir = expand('~/.local/share/vim/backup/')
+let &spellfile = expand('~/.local/share/vim/spell/en.utf-8.add')
 let &directory = expand('~/.local/share/vim/swap/')
 let &undodir = expand('~/.local/share/vim/undo/')
-let g:netrw_home = expand('~/.local/share/vim/')
-set undofile
+
 if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p') | endif
+let s:spelldir = fnamemodify(&spellfile, ':p:h')
+if !isdirectory(s:spelldir) | call mkdir(s:spelldir, 'p') | endif
+unlet s:spelldir
 if !isdirectory(&directory) | call mkdir(&directory, 'p') | endif
 if !isdirectory(&undodir) | call mkdir(&undodir, 'p') | endif
+
+let g:netrw_home = expand('~/.local/share/vim/')
 
 " set fold (zR/zM to open/close all folds) {{{1
 set foldcolumn=1
@@ -215,12 +207,6 @@ augroup fold
   autocmd FileType vim setlocal foldmethod=marker
   autocmd FileType python setlocal foldmethod=indent
 augroup END
-" }}}
-" add packages {{{1
-packadd! sensible
-packadd! statusline
-packadd! unimpaired
-packadd! bufferline
 " }}}
 
 " vim:ft=vim:fdm=marker:ts=2:sts=2:sw=2:
