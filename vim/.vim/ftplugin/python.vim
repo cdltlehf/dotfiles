@@ -1,6 +1,7 @@
-" ~/.vim/ftplugin/python.vim
+"" ~/.vim/ftplugin/python.vim
+
+set makeprg=pycodestyle
+set errorformat=%f:%l:%c:\ %m
 
 setlocal foldmethod=indent
-" setlocal foldlevel=99
-
-nnoremap <buffer> <Leader>r<Space> :!python %<CR>
+setlocal foldlevel=99

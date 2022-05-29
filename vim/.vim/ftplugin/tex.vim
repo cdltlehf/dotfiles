@@ -1,5 +1,9 @@
+"" ~/.vim/ftplugin/text.vim
 " TODO: Set snippet from file
 " TODO: Add some input mode maps
+
+autocmd FileType tex nnoremap <buffer> <Leader>r<Space>
+set makeprg=pdflatex\ -interaction=nonstopmode
 
 " snippets {{{1
 " https://github.com/honza/vim-snippets/blob/master/snippets/tex.snippets
@@ -30,7 +34,7 @@ iabbrev <buffer> _enum
       \ \begin{enumerate}<CR>\item<C-o>m1<CR>\end{enumerate}<ESC>
       \<ESC>`1a
 
-" comment
+" comment {{{1
 autocmd FileType tex nnoremap <silent> <buffer> <Leader>c<Space>
       \ :if match(getline('.'), '^\s*% \?') ==# -1 <CR>:s/^\s*/\0% /<CR>
       \ :else<CR>:s/^\(\s*\)% \?/\1/<CR>
@@ -39,5 +43,4 @@ autocmd FileType tex nnoremap <silent> <buffer> <Leader>c<Space>
 autocmd FileType tex vnoremap <silent> <buffer> <Leader>c<Space>
       \ :s/^\s*/\0% /<CR>
 
-autocmd FileType tex nnoremap <buffer> <Leader>r<Space>
-      \ :!pdflatex -interaction=nonstopmode %<CR>
+"}}}
