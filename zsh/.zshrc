@@ -2,37 +2,11 @@
 ## $HOME/.zshrc
 ## Zsh startup file for interactive shells
 
-# brew environment
+## Brew environment {{{1
 # XXX: Manual says that put this line to zprofile
 [[ -f "/opt/homebrew/bin/brew" ]] && eval $(/opt/homebrew/bin/brew shellenv)
 
-# Source the shell-independent startup file
-[[ -f "$HOME/.shrc" ]] && source "$HOME/.shrc";
-
-# Set large history size
-HISTFILE=~/.histfile;
-HISTSIZE=1000;
-SAVEHIST=1000;
-unsetopt beep;
-
-# vi-mode
-bindkey -v;
-# https://github.com/spaceship-prompt/spaceship-prompt/issues/91
-bindkey "^?" backward-delete-char;
-export KEYTIMEOUT=1;
-
-# Export editors
-export VISUAL='vim';
-export EDITOR='vim -E';
-export PAGER='less';
-
-# Source zsh-dependent external configurations
-for file in "$HOME/.zsh_prompt"; do
-  [[ -f "$file" ]] && source "$file";
-done
-unset file;
-
-## PLUGINS
+## PLUGINS {{{1
 # NOTE: Should I consider environments without git...?
 # NOTE: Consider using array...
 PREFIX="$HOME/.local"
@@ -42,7 +16,7 @@ PREFIX="$HOME/.local"
 # Make local share folder
 ! [[ -d "$PREFIX/share" ]] && mkdir -p "$PREFIX/share"
 
-## zsh-completions
+## Zsh-completions {{{2
 NAME="zsh-completions"
 
 # Install
@@ -64,7 +38,7 @@ if [[ -d "$PREFIX/share/$NAME/src" ]]; then
 fi
 unset NAME
 
-## zsh-autosuggestions
+## Zsh-autosuggestions {{{2
 NAME="zsh-autosuggestions"
 
 # Install
@@ -83,7 +57,7 @@ if [[ -f "$PREFIX/share/$NAME/$NAME.zsh" ]]; then
 fi
 unset NAME
 
-## zsh-syntax-highlighting
+## Zsh-syntax-highlighting {{{2
 NAME="zsh-syntax-highlighting"
 
 # Install
@@ -106,5 +80,47 @@ fi
 unset NAME
 
 unset PREFIX
+
+# }}}
+
+# }}}
+## Source the global zsh startup file {{{1
+[[ -f "/etc/zshrc" ]] && source "/etc/zshrc";
+## Source the shell-independent startup file {{{1
+[[ -f "$HOME/.shrc" ]] && source "$HOME/.shrc";
+
+# }}}
+
+## Zsh-dependent startup configurations
+# Set large history size {{{1
+HISTFILE=~/.histfile;
+HISTSIZE=1000;
+SAVEHIST=1000;
+unsetopt beep;
+
+# vi-mode {{{1
+bindkey -v;
+
+# https://github.com/spaceship-prompt/spaceship-prompt/issues/91
+bindkey "^?" backward-delete-char;
+export KEYTIMEOUT=1;
+
+# Export editors {{{1
+export VISUAL='vim';
+export EDITOR='vim -E';
+export PAGER='less';
+
+# Zsh aliases {{{1
+alias path='printf "${PATH:gs/:/\\n}\\n"'
+
+# }}}
+
+## Source zsh-dependent external configurations {{{1
+for file in "$HOME/.zsh_prompt"; do
+  [[ -f "$file" ]] && source "$file";
+done
+unset file;
+
+# }}}
 
 # vim:ft=zsh:ts=2:sts=2:sw=2:et:sta
