@@ -2,19 +2,21 @@
 ## Custom defaults for dock
 ## https://developer.apple.com/documentation/devicemanagement/dock
 
-# Delete defaults
-defaults delete com.apple.dock
+echo 'System Preferences > Dock & Menu Bar'
 
-# Custom defaults of dock
+echo '... > Automatically hide and show the Dock (enable)'
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock autohide-immutable -bool true
 defaults write com.apple.dock contents-immutable -bool true
 
+echo '... > Double-click a window'\''s title bar to (minimize)'
 defaults write com.apple.dock dblclickbehavior -string "minimize"
 defaults write com.apple.dock dblclickbehavior-immutable -bool true
 
+echo '... > Magnification (disable, 16)'
 defaults write com.apple.dock largesize -integer 16
 
+echo '... > Animate opening applications (enable)'
 defaults write com.apple.dock launchanim -bool true
 defaults write com.apple.dock launchanim-immutable -bool true
 
@@ -24,29 +26,37 @@ defaults write com.apple.dock magsize-immutable -bool true
 
 # defaults write com.apple.dock MCXDockSpecialFolders -string ""
 
+echo '... > Minimise windows using (scale)'
 defaults write com.apple.dock mineffect -string "scale"
 defaults write com.apple.dock mineffect-immutable -bool true
 defaults write com.apple.dock minimize-to-application -bool true
 defaults write com.apple.dock minintoapp-immutable -bool true
 
+echo '... > Position on screen (bottom)'
 defaults write com.apple.dock orientation -string "bottom"
 
+echo 'Empty all persistent apps and others'
 defaults write com.apple.dock persistent-apps -array {}
 defaults write com.apple.dock persistent-others -array {}
 
 defaults write com.apple.dock position-immutable -bool true
 
+echo '... > Show indicators for open applications (disable)'
 defaults write com.apple.dock show-process-indicators -bool false
 defaults write com.apple.dock showindicators-immutable -bool true
 
+echo '... > Show recent applications in Dock (disable)'
 defaults write com.apple.dock show-recents -bool false
 defaults write com.apple.dock showrecents-immutable -bool true
 
 defaults write com.apple.dock size-immutable -bool true
+
+echo 'Empty static apps and others'
 defaults write com.apple.dock static-apps -array {}
 defaults write com.apple.dock static-only -bool true
 defaults write com.apple.dock static-others -array {}
 
+echo 'Add \"Downloads\" to static others'
 # TODO: Reformat these with json. It works
 arrangement=1; displayas=1; showas=2; filetype=2
 tmp="$(mktemp)" || exit
@@ -73,12 +83,13 @@ value="$(cat "$tmp")" || exit
 defaults write com.apple.dock static-others -array-add "$value"
 unset tmp; unset value;
 unset arrangement; unset displayas; unset showas; unset filetype
+
+echo '... > Size (64)'
 defaults write com.apple.dock tilesize -integer 64
 
+echo 'Preference > General > Prefer tabs when opening documents (manual?)'
 defaults write com.apple.dock windowtabbing -string "manual"
 defaults write com.apple.dock windowtabbing-immutable -bool true
 
 # Restart dock
 killall Dock;
-# Print defaults of dock
-defaults read com.apple.dock

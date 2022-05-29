@@ -155,7 +155,7 @@ case $UNAME in
   ;;
 esac
 
-echo "Restart your login shell with \`exec \"\$SHELL\" --login\`."
+echo "Restart your login shell with \`exec \"\$SHELL\" --login\`"
 unset -f symlink_home
 unset UNAME
 unset BASEDIR
