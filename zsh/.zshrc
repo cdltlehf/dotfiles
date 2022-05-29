@@ -77,12 +77,28 @@ fi
 if [[ -f "$PREFIX/share/$NAME/$NAME.zsh" ]]; then
   source "$PREFIX/share/$NAME/$NAME.zsh"
 fi
-unset NAME
+## Zsh-z {{{2
+NAME="zsh-z"
 
-unset PREFIX
+# Install
+if [[ ! -f "$PREFIX/share/$NAME/$NAME.plugin.zsh" ]]; then
+  echo -n "Install $NAME...";
+  (git clone --quiet --depth=1 \
+    https://github.com/agkozak/$NAME.git \
+    "$PREFIX/share/$NAME") &&
+    echo "done" ||
+    echo "failed"
+fi
+
+# Activate
+if [[ -f "$PREFIX/share/$NAME/$NAME.plugin.zsh" ]]; then
+  source "$PREFIX/share/$NAME/$NAME.plugin.zsh"
+fi
 
 # }}}
 
+unset NAME
+unset PREFIX
 # }}}
 ## Source the global zsh startup file {{{1
 [[ -f "/etc/zshrc" ]] && source "/etc/zshrc";
@@ -123,4 +139,4 @@ unset file;
 
 # }}}
 
-# vim:ft=zsh:ts=2:sts=2:sw=2:et:sta
+# vim:ft=zsh:ts=2:sts=2:sw=2:et:sta:fdm=marker
