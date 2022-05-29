@@ -1,16 +1,15 @@
+" ~/.vim/vimrc
+" It needs Vim 8.0 to use packadd
+
 " Set nocompatible {{{1
 if &g:compatible
   set nocompatible
 endif
 
-" Add packages {{{1
-packadd! sensible
-packadd! statusline
-packadd! unimpaired
-packadd! bufferline
 
-packadd! dracula
-" packadd! gitgutter
+" Add external packages {{{1
+packadd dracula
+packadd vim-gitgutter
 
 " termguicolors, etc... {{{1
 set termguicolors
@@ -22,14 +21,13 @@ colorscheme dracula
 augroup dracula_customization
   autocmd!
   autocmd ColorScheme dracula
-        \ hi Normal guibg=NONE ctermbg=NONE |
-        \ hi DraculaComment cterm=italic |
-        \ hi link VertSplit DraculaCommentBold |
-        \ hi link FoldColumn DraculaCommentBold
+        \ highlight Normal guibg=NONE ctermbg=NONE |
+        \ highlight DraculaComment cterm=italic |
+        \ highlight link VertSplit DraculaCommentBold |
+        \ highlight VertSplit guibg=NONE ctermbg=NONE |
+        \ highlight link FoldColumn DraculaCommentBold |
+        \ highlight link PmenuSel WildMenu
 augroup END
-
-"Set fillchars {{{1
-set fillchars+=vert:│,foldsep:│,foldopen:┌
 
 " comment map {{{1
 " TODO: unify these
@@ -55,7 +53,8 @@ augroup END
 set number
 set relativenumber
 " set background=dark
-set nowrap
+" set nowrap
+set hlsearch
 set hidden
 set ignorecase
 set smartcase
@@ -68,118 +67,36 @@ vnoremap < <gv
 vnoremap > >gv
 vnoremap * y/<C-R>"<CR>
 
-nnoremap Q @@
+nnoremap Q @q
 nnoremap Y y$
 
 nnoremap n nzz
 nnoremap N Nzz
 
-nnoremap <Leader>b<Space> :buffers <CR>:buffer
-" nnoremap <Leader>b<Space> :ls <CR>:b
+" nnoremap <Leader>b<Space> :buffers <CR>:buffer
+nnoremap <Leader>b :buffers <CR>:buffer
 nnoremap <Leader><Leader> :b#<CR>
 
 " set text width 79 {{{1
-set colorcolumn=80
+if exists('&colorcolumn')
+  set colorcolumn=80
+endif
 " set textwidth=79
 
 " pop up menu {{{1
 set completeopt=noinsert,preview,menuone
 set pumheight=5
 
-"TODO
 augroup completion "{{{1
+  "TODO
   autocmd!
   "autocmd CursorMovedI * execute('if pumvisible() normal! a')
-  "
-augroup END
-
-augroup popupmenu "{{{1
-  autocmd!
-  autocmd ColorScheme,VimEnter * 
-        \ execute 'highlight PmenuSel guibg='. purple .' guifg=#21222c'
-augroup END
-
-augroup runcmd "{{{1
-  autocmd FileType python nnoremap <buffer> <Leader>r<Space> :!python %<CR>
 augroup END
 
 augroup filetype_vim "{{{1
   " TODO: make each comment maps use 'comments' or 'commentstring'
   autocmd!
-  autocmd FileType vim
-        \ nnoremap <silent> <buffer> 
-        \ <Leader>c<Space>
-        \ :if match(getline('.'), '^\s*" \?') ==# -1 <CR>:s/^\s*/\0" /<CR> 
-        \ :else<CR>:s/^\(\s*\)" \?/\1/<CR> 
-        \ :end<CR>
-
-  autocmd FileType vim
-        \ vnoremap <silent> <buffer>
-        \ <Leader>c<Space>
-        \ :s/^\s*/\0" /<CR>
-
-  autocmd FileType vim nnoremap <buffer> <Leader>r<Space>
-        \ :source %<CR>:echo "sourcing done"<CR>
-
-  autocmd FileType vim 
-        \ setlocal tabstop=2 softtabstop=2 shiftwidth=2
 augroup END
-
-augroup filetype_tex "{{{1
-  " TODO: set snippet from file
-  " TODO: add some input mode maps
-  autocmd!
-  autocmd FileType tex
-        \ setlocal tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd FileType tex syntax spell toplevel
-
-  " snippets {{{2
-  " https://github.com/honza/vim-snippets/blob/master/snippets/tex.snippets
-  " PREAMBLE
-  autocmd FileType tex iabbrev <buffer> _nc
-        \ \newcommand{<C-o>m1}[<C-o>m2]]{<C-o>m3}
-        \<ESC>`1a
-
-  " DOCUMENT
-  " autocmd FileType tex iabbrev <buffer> _begin
-        " \ \begin{<CR><C-o>m1}{c}<CR><C-o>m0<CR>\end{tabular}<ESC>
-        " \<ESC>`1a
-
-  autocmd FileType tex iabbrev <buffer> _mkt
-        \ \maketitle
-
-  autocmd FileType tex iabbrev <buffer> _tab
-        \ \begin{tabular}{c}<CR><C-o>m1<CR>\end{tabular}<ESC>
-        \<ESC>`1a
-
-  autocmd FileType tex iabbrev <buffer> _center
-        \ \begin{center}{c}<CR><C-o>m1\end{center}<ESC>
-        \<ESC>`1a
-
-  autocmd FileType tex iabbrev <buffer> _item
-        \ \begin{itemize}<CR>\item<C-o>m1<CR>\end{itemize}<ESC>
-        \<ESC>`1a
-
-  autocmd FileType tex iabbrev <buffer> _enum
-        \ \begin{enumerate}<CR>\item<C-o>m1<CR>\end{enumerate}<ESC>
-        \<ESC>`1a
-
-  " }}}
-
-  " comment
-  autocmd FileType tex nnoremap <silent> <buffer> <Leader>c<Space>
-        \ :if match(getline('.'), '^\s*% \?') ==# -1 <CR>:s/^\s*/\0% /<CR>
-        \ :else<CR>:s/^\(\s*\)% \?/\1/<CR>
-        \ :end<CR>
-
-  autocmd FileType tex vnoremap <silent> <buffer> <Leader>c<Space>
-        \ :s/^\s*/\0% /<CR>
-
-  autocmd FileType tex nnoremap <buffer> <Leader>r<Space>
-        \ :!pdflatex -interaction=nonstopmode %<CR>
-augroup END
-
-
 
 " set backup, spellcheck, swap and undo {{{1
 set spell
@@ -201,12 +118,11 @@ let g:netrw_home = expand('~/.local/share/vim/')
 
 " set fold (zR/zM to open/close all folds) {{{1
 set foldcolumn=1
-augroup fold
-  autocmd!
-  autocmd BufRead * normal zR
-  autocmd FileType vim setlocal foldmethod=marker
-  autocmd FileType python setlocal foldmethod=indent
-augroup END
+set fillchars+=vert:│,foldsep:│,foldopen:┌
+
+" set syn-sync {{{1
+syntax sync fromstart
+
 " }}}
 
 " vim:ft=vim:fdm=marker:ts=2:sts=2:sw=2:
