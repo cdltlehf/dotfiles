@@ -7,23 +7,7 @@
 # shellcheck disable=SC1090
 # shellcheck disable=SC1091
 
-# Source the global bash startup file
-[[ -f "/etc/bashrc" ]] && source "/etc/bashrc";
-
-# Source the shell-independent startup file
-[[ -f "$HOME/.shrc" ]] && source "$HOME/.shrc";
-
-# Place bash-dependent startup configurations here.
-##
-
-# Source bash-dependent external configurations
-# shellcheck disable=SC2043
-for file in "$HOME"/.bash_prompt; do
-  [[ -f "$file" ]] && source "$file";
-done
-unset file;
-
-## PLUGINS
+## PLUGINS {{{1
 PREFIX="$HOME/.local"
 
 # Make local tmp folder
@@ -31,7 +15,7 @@ PREFIX="$HOME/.local"
 # Make local share folder
 ! [[ -d "$PREFIX/share" ]] && mkdir -p "$PREFIX/share"
 
-## bash-completion
+## bash-completion {{{2
 ## https://github.com/scop/bash-completion
 NAME="bash-completion"
 
@@ -60,4 +44,24 @@ unset NAME
 
 unset PREFIX
 
-# vim:ft=sh:ts=2:sts=2:sw=2:et:sta
+## Source the global bash startup file {{{1
+[[ -f "/etc/bashrc" ]] && source "/etc/bashrc";
+
+## Source the shell-independent startup file {{{1
+[[ -f "$HOME/.shrc" ]] && source "$HOME/.shrc";
+
+#}}}
+
+## Bash-dependent startup configurations
+alias path='printf \"${PATH//:/\\n}\\n\"'
+
+## Source bash-dependent external configurations {{{1
+# shellcheck disable=SC2043
+for file in "$HOME"/.bash_prompt; do
+  [[ -f "$file" ]] && source "$file";
+done
+unset file;
+
+# }}}
+
+# vim:ft=sh:ts=2:sts=2:sw=2:et:sta:fdm=marker

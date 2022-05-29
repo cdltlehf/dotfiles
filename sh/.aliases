@@ -1,12 +1,14 @@
 #!/usr/bin/sh
 ## $HOME/.aliases
 ## Shell-independent aliases
+## Use the follows as possible: bat, lsd
 
 # Easier navigation
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
+alias ~='cd ~'
 
 # Fool-proof aliases
 alias rm='rm -i'
@@ -14,11 +16,30 @@ alias mv='mv -i'
 alias cp='cp -i'
 alias ln='ln -i'
 
-# Colorize `ls`
-alias ls='ls --color=auto'
+# Replace `cat` with `bat`
+# shellcheck disable=SC2139
+if command -v bat > /dev/null 2>&1; then
+  alias cat='bat --theme=dracula --paging=never'
+fi
+alias bathelp='bat --theme=dracula --plain --language=help'
+
+export MANPAGER="sh -c 'col -bx | bat --theme=dracula -l man -p'"
+
+help() {
+    "$@" --help 2>&1 | bathelp
+}
+
+# Colorize `ls` & Replace `ls` with `lsd`
+# Lsd
+if command -v bat > /dev/null 2>&1; then
+  alias ls='command lsd'
+  alias lsd="ls -lF --color=always --icon=always | grep --color=never '^[^\.]'"
+else
+  alias ls='ls --color=auto'
+  alias lsd='ls -lF | grep --color=never '\''^d'\'''
+fi
 alias l='ls -lF'
 alias la='ls -lFA'
-alias lsd='ls -lF | grep --color=never '\''^d'\'''
 
 # Colorize `grep`
 alias grep='grep --color=auto'
