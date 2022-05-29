@@ -1,4 +1,4 @@
-" tpope/vim-unimpaired
+"" See tpope/vim-unimpaired
 
 if exists('g:loaded_unimpaired') || &compatible
   finish

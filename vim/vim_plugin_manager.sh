@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deprecated. I don't use it
+# TODO: Make it with vim script or find a good package manager
 
 # TODO: dump
 # TODO: doc
@@ -47,3 +47,5 @@ install() {
 
 install 'dracula/vim' 'themes/dracula'
 install 'airblade/vim-gitgutter'
+install 'preservim/tagbar'
+

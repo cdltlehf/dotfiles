@@ -93,11 +93,6 @@ augroup completion "{{{1
   "autocmd CursorMovedI * execute('if pumvisible() normal! a')
 augroup END
 
-augroup filetype_vim "{{{1
-  " TODO: make each comment maps use 'comments' or 'commentstring'
-  autocmd!
-augroup END
-
 " set backup, spellcheck, swap and undo {{{1
 set spell
 set undofile
