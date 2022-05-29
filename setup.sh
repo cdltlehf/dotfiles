@@ -102,7 +102,7 @@ case $UNAME in
   # TODO: Brew things, macos defaults things, ...
   "Darwin")
 
-  # XXX: These default files should be package independent
+  # NOTE: These default files should be brew package independent
   echo "Set default configurations for macos."
   for defaults in "${MACOS_DEFAULTS}"; do
     command zsh $defaults
@@ -116,7 +116,7 @@ case $UNAME in
   echo "Done."
   unset dotfile
 
-  # XXX: In general, the below code is redundant, since it is needed for git.
+  # NOTE: In general, the below code is redundant since git needs it
   xcode-select --install &> /dev/null || true
 
   # If there is no ssh key, make one.
