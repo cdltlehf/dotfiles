@@ -1,4 +1,4 @@
-" tpope/vim-sensible
+"" See tpope/vim-sensible
 
 if exists('g:loaded_sensible') || &compatible
   finish
