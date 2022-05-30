@@ -1,4 +1,4 @@
-" ~/.vim/ftplugin/vim.vim
+" ~/.vim/after/ftplugin/vim.vim
 
 setlocal foldmethod=marker
 " setlocal foldlevel=99

@@ -1,37 +1,55 @@
 " tab (buffer) line
 " Dracula Color Palette {{{1
 " https://spec.draculatheme.com/
-let background='#282a36'
-let foreground='#f8f8f2'
-let selection='#44475a'
-let comment='#6272a4'
+let s:background='#282a36'
+let s:foreground='#f8f8f2'
+let s:selection='#44475a'
+let s:comment='#6272a4'
 
-let red='#ff5555'
-let orange='#ffb86c'
-let yellow='#f1fa8c'
-let green='#50fa7b'
-let purple='#bd93f9'
-let cyan='#8be9fd'
-let pink='#ff79c6'
+let s:red='#ff5555'
+let s:orange='#ffb86c'
+let s:yellow='#f1fa8c'
+let s:green='#50fa7b'
+let s:purple='#bd93f9'
+let s:cyan='#8be9fd'
+let s:pink='#ff79c6'
+
+"}}}
 
 set showtabline=2
 set tabline=%!TabLine()
 
-" highlight clear TabLineSelNR
-" highlight clear TabLineSel
-" highlight clear TabLine
-" highlight clear TabLineFill
+augroup tabline_update
+  autocmd!
+augroup END
+
 augroup tabline_highlight "{{{1
   autocmd!
-  autocmd ColorScheme,VimEnter * 
-        \ execute 'highlight TabLineSelNR '
-        \ . 'guibg=' . background . ' guifg=' . green |
-        \ execute 'highlight TabLineSel '
-        \ . 'guibg=' . background . ' guifg=' . foreground |
-        \ execute 'highlight TabLine '
-        \ . 'guibg=' . selection . ' guifg=' . foreground |
-        \ execute 'highlight TabLineFill '
-        \ . 'guibg=' . selection . ' guifg=' . selection
+  autocmd ColorScheme,VimEnter *
+        \ highlight clear TabLine
+        \|highlight clear TabLineUntitled
+        \|highlight clear TabLineSelNR
+        \|highlight clear TabLineSel
+        \|highlight clear TabLineSelUntitled
+        \|highlight clear TabLineFill
+        \|execute 'highlight TabLine'
+        \ . ' guibg=' . s:selection . ' guifg=' . s:foreground
+        \ . ' cterm=None gui=None'
+        \|execute 'highlight TabLineUntitled'
+        \ . ' guibg=' . s:selection . ' guifg=' . s:foreground
+        \ . ' cterm=italic gui=italic'
+        \|execute 'highlight TabLineSelNR'
+        \ . ' guibg=' . s:background . ' guifg=' . s:green
+        \ . ' cterm=bold gui=bold'
+        \|execute 'highlight TabLineSel'
+        \ . ' guibg=' . s:background . ' guifg=' . s:foreground
+        \ . ' cterm=bold gui=bold'
+        \|execute 'highlight TabLineSelUntitled'
+        \ . ' guibg=' . s:background . ' guifg=' . s:foreground
+        \ . ' cterm=bold,italic gui=bold,italic'
+        \|execute 'highlight TabLineFill'
+        \ . ' guibg=' . s:selection . ' guifg=' . s:selection
+        \ . ' cterm=None gui=None'
 augroup END
 
 function! TabLine() abort "{{{1
@@ -43,37 +61,54 @@ function! TabLine() abort "{{{1
 endfunction
 
 function! BufferLine() abort "{{{1
-  let s = ''
-  let bufls = filter(range(1, bufnr('$')), 'buflisted(v:val)')
-  " let leftmost = min(1, bufnr('$')))
+  let l:s = ''
+  let l:bufls = filter(range(1, bufnr('$')), 'buflisted(v:val)')
 
-  for i in filter(range(1, bufnr('$')), 'buflisted(v:val)')
-    if i == bufnr('%')
-      let s .= '%#TabLineSelNR# '
-      let s .= i
-      let s .= ' %#TabLineSel#'
+  for l:i in l:bufls
+
+    let l:bufname = bufname(l:i)
+    let l:untitled = 0
+
+    if l:bufname ==? ''
+      let l:untitled = 1
+
+    elseif l:i != bufnr('%')
+      let l:bufname = fnamemodify(bufname(l:i), ":~:.")
+      let l:bufname =
+            \ substitute(l:bufname, '\(\.[^/]\|[^/]\)[^/]*/', '\1/', 'g')
+
+    end
+
+    let l:flags = ''
+    if !getbufvar(l:i, '&modifiable')
+      let l:flags = '[-]'
+    elseif getbufinfo(l:i)[0].changed
+      let l:flags = '[+]'
+    endif
+
+    if l:i != bufnr('%')
+      let l:s .= '%#TabLine# ' . l:i
+      if !l:untitled
+        let l:s .= '%#TabLine# ' . l:bufname
+      else
+        let l:s .= '%#TabLineUntitled# Untitled'
+      endif
     else
-      let s .= '%#TabLine# '
-      let s .= i
-      let s .= ' '
+      let l:s .= '%#TabLineSelNR# ' . l:i
+      if !l:untitled
+        let l:s .= '%#TabLineSel# ' . l:bufname
+      else
+        let l:s .= '%#TabLineSelUntitled# Untitled'
+      endif
+
     endif
-    let filename = '%{'
-    if i != bufnr('%')
-      let filename .= 'substitute('
-    endif
-    let filename .= 'fnamemodify(bufname(' . i . '), ":~:.")'
-    if i != bufnr('%')
-      let filename .= ', "\\(\\.[^/]\\|[^/]\\)[^/]*/", "\\1/", "g")'
-    endif
-    let filename .= '}'
-    let s .= filename
-    let s .= '%{!getbufvar(' . i . ', "&modifiable") ?'
-    let s .= ' "[-]" :' 
-    let s .= ' (getbufinfo(' . i . ')[0].changed ? "[+]" : "")}'
-    let s .= ' '
+
+    let l:s .= l:flags . ' '
+
   endfor
-  let s .= '%#TabLineFill#'
-  return s
+
+  let l:s .= '%#TabLineFill#'
+  return l:s
 endfunction
 "}}}
 
