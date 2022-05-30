@@ -6,7 +6,6 @@ if &g:compatible
   set nocompatible
 endif
 
-
 " Add external packages {{{1
 packadd dracula
 packadd vim-gitgutter
@@ -113,11 +112,19 @@ let g:netrw_home = expand('~/.local/share/vim/')
 
 " set fold (zR/zM to open/close all folds) {{{1
 set foldcolumn=1
-set fillchars+=vert:│,foldsep:│,foldopen:┌
+if v:version < 802
+  set fillchars+=vert:│
+else
+  set fillchars+=vert:│,foldsep:│,foldopen:┌
+endif
 
-" set syn-sync {{{1
+" Set syn-sync {{{1
 syntax sync fromstart
 
-" }}}
+" Netrw settings {{
+let g:netrw_fastbrowse = 0
+let g:netrw_winsize = 30
+let g:netrw_banner = 0
 
+" }}}
 " vim:ft=vim:fdm=marker:ts=2:sts=2:sw=2:
