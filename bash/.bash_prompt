@@ -1,22 +1,30 @@
 #!/usr/bin/env bash
-#TODO: Add git-feature
-PROMPT_COMMAND=__prompt_command
 
-__prompt_command() {
-  local EXIT="$?"
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWSTASHSTATE=1
+GIT_PS1_SHOWUPSTREAM="auto"
+# GIT_PS1_STATESEPARATOR
+# GIT_PS1_COMPRESSSPARSESTATE
+# GIT_PS1_OMITSPARSESTATE
+# GIT_PS1_DESCRIBE_STYLE
+GIT_PS1_SHOWCOLORHINTS=1
 
-  PS1=$'\n'
-  PS1+=$"\[\033[1;35m\]\u\[\033[0m\] at "
-  PS1+=$"\[\033[1;33m\]\h\[\033[0m\] in "
-  PS1+=$"\[\033[1;32m\]\w\[\033[0m\]"
-  PS1+=$'\n'
-  if [ $EXIT == 0 ]; then
-    PS1+=$"$ "
-  else
-    PS1+=$"\[\033[1;31m\]?$EXIT \[\033[0m\]"
-  fi
+# PROMPT_COMMAND=__prompt_command
 
-  PS2=$"\[\033[38;5;103m\]> \[\033[0m\]" # 256-color
-}
+_PS1_1=$'\n'
+_PS1_1+=$"\[\033[1;35m\]\u\[\033[0m\]"
+_PS1_1+=$" at \[\033[1;36m\]\h\[\033[0m\]"
+_PS1_1+=$" in \[\033[1;33m\]\w\[\033[0m\]"
+# _PS1_1+='$(__git_ps1 " on %s")'
+_PS1_2+=$'\n'
+_PS1_2+='$([[ $? == 0 ]] && echo "$ " || echo "\[\033[1;31m\]?$? \[\033[0m\]")'
 
-# vim:ft=bash:ts=2:sts=2:sw=2:et:sta
+PS2=$"\[\033[38;5;103m\]> \[\033[0m\]" # 256-color
+
+if command -v __git_ps1 > /dev/null 2>&1; then
+  PROMPT_COMMAND="__git_ps1 \"$_PS1_1 \" \"$_PS1_2\" \"on %s\""
+else
+  PS1="$_PS1_1$_PS1_2"
+fi
+
+# vim:ft=sh:ts=2:sts=2:sw=2:et:sta

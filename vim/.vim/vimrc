@@ -16,7 +16,6 @@ let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 
 " Customize Dracula {{{1
-colorscheme dracula
 augroup dracula_customization
   autocmd!
   autocmd ColorScheme dracula
@@ -27,6 +26,7 @@ augroup dracula_customization
         \ highlight link FoldColumn DraculaCommentBold |
         \ highlight link PmenuSel WildMenu
 augroup END
+colorscheme dracula
 
 " comment map {{{1
 " TODO: unify these
