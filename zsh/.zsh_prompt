@@ -1,6 +1,7 @@
-# TODO: What happened if hex color not supported?
-# TODO: Unset colors
-#
+#!/usr/bin/env zsh
+
+## ~/.zsh_prompt
+
 GIT_PS1_SHOWDIRTYSTATE=1
 GIT_PS1_SHOWSTASHSTATE=1
 GIT_PS1_SHOWUPSTREAM="auto"
