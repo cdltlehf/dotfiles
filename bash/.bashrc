@@ -15,6 +15,28 @@ PREFIX="$HOME/.local"
 # Make local share folder
 ! [[ -d "$PREFIX/share" ]] && mkdir -p "$PREFIX/share"
 
+## git-prompt {{{2
+## https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+NAME="git-prompt"
+
+# Install
+URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
+
+if [[ ! -f "$PREFIX/share/$NAME.sh" ]]; then
+  echo -n "Install $NAME...";
+  curl \
+    -H "Accept: application/vnd.github.v3+json" \
+    "$URL" -s -o "$PREFIX/share/$NAME.sh" &&
+    echo "done" ||
+    echo "failed"
+fi
+unset URL
+
+# Activate
+[[ ! -f "$PREFIX/share/$NAME" ]] && \
+  source "$PREFIX/share/$NAME.sh"
+unset NAME
+
 ## bash-completion {{{2
 ## https://github.com/scop/bash-completion
 NAME="bash-completion"
@@ -22,15 +44,15 @@ NAME="bash-completion"
 # Install
 # FIXME: It needs autoreconf to build
 if false; then
-# if [[ ! -f "$PREFIX/share/$NAME" ]]; then
+  # if [[ ! -f "$PREFIX/share/$NAME" ]]; then
   echo -n "Install $NAME...";
   # (git clone --quiet --depth=1 \
-  (git clone --depth=1 \
+    (git clone --depth=1 \
     https://github.com/scop/$NAME.git \
     "$PREFIX/tmp/$NAME" &&
     cd "$PREFIX/tmp/$NAME" &&
     autoreconf
-    make install prefix="$PREFIX" &&
+  make install prefix="$PREFIX" &&
     rm -rf "$PREFIX/tmp/$NAME") &&
     echo "done" ||
     echo "failed"
@@ -39,10 +61,12 @@ fi
 # Activate
 [[ $PS1 && -f "$PREFIX/share/$NAME" ]] && \
   . "$PREFIX/share/$NAME"
-
 unset NAME
 
+# }}}
+
 unset PREFIX
+# }}}
 
 ## Source the global bash startup file {{{1
 [[ -f "/etc/bashrc" ]] && source "/etc/bashrc";

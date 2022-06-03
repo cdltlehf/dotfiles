@@ -1,73 +1,52 @@
 # TODO: What happened if hex color not supported?
 # TODO: Unset colors
+#
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWSTASHSTATE=1
+GIT_PS1_SHOWUPSTREAM="auto"
+# GIT_PS1_STATESEPARATOR
+# GIT_PS1_COMPRESSSPARSESTATE
+# GIT_PS1_OMITSPARSESTATE
+# GIT_PS1_DESCRIBE_STYLE
+GIT_PS1_SHOWCOLORHINTS=1
+
 setopt PROMPT_SUBST
 
-# git prompt {{{
-function prompt_git {
-  local git_branch='';
-  local prompt=''
-
-  git rev-parse --is-inside-work-tree &> /dev/null || return;
-
-  # git_branch=$(git branch --show-current 2> /dev/null)
-  git_branch=$(git symbolic-ref --quiet --short HEAD 2> /dev/null)
-  prompt+=" on %B%F{${1}}${git_branch}%f%b"
-
-  echo $prompt
-  return
-
-  # FIXME: below code is too slow...
-
-  local git_status=$(git -c color.status=false status --short | cut -c 1-2)
-
-  local uncommitted=$(echo $git_status | grep "[^ ?\!]." | wc -l | tr -d ' ')
-  local unstaged=$(echo $git_status | grep ".[^ ?\!]" | wc -l | tr -d ' ')
-  local untracked=$(echo $git_status | grep "??" | wc -l | tr -d ' ')
-  local stashed=$(git stash list | wc -l | tr -d ' ')
-
-  if [[ $(($uncommitted + $unstaged + $untracked + $stashed)) -eq 0 ]]; then
-    echo $prompt
-    return
-  fi
-
-  prompt+="%F{${2}} ["
-  [[ $uncommitted -eq 0 ]] || prompt+="${uncommitted}+"
-  [[ $unstaged -eq 0 ]] || prompt+="${unstaged}+"
-  [[ $untracked -eq 0 ]] || prompt+="${untracked}?"
-  [[ $stashed -eq 0 ]] || prompt+="${stashed}$"
-  prompt+="]%f"
-
-  echo $prompt
-}
-# }}}
-
 # PS {{{
-PS1=$'\n'
-PS1+="%B%F{5}%n%f%b at "
-PS1+="%B%F{3}%m%f%b in "
-PS1+="%B%F{2}%~%f%b"
-PS1+='$(prompt_git 6 4)'
-PS1+=$'\n'
-PS1+="%(?.%f$ %f.%B%F{1}?%? %f%b)"
+_PS1_1=$'\n'
+_PS1_1+="%B%F{5}%n%f%b at "
+_PS1_1+="%B%F{6}%m%f%b in "
+_PS1_1+="%B%F{3}%~%f%b"
+# PS1_1+='$(__git_ps1 " on (%s)")'
+_PS1_2+=$'\n'
+_PS1_2+="%(?.%f$ %f.%B%F{1}?%? %f%b)"
+
 PS2="%F{103}> %f" # Note that it uses 256-color
+
+# if command -v __git_ps1 > /dev/null 2>&1; then
+if command -v __git_ps1 > /dev/null 2>&1; then
+  precmd () { __git_ps1 "$_PS1_1" "$_PS1_2" " on %s" }
+else
+  PS1="$_PS1_1$_PS1_2"
+fi
 # }}}
 
 # RPS (vi-mode indicator) {{{1
 function zle-line-init zle-keymap-select {
-    case $KEYMAP in
-        vicmd|viopp ) RPS1="%B%F{2}[N]%k%f%b" ;;
-        viins|main ) RPS1="%B%F{3}[I]%k%f%b" ;;
-        isearch ) RPS1="%B%F{6}[/]%k%f%b" ;;
-        * ) RPS1="%B%F{1}[UNK]%k%f%b" ;;
-    esac
-    RPS2=$RPS1
-    zle reset-prompt
+case $KEYMAP in
+  vicmd|viopp ) RPS1="%B%F{2}[N]%k%f%b" ;;
+  viins|main ) RPS1="%B%F{3}[I]%k%f%b" ;;
+  isearch ) RPS1="%B%F{6}[/]%k%f%b" ;;
+  * ) RPS1="%B%F{1}[UNK]%k%f%b" ;;
+esac
+RPS2=$RPS1
+zle reset-prompt
 }
 
 function zle-line-finish {
-    RPS1=""
-    RPS2=""
-    zle reset-prompt
+  RPS1=""
+  RPS2=""
+  zle reset-prompt
 }
 
 zle -N zle-line-init

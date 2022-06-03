@@ -16,6 +16,28 @@ PREFIX="$HOME/.local"
 # Make local share folder
 ! [[ -d "$PREFIX/share" ]] && mkdir -p "$PREFIX/share"
 
+## git-prompt {{{2
+## https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+NAME="git-prompt"
+
+# Install
+URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
+
+if [[ ! -f "$PREFIX/share/$NAME.sh" ]]; then
+  echo -n "Install $NAME...";
+  curl \
+    -H "Accept: application/vnd.github.v3+json" \
+    "$URL" -s -o "$PREFIX/share/$NAME.sh" &&
+    echo "done" ||
+    echo "failed"
+fi
+unset URL
+
+# Activate
+[[ ! -f "$PREFIX/share/$NAME" ]] && \
+  source "$PREFIX/share/$NAME.sh"
+unset NAME
+
 ## Zsh-completions {{{2
 NAME="zsh-completions"
 
@@ -101,7 +123,8 @@ unset NAME
 unset PREFIX
 # }}}
 ## Source the global zsh startup file {{{1
-[[ -f "/etc/zshrc" ]] && source "/etc/zshrc";
+# XXX: It causes double sourcing...
+# [[ -f "/etc/zshrc" ]] && source "/etc/zshrc"; 
 ## Source the shell-independent startup file {{{1
 [[ -f "$HOME/.shrc" ]] && source "$HOME/.shrc";
 
