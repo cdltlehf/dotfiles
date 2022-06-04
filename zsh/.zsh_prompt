@@ -15,12 +15,14 @@ setopt PROMPT_SUBST
 
 # PS {{{
 _PS1_1=$'\n'
-_PS1_1+="%B%F{5}%n%f%b at "
-_PS1_1+="%B%F{6}%m%f%b in "
-_PS1_1+="%B%F{3}%~%f%b"
+_PS1_1+='%F{5}%n%f at '
+_PS1_1+='%F{6}%m%f in '
+_PS1_1+='%F{3}%~%f'
 # PS1_1+='$(__git_ps1 " on (%s)")'
+_PS1_2='$([ -z $VIRTUAL_ENV ] && echo ""'
+_PS1_2+='|| echo " via %F{4}"$VIRTUAL_ENV:t"%f")'
 _PS1_2+=$'\n'
-_PS1_2+="%(?.%f$ %f.%B%F{1}?%? %f%b)"
+_PS1_2+='%(?.%f$ %f.%B%F{1}?%? %f%b)'
 
 PS2="%F{103}> %f" # Note that it uses 256-color
 
@@ -35,10 +37,10 @@ fi
 # RPS (vi-mode indicator) {{{1
 function zle-line-init zle-keymap-select {
 case $KEYMAP in
-  vicmd|viopp ) RPS1="%B%F{2}[N]%k%f%b" ;;
-  viins|main ) RPS1="%B%F{3}[I]%k%f%b" ;;
-  isearch ) RPS1="%B%F{6}[/]%k%f%b" ;;
-  * ) RPS1="%B%F{1}[UNK]%k%f%b" ;;
+  vicmd|viopp ) RPS1="%F{2}[N]%k%f" ;;
+  viins|main ) RPS1="%F{3}[I]%k%f" ;;
+  isearch ) RPS1="%F{6}[/]%k%f" ;;
+  * ) RPS1="B%F{1}[UNK]%k%f%b" ;;
 esac
 RPS2=$RPS1
 zle reset-prompt
