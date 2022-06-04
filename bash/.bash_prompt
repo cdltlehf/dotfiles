@@ -20,7 +20,7 @@ _PS1_1+=$" in \[\033[33m\]\w\[\033[0m\]"
 # _PS1_1+='$(__git_ps1 " on %s")'
 # virtual environments
 _PS1_2='$([ -z $VIRTUAL_ENV ] && echo ""'
-_PS1_2+='|| echo " via \[\033[34m\]"$(basename "$VIRTUAL_ENV")"\[\033[0m\]")'
+_PS1_2+='|| echo " via \[\033[34m\]"${VIRTUAL_ENV:t}"\[\033[0m\]")'
 _PS1_2+=$'\n'
 _PS1_2+='$([[ $? == 0 ]] && echo "$ " || echo "\[\033[1;38m\]?$? \[\033[0m\]")'
 
