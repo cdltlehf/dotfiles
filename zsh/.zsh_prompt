@@ -1,24 +1,13 @@
 #!/usr/bin/env zsh
-
 ## ~/.zsh_prompt
-
-GIT_PS1_SHOWDIRTYSTATE=1
-GIT_PS1_SHOWSTASHSTATE=1
-GIT_PS1_SHOWUPSTREAM="auto"
-# GIT_PS1_STATESEPARATOR
-# GIT_PS1_COMPRESSSPARSESTATE
-# GIT_PS1_OMITSPARSESTATE
-# GIT_PS1_DESCRIBE_STYLE
-GIT_PS1_SHOWCOLORHINTS=1
 
 setopt PROMPT_SUBST
 
-# PS {{{
 _PS1_1=$'\n'
 _PS1_1+='%F{5}%n%f at '
 _PS1_1+='%F{6}%m%f in '
 _PS1_1+='%F{3}%~%f'
-# PS1_1+='$(__git_ps1 " on (%s)")'
+# _PS1_1+='$(__git_ps1 " on (%s)")'
 _PS1_2='$([ -z $VIRTUAL_ENV ] && echo ""'
 _PS1_2+='|| echo " via %F{4}"$VIRTUAL_ENV:t"%f")'
 _PS1_2+=$'\n'
@@ -26,13 +15,24 @@ _PS1_2+='%(?.%f$ %f.%B%F{1}?%? %f%b)'
 
 PS2="%F{103}> %f" # Note that it uses 256-color
 
-# if command -v __git_ps1 > /dev/null 2>&1; then
 if command -v __git_ps1 > /dev/null 2>&1; then
+  # GIT_PS1 environment variables {{{
+  GIT_PS1_SHOWDIRTYSTATE=1
+  GIT_PS1_SHOWSTASHSTATE=1
+  GIT_PS1_SHOWUPSTREAM="auto"
+  # GIT_PS1_STATESEPARATOR
+  # GIT_PS1_COMPRESSSPARSESTATE
+  # GIT_PS1_OMITSPARSESTATE
+  # GIT_PS1_DESCRIBE_STYLE
+  GIT_PS1_SHOWCOLORHINTS=1 
+
+  #}}}
   precmd () { __git_ps1 "$_PS1_1" "$_PS1_2" " on %s" }
 else
   PS1="$_PS1_1$_PS1_2"
 fi
-# }}}
+unset _PS1_1
+unset _PS1_2
 
 # RPS (vi-mode indicator) {{{1
 function zle-line-init zle-keymap-select {
