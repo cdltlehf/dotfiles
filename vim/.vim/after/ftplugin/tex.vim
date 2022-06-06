@@ -3,7 +3,7 @@
 " TODO: Add some input mode maps
 
 autocmd FileType tex nnoremap <buffer> <Leader>r<Space>
-set makeprg=pdflatex\ -interaction=nonstopmode
+setlocal makeprg=pdflatex\ -interaction=nonstopmode
 
 " snippets {{{1
 " https://github.com/honza/vim-snippets/blob/master/snippets/tex.snippets
