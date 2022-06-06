@@ -24,7 +24,7 @@ _PS1_2+='|| echo " via \[\033[34m\]"${VIRTUAL_ENV:t}"\[\033[0m\]")'
 _PS1_2+=$'\n'
 _PS1_2+='$([[ $? == 0 ]] && echo "$ " || echo "\[\033[1;38m\]?$? \[\033[0m\]")'
 
-PS2=$"\[\033[38;5;103m\]> \[\034[0m\]" # 256-color
+PS2=$"\[\033[38;5;103m\]> \[\033[0m\]" # 256-color
 
 if command -v __git_ps1 > /dev/null 2>&1; then
   PROMPT_COMMAND="__git_ps1 \"$_PS1_1\" \"$_PS1_2\" \" on %s\""
