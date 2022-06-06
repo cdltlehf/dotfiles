@@ -1,15 +1,5 @@
 #!/usr/bin/env bash
-
 ## ~/.bash_prompt
-
-GIT_PS1_SHOWDIRTYSTATE=1
-GIT_PS1_SHOWSTASHSTATE=1
-GIT_PS1_SHOWUPSTREAM="auto"
-# GIT_PS1_STATESEPARATOR
-# GIT_PS1_COMPRESSSPARSESTATE
-# GIT_PS1_OMITSPARSESTATE
-# GIT_PS1_DESCRIBE_STYLE
-GIT_PS1_SHOWCOLORHINTS=1
 
 export VIRTUAL_ENV_DISABLE_PROMPT
 
@@ -18,7 +8,6 @@ _PS1_1+=$"\[\033[35m\]\u\[\033[0m\]"
 _PS1_1+=$" at \[\033[36m\]\h\[\033[0m\]"
 _PS1_1+=$" in \[\033[33m\]\w\[\033[0m\]"
 # _PS1_1+='$(__git_ps1 " on %s")'
-# virtual environments
 _PS1_2='$([ -z $VIRTUAL_ENV ] && echo ""'
 _PS1_2+='|| echo " via \[\033[34m\]"${VIRTUAL_ENV:t}"\[\033[0m\]")'
 _PS1_2+=$'\n'
@@ -27,9 +16,22 @@ _PS1_2+='$([[ $? == 0 ]] && echo "$ " || echo "\[\033[1;38m\]?$? \[\033[0m\]")'
 PS2=$"\[\033[38;5;103m\]> \[\033[0m\]" # 256-color
 
 if command -v __git_ps1 > /dev/null 2>&1; then
+  # GIT_PS1 environment variables {{{
+  GIT_PS1_SHOWDIRTYSTATE=1
+  GIT_PS1_SHOWSTASHSTATE=1
+  GIT_PS1_SHOWUPSTREAM="auto"
+  # GIT_PS1_STATESEPARATOR
+  # GIT_PS1_COMPRESSSPARSESTATE
+  # GIT_PS1_OMITSPARSESTATE
+  # GIT_PS1_DESCRIBE_STYLE
+  GIT_PS1_SHOWCOLORHINTS=1 
+
+  #}}}
   PROMPT_COMMAND="__git_ps1 \"$_PS1_1\" \"$_PS1_2\" \" on %s\""
 else
   PS1="$_PS1_1$_PS1_2"
 fi
+unset _PS1_1
+unset _PS1_2
 
-# vim:ft=sh:ts=2:sts=2:sw=2:et:sta
+# vim:ts=2:sts=2:sw=2:et:sta:fdm=marker:fdl=0
