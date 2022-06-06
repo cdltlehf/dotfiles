@@ -18,6 +18,10 @@ export PATH
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+# Cygwin environment variables
+# https://cygwin.com/cygwin-ug-net/using-cygwinenv.html
+export CYGWIN=winsymlinks:nativestrict
+
 # Disable special behaviors
 if tty >/dev/null 2>&1; then
   stty stop ''; stty start ''
@@ -25,13 +29,13 @@ fi
 
 # Inspect processes on GPUs
 nvidia_ps() {
-_pids="$(nvidia-smi pmon -c 1 | awk '/^#/{next}{if ($2 != "-") print $2}')"
-if [[ -n "$_pids" ]]; then
-  echo "$_pids" | xargs ps "$@"
-else
-  echo "No processes are running."
-fi
-unset _pids
+  _pids="$(nvidia-smi pmon -c 1 | awk '/^#/{next}{if ($2 != "-") print $2}')"
+  if [[ -n "$_pids" ]]; then
+    echo "$_pids" | xargs ps "$@"
+  else
+    echo "No processes are running."
+  fi
+  unset _pids
 }
 alias -- nvidia-ps="nvidia_ps"
 
