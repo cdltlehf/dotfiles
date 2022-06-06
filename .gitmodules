@@ -7,3 +7,9 @@
 [submodule "vim/.vim/pack/preservim/opt/tagbar"]
 	path = vim/.vim/pack/preservim/opt/tagbar
 	url = https://github.com/preservim/tagbar.git
+[submodule "vim/.vim/pack/justinmk/opt/vim-dirvish"]
+	path = vim/.vim/pack/justinmk/opt/vim-dirvish
+	url = https://github.com/justinmk/vim-dirvish.git
+[submodule "vim/.vim/pack/tpope/opt/vim-fugitive"]
+	path = vim/.vim/pack/tpope/opt/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git

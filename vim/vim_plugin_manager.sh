@@ -3,7 +3,7 @@
 
 # TODO: dump
 # TODO: doc
-install() {
+install() { #{{{
   local repo
   local author
   local plugin
@@ -43,9 +43,12 @@ install() {
   if ! [[ -e "./.vim/pack/$bundle/opt/$name" ]]; then
     git submodule add "$repo" "./.vim/pack/$bundle/opt/$name"
   fi
-}
+} #}}}
 
 install 'dracula/vim' 'themes/dracula'
 install 'airblade/vim-gitgutter'
-install 'preservim/tagbar'
+# install 'preservim/tagbar'
+install 'justinmk/vim-dirvish'
+install 'tpope/vim-fugitive'
 
+# vim:fdm=marker:
