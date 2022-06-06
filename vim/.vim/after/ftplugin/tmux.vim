@@ -1,3 +1,3 @@
 " ~/.vim/after/ftplugin/tmux.vim
 
-set indentexpr=GetShIndent()
+setlocal indentexpr=GetShIndent()

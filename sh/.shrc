@@ -21,6 +21,7 @@ export LC_ALL=en_US.UTF-8
 # Cygwin environment variables
 # https://cygwin.com/cygwin-ug-net/using-cygwinenv.html
 export CYGWIN=winsymlinks:nativestrict
+export MSYS=$CYGWIN
 
 # Disable special behaviors
 if tty >/dev/null 2>&1; then
