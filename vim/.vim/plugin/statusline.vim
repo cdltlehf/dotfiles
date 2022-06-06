@@ -145,6 +145,16 @@ augroup statusline_highlight "{{{
         \ . ' cterm=bold gui=bold'
 
   "}}}
+  " Fugitive statusline {{{
+  if exists('g:loaded_fugitive')
+    autocmd ColorScheme,VimEnter *
+          \ highlight clear FugitiveStatusline
+          \|execute 'highlight FugitiveStatusline'
+          \ . ' guibg=' . s:comment . ' guifg=' . s:background
+          \ . ' cterm=None gui=None'
+  end
+
+  "}}}
   " Right statusline {{{ 
   autocmd ColorScheme,VimEnter *
         \ highlight clear StatusLineRight1
@@ -167,30 +177,29 @@ augroup statusline_string "{{{1
   autocmd!
   " Active statusline "{{{
   autocmd WinEnter,BufEnter *
-        \ let &l:statusline =
-        \ '%#StatusLineMode#'
-        \ . ' %{StatusLineMode()} '
-        \ . '%#StatusLine#'
-        \ . ' %<%f %m%r%h%w '
-        \ . '%='
+        \ let &l:statusline = '%#StatusLineMode# %{StatusLineMode()} '
+        \|if exists('g:loaded_fugitive')
+        \|  let &l:statusline .= ''
+        \ . '%#FugitiveStatusline#'
+        \. '%{substitute(FugitiveStatusline(), "^\\[\\|\\]$", " ", "g")}'
+        \|endif
+        \|let &l:statusline .= '%#StatusLine# %<%f %m%r%h%w '
+        \|let &l:statusline .= '%='
+        \|let &l:statusline .= ''
         \ . ' %y '
-        \ . '%#StatusLineRight1#'
-        \ . ' %{&fileencoding}[%{&fileformat}] '
-        \ . '%#StatusLineRight2#'
-        \ . ' %3.p%% :%5.l/%L:%2.c '
+        \ . '%#StatusLineRight1# %{&fileencoding}[%{&fileformat}] '
+        \ . '%#StatusLineRight2# %3.p%% :%5.l/%L:%2.c '
 
   "}}}
   " Inactive statusline {{{
   autocmd WinLeave,BufLeave *
-        \ let &l:statusline =
-        \ '%#StatusLineInactive#'
-        \ . ' INACTIVE '
-        \ . '%#StatusLine#'
-        \ . ' %<%f %m%r%h%w '
-        \ . '%='
+        \ let &l:statusline = ''
+        \ . '%#StatusLineInactive# INACTIVE '
+        \ . '%#StatusLine# %<%f %m%r%h%w '
+        \|let &l:statusline .= '%='
+        \|let &l:statusline .= ''
         \ . ' %y '
-        \ . '%#StatusLineInactive#'
-        \ . ' %{&fileencoding}[%{&fileformat}] '
+        \ . '%#StatusLineInactive# %{&fileencoding}[%{&fileformat}] '
 
   "}}}
 augroup end "}}}
