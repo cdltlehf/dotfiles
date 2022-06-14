@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -eu
+#!/bin/bash -ue
 
 # Treat unset variables and parameters as an error
 # (= `set -u`)
@@ -25,7 +25,8 @@ symlink_home() {
 
   # If $source_file not exists, return with an error
   if [[ ! -e "$source_file" ]]; then return 1; fi
-  local target_file="$HOME/$(basename "$source_file")"
+  local target_file
+  target_file="$HOME/$(basename "$source_file")"
 
   # If $target_file exists, ask to replace or not
   if [[ -e "$target_file" ]]; then
@@ -37,7 +38,7 @@ symlink_home() {
     fi
 
     local yn
-    read -p "replace $target_file? (y/n) " yn
+    read -rp "replace $target_file? (y/n) " yn
     case $yn in
       [Yy]* ) rm -rf "$target_file" ;;
       * ) return 1 ;;
@@ -55,47 +56,47 @@ DOTFILES_COMMON=(
   "$BASEDIR/bash/.bash_prompt"
   "$BASEDIR/bash/.bashrc"
 
-  "$BASEDIR/etc/.inputrc"
+  "${BASEDIR}/etc/.inputrc"
 
-  "$BASEDIR/git/.gitconfig"
+  "${BASEDIR}/git/.gitconfig"
 
-  "$BASEDIR/sh/.aliases"
-  "$BASEDIR/sh/.profile"
-  "$BASEDIR/sh/.shrc"
+  "${BASEDIR}/sh/.aliases"
+  "${BASEDIR}/sh/.profile"
+  "${BASEDIR}/sh/.shrc"
 
-  "$BASEDIR/tmux/.tmux.conf"
+  "${BASEDIR}/tmux/.tmux.conf"
 
-  "$BASEDIR/vim/.vim/"
+  "${BASEDIR}/vim/.vim/"
 
-  "$BASEDIR/zsh/.zshrc"
-  "$BASEDIR/zsh/.zsh_prompt"
+  "${BASEDIR}/zsh/.zshrc"
+  "${BASEDIR}/zsh/.zsh_prompt"
 )
 
 echo "Make symbolic links of common dotfiles..."
 for dotfile in "${DOTFILES_COMMON[@]}"; do
-  symlink_home "$dotfile" || true
+  symlink_home "${dotfile}" || true
 done
 unset dotfile
 echo "Done."
 
 # Array of dotfiles for Darwin (macos)
 DOTFILES_DARWIN=(
-  "$BASEDIR/macos/.hammerspoon/"
-  # "$BASEDIR/macos/.skhdrc"
-  "$BASEDIR/macos/.ubersichtrc"
-  # "$BASEDIR/macos/.yabairc"
+  "${BASEDIR}/macos/.hammerspoon/"
+  # "${BASEDIR}/macos/.skhdrc"
+  "${BASEDIR}/macos/.ubersichtrc"
+  # "${BASEDIR}/macos/.yabairc"
 )
 
 # Array of default configuration files for Darwin
 MACOS_DEFAULTS=(
-  # "$BASEDIR/macos/defaults/.macos"
-  "$BASEDIR/macos/defaults/.macos.dock"
-  "$BASEDIR/macos/defaults/.macos.screencapture"
-  "$BASEDIR/macos/defaults/.macos.screensaver"
+  # "${BASEDIR}/macos/defaults/.macos"
+  "${BASEDIR}/macos/defaults/.macos.dock"
+  "${BASEDIR}/macos/defaults/.macos.screencapture"
+  "${BASEDIR}/macos/defaults/.macos.screensaver"
 )
 
 # Do platform dependent configurations
-case $UNAME in
+case ${UNAME} in
   # TODO: Be sudoer for some commands
 
   # Do configurations of Darwin (macos)
@@ -104,14 +105,14 @@ case $UNAME in
 
   # NOTE: These default files should be brew package independent
   echo "Set default configurations for macos."
-  for defaults in "${MACOS_DEFAULTS}"; do
-    command zsh $defaults
+  for defaults in "${MACOS_DEFAULTS[@]}"; do
+    command zsh "${defaults}"
   done
   unset defaults
 
   echo "Make symbolic links of dotfiles for macos..."
   for dotfile in "${DOTFILES_DARWIN[@]}"; do
-    symlink_home "$dotfile" || true
+    symlink_home "${dotfile}" || true
   done
   echo "Done."
   unset dotfile
@@ -121,7 +122,7 @@ case $UNAME in
 
   # If there is no ssh key, make one.
   # XXX: Is it a best way to check whether a directory is empty?
-  if [[ -d $HOME/.ssh ]] && [[ "$(ls -A $HOME/.ssh)" ]]; then
+  if [[ -d ${HOME}/.ssh ]] && [[ "$(ls -A "${HOME}/.ssh")" ]]; then
     true
 
   else
@@ -135,16 +136,18 @@ case $UNAME in
   if ! command -v brew &> /dev/null; then
     echo "Install Homebrew"
     /bin/bash -c \
-      "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval $(/opt/homebrew/bin/brew shellenv)
+      "$(curl -fsSL
+          https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
 
   # TODO: Check and run `softwareupdate --all --install --force`
   echo "Install rosetta"
   sudo softwareupdate --install-rosetta || true
 
-  echo "Install brew packages in $BASEDIR/macos/Brewfile"
-  command -v brew &> /dev/null && brew bundle --file "$BASEDIR/macos/Brewfile"
+  echo "Install brew packages in ${BASEDIR}/macos/Brewfile"
+  command -v brew &> /dev/null \
+    && brew bundle --file "${BASEDIR}/macos/Brewfile"
 
   # TODO: Do package dependent things
   # Make the following applications default:

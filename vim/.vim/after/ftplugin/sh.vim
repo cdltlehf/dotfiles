@@ -1,3 +1,7 @@
-"" ~/.vim/after/ftplugin/sh.vim
+" ~/.vim/after/ftplugin/sh.vim
 
-setlocal makeprg=shellcheck\ --format=gcc\ --external-sources\ %
+abbreviate <buffer> #! #!/bin/bash
+abbreviate <buffer> sh#! #!/bin/sh
+abbreviate <buffer> bash#! #!/bin/bash
+
+compiler shellcheck

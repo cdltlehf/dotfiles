@@ -1,5 +1,7 @@
-#!/usr/bin/env bash
-## ~/.bash_prompt
+#!/bin/bash
+# shellcheck disable=2016
+#
+# ~/.bash_prompt
 
 export VIRTUAL_ENV_DISABLE_PROMPT
 
@@ -17,14 +19,14 @@ PS2=$"\[\033[38;5;103m\]> \[\033[0m\]" # 256-color
 
 if command -v __git_ps1 > /dev/null 2>&1; then
   # GIT_PS1 environment variables {{{
-  GIT_PS1_SHOWDIRTYSTATE=1
-  GIT_PS1_SHOWSTASHSTATE=1
-  GIT_PS1_SHOWUPSTREAM="auto"
-  # GIT_PS1_STATESEPARATOR
-  # GIT_PS1_COMPRESSSPARSESTATE
-  # GIT_PS1_OMITSPARSESTATE
-  # GIT_PS1_DESCRIBE_STYLE
-  GIT_PS1_SHOWCOLORHINTS=1 
+  export GIT_PS1_SHOWDIRTYSTATE=1
+  export GIT_PS1_SHOWSTASHSTATE=1
+  export GIT_PS1_SHOWUPSTREAM="auto"
+  # export GIT_PS1_STATESEPARATOR
+  # export GIT_PS1_COMPRESSSPARSESTATE
+  # export GIT_PS1_OMITSPARSESTATE
+  # export GIT_PS1_DESCRIBE_STYLE
+  export GIT_PS1_SHOWCOLORHINTS=1
 
   #}}}
   PROMPT_COMMAND="__git_ps1 \"$_PS1_1\" \"$_PS1_2\" \" on %s\""
