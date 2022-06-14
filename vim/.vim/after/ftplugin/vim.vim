@@ -1,7 +1,7 @@
 " ~/.vim/after/ftplugin/vim.vim
 
 setlocal foldmethod=marker
-" setlocal foldlevel=99
+setlocal foldlevel=99
 
 autocmd FileType vim
       \ nnoremap <silent> <buffer> 

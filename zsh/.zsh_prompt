@@ -1,5 +1,6 @@
-#!/usr/bin/env zsh
-## ~/.zsh_prompt
+#!/bin/zsh
+#
+# ~/.zsh_prompt
 
 setopt PROMPT_SUBST
 
