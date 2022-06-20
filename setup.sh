@@ -21,40 +21,40 @@ UNAME=$(uname)
 # command -v git > /dev/null && (cd "$BASEDIR" && git pull origin main);
 
 symlink_home() {
-  local source_file=${1}
+  local source_file=$1
 
-  # If $source_file not exists, return with an error
-  if [[ ! -e "$source_file" ]]; then return 1; fi
+  # If ${source_file} not exists, return with an error
+  if [[ ! -e "${source_file}" ]]; then return 1; fi
   local target_file
-  target_file="$HOME/$(basename "$source_file")"
+  target_file="${HOME}/$(basename "$source_file")"
 
   # If $target_file exists, ask to replace or not
-  if [[ -e "$target_file" ]]; then
+  if [[ -e "${target_file}" ]]; then
 
     # If symlink exists, return 0
-    if [[ -L "$target_file" ]] &&
-      [[ $(readlink "$target_file") == "$source_file" ]]; then
+    if [[ -L "${target_file}" ]] &&
+      [[ $(readlink "${target_file}") == "${source_file}" ]]; then
           return 0;
     fi
 
     local yn
-    read -rp "replace $target_file? (y/n) " yn
-    case $yn in
-      [Yy]* ) rm -rf "$target_file" ;;
+    read -rp "replace ${target_file}? (y/n) " yn
+    case ${yn} in
+      [Yy]* ) rm -rf "${target_file}" ;;
       * ) return 1 ;;
     esac
   fi
 
   # Make a target symlink verbosely
-  ln -s "$source_file" "$target_file"
-  echo "$target_file -> $source_file"
+  ln -s "${source_file}" "${target_file}"
+  echo "${target_file} -> ${source_file}"
 }
 
 # Array of common dotfiles
 DOTFILES_COMMON=(
-  "$BASEDIR/bash/.bash_profile"
-  "$BASEDIR/bash/.bash_prompt"
-  "$BASEDIR/bash/.bashrc"
+  "${BASEDIR}/bash/.bash_profile"
+  "${BASEDIR}/bash/.bash_prompt"
+  "${BASEDIR}/bash/.bashrc"
 
   "${BASEDIR}/etc/.inputrc"
 
@@ -93,6 +93,7 @@ MACOS_DEFAULTS=(
   "${BASEDIR}/macos/defaults/.macos.dock"
   "${BASEDIR}/macos/defaults/.macos.screencapture"
   "${BASEDIR}/macos/defaults/.macos.screensaver"
+  "${BASEDIR}/macos/defaults/.macos.keyboard"
 )
 
 # Do platform dependent configurations
@@ -100,8 +101,12 @@ case ${UNAME} in
   # TODO: Be sudoer for some commands
 
   # Do configurations of Darwin (macos)
-  # TODO: Brew things, macos defaults things, ...
   "Darwin")
+
+  # System Configurations
+  sudo scutil --set ComputerName
+  sudo scutil --set HostName
+  sudo scutil --set LocalHostName
 
   # NOTE: These default files should be brew package independent
   echo "Set default configurations for macos."
@@ -121,10 +126,8 @@ case ${UNAME} in
   xcode-select --install &> /dev/null || true
 
   # If there is no ssh key, make one.
-  # XXX: Is it a best way to check whether a directory is empty?
-  if [[ -d ${HOME}/.ssh ]] && [[ "$(ls -A "${HOME}/.ssh")" ]]; then
+  if [[ -d ${HOME}/.ssh ]] && [[ -z "$(ls -A "${HOME}/.ssh")" ]]; then
     true
-
   else
     if command -v ssh-keygen; then
       # https://stribika.github.io/2015/01/04/secure-secure-shell.html
@@ -138,7 +141,7 @@ case ${UNAME} in
     /bin/bash -c \
       "$(curl -fsSL
           https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+          eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
 
   # TODO: Check and run `softwareupdate --all --install --force`
@@ -149,6 +152,32 @@ case ${UNAME} in
   command -v brew &> /dev/null \
     && brew bundle --file "${BASEDIR}/macos/Brewfile"
 
+  # iTerm
+  echo "Add terminfo. It may override local terminfo"
+  tic -x "${BASEDIR}/term/xterm-256color-italic.terminfo"
+  tic -x "${BASEDIR}/term/tmux-256color.terminfo"
+
+  read -rp "Open iTerm? (y/n) " yn
+  case $yn in
+    [Yy]* ) open -a iTerm
+  esac
+  unset yn
+  echo "Do followings for iTerm settings:"
+  cat <<END
+iTerm2 > Preferences... > Profiles > Other Actions... > Import JSON Profiles..."
+END
+
+  # Hammerspoon
+  read -rp "Open hammerspoon? (y/n) " yn
+  case $yn in
+    [Yy]* ) open -a hammerspoon
+  esac
+  unset yn
+
+  echo "Do followings for Hammerspoon settings:"
+  echo "Hammerspoon > Preferences... > Launch Hammerspoon at login (enable)"
+  echo "Hammerspoon > Preferences... > Enable Accessibility"
+
   # TODO: Do package dependent things
   # Make the following applications default:
   # Google Chrome, iTerm, VLC, VOX, The Unarchiver
@@ -158,7 +187,7 @@ case ${UNAME} in
   ;;
 esac
 
-echo "Restart your login shell with \`exec \"\$SHELL\" --login\`"
+echo "Restart your login shell with \`exec \"\${SHELL}\" --login\`"
 unset -f symlink_home
 unset UNAME
 unset BASEDIR

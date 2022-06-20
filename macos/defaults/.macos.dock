@@ -26,7 +26,7 @@ defaults write com.apple.dock magsize-immutable -bool true
 
 # defaults write com.apple.dock MCXDockSpecialFolders -string ""
 
-echo '... > Minimise windows using (scale)'
+echo '... > Minimize windows using (scale)'
 defaults write com.apple.dock mineffect -string "scale"
 defaults write com.apple.dock mineffect-immutable -bool true
 defaults write com.apple.dock minimize-to-application -bool true
