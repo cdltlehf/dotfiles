@@ -81,12 +81,12 @@ nnoremap Y y$
 nnoremap n nzz
 nnoremap N Nzz
 
-" leader maps {{{1
+" Leader maps {{{1
 "nnoremap <leader>b :b<space><c-d>
 nnoremap <leader>b :ls<space>:b<space>
 nnoremap <leader>m :make!<cr>
 nnoremap <leader>s mzHmy:%s/\s\+$//e<cr>'yz<cr>`z
-nnoremap <leader>q :b#<cr>>
+nnoremap <leader>q :b#<cr>
 
 " Set text width 80 {{{1
 if exists('&colorcolumn')
