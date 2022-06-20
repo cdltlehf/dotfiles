@@ -126,7 +126,7 @@ case ${UNAME} in
   xcode-select --install &> /dev/null || true
 
   # If there is no ssh key, make one.
-  if [[ -d ${HOME}/.ssh ]] && [[ -z "$(ls -A "${HOME}/.ssh")" ]]; then
+  if [[ -d ${HOME}/.ssh ]] && [[ -n "$(ls -A "${HOME}/.ssh")" ]]; then
     true
   else
     if command -v ssh-keygen; then
@@ -145,8 +145,11 @@ case ${UNAME} in
   fi
 
   # TODO: Check and run `softwareupdate --all --install --force`
-  echo "Install rosetta"
-  sudo softwareupdate --install-rosetta || true
+  read -rp "Install rosetta? (y/n) " yn
+  case $yn in
+    [Yy]* ) sudo softwareupdate --install-rosetta || true ;;
+  esac
+  unset yn
 
   echo "Install brew packages in ${BASEDIR}/macos/Brewfile"
   command -v brew &> /dev/null \
@@ -159,7 +162,7 @@ case ${UNAME} in
 
   read -rp "Open iTerm? (y/n) " yn
   case $yn in
-    [Yy]* ) open -a iTerm
+    [Yy]* ) open -a iTerm ;;
   esac
   unset yn
   echo "Do followings for iTerm settings:"
@@ -168,9 +171,20 @@ iTerm2 > Preferences... > Profiles > Other Actions... > Import JSON Profiles..."
 END
 
   # Hammerspoon
-  read -rp "Open hammerspoon? (y/n) " yn
+  read -rp "Open Hammerspoon? (y/n) " yn
   case $yn in
-    [Yy]* ) open -a hammerspoon
+    [Yy]* ) open -a Hammerspoon ;;
+  esac
+  unset yn
+
+  echo "Do followings for Hammerspoon settings:"
+  echo "Hammerspoon > Preferences... > Launch Hammerspoon at login (enable)"
+  echo "Hammerspoon > Preferences... > Enable Accessibility"
+
+  # BetterDiscord
+  read -rp "Open BetterDiscord? (y/n) " yn
+  case $yn in
+    [Yy]* ) open -a BetterDiscord ;;
   esac
   unset yn
 
@@ -182,7 +196,6 @@ END
   # Make the following applications default:
   # Google Chrome, iTerm, VLC, VOX, The Unarchiver
   # Set the following applications: Alfred4(?), Ubersicht, Hammerspoon
-  # Run BetterDiscord
 
   ;;
 esac
