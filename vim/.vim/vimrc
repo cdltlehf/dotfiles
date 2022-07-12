@@ -1,5 +1,6 @@
 " ~/.vim/vimrc
 " It needs Vim 8.0 to use packadd
+" Anyway, read https://www.vi-improved.org/recommendations/
 
 " Set nocompatible {{{1
 if &g:compatible
@@ -75,18 +76,21 @@ vnoremap < <gv
 vnoremap > >gv
 vnoremap * y/<c-r>"<cr>
 
-nnoremap Q @q
+" nnoremap Q @q
 nnoremap Y y$
 
-nnoremap n nzz
-nnoremap N Nzz
+" nnoremap n nzz
+" nnoremap N Nzz
 
 " Leader maps {{{1
-"nnoremap <leader>b :b<space><c-d>
-nnoremap <leader>b :ls<space>:b<space>
-nnoremap <leader>m :make!<cr>
-nnoremap <leader>s mzHmy:%s/\s\+$//e<cr>'yz<cr>`z
-nnoremap <leader>q :b#<cr>
+" nnoremap <leader>b :b<space><c-d>
+nnoremap <leader>b :ls<cr>:b<space>
+nnoremap <silent> <leader>m :make!<cr>
+" TODO: The below ruins last search pattern register
+nnoremap <silent> <leader>s mzHmy:%s/\s\+$//e<cr>'yz<cr>`z:noh<cr>
+nnoremap <silent> <leader>q :b#<cr>
+
+nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 
 " Set text width 80 {{{1
 if exists('&colorcolumn')
@@ -131,7 +135,7 @@ else
   set fillchars+=vert:│,foldsep:│,foldopen:┌
 endif
 
-" Set syn-sync {{{1
+" Set syntax sync {{{1
 syntax sync fromstart
 
 " Netrw settings {{{1
