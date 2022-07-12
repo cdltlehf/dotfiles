@@ -28,14 +28,14 @@ symlink_home() {
   local target_file
   target_file="${HOME}/$(basename "$source_file")"
 
-  # If $target_file exists, ask to replace or not
-  if [[ -e "${target_file}" ]]; then
+  # If the symlink exists, return 0
+  if [[ -L "${target_file}" ]] &&
+    [[ $(readlink "${target_file}") == "${source_file}" ]]; then
+        return 0;
+  fi
 
-    # If symlink exists, return 0
-    if [[ -L "${target_file}" ]] &&
-      [[ $(readlink "${target_file}") == "${source_file}" ]]; then
-          return 0;
-    fi
+  # If ${target_file} exists, ask to replace or not
+  if [[ -e "${target_file}" ]]; then
 
     local yn
     read -rp "replace ${target_file}? (y/n) " yn

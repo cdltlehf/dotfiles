@@ -1,0 +1,6 @@
+#!/usr/bin/env zsh
+## Custom defaults for some applications
+
+# Chrome
+defaults write com.google.Chrome \
+  AppleEnableSwipeNavigateWithScrolls -bool false
