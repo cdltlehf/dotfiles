@@ -33,7 +33,7 @@ unset URL
 
 # Activate
 [[ ! -f "${PREFIX}/share/${NAME}" ]] && \
-  source "{$PREFIX}/share/${NAME}.sh"
+  source "${PREFIX}/share/${NAME}.sh"
 unset NAME
 
 ## bash-completion {{{2

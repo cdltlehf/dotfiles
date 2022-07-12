@@ -3,6 +3,12 @@
 setlocal foldmethod=marker
 setlocal foldlevel=99
 
+setlocal tabstop=2
+setlocal softtabstop=2
+setlocal shiftwidth=2
+setlocal expandtab
+setlocal smarttab
+
 autocmd FileType vim
       \ nnoremap <silent> <buffer>
       \ <Leader>c<Space>
