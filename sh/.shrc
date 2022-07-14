@@ -1,17 +1,16 @@
 #!/usr/bin/env sh
-## $HOME/.shrc
-## Shell-independent startup file (for any kind of shells)
-## XXX: This file must be POSIX-compliant, but never be guaranteed
-## XXX: This must be sourced once.
+#
+# ~/.shrc
+# Shell-independent startup file (for any kind of shells)
 
-if [ -n "$HOME_SHRC_SOURCED" ]; then
-  echo "$HOME/.shrc sourced twice!"
+if [ -n "${HOME_SHRC_SOURCED}" ]; then
+  echo "${HOME}/.shrc sourced twice!"
 fi
 HOME_SHRC_SOURCED="1"
 
 # User specific environment
-PATH="$HOME/bin:$PATH"
-PATH="$HOME/.local/bin:$PATH"
+PATH="${HOME}/bin:${PATH}"
+PATH="${HOME}/.local/bin:${PATH}"
 export PATH
 
 # Set locale
@@ -21,9 +20,8 @@ export LC_ALL=en_US.UTF-8
 # Cygwin environment variables
 # https://cygwin.com/cygwin-ug-net/using-cygwinenv.html
 export CYGWIN=winsymlinks:nativestrict
-export MSYS=$CYGWIN
+export MSYS=${CYGWIN}
 
-# Disable special behaviors
 if tty >/dev/null 2>&1; then
   stty stop ''; stty start ''
 fi
@@ -31,8 +29,8 @@ fi
 # Inspect processes on GPUs
 nvidia_ps() {
   _pids="$(nvidia-smi pmon -c 1 | awk '/^#/{next}{if ($2 != "-") print $2}')"
-  if [[ -n "$_pids" ]]; then
-    echo "$_pids" | xargs ps "$@"
+  if [ -n "${_pids}" ]; then
+    echo "${_pids}" | xargs ps "$@"
   else
     echo "No processes are running."
   fi
@@ -47,8 +45,9 @@ if ! command docker 2> /dev/null; then
 fi
 
 # Source shell-independent external configurations
-for file in "$HOME"/.aliases; do
-  [ -f "$file" ] && . "$file"
+# shellcheck disable=2066,1090
+for file in "${HOME}/.aliases"; do
+  [ -f "${file}" ] && . "${file}"
 done;
 unset file;
 

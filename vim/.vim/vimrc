@@ -1,5 +1,6 @@
 " ~/.vim/vimrc
 " It needs Vim 8.0 to use packadd
+" Anyway, read https://www.vi-improved.org/recommendations/
 
 " Set nocompatible {{{1
 if &g:compatible
@@ -14,8 +15,8 @@ packadd vim-fugitive
 
 " termguicolors, etc... {{{1
 set termguicolors
-let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<esc>[48;2;%lu;%lu;%lum"
 
 " Customize Dracula {{{1
 augroup dracula_customization
@@ -36,27 +37,27 @@ augroup gitgutter_listener
   autocmd User GitGutter let &l:statusline=&l:statusline
 augroup END
 
-" comment map {{{1
+" Comment map {{{1
 " TODO: unify these
 function! SetPythonCommentMap() abort
-  nnoremap <Leader>c<Space> mcI# <ESC>`c
-  vnoremap <Leader>c<Space> :s\/^\/#\ 
+  nnoremap <leader>c<space> mcI# <esc>`c
+  vnoremap <leader>c<space> :s\/^\/#\
 
-  nnoremap gcc mcI# <ESC>`c
+  nnoremap gcc mcI# <esc>`c
   vnoremap gc :s\/^\/#\
 endfunction
 
 augroup commentmap
   autocmd!
-  autocmd FileType javascript 
-        \ nnoremap <Leader>c<Space> mcI// <ESC>`c
-  autocmd FileType c 
-        \ nnoremap <Leader>c<Space> mcI// <ESC>`c
-  autocmd FileType cpp 
-        \ nnoremap <Leader>c<Space> mcI// <ESC>`c
+  autocmd FileType javascript
+        \ nnoremap <leader>c<space> mcI// <esc>`c
+  autocmd FileType c
+        \ nnoremap <leader>c<space> mcI// <esc>`c
+  autocmd FileType cpp
+        \ nnoremap <leader>c<space> mcI// <esc>`c
 augroup END
 
-" miscellaneous settings {{{1
+" Miscellaneous settings {{{1
 set number
 set relativenumber
 " set background=dark
@@ -67,40 +68,48 @@ set ignorecase
 set smartcase
 set tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab
 set list
-set showbreak=>\ 
+let &showbreak = '> '
 set belloff=all
+set showcmd
 
 vnoremap < <gv
 vnoremap > >gv
-vnoremap * y/<C-R>"<CR>
+vnoremap * y/<c-r>"<cr>
 
-nnoremap Q @q
+" nnoremap Q @q
 nnoremap Y y$
 
-nnoremap n nzz
-nnoremap N Nzz
+" nnoremap n nzz
+" nnoremap N Nzz
 
-" nnoremap <Leader>b<Space> :buffers <CR>:buffer
-nnoremap <Leader>b :buffers <CR>:buffer
-nnoremap <Leader><Leader> :b#<CR>
+" Leader maps {{{1
+" nnoremap <leader>b :b<space><c-d>
+nnoremap <leader>b :ls<cr>:b<space>
+nnoremap <silent> <leader>m :make!<cr>
+" TODO: The below ruins last search pattern register
+nnoremap <silent> <leader>s mzHmy:%s/\s\+$//e<cr>'yz<cr>`z:noh<cr>
+nnoremap <silent> <leader>q :b#<cr>
 
-" set text width 79 {{{1
+nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
+
+" Set text width 80 {{{1
 if exists('&colorcolumn')
-  set colorcolumn=80
+  set colorcolumn=81
 endif
 " set textwidth=79
 
-" pop up menu {{{1
-set completeopt=noinsert,preview,menuone
-set pumheight=5
+" Pop-up menu {{{1
+" set completeopt=noinsert,preview,menuone
+" set pumheight=5
 
-augroup completion "{{{1
+" Completion settings "{{{1
+augroup completion
   "TODO
   autocmd!
   "autocmd CursorMovedI * execute('if pumvisible() normal! a')
 augroup END
 
-" set backup, spellcheck, swap and undo {{{1
+" Set backup, spellcheck, swap and undo {{{1
 set spell
 set undofile
 
@@ -118,7 +127,7 @@ if !isdirectory(&undodir) | call mkdir(&undodir, 'p') | endif
 
 let g:netrw_home = expand('~/.local/share/vim/')
 
-" set fold (zR/zM to open/close all folds) {{{1
+" Set fold (zR/zM to open/close all folds) {{{1
 set foldcolumn=1
 if v:version < 802
   set fillchars+=vert:│
@@ -126,7 +135,7 @@ else
   set fillchars+=vert:│,foldsep:│,foldopen:┌
 endif
 
-" Set syn-sync {{{1
+" Set syntax sync {{{1
 syntax sync fromstart
 
 " Netrw settings {{{1
@@ -135,4 +144,4 @@ let g:netrw_winsize = 30
 let g:netrw_banner = 0
 
 " }}}
-" vim:ft=vim:fdm=marker:ts=2:sts=2:sw=2:
+" vim:ft=vim:fdm=marker:ts=2:sts=2:sw=2:fdl=0

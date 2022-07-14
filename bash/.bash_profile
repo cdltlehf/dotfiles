@@ -1,6 +1,7 @@
-#!/usr/bin/env bash
-## $HOME/.bash_profile
-## Bash startup file for login shells
+#!/bin/bash
+#
+# ~/.bash_profile
+# Bash startup file for login shells
 
 # shellcheck disable=SC1091
 

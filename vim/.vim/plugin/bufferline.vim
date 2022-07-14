@@ -13,52 +13,84 @@ let s:green='#50fa7b'
 let s:purple='#bd93f9'
 let s:cyan='#8be9fd'
 let s:pink='#ff79c6'
-
 "}}}
 
 set showtabline=2
 set tabline=%!TabLine()
 
-augroup tabline_update
-  autocmd!
-augroup END
-
 augroup tabline_highlight "{{{1
   autocmd!
   autocmd ColorScheme,VimEnter *
         \ highlight clear TabLine
-        \|highlight clear TabLineUntitled
         \|highlight clear TabLineSelNR
         \|highlight clear TabLineSel
-        \|highlight clear TabLineSelUntitled
         \|highlight clear TabLineFill
         \|execute 'highlight TabLine'
         \ . ' guibg=' . s:selection . ' guifg=' . s:foreground
         \ . ' cterm=None gui=None'
-        \|execute 'highlight TabLineUntitled'
-        \ . ' guibg=' . s:selection . ' guifg=' . s:foreground
-        \ . ' cterm=italic gui=italic'
         \|execute 'highlight TabLineSelNR'
-        \ . ' guibg=' . s:background . ' guifg=' . s:green
+        \ . ' guibg=' . s:background . ' guifg=' . s:purple
         \ . ' cterm=bold gui=bold'
         \|execute 'highlight TabLineSel'
         \ . ' guibg=' . s:background . ' guifg=' . s:foreground
         \ . ' cterm=bold gui=bold'
-        \|execute 'highlight TabLineSelUntitled'
-        \ . ' guibg=' . s:background . ' guifg=' . s:foreground
-        \ . ' cterm=bold,italic gui=bold,italic'
         \|execute 'highlight TabLineFill'
         \ . ' guibg=' . s:selection . ' guifg=' . s:selection
         \ . ' cterm=None gui=None'
-augroup END
+augroup END "}}}
+
+augroup bufline_highlight "{{{1
+  autocmd!
+  autocmd ColorScheme,VimEnter *
+        \ highlight clear BufLine
+        \|highlight clear BufLineUntitled
+        \|highlight clear BufLineSelNR
+        \|highlight clear BufLineSel
+        \|highlight clear BufLineSelUntitled
+        \|highlight clear BufLineFill
+        \|execute 'highlight BufLine'
+        \ . ' guibg=' . s:selection . ' guifg=' . s:foreground
+        \ . ' cterm=None gui=None'
+        \|execute 'highlight BufLineUntitled'
+        \ . ' guibg=' . s:selection . ' guifg=' . s:foreground
+        \ . ' cterm=italic gui=italic'
+        \|execute 'highlight BufLineSelNR'
+        \ . ' guibg=' . s:background . ' guifg=' . s:green
+        \ . ' cterm=bold gui=bold'
+        \|execute 'highlight BufLineSel'
+        \ . ' guibg=' . s:background . ' guifg=' . s:foreground
+        \ . ' cterm=bold gui=bold'
+        \|execute 'highlight BufLineSelUntitled'
+        \ . ' guibg=' . s:background . ' guifg=' . s:foreground
+        \ . ' cterm=bold,italic gui=bold,italic'
+        \|execute 'highlight BufLineFill'
+        \ . ' guibg=' . s:selection . ' guifg=' . s:selection
+        \ . ' cterm=None gui=None'
+augroup END "}}}
 
 function! TabLine() abort "{{{1
   if tabpagenr('$') == 1
     return BufferLine()
   else
-    return ''
+    let l:s = ''
+    let l:tabls = range(1, tabpagenr('$'))
+
+    for l:i in l:tabls
+
+      let l:bufname = l:i
+
+      if l:i != tabpagenr()
+        let l:s .= '%#TabLine# ' . l:i . ' '
+      else
+        let l:s .= '%#TabLineSelNR# ' . l:i . ' '
+      endif
+
+    endfor
+
+    let l:s .= '%#TabLineFill#'
+    return l:s
   endif
-endfunction
+endfunction "}}}
 
 function! BufferLine() abort "{{{1
   let l:s = ''
@@ -87,18 +119,18 @@ function! BufferLine() abort "{{{1
     endif
 
     if l:i != bufnr('%')
-      let l:s .= '%#TabLine# ' . l:i
+      let l:s .= '%#BufLine# ' . l:i
       if !l:untitled
-        let l:s .= '%#TabLine# ' . l:bufname
+        let l:s .= '%#BufLine# ' . l:bufname
       else
-        let l:s .= '%#TabLineUntitled# Untitled'
+        let l:s .= '%#BufLineUntitled# Untitled'
       endif
     else
-      let l:s .= '%#TabLineSelNR# ' . l:i
+      let l:s .= '%#BufLineSelNR# ' . l:i
       if !l:untitled
-        let l:s .= '%#TabLineSel# ' . l:bufname
+        let l:s .= '%#BufLineSel# ' . l:bufname
       else
-        let l:s .= '%#TabLineSelUntitled# Untitled'
+        let l:s .= '%#BufLineSelUntitled# Untitled'
       endif
 
     endif
@@ -107,9 +139,8 @@ function! BufferLine() abort "{{{1
 
   endfor
 
-  let l:s .= '%#TabLineFill#'
+  let l:s .= '%#BufLineFill#'
   return l:s
-endfunction
-"}}}
+endfunction "}}}
 
 " vim: set ft=vim fdm=marker ts=2 sts=2 sw=2 fdl=0:

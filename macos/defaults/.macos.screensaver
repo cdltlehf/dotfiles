@@ -15,5 +15,5 @@
 ## Print screen defaults
 # defaults read com.apple.screensaver
 echo "Set followings manually: "
-echo "- System Preferences > Security & Privacy > 'Required password ...'"
-echo "- System Preferences > Security & Privacy > 'Show a message ...'"
+echo "- System Preferences > Security & Privacy > General > 'Required password ...'"
+echo "- System Preferences > Security & Privacy > General > 'Show a message ...'"
