@@ -1,6 +1,7 @@
-#!/usr/bin/env zsh
-## $HOME/.zshrc
-## Zsh startup file for interactive shells
+#!/bin/zsh
+#
+# ~/.zshrc
+# Zsh startup file for interactive shells
 
 ## Brew environment {{{1
 # XXX: Manual says that put this line to zprofile

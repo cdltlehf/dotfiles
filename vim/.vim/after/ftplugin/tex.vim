@@ -1,36 +1,37 @@
-"" ~/.vim/after/ftplugin/text.vim
+" ~/.vim/after/ftplugin/text.vim
 " TODO: Set snippet from file
 " TODO: Add some input mode maps
 
-autocmd FileType tex nnoremap <buffer> <Leader>r<Space>
-setlocal makeprg=pdflatex\ -interaction=nonstopmode
+let b:tex_flavor = 'pdflatex'
+compiler tex
 
 " snippets {{{1
+setlocal iskeyword+=;
 " https://github.com/honza/vim-snippets/blob/master/snippets/tex.snippets
 
 " PREAMBLE
-iabbrev <buffer> _nc \newcommand{<C-o>m1}[<C-o>m2]]{<C-o>m3} \<ESC>`1a
+iabbrev <buffer> ;nc \newcommand{<C-o>m1}[<C-o>m2]]{<C-o>m3} \<ESC>`1a
 
 " DOCUMENT
 " autocmd FileType tex iabbrev <buffer> _begin
 " \ \begin{<CR><C-o>m1}{c}<CR><C-o>m0<CR>\end{tabular}<ESC>
 " \<ESC>`1a
 
-iabbrev <buffer> _mkt \maketitle
+iabbrev <buffer> ;mkt \maketitle
 
-iabbrev <buffer> _tab
+iabbrev <buffer> ;tab
       \ \begin{tabular}{c}<CR><C-o>m1<CR>\end{tabular}<ESC>
       \<ESC>`1a
 
-iabbrev <buffer> _center
+iabbrev <buffer> ;center
       \ \begin{center}{c}<CR><C-o>m1\end{center}<ESC>
       \<ESC>`1a
 
-iabbrev <buffer> _item
+iabbrev <buffer> ;item
       \ \begin{itemize}<CR>\item<C-o>m1<CR>\end{itemize}<ESC>
       \<ESC>`1a
 
-iabbrev <buffer> _enum
+iabbrev <buffer> ;enum
       \ \begin{enumerate}<CR>\item<C-o>m1<CR>\end{enumerate}<ESC>
       \<ESC>`1a
 
