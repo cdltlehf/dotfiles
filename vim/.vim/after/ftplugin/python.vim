@@ -1,5 +1,5 @@
 " ~/.vim/after/ftplugin/python.vim
-
+"
 iabbrev <buffer> #! #!/usr/bin/env python3
 iabbrev <buffer> python#! #!/usr/bin/env python
 iabbrev <buffer> python3#! #!/usr/bin/env python3
