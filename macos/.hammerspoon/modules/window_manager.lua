@@ -1,10 +1,11 @@
-local checkMods = require'hs.eventtap'.checkKeyboardModifiers
-local timer = require'hs.timer'
+local checkMods = require('hs.eventtap').checkKeyboardModifiers
+local timer = require('hs.timer')
 local leader = {"ctrl","cmd"}
 
 local MODS_INTERVAL=0.05
 local PADDING = 5
 local DURATION = 0
+local DELAY = 1.5
 
 -- FIXME: add some kind of set_leader to set leader from outside
 
@@ -13,8 +14,8 @@ local function modsPressed()
   return mods > 0
 end
 
-local function setWindowRatio(window,x,y,w,h,padding,duration)
-  padding = padding or 0; duration = duration or 0
+local function getFrameWithRatio(window,x,y,w,h,padding)
+  local padding = padding or 0
 
   local window_frame = window:frame()
   local screen_frame = window:screen():frame()
@@ -40,79 +41,149 @@ local function setWindowRatio(window,x,y,w,h,padding,duration)
     window_frame.h = h * (inner_screen_frame.h-padding) - padding
   end
 
-  window:setFrame(window_frame, duration)
+  return window_frame
+end
+
+local boxes = {}
+
+local function drawBox(f, text)
+  padding = padding or 0
+  local f = {
+    x = f.x + padding,
+    y = f.y + padding,
+    w = f.w - padding*2,
+    h = f.h - padding*2,
+  }
+  canvas = hs.canvas.new(f):appendElements(
+    {
+      type = "rectangle",
+      fillColor = { black = 0.3, alpha = 0.5 },
+      action = "fill",
+      roundedRectRadii = { xRadius = 10, yRadius = 10 },
+    },
+    {
+      type = "text",
+      text = string.upper(text),
+      frame = { x = "0%", y = f.h / 2 - 100, h = "100%", w = "100%" },
+      textAlignment = "center",
+      textSize = 150,
+    }
+  ):level('floating')
+  canvas:show()
+  boxes[#boxes+1] = canvas
+end
+
+local function hideBox()
+  for i = 1, #boxes do
+    boxes[i]:hide()
+    boxes[i] = nil
+  end
 end
 
 local function modsPressed()
   return checkMods(true)._raw > 0
 end
 
-local state = nil
-local function resetState() state = nil end
-
 local function setDefaultWindowManagerKeyMap()
 
-  hs.hotkey.bind(leader, 'h', function()
-    window = hs.window.focusedWindow()
+  local window = nil
+  local state = nil
 
-    if not state then
-      setWindowRatio(window, 0, 0, 0.5, 1, PADDING, DURATION)
-      state = 'h'
-    elseif state == 'h' then
-      setWindowRatio(window, 0, 0, 0.375, 1, PADDING, DURATION)
-      state = 'hh'
-    elseif state == 'l' then
-      setWindowRatio(window, 0.375, 0, 0.625, 1, PADDING, DURATION)
-      state = 'lh'
-    end
+  local keymap = {}
+  keymap[''] = { { 0.25, 0.25, 0.5, 0.5 } }
 
-    timer.waitWhile(modsPressed, resetState, MODS_INTERVAL)
-  end)
+  keymap['h'] = { -- Left
+    { 0, 0, 0.5, 1 },
+    ['k']='hk', ['j']='hj', ['l']='l'
+  }
+  keymap['j'] = { -- Down
+    { 0, 0.5, 1, 0.5 },
+    ['k']='kk', ['h']='hj', ['l']='lj'
+  }
+  keymap['k'] = { -- Full
+    { 0, 0, 1, 1 },
+    ['k']='kk', ['j']='j'
+  }
+  keymap['l'] = { -- Right
+    { 0.5, 0, 0.5, 1 },
+    ['k']='lk', ['j']='lj', ['h']='h'
+  }
 
-  hs.hotkey.bind(leader, 'l', function()
-    window = hs.window.focusedWindow()
+  keymap['hj'] = { -- Left-down
+    { 0, 0.5, 0.5, 0.5 },
+    ['k']='hk', ['l']='lj',
+  }
+  keymap['hk'] = { -- Left-up
+    { 0, 0, 0.5, 0.5 },
+    ['j']='hj', ['l']='lk',
+  }
+  keymap['lj'] = { -- Right-down
+    { 0.5, 0.5, 0.5, 0.5 },
+    ['h']='hj', ['k']='lk',
+  }
+  keymap['lk'] = { -- Right-up
+    { 0.5, 0, 0.5, 0.5 },
+    ['h']='hk', ['j']='lj',
+  }
+  keymap['kk'] = { -- Up
+    { 0, 0, 1, 0.5 },
+    ['h']='hk', ['l']='lk', ['j']='j'
+  }
 
-    if not state then
-      setWindowRatio(window, 0.5, 0, 0.5, 1, PADDING, DURATION)
-      state = 'l'
-    elseif state == 'h' then
-      setWindowRatio(window, 0, 0, 0.625, 1, PADDING, DURATION)
-      state = 'hl'
-    elseif state == 'l' then
-      setWindowRatio(window, 0.625, 0, 0.375, 1, PADDING, DURATION)
-      state = 'll'
-    end
+  local delay = DELAY
 
-    timer.waitWhile(modsPressed, resetState, MODS_INTERVAL)
-  end)
+  local draw_timer = timer.delayed.new(
+    0,
+    function()
+      hideBox()
+      if not window then return end
+      delay = 0
 
-  hs.hotkey.bind(leader, "k", function()
-    window = hs.window.focusedWindow()
+      for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
+        local next_state = keymap[state or ''][key]
+        if next_state then
+          local ratio = keymap[next_state][1]
+          local f = getFrameWithRatio(
+            window, ratio[1], ratio[2], ratio[3], ratio[4], PADDING)
+          drawBox(f, key)
+        end
+      end
+    end)
 
-    if not state then
-      setWindowRatio(window, 0, 0, 1, 1, PADDING, DURATION)
-      state = 'k'
-    elseif state == 'k' then
-      setWindowRatio(window, 0, 0, 1, 0.5, PADDING, DURATION)
-      state = 'kk'
-    else
-    end
+  local modifier_timer = timer.waitWhile(
+    modsPressed,
+    function()
+      window = nil
+      state = nil
 
-    timer.waitWhile(modsPressed, resetState, MODS_INTERVAL)
-  end)
+      hideBox()
+    end,
+    MODS_INTERVAL):stop()
 
-  hs.hotkey.bind(leader, "j", function()
-    window = hs.window.focusedWindow()
+  for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
+    hs.hotkey.bind(leader, key, function()
+      if not state then delay = 0.5 end
 
-    if not state or
-      state == 'k' then
-      setWindowRatio(window, 0, 0.5, 1, 0.5, PADDING, DURATION)
-      state = 'j'
-    else
-    end
+      -- Start modifier timer which checks whether modifier released
+      modifier_timer:start()
 
-    timer.waitWhile(modsPressed, resetState, MODS_INTERVAL)
-  end)
+      -- If window is not specified, find window
+      window = window or hs.window.focusedWindow()
+
+      -- Update state
+      -- If the next state is not explicitly defined, key is the next state
+      state = keymap[state or ''][key] or key
+
+      -- Update window based on the state
+      local ratio = keymap[state][1]
+      local f = getFrameWithRatio(
+        window, ratio[1], ratio[2], ratio[3], ratio[4], PADDING)
+
+      draw_timer:start(delay)
+
+      window:setFrame(f, DURATION)
+    end)
+  end
 end
 
 setDefaultWindowManagerKeyMap()
