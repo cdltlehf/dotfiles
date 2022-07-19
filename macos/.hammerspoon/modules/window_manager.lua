@@ -6,6 +6,8 @@ local MODS_INTERVAL = 0.05
 local PADDING = 5
 local DURATION = 0
 local DELAY = 1.5
+local HIDE_BOXES_DELAY = 0.2
+local SHOW_BOX_DELAY = 0.5
 
 -- FIXME: add some kind of set_leader to set leader from outside
 
@@ -46,7 +48,9 @@ end
 
 local boxes = {}
 
-local function drawBox(f, text)
+local function showBox(f, text, delay)
+  local text = text or ''
+  local delay = delay or 0
   padding = padding or 0
   local f = {
     x = f.x + padding,
@@ -69,13 +73,14 @@ local function drawBox(f, text)
       textSize = 150,
     }
   ):level('floating')
-  canvas:show()
+  canvas:show(0.2)
   boxes[#boxes+1] = canvas
 end
 
-local function hideBox()
+local function hideBoxes(delay)
+  local delay = delay or 0
   for i = 1, #boxes do
-    boxes[i]:hide()
+    boxes[i]:hide(delay)
     boxes[i] = nil
   end
 end
@@ -135,7 +140,7 @@ local function setDefaultWindowManagerKeyMap()
   local draw_timer = timer.delayed.new(
     0,
     function()
-      hideBox()
+      hideBoxes(HIDE_BOXES_DELAY)
       if not window then return end
       delay = 0
 
@@ -145,7 +150,7 @@ local function setDefaultWindowManagerKeyMap()
           local ratio = keymap[next_state][1]
           local f = getFrameWithRatio(
             window, ratio[1], ratio[2], ratio[3], ratio[4], PADDING)
-          drawBox(f, key)
+          showBox(f, key, SHOW_BOX_DELAY)
         end
       end
     end)
@@ -156,7 +161,7 @@ local function setDefaultWindowManagerKeyMap()
       window = nil
       state = nil
 
-      hideBox()
+      hideBoxes(HIDE_BOXES_DELAY)
     end,
     MODS_INTERVAL):stop()
 
