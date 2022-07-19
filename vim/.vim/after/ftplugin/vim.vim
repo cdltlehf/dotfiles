@@ -1,13 +1,9 @@
 " ~/.vim/after/ftplugin/vim.vim
 
+setlocal tabstop=2 softtabstop=2 shiftwidth=2
+
 setlocal foldmethod=marker
 setlocal foldlevel=99
-
-setlocal tabstop=2
-setlocal softtabstop=2
-setlocal shiftwidth=2
-setlocal expandtab
-setlocal smarttab
 
 autocmd FileType vim
       \ nnoremap <silent> <buffer>

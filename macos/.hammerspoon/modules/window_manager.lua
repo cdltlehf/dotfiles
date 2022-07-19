@@ -1,8 +1,8 @@
 local checkMods = require('hs.eventtap').checkKeyboardModifiers
 local timer = require('hs.timer')
-local leader = {"ctrl","cmd"}
+local leader = { "ctrl", "cmd" }
 
-local MODS_INTERVAL=0.05
+local MODS_INTERVAL = 0.05
 local PADDING = 5
 local DURATION = 0
 local DELAY = 1.5
