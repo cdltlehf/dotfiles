@@ -1,19 +1,21 @@
 #!/usr/bin/env zsh
 ## Custom defaults for screen-saver
 ## https://developer.apple.com/documentation/devicemanagement/screensaver
-# NOTE: Below code is not working.
+# XXX: Below code is not working.
 # See https://www.kolide.com/blog/macos-10-13-broke-screenlock-detection
-#
-# # Delete current dock defaults
+
+## Delete current dock defaults
 # defaults delete com.apple.screensaver
-#
+
 # defaults write com.apple.screensaver askForPassword -bool true
 # defaults write com.apple.screensaver askForPasswordDelay -integer 0
 # defaults write com.apple.screensaver loginWindowIdleTime -integer 300
 # defaults write com.apple.screensaver loginWindowModulePath -string ""
 # defaults write com.apple.screensaver moduleName -string ""
+
 ## Print screen defaults
 # defaults read com.apple.screensaver
 echo "Set followings manually: "
-echo "- System Preferences > Security & Privacy > General > 'Required password ...'"
-echo "- System Preferences > Security & Privacy > General > 'Show a message ...'"
+echo "System Preferences > Security & Privacy > General"
+echo "... > 'Required password ...'"
+echo "... > 'Show a message ...'"
