@@ -32,7 +32,7 @@ fi
 unset URL
 
 # Activate
-[[ ! -f "${PREFIX}/share/${NAME}" ]] && \
+[[ -f "${PREFIX}/share/${NAME}.sh" ]] && \
   source "${PREFIX}/share/${NAME}.sh"
 unset NAME
 
