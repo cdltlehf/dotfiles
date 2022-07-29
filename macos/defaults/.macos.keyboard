@@ -28,9 +28,6 @@ else
   echo '... > Keyboard > Modifier keys > Caps Lock Key (Control)'
 fi
 
-echo 'Set the following manually'
-echo '... > Keyboard > Use F1, F2, etc. keys as standard function keys (enable)
-
 echo '... > Text > Correct spelling automatically (disable)'
 defaults write NSGlobalDomain \
   NSAutomaticSpellingCorrectionEnabled -bool false
