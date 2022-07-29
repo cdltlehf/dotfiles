@@ -1,13 +1,22 @@
 local checkMods = require('hs.eventtap').checkKeyboardModifiers
+
+local window = require('hs.window')
 local timer = require('hs.timer')
+local hotkey = require('hs.hotkey')
+local spaces = require('hs.spaces')
+local canvas = require('hs.canvas')
+
 local leader = { "ctrl", "cmd" }
 
 local MODS_INTERVAL = 0.05
 local PADDING = 5
 local DURATION = 0
-local DELAY = 1.5
+
+local INDICATOR_DELAY = 1
 local HIDE_BOXES_DELAY = 0.2
-local SHOW_BOX_DELAY = 0.5
+local SHOW_BOX_DELAY = 0.2
+
+local MISSION_CONTROL_DELAY = 0.3 -- Mission Control animation delay
 
 -- FIXME: add some kind of set_leader to set leader from outside
 
@@ -16,11 +25,11 @@ local function modsPressed()
   return mods > 0
 end
 
-local function getFrameWithRatio(window,x,y,w,h,padding)
+local function getFrameWithRatio(target_window,x,y,w,h,padding)
   local padding = padding or 0
 
-  local window_frame = window:frame()
-  local screen_frame = window:screen():frame()
+  local window_frame = target_window:frame()
+  local screen_frame = target_window:screen():frame()
 
   inner_screen_frame = {
     x = screen_frame.x+padding/2,
@@ -58,7 +67,7 @@ local function showBox(f, text, delay)
     w = f.w - padding*2,
     h = f.h - padding*2,
   }
-  canvas = hs.canvas.new(f):appendElements(
+  boxes[#boxes+1] = canvas.new(f):appendElements(
     {
       type = "rectangle",
       fillColor = { black = 0.3, alpha = 0.5 },
@@ -68,13 +77,11 @@ local function showBox(f, text, delay)
     {
       type = "text",
       text = string.upper(text),
-      frame = { x = "0%", y = f.h / 2 - 100, h = "100%", w = "100%" },
+      frame = { x = "0%", y = f.h / 2 - 90, h = "100%", w = "100%" },
       textAlignment = "center",
       textSize = 150,
     }
-  ):level('floating')
-  canvas:show(0.2)
-  boxes[#boxes+1] = canvas
+  ):level('floating'):show(delay)
 end
 
 local function hideBoxes(delay)
@@ -89,9 +96,33 @@ local function modsPressed()
   return checkMods(true)._raw > 0
 end
 
+local function getNextSpace()
+  local focused_space = spaces.focusedSpace()
+  local screen_spaces = spaces.spacesForScreen()
+  local previous_space = nil
+  for _, space in ipairs(screen_spaces) do
+    if previous_space == focused_space then
+      return space
+    end
+    previous_space = space
+  end
+end
+
+local function getPrevSpace()
+  local focused_space = spaces.focusedSpace()
+  local screen_spaces = spaces.spacesForScreen()
+  local previous_space = nil
+  for _, space in ipairs(screen_spaces) do
+    if space == focused_space then
+      return previous_space
+    end
+    previous_space = space
+  end
+end
+
 local function setDefaultWindowManagerKeyMap()
 
-  local window = nil
+  local target_window = nil
   local state = nil
 
   local keymap = {}
@@ -135,13 +166,13 @@ local function setDefaultWindowManagerKeyMap()
     ['h']='hk', ['l']='lk', ['j']='j'
   }
 
-  local delay = DELAY
+  local delay = INDICATOR_DELAY
 
   local draw_timer = timer.delayed.new(
     0,
     function()
       hideBoxes(HIDE_BOXES_DELAY)
-      if not window then return end
+      if not target_window then return end
       delay = 0
 
       for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
@@ -149,7 +180,7 @@ local function setDefaultWindowManagerKeyMap()
         if next_state then
           local ratio = keymap[next_state][1]
           local f = getFrameWithRatio(
-            window, ratio[1], ratio[2], ratio[3], ratio[4], PADDING)
+            target_window, ratio[1], ratio[2], ratio[3], ratio[4], PADDING)
           showBox(f, key, SHOW_BOX_DELAY)
         end
       end
@@ -158,7 +189,7 @@ local function setDefaultWindowManagerKeyMap()
   local modifier_timer = timer.waitWhile(
     modsPressed,
     function()
-      window = nil
+      target_window = nil
       state = nil
 
       hideBoxes(HIDE_BOXES_DELAY)
@@ -166,14 +197,14 @@ local function setDefaultWindowManagerKeyMap()
     MODS_INTERVAL):stop()
 
   for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
-    hs.hotkey.bind(leader, key, function()
-      if not state then delay = 0.5 end
+    hotkey.bind(leader, key, function()
+      if not state then delay = INDICATOR_DELAY end
 
       -- Start modifier timer which checks whether modifier released
       modifier_timer:start()
 
       -- If window is not specified, find window
-      window = window or hs.window.focusedWindow()
+      target_window = target_window or window.focusedWindow()
 
       -- Update state
       -- If the next state is not explicitly defined, key is the next state
@@ -182,18 +213,51 @@ local function setDefaultWindowManagerKeyMap()
       -- Update window based on the state
       local ratio = keymap[state][1]
       local f = getFrameWithRatio(
-        window, ratio[1], ratio[2], ratio[3], ratio[4], PADDING)
+        target_window, ratio[1], ratio[2], ratio[3], ratio[4], PADDING)
 
       draw_timer:start(delay)
 
-      window:setFrame(f, DURATION)
+      target_window:setFrame(f, DURATION)
     end)
   end
+  hotkey.bind(leader, 'n', function()
+    local next_space = getNextSpace()
+    spaces.gotoSpace(next_space)
+  end)
+  hotkey.bind(leader, 'p', function()
+    local prev_space = getPrevSpace()
+    spaces.gotoSpace(prev_space)
+  end)
+  hotkey.bind(leader, 'c', function()
+    spaces.addSpaceToScreen()
+    local next_space = getNextSpace()
+    timer.doAfter(MISSION_CONTROL_DELAY, function()
+      spaces.gotoSpace(next_space)
+    end)
+  end)
+  hotkey.bind(leader, 'x', function()
+    local focused_space = spaces.focusedSpace()
+    local nextSpace = getNextSpace()
+    if next_space then
+      -- If there is an next space, go to the space
+      spaces.gotoSpace(next_space)
+    else
+      -- Else if there is an previous space, go to the space
+      local prev_space = getPrevSpace()
+      if prev_space then
+        spaces.gotoSpace(prev_space)
+      end
+    end
+    -- If there is no space to go, the following function fails
+    timer.doAfter(MISSION_CONTROL_DELAY, function()
+      spaces.removeSpace(focused_space)
+    end)
+  end)
 end
 
 setDefaultWindowManagerKeyMap()
 
-hs.hotkey.bind({ "shift", table.unpack(leader) }, "l", function()
+hotkey.bind({ "shift", table.unpack(leader) }, "l", function()
   hs.caffeinate.lockScreen()
 end)
 
