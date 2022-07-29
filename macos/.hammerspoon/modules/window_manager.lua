@@ -225,10 +225,7 @@ function WindowManager:_initialize_modal(leader)
     if not next_space then return end
 
     spaces.gotoSpace(next_space)
-    self:deactivate()
-    timer.doAfter(MISSION_CONTROL_DELAY, function()
-      self:activate()
-    end)
+    self.draw_timer:start()
   end)
 
   self.modal:bind(leader, 'p', function()
@@ -236,17 +233,13 @@ function WindowManager:_initialize_modal(leader)
     if not prev_space then return end
 
     spaces.gotoSpace(prev_space)
-    self:deactivate()
-    timer.doAfter(MISSION_CONTROL_DELAY, function()
-      self:activate()
-    end)
+    self.draw_timer:start()
   end)
 
   self.modal:bind(leader, 'c', function()
     spaces.addSpaceToScreen()
-    self:deactivate()
+    self.draw_timer:start()
     timer.doAfter(MISSION_CONTROL_DELAY, function()
-      self:activate()
       local next_space = getNextSpace()
       if not next_space then return end
       spaces.gotoSpace(next_space)
@@ -255,19 +248,22 @@ function WindowManager:_initialize_modal(leader)
 
   self.modal:bind(leader, 'x', function()
     local focused_space = spaces.focusedSpace()
-    local nextSpace = getNextSpace()
+    local next_space = getNextSpace()
     -- If there is an next space, go to the space
-    if next_space then spaces.gotoSpace(next_space)
+    if next_space then
+      spaces.gotoSpace(next_space)
     else
+      hs.printf("?")
       -- Else if there is an previous space, go to the space
       local prev_space = getPrevSpace()
-      if prev_space then spaces.gotoSpace(prev_space) end
+      if prev_space then
+        spaces.gotoSpace(prev_space)
+      end
     end
     -- If there is no space to go, the following function fails
-    self:deactivate()
+    self.draw_timer:start()
     timer.doAfter(MISSION_CONTROL_DELAY, function()
       spaces.removeSpace(focused_space)
-      self:activate()
     end)
   end)
 
