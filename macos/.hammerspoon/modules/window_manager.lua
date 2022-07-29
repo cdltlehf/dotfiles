@@ -129,7 +129,25 @@ function WindowManager.new(leader)
   self.show_indicator = false
   self.boxes = {}
 
-  self.eventtap = eventtap.new(
+  self.dragging_eventtap = eventtap.new({
+    eventtap.event.types.leftMouseDragged,
+    eventtap.event.types.leftMouseDown }, function(event)
+      local original_frame = self.target_window:frame()
+      local delta_x = event:getProperty(
+        eventtap.event.properties.mouseEventDeltaX)
+      local delta_y = event:getProperty(
+        eventtap.event.properties.mouseEventDeltaY)
+      local new_frame = {
+        x = original_frame.x + delta_x,
+        y = original_frame.y + delta_y,
+        w = original_frame.w,
+        h = original_frame.h
+      }
+      self.target_window:setFrame(new_frame, 0)
+      return true, {}
+    end)
+
+  self.activate_eventtap = eventtap.new(
     { eventtap.event.types.flagsChanged }, function(event)
       local which_flags = event:getFlags()
       local leader_pressed = true
@@ -264,23 +282,29 @@ function WindowManager:activate()
   self.show_indicator = false
 
   self.draw_timer:start()
+  self.dragging_eventtap:start()
+
   self.modal:enter()
 end
 
 function WindowManager:deactivate()
   self.show_indicator = false
+
   self.draw_timer:stop()
+  self.dragging_eventtap:stop()
+
   self:hideBoxes(HIDE_BOXES_DELAY)
+
   self.modal:exit()
 end
 
 function WindowManager:start()
-  self.eventtap:start()
+  self.activate_eventtap:start()
   return self
 end
 
 function WindowManager:stop()
-  self.eventtap:stop()
+  self.activate_eventtap:stop()
   return self
 end
 
