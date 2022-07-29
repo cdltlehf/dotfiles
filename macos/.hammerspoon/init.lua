@@ -1,7 +1,7 @@
 -- global leader
 local leader = { "ctrl", "cmd" }
-local window_manager = require('.modules.window_manager')
-local window_manager = require('.modules.window_switcher')
+local window_manager = require('.modules.window_manager').new():start()
+-- local window_manager = require('.modules.window_switcher')
 
 -- Alert style {{{1
 -- TODO: set it as a local configuration?

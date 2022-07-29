@@ -5,8 +5,7 @@ local timer = require('hs.timer')
 local hotkey = require('hs.hotkey')
 local spaces = require('hs.spaces')
 local canvas = require('hs.canvas')
-
-local leader = { "ctrl", "cmd" }
+local eventtap = require('hs.eventtap')
 
 local MODS_INTERVAL = 0.05
 local PADDING = 5
@@ -17,79 +16,33 @@ local HIDE_BOXES_DELAY = 0.2
 local SHOW_BOX_DELAY = 0.2
 
 local MISSION_CONTROL_DELAY = 0.3 -- Mission Control animation delay
-
--- FIXME: add some kind of set_leader to set leader from outside
+local DEFAULT_LEADER = { "ctrl", "cmd" }
 
 local function modsPressed()
   local mods = checkMods(true)._raw
   return mods > 0
 end
 
-local function getFrameWithRatio(target_window,x,y,w,h,padding)
+local function getFrameWithRatio(screen, x, y, w, h, padding)
   local padding = padding or 0
 
-  local window_frame = target_window:frame()
-  local screen_frame = target_window:screen():frame()
+  local screen_frame = screen:frame()
 
-  inner_screen_frame = {
-    x = screen_frame.x+padding/2,
-    y = screen_frame.y+padding/2,
+  local inner_screen_frame = {
+    x = screen_frame.x + padding/2,
+    y = screen_frame.y + padding/2,
     w = screen_frame.w - padding,
     h = screen_frame.h - padding
   }
 
-  if x ~= nil then
-    window_frame.x = inner_screen_frame.x + x*inner_screen_frame.w + padding
-  end
-  if y ~= nil then
-    window_frame.y = inner_screen_frame.y + y*inner_screen_frame.h + padding
-  end
-
-  if w ~= nil then
-    window_frame.w = w * (inner_screen_frame.w-padding) - padding
-  end
-  if h ~= nil then
-    window_frame.h = h * (inner_screen_frame.h-padding) - padding
-  end
-
-  return window_frame
-end
-
-local boxes = {}
-
-local function showBox(f, text, delay)
-  local text = text or ''
-  local delay = delay or 0
-  padding = padding or 0
-  local f = {
-    x = f.x + padding,
-    y = f.y + padding,
-    w = f.w - padding*2,
-    h = f.h - padding*2,
+  local frame = {
+    x = inner_screen_frame.x + x*inner_screen_frame.w + padding,
+    y = inner_screen_frame.y + y*inner_screen_frame.h + padding,
+    w = w * (inner_screen_frame.w-padding) - padding,
+    h = h * (inner_screen_frame.h-padding) - padding
   }
-  boxes[#boxes+1] = canvas.new(f):appendElements(
-    {
-      type = "rectangle",
-      fillColor = { black = 0.3, alpha = 0.5 },
-      action = "fill",
-      roundedRectRadii = { xRadius = 10, yRadius = 10 },
-    },
-    {
-      type = "text",
-      text = string.upper(text),
-      frame = { x = "0%", y = f.h / 2 - 90, h = "100%", w = "100%" },
-      textAlignment = "center",
-      textSize = 150,
-    }
-  ):level('floating'):show(delay)
-end
 
-local function hideBoxes(delay)
-  local delay = delay or 0
-  for i = 1, #boxes do
-    boxes[i]:hide(delay)
-    boxes[i] = nil
-  end
+  return frame
 end
 
 local function modsPressed()
@@ -120,145 +73,257 @@ local function getPrevSpace()
   end
 end
 
-local function setDefaultWindowManagerKeyMap()
+local WindowManager = { keymap = {} }
+WindowManager.keymap[''] = { -- Default
+  { 0.25, 0.25, 0.5, 0.5 },
+  ['h']='h', ['l']='l'
+}
+WindowManager.keymap['h'] = { -- Left
+  { 0, 0, 0.5, 1 },
+  ['k']='hk', ['j']='hj', ['l']='l'
+}
 
-  local target_window = nil
-  local state = nil
+WindowManager.keymap['j'] = { -- Down
+  { 0, 0.5, 1, 0.5 },
+  ['k']='kk', ['h']='hj', ['l']='lj'
+}
+WindowManager.keymap['k'] = { -- Full
+  { 0, 0, 1, 1 },
+  ['k']='kk', ['j']='j'
+}
+WindowManager.keymap['l'] = { -- Right
+  { 0.5, 0, 0.5, 1 },
+  ['k']='lk', ['j']='lj', ['h']='h'
+}
 
-  local keymap = {}
-  keymap[''] = { { 0.25, 0.25, 0.5, 0.5 } }
+WindowManager.keymap['hj'] = { -- Left-down
+  { 0, 0.5, 0.5, 0.5 },
+  ['k']='hk', ['l']='lj',
+}
+WindowManager.keymap['hk'] = { -- Left-up
+  { 0, 0, 0.5, 0.5 },
+  ['j']='hj', ['l']='lk',
+}
+WindowManager.keymap['lj'] = { -- Right-down
+  { 0.5, 0.5, 0.5, 0.5 },
+  ['h']='hj', ['k']='lk',
+}
+WindowManager.keymap['lk'] = { -- Right-up
+  { 0.5, 0, 0.5, 0.5 },
+  ['h']='hk', ['j']='lj',
+}
+WindowManager.keymap['kk'] = { -- Up
+  { 0, 0, 1, 0.5 },
+  ['h']='hk', ['l']='lk', ['j']='j'
+}
+WindowManager.__index = WindowManager
 
-  keymap['h'] = { -- Left
-    { 0, 0, 0.5, 1 },
-    ['k']='hk', ['j']='hj', ['l']='l'
-  }
-  keymap['j'] = { -- Down
-    { 0, 0.5, 1, 0.5 },
-    ['k']='kk', ['h']='hj', ['l']='lj'
-  }
-  keymap['k'] = { -- Full
-    { 0, 0, 1, 1 },
-    ['k']='kk', ['j']='j'
-  }
-  keymap['l'] = { -- Right
-    { 0.5, 0, 0.5, 1 },
-    ['k']='lk', ['j']='lj', ['h']='h'
-  }
+function WindowManager.new(leader)
+  local self = setmetatable({}, WindowManager)
 
-  keymap['hj'] = { -- Left-down
-    { 0, 0.5, 0.5, 0.5 },
-    ['k']='hk', ['l']='lj',
-  }
-  keymap['hk'] = { -- Left-up
-    { 0, 0, 0.5, 0.5 },
-    ['j']='hj', ['l']='lk',
-  }
-  keymap['lj'] = { -- Right-down
-    { 0.5, 0.5, 0.5, 0.5 },
-    ['h']='hj', ['k']='lk',
-  }
-  keymap['lk'] = { -- Right-up
-    { 0.5, 0, 0.5, 0.5 },
-    ['h']='hk', ['j']='lj',
-  }
-  keymap['kk'] = { -- Up
-    { 0, 0, 1, 0.5 },
-    ['h']='hk', ['l']='lk', ['j']='j'
-  }
+  self.leader = leader or DEFAULT_LEADER
+  self.padding = PADDING
 
-  local delay = INDICATOR_DELAY
+  self.target_window = nil
+  self.state = nil
+  self.show_indicator = false
+  self.boxes = {}
 
-  local draw_timer = timer.delayed.new(
-    0,
-    function()
-      hideBoxes(HIDE_BOXES_DELAY)
-      if not target_window then return end
-      delay = 0
-
-      for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
-        local next_state = keymap[state or ''][key]
-        if next_state then
-          local ratio = keymap[next_state][1]
-          local f = getFrameWithRatio(
-            target_window, ratio[1], ratio[2], ratio[3], ratio[4], PADDING)
-          showBox(f, key, SHOW_BOX_DELAY)
-        end
+  self.eventtap = eventtap.new(
+    { eventtap.event.types.flagsChanged }, function(event)
+      local which_flags = event:getFlags()
+      local leader_pressed = true
+      for _, flag in ipairs(self.leader) do
+        if not which_flags[flag] then leader_pressed = false end
       end
+      if leader_pressed then self:activate()
+      else self:deactivate() end
     end)
 
-  local modifier_timer = timer.waitWhile(
-    modsPressed,
-    function()
-      target_window = nil
-      state = nil
+  self.draw_timer = timer.delayed.new(INDICATOR_DELAY, function()
+    self.show_indicator = true
+    self:hideBoxes(HIDE_BOXES_DELAY)
+    if not self.target_window then return end
 
-      hideBoxes(HIDE_BOXES_DELAY)
-    end,
-    MODS_INTERVAL):stop()
+    local focused_space = spaces.focusedSpace()
+    if spaces.windowSpaces(self.target_window)[1] ~= focused_space then
+      local f = getFrameWithRatio(
+        self.target_window:screen(), 0, 0, 1, 1, self.padding)
+      self:showBox(f, "No Available Windows", SHOW_BOX_DELAY, 30)
+      return
+    end
 
+    for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
+      local next_state = WindowManager.keymap[self.state or ''][key]
+      if next_state then
+        local ratio = WindowManager.keymap[next_state][1]
+        local f = getFrameWithRatio(
+          self.target_window:screen(),
+          ratio[1], ratio[2], ratio[3], ratio[4],
+          self.padding)
+        self:showBox(f, string.upper(key), SHOW_BOX_DELAY)
+      end
+    end
+  end)
+
+  self:_initialize_modal(self.leader)
+
+  return self
+end
+
+function WindowManager:_initialize_modal(leader)
+  self.modal = hotkey.modal.new()
   for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
-    hotkey.bind(leader, key, function()
-      if not state then delay = INDICATOR_DELAY end
+    self.modal:bind(leader, key, function()
+      self:hideBoxes(HIDE_BOXES_DELAY)
+      if self.show_indicator then self.draw_timer:start(0)
+      else self.draw_timer:start() end
 
-      -- Start modifier timer which checks whether modifier released
-      modifier_timer:start()
+      -- Do nothing if there is no target window
+      if not self.target_window then return end
 
-      -- If window is not specified, find window
-      target_window = target_window or window.focusedWindow()
+      -- Do nothing if the target window is not in focused space
+      local focused_space = spaces.focusedSpace()
+      if spaces.windowSpaces(self.target_window)[1] ~= focused_space then
+        return
+      end
 
       -- Update state
       -- If the next state is not explicitly defined, key is the next state
-      state = keymap[state or ''][key] or key
+      self.state = WindowManager.keymap[self.state or ''][key] or key
 
       -- Update window based on the state
-      local ratio = keymap[state][1]
+      local ratio = WindowManager.keymap[self.state][1]
       local f = getFrameWithRatio(
-        target_window, ratio[1], ratio[2], ratio[3], ratio[4], PADDING)
-
-      draw_timer:start(delay)
-
-      target_window:setFrame(f, DURATION)
+        self.target_window:screen(),
+        ratio[1], ratio[2], ratio[3], ratio[4],
+        self.padding)
+      self.target_window:setFrame(f, DURATION)
     end)
   end
-  hotkey.bind(leader, 'n', function()
+
+  self.modal:bind(leader, 'n', function()
     local next_space = getNextSpace()
+    if not next_space then return end
+
     spaces.gotoSpace(next_space)
-  end)
-  hotkey.bind(leader, 'p', function()
-    local prev_space = getPrevSpace()
-    spaces.gotoSpace(prev_space)
-  end)
-  hotkey.bind(leader, 'c', function()
-    spaces.addSpaceToScreen()
-    local next_space = getNextSpace()
+    self:deactivate()
     timer.doAfter(MISSION_CONTROL_DELAY, function()
+      self:activate()
+    end)
+  end)
+
+  self.modal:bind(leader, 'p', function()
+    local prev_space = getPrevSpace()
+    if not prev_space then return end
+
+    spaces.gotoSpace(prev_space)
+    self:deactivate()
+    timer.doAfter(MISSION_CONTROL_DELAY, function()
+      self:activate()
+    end)
+  end)
+
+  self.modal:bind(leader, 'c', function()
+    spaces.addSpaceToScreen()
+    self:deactivate()
+    timer.doAfter(MISSION_CONTROL_DELAY, function()
+      self:activate()
+      local next_space = getNextSpace()
+      if not next_space then return end
       spaces.gotoSpace(next_space)
     end)
   end)
-  hotkey.bind(leader, 'x', function()
+
+  self.modal:bind(leader, 'x', function()
     local focused_space = spaces.focusedSpace()
     local nextSpace = getNextSpace()
-    if next_space then
-      -- If there is an next space, go to the space
-      spaces.gotoSpace(next_space)
+    -- If there is an next space, go to the space
+    if next_space then spaces.gotoSpace(next_space)
     else
       -- Else if there is an previous space, go to the space
       local prev_space = getPrevSpace()
-      if prev_space then
-        spaces.gotoSpace(prev_space)
-      end
+      if prev_space then spaces.gotoSpace(prev_space) end
     end
     -- If there is no space to go, the following function fails
+    self:deactivate()
     timer.doAfter(MISSION_CONTROL_DELAY, function()
       spaces.removeSpace(focused_space)
+      self:activate()
     end)
+  end)
+
+  hotkey.bind({ "shift", table.unpack(leader) }, "l", function()
+    hs.caffeinate.lockScreen()
   end)
 end
 
-setDefaultWindowManagerKeyMap()
+function WindowManager:activate()
+  self.target_window = window.focusedWindow()
+  self.state = nil
+  self.show_indicator = false
 
-hotkey.bind({ "shift", table.unpack(leader) }, "l", function()
-  hs.caffeinate.lockScreen()
-end)
+  self.draw_timer:start()
+  self.modal:enter()
+end
+
+function WindowManager:deactivate()
+  self.show_indicator = false
+  self.draw_timer:stop()
+  self:hideBoxes(HIDE_BOXES_DELAY)
+  self.modal:exit()
+end
+
+function WindowManager:start()
+  self.eventtap:start()
+  return self
+end
+
+function WindowManager:stop()
+  self.eventtap:stop()
+  return self
+end
+
+function WindowManager:showBox(f, text, delay, textSize)
+  text = text or ''
+  delay = delay or 0
+  textSize = textSize or 150
+
+  padding = padding or 0
+  local f = {
+    x = f.x + padding,
+    y = f.y + padding,
+    w = f.w - padding*2,
+    h = f.h - padding*2,
+  }
+  self.boxes[#self.boxes+1] = canvas.new(f):appendElements(
+    {
+      type = "rectangle",
+      fillColor = { black = 0.3, alpha = 0.5 },
+      action = "fill",
+      roundedRectRadii = { xRadius = 10, yRadius = 10 },
+    },
+    {
+      type = "text",
+      text = text,
+      frame = {
+        x = "0%", y = f.h / 2 - textSize * 0.6,
+        h = "100%", w = "100%"
+      },
+      textAlignment = "center",
+      textSize = textSize,
+    }
+  ):level('floating'):show(delay)
+end
+
+function WindowManager:hideBoxes(delay)
+  local delay = delay or 0
+  for i = 1, #self.boxes do
+    self.boxes[i]:hide(delay)
+    self.boxes[i] = nil
+  end
+end
+
+return WindowManager
 
 -- vim:ts=2:sts=2:sw=2:et:sta:fdm=manual:fdl=0
