@@ -143,6 +143,7 @@ function WindowManager.new(leader)
         w = original_frame.w,
         h = original_frame.h
       }
+      self.draw_timer:stop()
       self.target_window:setFrame(new_frame, 0)
       return true, {}
     end)
@@ -226,6 +227,10 @@ function WindowManager:_initialize_modal(leader)
 
     spaces.gotoSpace(next_space)
     self.draw_timer:start()
+    timer.doAfter(MISSION_CONTROL_DELAY, function()
+      self.target_window = window.focusedWindow()
+      self.state = nil
+    end)
   end)
 
   self.modal:bind(leader, 'p', function()
@@ -234,6 +239,10 @@ function WindowManager:_initialize_modal(leader)
 
     spaces.gotoSpace(prev_space)
     self.draw_timer:start()
+    timer.doAfter(MISSION_CONTROL_DELAY, function()
+      self.target_window = window.focusedWindow()
+      self.state = nil
+    end)
   end)
 
   self.modal:bind(leader, 'c', function()
