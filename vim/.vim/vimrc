@@ -89,7 +89,6 @@ nnoremap <silent> <leader>m :make!<cr>
 " TODO: The below ruins last search pattern register
 nnoremap <silent> <leader>s mzHmy:%s/\s\+$//e<cr>'yz<cr>`z:noh<cr>
 nnoremap <silent> <leader>q :b#<cr>
-
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 
 " Set text width 80 {{{1

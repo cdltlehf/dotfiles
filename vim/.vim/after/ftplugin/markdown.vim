@@ -18,7 +18,7 @@ function! SpaceFunc()
   let l:line = getline(".")
   if l:line =~ '^\s*\d\+\.$'
     return "\<tab>"
-  elseif l:line =~ '^\s*[*-+]$'
+  elseif l:line =~ '^\s*[-*+]$'
     return "\<tab>"
   endif
 
@@ -31,7 +31,7 @@ function! EnterFunc()
   let l:line = getline(".")
   if getline(".") =~ '^\s*\d\+\.\s*$'
     return "\<esc>^C"
-  elseif getline(".") =~ '^\s*[*-+]\s*$'
+  elseif getline(".") =~ '^\s*[-*+]\s*$'
     return "\<esc>^C"
   elseif getline(".") =~ '^#\s*$'
     return "\<esc>^C"
