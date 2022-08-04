@@ -38,10 +38,10 @@ unset _PS1_2
 # RPS (vi-mode indicator) {{{1
 function zle-line-init zle-keymap-select {
 case $KEYMAP in
-  vicmd|viopp ) RPS1="%F{2}[N]%k%f" ;;
-  viins|main ) RPS1="%F{3}[I]%k%f" ;;
-  isearch ) RPS1="%F{6}[/]%k%f" ;;
-  * ) RPS1="B%F{1}[UNK]%k%f%b" ;;
+  vicmd|viopp ) RPS1="%F{0}%K{2} N %k%f" ;;
+  viins|main ) RPS1="%F{0}%K{3} I %k%f" ;;
+  isearch ) RPS1="%F{7}[/]%k%f" ;; # Not working
+  * ) RPS1="%B%F{1}[UNK]%k%f%b" ;;
 esac
 RPS2=$RPS1
 zle reset-prompt
