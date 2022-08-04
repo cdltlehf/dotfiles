@@ -53,6 +53,29 @@ symlink_home() {
 }
 
 # Array of common dotfiles
+# TODO: Think about how to deal with ~/.config
+DOTFILES_COMMON=(
+  "${BASEDIR}/bash/.bash_profile"
+  "${BASEDIR}/bash/.bash_prompt"
+  "${BASEDIR}/bash/.bashrc"
+
+  "${BASEDIR}/etc/.inputrc"
+
+  "${BASEDIR}/git/.gitconfig"
+
+  "${BASEDIR}/sh/.aliases"
+  "${BASEDIR}/sh/.profile"
+  "${BASEDIR}/sh/.shrc"
+
+  "${BASEDIR}/tmux/.tmux.conf"
+
+  "${BASEDIR}/vim/.vim/"
+
+  "${BASEDIR}/zsh/.zshrc"
+  "${BASEDIR}/zsh/.zsh_prompt"
+)
+
+# Array of common XDG_CONFIG_HOME dotfiles
 DOTFILES_COMMON=(
   "${BASEDIR}/bash/.bash_profile"
   "${BASEDIR}/bash/.bash_prompt"
