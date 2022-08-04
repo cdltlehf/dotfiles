@@ -38,9 +38,11 @@ symlink_home() {
   if [[ -e "${target_file}" ]]; then
 
     local yn
-    read -rp "replace ${target_file}? (y/n) " yn
+    read -rp \
+      "Move ${target_file} to ${target_file}.$(date +%s)? (y/n) " yn
     case ${yn} in
-      [Yy]* ) rm -rf "${target_file}" ;;
+      # [Yy]* ) rm -rf "${target_file}" ;;
+      [Yy]* ) mv ${target_file} "${target_file}.$(date +%s)" ;;
       * ) return 1 ;;
     esac
   fi
@@ -67,6 +69,7 @@ DOTFILES_COMMON=(
   "${BASEDIR}/tmux/.tmux.conf"
 
   "${BASEDIR}/vim/.vim/"
+  "${BASEDIR}/config/.config/"
 
   "${BASEDIR}/zsh/.zshrc"
   "${BASEDIR}/zsh/.zsh_prompt"
@@ -102,6 +105,7 @@ case ${UNAME} in
 
   # Do configurations of Darwin (macos)
   "Darwin")
+  echo "Set configurations for macos."
 
   # System Configurations
   sudo scutil --set ComputerName
@@ -109,7 +113,7 @@ case ${UNAME} in
   sudo scutil --set LocalHostName
 
   # NOTE: These default files should be brew package independent
-  echo "Set default configurations for macos."
+  echo "Run \`default ...\` commands for macos."
   for defaults in "${MACOS_DEFAULTS[@]}"; do
     command zsh "${defaults}"
   done
