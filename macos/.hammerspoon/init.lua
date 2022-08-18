@@ -12,38 +12,26 @@ hs.alert.defaultStyle.fadeInDuration = 0.1
 hs.alert.defaultStyle.fadeOutDuration = 0.3
 -- }}}
 do -- Input source changer {{{1
-  local inputSource = {
-    english = "com.apple.keylayout.ABC",
-    korean = "com.apple.inputmethod.Korean.2SetKorean",
-  }
-  local sourceNameTable = {
-    [inputSource.english] = "ABC",
-    [inputSource.korean] = "두벌식",
-  }
-  local getName = function(source)
-    if sourceNameTable[source] == nil then 
-      return source
-    end
-    return sourceNameTable[source]
-  end
+
   local escape_bind
   local escape_callback = function()
-    hs.keycodes.currentSourceID(inputSource.english)
+    hs.keycodes.currentSourceID("com.apple.keylayout.ABC")
 
     escape_bind:disable()
     hs.eventtap.keyStroke({}, 'escape', 0)
     escape_bind:enable()
   end
-  escape_bind = hs.hotkey.new({}, 'escape', escape_callback)
-  escape_bind:enable()
+  escape_bind = hs.hotkey.new({}, 'escape', escape_callback):enable()
 
   hs.keycodes.inputSourceChanged(function()
-    if hs.keycodes.currentSourceID() == last_alerted_IM_ID then 
+    if hs.keycodes.currentSourceID() == last_alerted_IM_ID then
       return end
 
       hs.alert.closeSpecific(last_IM_alert_uuid)
       last_alerted_IM_ID = hs.keycodes.currentSourceID()
-      last_IM_alert_uuid = hs.alert.show(getName(last_alerted_IM_ID), 0.2)
+      local label = last_alerted_IM_ID:match(".%w+$"):sub(2)
+
+      last_IM_alert_uuid = hs.alert.show(label, 0.2)
     end)
   end -- }}}
   -- Space/Activate indicators {{{
@@ -52,10 +40,10 @@ do -- Input source changer {{{1
   hs.ipc.cliInstall()
   space_indicators = {}
   activate_indicators = {}
-  function skhd_activate() 
+  function skhd_activate()
     hs.task.new(
-    '/usr/local/bin/yabai', 
-    function(s,o,e) 
+    '/usr/local/bin/yabai',
+    function(s,o,e)
       hs.task.new(
       '/usr/local/bin/jq',
       function(s,o,e)
@@ -65,17 +53,17 @@ do -- Input source changer {{{1
       end,
       {'.windows | length'}
       ):setInput(o):start()
-    end, 
+    end,
     { '-m', 'query', '--spaces', '--space' }
     ):start()
-    show_space_indicator() 
+    show_space_indicator()
   end
 
-  function skhd_deactivate() 
+  function skhd_deactivate()
     hs.fnutils.each(activate_indicators, function(indicator)
       indicator:hide()
     end)
-    hide_space_indicator() 
+    hide_space_indicator()
   end
 
   function init_activate_indicator()
@@ -83,8 +71,8 @@ do -- Input source changer {{{1
       local indicator = hs.canvas.new(scr:fullFrame())
       indicator:insertElement({
         type = 'rectangle',
-        frame = { 
-          x = 6, y = 6 + 24, 
+        frame = {
+          x = 6, y = 6 + 24,
           w = indicator:size().w - 12, h = indicator:size().h - 12 - 24
         },
         strokeColor = { hex = "0xf1fa8c" },
@@ -110,26 +98,26 @@ do -- Input source changer {{{1
     local circle_padding = 10
 
     hs.task.new(
-    '/usr/local/bin/yabai', 
-    function(s,o,e) 
+    '/usr/local/bin/yabai',
+    function(s,o,e)
       hs.task.new(
       '/usr/local/bin/jq',
       function(s,o,e)
         hs.fnutils.each(space_indicators, function(indicator)
           local num_spaces = string.len(string.gsub(o, '%s', ''))
-          local container_width = 
+          local container_width =
           circle_padding * ( num_spaces - 1 ) +
           circle_radius * 2 * ( num_spaces - 1 ) +
           container_height
 
           indicator:replaceElements()
 
-          indicator:insertElement({ 
-            type = "rectangle", 
+          indicator:insertElement({
+            type = "rectangle",
             id = "background",
             fillColor = { white = 0.4, alpha = 0.9 },
-            roundedRectRadii = { 
-              xRadius = container_height / 2, 
+            roundedRectRadii = {
+              xRadius = container_height / 2,
               yRadius = container_height / 2
             },
             frame = {
@@ -150,11 +138,11 @@ do -- Input source changer {{{1
               radius = 10,
               absolutePosition = false,
               action = "fill",
-              frame = { 
+              frame = {
                 x = indicator:size().w / 2 - container_width / 2 +
                 n * (circle_radius * 2 + circle_padding) +
                 container_height / 2 - circle_radius,
-                y = indicator:size().h - container_height 
+                y = indicator:size().h - container_height
                 - container_offset_bottom +
                 container_height / 2 - circle_radius,
                 w = circle_radius * 2,
@@ -167,7 +155,7 @@ do -- Input source changer {{{1
       end,
       {'-r', '.[].focused'}
       ):setInput(o):start()
-    end, 
+    end,
     { '-m', 'query', '--spaces' }
     ):start()
   end
