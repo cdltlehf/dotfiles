@@ -255,6 +255,8 @@
 	<integer>524288</integer>
 	<key>IRMemory</key>
 	<integer>4</integer>
+	<key>MaxVertically</key>
+	<true/>
 	<key>NeverWarnAboutShortLivedSessions_D07D5D08-FDF8-4F44-B1AC-AFCD041EFFCD</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_D07D5D08-FDF8-4F44-B1AC-AFCD041EFFCD_selection</key>
@@ -1108,7 +1110,9 @@
 				<real>0.90237069129943848</real>
 			</dict>
 			<key>Bound Hosts</key>
-			<array/>
+			<array>
+				<string>&amp;cava</string>
+			</array>
 			<key>Brighten Bold Text</key>
 			<true/>
 			<key>Character Encoding</key>
@@ -1575,7 +1579,7 @@
 		</dict>
 	</array>
 	<key>OnlyWhenMoreTabs</key>
-	<false/>
+	<true/>
 	<key>OpenBookmark</key>
 	<false/>
 	<key>PerPaneBackgroundImage</key>
@@ -1616,15 +1620,17 @@
 	<key>Print In Black And White</key>
 	<true/>
 	<key>PromptOnQuit</key>
-	<false/>
+	<true/>
 	<key>PromptOnQuitEvenIfThereAreNoWindows</key>
-	<false/>
+	<true/>
 	<key>QuitWhenAllWindowsClosed</key>
 	<true/>
 	<key>SeparateStatusBarsPerPane</key>
 	<false/>
 	<key>ShowPaneTitles</key>
 	<false/>
+	<key>SmartPlacement</key>
+	<true/>
 	<key>SoundForEsc</key>
 	<false/>
 	<key>SplitPaneDimmingAmount</key>
@@ -1636,6 +1642,8 @@
 	<key>UIElementRequiresHotkeys</key>
 	<true/>
 	<key>UseBorder</key>
+	<false/>
+	<key>UseLionStyleFullscreen</key>
 	<false/>
 	<key>VisualIndicatorForEsc</key>
 	<false/>

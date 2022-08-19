@@ -61,7 +61,7 @@ augroup END
 set number
 set relativenumber
 " set background=dark
-" set nowrap
+set nowrap
 set hlsearch
 set hidden
 set ignorecase
@@ -71,6 +71,8 @@ set list
 let &showbreak = '> '
 set belloff=all
 set showcmd
+
+cabbr <expr> %% expand('%:p:h')
 
 vnoremap < <gv
 vnoremap > >gv
