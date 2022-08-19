@@ -1,5 +1,5 @@
 #!/bin/bash
-# It does not use database like terminfo. 
+# It does not use database like terminfo.
 # Refer:
 # https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
 
