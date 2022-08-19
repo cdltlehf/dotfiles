@@ -207,9 +207,31 @@ function WindowManager:_initialize_modal(leader)
         return
       end
 
+      -- Exceptional cases, which change space of the window
+      local is_space_changed = false
+      if self.state == 'l' and key == 'l' then
+        local next_space = getNextSpace()
+        if next_space then
+          spaces.gotoSpace(next_space)
+          self.state = 'k'
+          spaces.moveWindowToSpace(self.target_window, next_space)
+          is_space_changed = true
+        end
+      elseif self.state == 'h' and key == 'h' then
+        local prev_space = getPrevSpace()
+        if prev_space then
+          self.state = 'k'
+          spaces.gotoSpace(prev_space)
+          spaces.moveWindowToSpace(self.target_window, prev_space)
+          is_space_changed = true
+        end
+      end
+
       -- Update state
       -- If the next state is not explicitly defined, key is the next state
-      self.state = WindowManager.keymap[self.state or ''][key] or key
+      if not is_space_changed then
+        self.state = WindowManager.keymap[self.state or ''][key] or key
+      end
 
       -- Update window based on the state
       local ratio = WindowManager.keymap[self.state][1]
