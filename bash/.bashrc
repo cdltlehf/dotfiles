@@ -79,6 +79,7 @@ unset PREFIX
 
 ## Bash-dependent startup configurations
 alias path='printf \"${PATH//:/\\n}\\n\"'
+shopt -s globstar
 
 ## Source bash-dependent external configurations {{{1
 # shellcheck disable=SC2043
