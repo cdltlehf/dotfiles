@@ -81,6 +81,10 @@ unset PREFIX
 alias path='printf \"${PATH//:/\\n}\\n\"'
 shopt -s globstar
 
+cdls() {
+  cd $@; ls
+}
+
 ## Source bash-dependent external configurations {{{1
 # shellcheck disable=SC2043
 for file in "${HOME}"/.bash_prompt; do
