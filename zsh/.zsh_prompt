@@ -6,16 +6,36 @@ setopt PROMPT_SUBST
 ZLE_RPROMPT_INDENT=0
 
 _PS1_1=$'\n'
-_PS1_1+='%F{5}%n%f at '
-_PS1_1+='%F{6}%m%f in '
-_PS1_1+='%F{3}%~%f'
+
+# Username
+if [[ "${USER}" == "root" ]] then
+  _PS1_1+='%F{1}%n%f'
+else
+  _PS1_1+='%F{5}%n%f'
+fi;
+
+# Hostname
+if [[ -n "${SSH_TTY}" ]]; then
+  _PS1_1+=' at %F{1}%m%f'
+else
+  _PS1_1+=' at %F{6}%m%f'
+fi;
+
+# Current working directory
+_PS1_1+=' in %F{3}%~%f'
+
+# Git prompt
 # _PS1_1+='$(__git_ps1 " on (%s)")'
+
+# Environment
 _PS1_2='$([ -z $VIRTUAL_ENV ] && echo ""'
 _PS1_2+='|| echo " via %F{4}"$VIRTUAL_ENV:t"%f")'
 _PS1_2+=$'\n'
 _PS1_2+='%(?.%f$ %f.%B%F{1}?%? %f%b)'
 
-PS2="%F{103}> %f" # Note that it uses 256-color
+# Continued prompt
+# NOTE: It uses 256-color
+PS2="%F{103}> %f"
 
 if command -v __git_ps1 > /dev/null 2>&1; then
   # GIT_PS1 environment variables {{{
