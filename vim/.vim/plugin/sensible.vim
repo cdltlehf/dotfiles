@@ -23,7 +23,7 @@ set backspace=indent,eol,start
 set complete-=i
 set smarttab
 
-" octal: If included, numbers starting with a zero 
+" octal: If included, numbers starting with a zero
 " will be considered to be octal
 set nrformats-=octal
 
@@ -42,7 +42,7 @@ if !&sidescrolloff
   set sidescrolloff=5
 endif
 
-" lastline: When included as much as possible of the last line 
+" lastline: When included as much as possible of the last line
 " in a window will be displayed
 set display+=lastline
 
@@ -54,7 +54,7 @@ if &listchars ==# 'eol:$'
   set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 endif
 
-if v:version > 703 || v:version == 703 && has("patch541")
+if v:version > 703 || v:version ==# 703 && has("patch541")
   " Delete comment character when joining commented lines
   set formatoptions+=j
 endif
@@ -63,7 +63,8 @@ if has('path_extra')
   setglobal tags-=./tags tags-=./tags; tags^=./tags;
 endif
 
-if &shell =~# 'fish$' && (v:version < 704 || v:version == 704 && !has('patch276'))
+if &shell =~# 'fish$'
+      \&& (v:version < 704 || v:version ==# 704 && !has('patch276'))
   set shell=/usr/bin/env\ bash
 endif
 

@@ -69,7 +69,7 @@ augroup bufline_highlight "{{{1
 augroup END "}}}
 
 function! TabLine() abort "{{{1
-  if tabpagenr('$') == 1
+  if tabpagenr('$') ==# 1
     return BufferLine()
   else
     let l:s = ''
@@ -101,7 +101,7 @@ function! BufferLine() abort "{{{1
     let l:bufname = bufname(l:i)
     let l:untitled = 0
 
-    if l:bufname ==? ''
+    if l:bufname ==# ''
       let l:untitled = 1
 
     elseif l:i != bufnr('%')
