@@ -31,7 +31,7 @@ symlink_home() {
   # If the existing target is a symlink to the source file, return
   if [[ -L "${target_file}" ]] &&
     [[ $(readlink "${target_file}") == "${source_file}" ]]; then
-        return 0;
+      return 0;
   fi
 
   # If the target file exists, ask to replace or not
@@ -41,12 +41,12 @@ symlink_home() {
     echo "File \"${target_file}\" already exists!"
     read -rp \
       "[O]verwrite the file, (B)ackup, (S)kip: " opt
-    case ${opt} in
-      [Oo] | "" ) rm ${target_file} ;;
-      [Bb] ) mv ${target_file} "${target_file}.$(date +%s)" ;;
-      [Ss] ) return 0 ;;
-      * ) return 1 ;;
-    esac
+          case ${opt} in
+            [Oo] | "" ) rm "${target_file}" ;;
+            [Bb] ) mv "${target_file}" "${target_file}.$(date +%s)" ;;
+            [Ss] ) return 0 ;;
+            * ) return 1 ;;
+          esac
   fi
 
   # Make a target symlink verbosely
@@ -57,26 +57,6 @@ symlink_home() {
 
 # Array of common dotfiles
 # TODO: Think about how to deal with ~/.config
-DOTFILES_COMMON=(
-  "${BASEDIR}/bash/.bash_profile"
-  "${BASEDIR}/bash/.bash_prompt"
-  "${BASEDIR}/bash/.bashrc"
-
-  "${BASEDIR}/etc/.inputrc"
-
-  "${BASEDIR}/git/.gitconfig"
-
-  "${BASEDIR}/sh/.aliases"
-  "${BASEDIR}/sh/.profile"
-  "${BASEDIR}/sh/.shrc"
-
-  "${BASEDIR}/tmux/.tmux.conf"
-
-  "${BASEDIR}/vim/.vim/"
-
-  "${BASEDIR}/zsh/.zshrc"
-  "${BASEDIR}/zsh/.zsh_prompt"
-)
 
 # Array of common XDG_CONFIG_HOME dotfiles
 DOTFILES_COMMON=(
@@ -87,6 +67,7 @@ DOTFILES_COMMON=(
   "${BASEDIR}/etc/.inputrc"
 
   "${BASEDIR}/git/.gitconfig"
+  "${BASEDIR}/git/.gitmessage.txt"
 
   "${BASEDIR}/sh/.aliases"
   "${BASEDIR}/sh/.profile"
@@ -158,11 +139,9 @@ case ${UNAME} in
   # If there is no ssh key, make one.
   if [[ -d ${HOME}/.ssh ]] && [[ -n "$(ls -A "${HOME}/.ssh")" ]]; then
     true
-  else
-    if command -v ssh-keygen; then
-      # https://stribika.github.io/2015/01/04/secure-secure-shell.html
-      ssh-keygen -t ed25519 -a 100
-    fi
+  elif command -v ssh-keygen; then
+    # https://stribika.github.io/2015/01/04/secure-secure-shell.html
+    ssh-keygen -t ed25519 -a 100
   fi
 
   # Install Homebrew
@@ -175,9 +154,9 @@ case ${UNAME} in
   fi
 
   # TODO: Check and run `softwareupdate --all --install --force`
-  read -rp "Install rosetta? (y/n) " yn
+  read -rp "Install rosetta? (Y/n) " yn
   case $yn in
-    [Yy]* ) sudo softwareupdate --install-rosetta || true ;;
+    [Yy]* | " " ) sudo softwareupdate --install-rosetta || true ;;
   esac
   unset yn
 
