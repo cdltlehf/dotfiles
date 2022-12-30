@@ -23,26 +23,28 @@ UNAME=$(uname)
 symlink_home() {
   local source_file=$1
 
-  # If ${source_file} not exists, return with an error
+  # If the source file not exists, return with an error
   if [[ ! -e "${source_file}" ]]; then return 1; fi
   local target_file
   target_file="${HOME}/$(basename "$source_file")"
 
-  # If the symlink exists, return 0
+  # If the existing target is a symlink to the source file, return
   if [[ -L "${target_file}" ]] &&
     [[ $(readlink "${target_file}") == "${source_file}" ]]; then
         return 0;
   fi
 
-  # If ${target_file} exists, ask to replace or not
+  # If the target file exists, ask to replace or not
   if [[ -e "${target_file}" ]]; then
 
-    local yn
+    local opt
+    echo "File \"${target_file}\" already exists!"
     read -rp \
-      "Move ${target_file} to ${target_file}.$(date +%s)? (y/n) " yn
-    case ${yn} in
-      # [Yy]* ) rm -rf "${target_file}" ;;
-      [Yy]* ) mv ${target_file} "${target_file}.$(date +%s)" ;;
+      "[O]verwrite the file, (B)ackup, (S)kip: " opt
+    case ${opt} in
+      [Oo] | "" ) rm ${target_file} ;;
+      [Bb] ) mv ${target_file} "${target_file}.$(date +%s)" ;;
+      [Ss] ) return 0 ;;
       * ) return 1 ;;
     esac
   fi
@@ -50,6 +52,7 @@ symlink_home() {
   # Make a target symlink verbosely
   ln -s "${source_file}" "${target_file}"
   echo "${target_file} -> ${source_file}"
+  return 0
 }
 
 # Array of common dotfiles
