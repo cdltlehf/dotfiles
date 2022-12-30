@@ -27,3 +27,6 @@
 
 [submodule]
   recurse = true
+
+[commit]
+  template = ~/.gitmessage.txt
