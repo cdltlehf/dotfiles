@@ -13,3 +13,9 @@
 [submodule "vim/.vim/pack/tpope/opt/vim-fugitive"]
 	path = vim/.vim/pack/tpope/opt/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vim/.vim/pack/dense-analysis/opt/ale"]
+	path = vim/.vim/pack/dense-analysis/opt/ale
+	url = https://github.com/dense-analysis/ale.git
+[submodule "vim/.vim/pack/prabirshrestha/opt/vim-lsp"]
+	path = vim/.vim/pack/prabirshrestha/opt/vim-lsp
+	url = https://github.com/prabirshrestha/vim-lsp.git

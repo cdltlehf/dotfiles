@@ -50,5 +50,7 @@ install 'airblade/vim-gitgutter'
 # install 'preservim/tagbar'
 install 'justinmk/vim-dirvish'
 install 'tpope/vim-fugitive'
+# install 'dense-analysis/ale'
+install 'prabirshrestha/vim-lsp'
 
 # vim:fdm=marker:
