@@ -14,6 +14,8 @@ packadd vim-dirvish
 packadd vim-fugitive
 " packadd ale
 packadd vim-lsp
+packadd asyncomplete.vim
+packadd asyncomplete-lsp.vim
 
 silent! helptags ALL
 
@@ -62,6 +64,25 @@ if executable('pylsp')
         \ 'allowlist': ['python'],
         \ })
 endif
+
+if executable('cmake-language-server')
+  au User lsp_setup call lsp#register_server({
+  \ 'name': 'cmake',
+  \ 'cmd': {server_info->['cmake-language-server']},
+  \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'build/'))},
+  \ 'whitelist': ['cmake'],
+  \ 'initialization_options': {
+  \   'buildDirectory': 'build',
+  \ }
+  \})
+endif
+
+" Asyncomplete.vim Settings {{{1
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>
+      \ pumvisible() ? asyncomplete#close_popup() . "\<cr>" : "\<cr>"
+imap <c-space> <Plug>(asyncomplete_force_refresh)
 
 " Comment map {{{1
 " TODO: unify these
