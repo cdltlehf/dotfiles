@@ -23,57 +23,40 @@ UNAME=$(uname)
 symlink_home() {
   local source_file=$1
 
-  # If ${source_file} not exists, return with an error
+  # If the source file not exists, return with an error
   if [[ ! -e "${source_file}" ]]; then return 1; fi
   local target_file
   target_file="${HOME}/$(basename "$source_file")"
 
-  # If the symlink exists, return 0
+  # If the existing target is a symlink to the source file, return
   if [[ -L "${target_file}" ]] &&
     [[ $(readlink "${target_file}") == "${source_file}" ]]; then
-        return 0;
+      return 0;
   fi
 
-  # If ${target_file} exists, ask to replace or not
+  # If the target file exists, ask to replace or not
   if [[ -e "${target_file}" ]]; then
 
-    local yn
+    local opt
+    echo "File \"${target_file}\" already exists!"
     read -rp \
-      "Move ${target_file} to ${target_file}.$(date +%s)? (y/n) " yn
-    case ${yn} in
-      # [Yy]* ) rm -rf "${target_file}" ;;
-      [Yy]* ) mv ${target_file} "${target_file}.$(date +%s)" ;;
-      * ) return 1 ;;
-    esac
+      "[O]verwrite the file, (B)ackup, (S)kip: " opt
+          case ${opt} in
+            [Oo] | "" ) rm "${target_file}" ;;
+            [Bb] ) mv "${target_file}" "${target_file}.$(date +%s)" ;;
+            [Ss] ) return 0 ;;
+            * ) return 1 ;;
+          esac
   fi
 
   # Make a target symlink verbosely
   ln -s "${source_file}" "${target_file}"
   echo "${target_file} -> ${source_file}"
+  return 0
 }
 
 # Array of common dotfiles
 # TODO: Think about how to deal with ~/.config
-DOTFILES_COMMON=(
-  "${BASEDIR}/bash/.bash_profile"
-  "${BASEDIR}/bash/.bash_prompt"
-  "${BASEDIR}/bash/.bashrc"
-
-  "${BASEDIR}/etc/.inputrc"
-
-  "${BASEDIR}/git/.gitconfig"
-
-  "${BASEDIR}/sh/.aliases"
-  "${BASEDIR}/sh/.profile"
-  "${BASEDIR}/sh/.shrc"
-
-  "${BASEDIR}/tmux/.tmux.conf"
-
-  "${BASEDIR}/vim/.vim/"
-
-  "${BASEDIR}/zsh/.zshrc"
-  "${BASEDIR}/zsh/.zsh_prompt"
-)
 
 # Array of common XDG_CONFIG_HOME dotfiles
 DOTFILES_COMMON=(
@@ -84,6 +67,7 @@ DOTFILES_COMMON=(
   "${BASEDIR}/etc/.inputrc"
 
   "${BASEDIR}/git/.gitconfig"
+  "${BASEDIR}/git/.gitmessage.txt"
 
   "${BASEDIR}/sh/.aliases"
   "${BASEDIR}/sh/.profile"
@@ -155,11 +139,9 @@ case ${UNAME} in
   # If there is no ssh key, make one.
   if [[ -d ${HOME}/.ssh ]] && [[ -n "$(ls -A "${HOME}/.ssh")" ]]; then
     true
-  else
-    if command -v ssh-keygen; then
-      # https://stribika.github.io/2015/01/04/secure-secure-shell.html
-      ssh-keygen -t ed25519 -a 100
-    fi
+  elif command -v ssh-keygen; then
+    # https://stribika.github.io/2015/01/04/secure-secure-shell.html
+    ssh-keygen -t ed25519 -a 100
   fi
 
   # Install Homebrew
@@ -172,9 +154,9 @@ case ${UNAME} in
   fi
 
   # TODO: Check and run `softwareupdate --all --install --force`
-  read -rp "Install rosetta? (y/n) " yn
+  read -rp "Install rosetta? (Y/n) " yn
   case $yn in
-    [Yy]* ) sudo softwareupdate --install-rosetta || true ;;
+    [Yy]* | " " ) sudo softwareupdate --install-rosetta || true ;;
   esac
   unset yn
 
