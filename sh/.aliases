@@ -48,6 +48,10 @@ alias reload='exec ${SHELL} --login'
 alias ve='python3 -m venv ./venv'
 alias va='source ./venv/bin/activate'
 
+jpt() {
+  jupyter notebook --no-browser --ip=0.0.0.0 --port=$1 "${@:2}"
+}
+
 # Print PATH entries
 # FIXME
 case $0 in
