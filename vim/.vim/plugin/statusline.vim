@@ -25,7 +25,19 @@ function! StatusLineMode() abort "{{{1
     highlight link StatusLineMode StatusLineNormal
     return 'NORMAL'
   elseif l:mode ==# 'no'
+  elseif l:mode ==# 'nov'
+  elseif l:mode ==# 'noV'
     " Operator-pending
+  elseif l:mode ==# 'niI'
+    "Normal in Insert-mode
+    highlight link StatusLineMode StatusLineNormal
+    return 'NORMAL(I)'
+  elseif l:mode ==# 'niR'
+    "Normal in Replace-mode
+  elseif l:mode ==# 'niV'
+    "Normal in Virtual-Replace-mode
+  elseif l:mode ==# 'nt'
+    "Terminal-Normal
 
   " Visual mode {{{2
   elseif l:mode ==# 'v'
@@ -36,8 +48,6 @@ function! StatusLineMode() abort "{{{1
     " Visual by line
     highlight link StatusLineMode StatusLineVisual
     return 'VISUAL LINE'
-  " elseif l:mode ==# 'CTRL-V'
-  " " Visual blockwise
   elseif l:mode ==# "\<C-V>"
     " Visual blockwise
     highlight link StatusLineMode StatusLineVisual

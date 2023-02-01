@@ -1,0 +1,41 @@
+
+
+# <type>(optional scope): A short, imperative tense description of the changes
+# |<----  Using a Maximum of 50 Characters  ---->|
+
+# A longer description of the changes
+# |<----   Try To Limit Each Line to a Maximum of 72 Characters   ---->|
+
+# BREAKING CHANGE: Is this a BREAKING CHANGE?
+# Information about Breaking Changes and reference issues that this commit
+# closes
+
+# --- COMMIT END ---
+# Type can be
+#   feat:     A new feature
+#   fix:      A bug fix
+#   docs:     Documentation only changes
+#   style:    Changes that do not affect the meaning of the code
+#             (white-space,formatting, missing semi-colons, etc)
+#   refactor: A code change that neither fixes a bug or adds a feature
+#   perf:     A code change that improves performance
+#   test:     Adding missing test
+#   build:    Changes that affect the build system or external dependencies
+#             (example scopes: gulp, broccoli, npm)
+#   ci:       Changes to our CI configuration files and scripts
+#             (example scopes: Travis, Circle, BroserStack, SauceLabs)
+#   chore:    Changes to the build process or auxiliary tools
+#             and libraries such as documentation generation
+#   revert:   Reverts a previous commit
+# --------------------
+# Remember to
+# - Capitalize the subject line
+# - Use the imperative mood in the subject line
+# - Do not end the subject line with a period
+# - Separate subject from body with a blank line
+# - Use the body to explain what and why vs. how
+# - Can use multiple lines with "-" for bullet points in body
+# --------------------
+# Refer:
+# https://gist.github.com/adeekshith/cd4c95a064977cdc6c50
+# http://commitizen.github.io/cz-cli/
