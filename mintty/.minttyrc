@@ -1,0 +1,13 @@
+ThemeFile=dracula
+Font=JetBrainsMono NF
+FontHeight=13
+CursorType=block
+CursorBlinks=no
+Scrollbar=none
+Term=xterm
+BoldAsFont=yes
+AllowBlinking=yes
+Transparency=off
+OpaqueWhenFocused=no
+LigaturesSupport=2
+Ligatures=2
