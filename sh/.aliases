@@ -47,6 +47,10 @@ alias reload='exec ${SHELL} --login'
 alias ve='python3 -m venv ./venv'
 alias va='source ./venv/bin/activate'
 
+# Tmux alias
+alias tm='tmux'
+alias ta='tmux a'
+
 # Print PATH entries
 # FIXME
 case $0 in
