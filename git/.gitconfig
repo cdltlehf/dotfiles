@@ -22,11 +22,11 @@
   editor = vim
   pager = less -F
 
-[include]
-  path = .gitconfig.local
-
-[submodule]
-  recurse = true
+[pull]
+  rebase = false
 
 [commit]
   template = ~/.gitmessage.txt
+
+[include]
+  path = .gitconfig.local
