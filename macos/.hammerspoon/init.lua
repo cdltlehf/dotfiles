@@ -12,7 +12,6 @@ hs.alert.defaultStyle.fadeInDuration = 0.1
 hs.alert.defaultStyle.fadeOutDuration = 0.3
 -- }}}
 do -- Input source changer {{{1
-
   local escape_bind
   local escape_callback = function()
     hs.keycodes.currentSourceID("com.apple.keylayout.ABC")
