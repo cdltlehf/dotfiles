@@ -79,7 +79,7 @@ unset PREFIX
 
 ## Bash-dependent startup configurations
 alias path='printf \"${PATH//:/\\n}\\n\"'
-shopt -s globstar
+# shopt -s globstar
 
 cdls() {
   cd $@; ls
