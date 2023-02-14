@@ -11,6 +11,7 @@ HOME_SHRC_SOURCED="1"
 # User specific environment
 PATH="${HOME}/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
+PATH="${HOME}/dotfiles/bin:${PATH}"
 export PATH
 
 # Set locale

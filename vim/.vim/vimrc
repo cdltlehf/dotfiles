@@ -23,6 +23,9 @@ silent! helptags ALL
 set termguicolors
 let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<esc>[48;2;%lu;%lu;%lum"
+let &t_SI="\<esc>[5 q" " blinking bar
+let &t_SR="\<esc>[3 q" " blinking underline
+let &t_EI="\<esc>[0 q"
 
 " Customize Dracula {{{1
 augroup dracula_customization

@@ -60,8 +60,8 @@ unset _PS1_2
 RPS1="%F{0}%K{3} INSERT %k%f"
 update_vi_mode_indicator() {
   case $KEYMAP in
-    vicmd|viopp ) RPS1="%F{0}%K{2} NORMAL %k%f";;
-    viins|main ) RPS1="%F{0}%K{3} INSERT %k%f";;
+    vicmd|viopp ) RPS1="%F{0}%K{2} NORMAL %k%f"; echo -ne '\e[1 q';;
+    viins|main ) RPS1="%F{0}%K{3} INSERT %k%f"; echo -ne '\e[5 q';;
     isearch ) RPS1="%F{7}[/]%k%f" ;; # Not working
     * ) RPS1="%B%F{1}[UNK]%k%f%b" ;;
   esac
@@ -78,6 +78,8 @@ hide_vi_mode_indicator() {
 zle -N zle-line-init update_vi_mode_indicator
 zle -N zle-line-finish hide_vi_mode_indicator
 zle -N zle-keymap-select update_vi_mode_indicator
+echo -ne '\e[5 q' # Use beam shape cursor on startup.
+preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 # }}}
 
 # vim:ts=2:sts=2:sw=2:et:sta:fdm=marker:fdl=0
