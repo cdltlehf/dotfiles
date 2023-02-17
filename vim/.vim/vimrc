@@ -19,13 +19,19 @@ packadd asyncomplete-lsp.vim
 
 silent! helptags ALL
 
-" termguicolors, etc... {{{1
+" Set terminal-things {{{1
 set termguicolors
 let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<esc>[48;2;%lu;%lu;%lum"
-let &t_SI="\<esc>[5 q" " blinking bar
-let &t_SR="\<esc>[3 q" " blinking underline
-let &t_EI="\<esc>[0 q"
+" :help termcap-cursor-shape
+if &term =~ "xterm"
+  let &t_SI="\<esc>[5 q" " blinking bar
+  let &t_SR="\<esc>[3 q" " blinking underline
+  let &t_EI="\<esc>[0 q" " block
+endif
+" https://github.com/vim/vim/commit/e07e797db0c5ef1aafc650d8bb0d39fb052cf1e1
+set ttimeout
+set ttimeoutlen=100
 
 " Customize Dracula {{{1
 augroup dracula_customization
