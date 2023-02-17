@@ -28,7 +28,7 @@ set smarttab
 set nrformats-=octal
 
 set incsearch
-nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
+nnoremap <silent> <c-l> :<c-u>nohlsearch<cr><c-l>
 
 set laststatus=2
 set ruler
