@@ -16,7 +16,6 @@ local HIDE_BOXES_DELAY = 0.2
 local SHOW_BOX_DELAY = 0.2
 
 local MISSION_CONTROL_DELAY = 0.3 -- Mission Control animation delay
-local DEFAULT_LEADER = { "ctrl", "cmd" }
 
 local function modsPressed()
   local mods = checkMods(true)._raw
@@ -121,7 +120,7 @@ WindowManager.__index = WindowManager
 function WindowManager.new(leader)
   local self = setmetatable({}, WindowManager)
 
-  self.leader = leader or DEFAULT_LEADER
+  self.leader = leader
   self.padding = PADDING
 
   self.target_window = nil
@@ -297,10 +296,6 @@ function WindowManager:_initialize_modal(leader)
       spaces.removeSpace(focused_space)
     end)
   end)
-
-  hotkey.bind({ "shift", table.unpack(leader) }, "l", function()
-    hs.caffeinate.lockScreen()
-  end)
 end
 
 function WindowManager:activate()
@@ -323,16 +318,6 @@ function WindowManager:deactivate()
   self:hideBoxes(HIDE_BOXES_DELAY)
 
   self.modal:exit()
-end
-
-function WindowManager:start()
-  self.activate_eventtap:start()
-  return self
-end
-
-function WindowManager:stop()
-  self.activate_eventtap:stop()
-  return self
 end
 
 function WindowManager:showBox(f, text, delay, textSize)
@@ -375,6 +360,12 @@ function WindowManager:hideBoxes(delay)
   end
 end
 
-return WindowManager
+function WindowManager:start()
+  self.activate_eventtap:start()
+end
 
--- vim:ts=2:sts=2:sw=2:et:sta:fdm=manual:fdl=0
+function WindowManager:stop()
+  self.activate_eventtap:stop()
+end
+
+return WindowManager
