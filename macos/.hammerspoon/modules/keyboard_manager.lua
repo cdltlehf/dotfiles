@@ -13,7 +13,7 @@ function KeyboardManager.new(default_source_id)
     keycodes.currentSourceID(default_source_id)
     keycodes.currentSourceID("com.apple.keylayout.ABC")
     self.escape_bind:disable()
-    self.eventtap.keyStroke(
+    eventtap.keyStroke(
       eventtap.event.types.keyStroke, 'escape', 0)
     self.escape_bind:enable()
   end

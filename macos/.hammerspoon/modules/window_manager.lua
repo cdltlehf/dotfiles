@@ -1,11 +1,11 @@
-local checkMods = require('hs.eventtap').checkKeyboardModifiers
-
 local window = require('hs.window')
 local timer = require('hs.timer')
 local hotkey = require('hs.hotkey')
 local spaces = require('hs.spaces')
 local canvas = require('hs.canvas')
 local eventtap = require('hs.eventtap')
+
+local checkMods = eventtap.checkKeyboardModifiers
 
 local MODS_INTERVAL = 0.05
 local PADDING = 5
