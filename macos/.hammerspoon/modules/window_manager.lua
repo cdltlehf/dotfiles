@@ -325,16 +325,6 @@ function WindowManager:deactivate()
   self.modal:exit()
 end
 
-function WindowManager:start()
-  self.activate_eventtap:start()
-  return self
-end
-
-function WindowManager:stop()
-  self.activate_eventtap:stop()
-  return self
-end
-
 function WindowManager:showBox(f, text, delay, textSize)
   text = text or ''
   delay = delay or 0
@@ -375,6 +365,12 @@ function WindowManager:hideBoxes(delay)
   end
 end
 
-return WindowManager
+function WindowManager:start()
+  self.activate_eventtap:start()
+end
 
--- vim:ts=2:sts=2:sw=2:et:sta:fdm=manual:fdl=0
+function WindowManager:stop()
+  self.activate_eventtap:stop()
+end
+
+return WindowManager
