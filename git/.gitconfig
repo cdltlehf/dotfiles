@@ -1,32 +1,35 @@
 [alias]
-  ; https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
-  co = checkout
-  br = branch
-  ci = commit
-  st = status
-  unstage = reset HEAD --
-  last = log -1 HEAD
-  ; misc
-  cim = commit -m
-  root = rev-parse --show-toplevel
+	; https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	; misc
+	cim = commit -m
+	root = rev-parse --show-toplevel
 
 [color]
-  ui = auto
-  diff = auto
-  status = auto
-  branch = auto
-  interactive = auto
-  grep = auto
+	ui = auto
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+	grep = auto
 
 [core]
-  editor = vim
-  pager = less -F
+	editor = vim
+	pager = less -F
 
 [pull]
-  rebase = false
+	rebase = false
 
 [commit]
-  template = ~/.gitmessage.txt
+	template = ~/.gitmessage.txt
 
 [include]
-  path = .gitconfig.local
+	path = .gitconfig.local
+
+[init]
+	defaultBranch = main
