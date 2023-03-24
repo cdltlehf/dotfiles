@@ -1,0 +1,230 @@
+" ~/.vim/vimrc
+" It needs Vim 8.0 to use packadd
+" Anyway, read https://www.vi-improved.org/recommendations/
+
+" Set nocompatible {{{1
+if &g:compatible
+  set nocompatible
+endif
+
+" Add external packages {{{1
+packadd dracula
+packadd vim-gitgutter
+packadd vim-dirvish
+packadd vim-fugitive
+" packadd ale
+packadd vim-lsp
+packadd asyncomplete.vim
+packadd asyncomplete-lsp.vim
+
+silent! helptags ALL
+
+" Set terminal-things {{{1
+set termguicolors
+let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<esc>[48;2;%lu;%lu;%lum"
+" :help termcap-cursor-shape
+if &term =~ "xterm"
+  let &t_SI="\<esc>[5 q" " blinking bar
+  let &t_SR="\<esc>[3 q" " blinking underline
+  let &t_EI="\<esc>[0 q" " block
+endif
+" https://github.com/vim/vim/commit/e07e797db0c5ef1aafc650d8bb0d39fb052cf1e1
+set ttimeout
+set ttimeoutlen=100
+
+" Customize Dracula {{{1
+augroup dracula_customization
+  autocmd!
+  autocmd ColorScheme dracula
+        \ highlight Normal guibg=NONE ctermbg=NONE
+        \|highlight DraculaComment cterm=italic
+        \|highlight link VertSplit DraculaCommentBold
+        \|highlight VertSplit guibg=NONE ctermbg=NONE gui=None cterm=None
+        \|highlight link FoldColumn DraculaCommentBold
+        \|highlight link PmenuSel WildMenu
+augroup END
+colorscheme dracula
+
+" GitGutter Settings {{{1
+augroup gitgutter_listener
+  autocmd!
+  autocmd User GitGutter let &l:statusline=&l:statusline
+augroup END
+
+" Vim-lsp Settings {{{1
+
+" set completeopt-=preview
+let g:lsp_signature_help_enabled = 0
+
+if executable('clangd')
+  autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'clangd',
+        \ 'cmd': {server_info->[
+        \   'clangd', '--all-scopes-completion',
+        \   '--completion-style=bundled']},
+        \ 'root_uri':{server_info->lsp#utils#path_to_uri(
+        \   lsp#utils#find_nearest_parent_file_directory(
+        \     lsp#utils#get_buffer_path(),
+        \     ['.clangd', 'compile_commands.json', '.git/']))},
+        \ 'allowlist': ['c', 'cpp', 'cc']})
+endif
+
+if executable('pylsp')
+  autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'python-lsp-server',
+        \ 'cmd': {server_info->['pylsp']},
+        \ 'allowlist': ['python']})
+endif
+
+if executable('cmake-language-server')
+  autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'cmake',
+        \ 'cmd': {server_info->['cmake-language-server']},
+        \ 'root_uri': {
+        \   server_info->lsp#utils#path_to_uri(
+        \     lsp#utils#find_nearest_parent_file_directory(
+        \       lsp#utils#get_buffer_path(), 'build/'))},
+        \ 'whitelist': ['cmake'],
+        \ 'initialization_options': {'buildDirectory': 'build'}})
+endif
+
+function! s:lsp_buffer_mappings()
+  nmap <buffer> gd <Plug>(lsp-definition)
+  " nmap <buffer> gi <Plug>(lsp-implementation)
+  " nmap <buffer> gr <Plug>(lsp-references)
+  " nmap <buffer> gy <Plug>(lsp-type-definition)
+  nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
+  nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
+  " nmap <buffer> \g <Plug>(lsp-document-diagnostics)
+  " nmap <buffer> <LocalLeader>ca <Plug>(lsp-code-action)
+  " nmap <buffer> <localLeader>cl <Plug>(lsp-code-lens)
+  nmap <buffer> <LocalLeader>rn <Plug>(lsp-rename)
+  nmap <buffer> <f2> <Plug>(lsp-rename)
+  nmap <buffer> K <Plug>(lsp-hover)
+  nmap <buffer> <LocalLeader>fm <Plug>(lsp-document-format)
+  xmap <buffer> <LocalLeader>fm <Plug>(lsp-document-format)
+endfunction
+
+autocmd User lsp_buffer_enabled call s:lsp_buffer_mappings()
+
+" Asyncomplete.vim Settings {{{1
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>
+      \ pumvisible() ? asyncomplete#close_popup() . "\<cr>" : "\<cr>"
+imap <c-space> <Plug>(asyncomplete_force_refresh)
+
+" Comment map {{{1
+" TODO: unify these
+function! SetPythonCommentMap() abort
+  nnoremap <leader>c<space> mcI# <esc>`c
+  vnoremap <leader>c<space> :s\/^\/#\
+
+  nnoremap gcc mcI# <esc>`c
+  vnoremap gc :s\/^\/#\
+endfunction
+
+augroup commentmap
+  autocmd!
+  autocmd FileType javascript
+        \ nnoremap <leader>c<space> mcI// <esc>`c
+  autocmd FileType c
+        \ nnoremap <leader>c<space> mcI// <esc>`c
+  autocmd FileType cpp
+        \ nnoremap <leader>c<space> mcI// <esc>`c
+augroup END
+
+" Miscellaneous settings {{{1
+set number
+set relativenumber
+" set background=dark
+set nowrap
+set hlsearch
+set hidden
+set ignorecase
+set smartcase
+set tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab
+set list
+let &showbreak = '> '
+set belloff=all
+set showcmd
+
+cabbr <expr> %% expand('%:p:h')
+
+vnoremap < <gv
+vnoremap > >gv
+vnoremap * y/<c-r>"<cr>
+
+" nnoremap Q @q
+nnoremap Y y$
+
+" nnoremap n nzz
+" nnoremap N Nzz
+
+" Leader maps {{{1
+" nnoremap <leader>b :b<space><c-d>
+nnoremap <leader>b :<c-u>ls<cr>:<c-u>b<space>
+nnoremap <silent> <leader>m :<c-u>make!<cr>
+" TODO: The below ruins last search pattern register
+nnoremap <silent> <leader>s mzHmy:<c-u>%s/\s\+$//e<cr>'yz<cr>`z:<c-u>noh<cr>
+nnoremap <silent> <leader>q :<c-u>b#<cr>
+nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
+
+" Set text width 80 {{{1
+if exists('&colorcolumn')
+  set colorcolumn=81
+endif
+" set textwidth=79
+
+" Pop-up menu {{{1
+" set completeopt=noinsert,preview,menuone
+" set pumheight=5
+
+" Completion settings "{{{1
+augroup completion
+  "TODO
+  autocmd!
+  "autocmd CursorMovedI * execute('if pumvisible() normal! a')
+augroup END
+
+" Set backup, spellcheck, swap and undo {{{1
+set spell
+set undofile
+
+let &backupdir = expand('$HOME/.local/share/vim/backup/')
+let &spellfile = expand('$HOME/.local/share/vim/spell/en.utf-8.add')
+let &directory = expand('$HOME/.local/share/vim/swap/')
+let &undodir = expand('$HOME/.local/share/vim/undo/')
+
+if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p') | endif
+let s:spelldir = fnamemodify(&spellfile, ':p:h')
+if !isdirectory(s:spelldir) | call mkdir(s:spelldir, 'p') | endif
+unlet s:spelldir
+if !isdirectory(&directory) | call mkdir(&directory, 'p') | endif
+if !isdirectory(&undodir) | call mkdir(&undodir, 'p') | endif
+
+let g:netrw_home = expand('$HOME/.local/share/vim/')
+
+" Set fold (zR/zM to open/close all folds) {{{1
+set foldcolumn=1
+if v:version < 802
+  set fillchars+=vert:│
+else
+  set fillchars+=vert:│,foldsep:│,foldopen:┌
+endif
+
+" Set syntax sync {{{1
+syntax sync fromstart
+
+" Netrw settings {{{1
+let g:netrw_fastbrowse = 0
+let g:netrw_winsize = 30
+let g:netrw_banner = 0
+
+" }}}
+let s:local_vimrc = expand('$HOME/.local/etc/vimrc')
+if filereadable(s:local_vimrc) | execute "source " . s:local_vimrc | endif
+" TODO: Implement :Reload
+" if !exists(":Reload") | command Reload :source ~/.vim/vimrc | endif
+" vim:ft=vim:fdm=marker:ts=2:sts=2:sw=2:fdl=0
