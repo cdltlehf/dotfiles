@@ -3,103 +3,70 @@
 " https://learnvimscriptthehardway.stevelosh.com
 " https://learnvim.irian.to
 
-"" https://neovim.io/doc/user/vim_diff.html
-filetype plugin indent on
+if &g:compatible
+  set nocompatible
+endif
 
-set autoindent
-set autoread
-set background=dark
-set backspace=indent,eol,start
-" $XDG_STATE_HOME/vim/backup
-set backupdir=~/.local/state/vim/backup
-set belloff=all
-set nocompatible
-set complete-=i
-" $XDG_STATE_HOME/vim/swap
-set directory=~/.local/state/vim/swap
-set display=lastline
-set encoding=utf-8
-scriptencoding utf-8
-" set fillchars=vert:│,fold:·,sep:│
-set fillchars=vert:│,foldopen:-,foldclose:+
-set formatoptions=tcqj
-set nofsync
-set hidden
-set history=10000
-set hlsearch
-set incsearch
-set nojoinspaces
-set langnoremap
-set nolangremap
-set laststatus=2
-set listchars=tab:>\ \ ,trail:-,nbsp:+
-set mouse=nvi
-set mousemodel=popup_setpos
-set nrformats=bin,hex
-set ruler
-set sessionoptions+=unix,slash sessionoptions-=options
-set shortmess+=F shortmess-=S
-set showcmd
-set sidescroll=1
-set smarttab
-set nostartofline
-set switchbuf=uselast
-set tabpagemax=50
-set tags=./tags;,tags " :help file-searching
-set ttimeoutlen=50
-set undodir=~/.local/state/nvim/undo
-set viewoptions+=unix,slash viewoptions-=options
-set viminfo+=!
-set wildmenu
-set wildoptions=pum,tagfile
+packadd dracula
+packadd vim-gitgutter
+packadd vim-dirvish
+packadd vim-fugitive
+" packadd ale
+packadd vim-lsp
+packadd asyncomplete.vim
+packadd asyncomplete-lsp.vim
 
-packadd! matchit
-let g:vimsyn_embed='l'
+for f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
+	execute 'source' f
+endfor
 
-if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p') | endif
-if !isdirectory(&directory) | call mkdir(&directory, 'p') | endif
-if !isdirectory(&undodir) | call mkdir(&undodir, 'p') | endif
-
-nnoremap Y y$
-" :help <cmd>
-nnoremap <c-l> <cmd>nohlsearch<bar>diffupdate<bar>normal! <c-l><cr>
-inoremap <c-u> <c-g>u<c-u>
-inoremap <c-w> <c-g>u<c-w>
-" :help /\V
-xnoremap * y/\V<c-r>"<cr>
-xnoremap # y?\V<c-r>"<cr>
-nnoremap & :&&<cr>
-
-" NOTE: In nvim, `Q` replays the last recorded macro.
-nnoremap Q @@
-nnoremap gQ Q
-
-"" https://www.vi-improved.org/recommendations/
-
-function! s:StripTrailingWhitespace()
-  if !&binary && &filetype != 'diff'
-    normal mz
-    normal Hmy
-    %s/\s\+$//e
-    normal 'yz<CR>
-    normal `z
-  endif
-endfunction
-command StripTrailingWhitespace call s:StripTrailingWhitespace()
-
-nnoremap <leader>a
-      \ :<c-u>argadd <c-r>=filenameescape(expand('%:p:h'))<cr>/*<c-d>
-nnoremap <leader>b :<c-u>ls<cr>:b <c-d>
-nnoremap <leader>e :<c-u>e **/
-nnoremap <leader>g :<c-u>greap<space>
-" nnoremap <leader>i :Ilist<space>
-nnoremap <leader>j :<c-u>tjump /
-nnoremap <leader>m :<c-u>make<cr>
-nnoremap <leader>s :<c-u>StripTrailingWhitespace<cr>
-nnoremap <leader>q :b#<cr>
-
-""
+set number
 
 set undofile
+
+" Set terminal-things
+set termguicolors
+let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<esc>[48;2;%lu;%lu;%lum"
+" :help termcap-cursor-shape
+if &term =~ "xterm"
+  let &t_SI="\<esc>[5 q" " blinking bar
+  let &t_SR="\<esc>[3 q" " blinking underline
+  let &t_EI="\<esc>[0 q" " block
+endif
+
+" https://github.com/vim/vim/commit/e07e797db0c5ef1aafc650d8bb0d39fb052cf1e1
+set ttimeout
+set ttimeoutlen=100
+
+augroup gitgutter_listener
+  autocmd!
+  autocmd User GitGutter let &l:statusline=&l:statusline
+augroup END
+
+vnoremap < <gv
+vnoremap > >gv
+vnoremap * y/<c-r>"<cr>
+
+nnoremap <leader>b :<c-u>ls<cr>:<c-u>b<space>
+nnoremap <silent> <leader>m :<c-u>make!<cr>
+" TODO: The below ruins last search pattern register
+nnoremap <silent> <leader>s mzHmy:<c-u>%s/\s\+$//e<cr>'yz<cr>`z:<c-u>noh<cr>
+nnoremap <silent> <leader>q :<c-u>b#<cr>
+nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
+
+if exists('&colorcolumn')
+  set colorcolumn=81
+endif
+
+silent! helptags ALL
+
+let g:netrw_home = expand('$HOME/.local/share/vim/')
+let g:netrw_fastbrowse = 0
+let g:netrw_winsize = 30
+let g:netrw_banner = 0
+
+let s:local_vimrc = expand('$HOME/.local/etc/vimrc')
+if filereadable(s:local_vimrc) | execute "source " . s:local_vimrc | endif
 
 " vim: set ft=vim fdm=marker ts=2 sts=2 sw=2 fdl=0:
