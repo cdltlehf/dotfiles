@@ -6,6 +6,18 @@ local hotkey = require('hs.hotkey')
 local KeyboardManager = {}
 KeyboardManager.__index = KeyboardManager
 
+local screen_frame = hs.window.focusedWindow():screen():frame()
+local w = 800
+local h = 200
+local x = screen_frame.w / 2 - w / 2
+local y = screen_frame.h - h
+local webview = hs.webview.new({x=x, y=y, w=w, h=h})
+local url = "file:///" .. os.getenv("HOME")
+url = url .. "/.hammerspoon/modules/korean_3set/index.html"
+webview:transparent(true)
+webview:url(url)
+webview:bringToFront(false)
+
 function KeyboardManager.new(default_source_id)
   local self = setmetatable({}, KeyboardManager)
 
@@ -32,6 +44,12 @@ function KeyboardManager.new(default_source_id)
 
     local label = self.last_alerted_source_id:match(".%w+$"):sub(2)
     self.last_alert_uuid = alert.show(label, 0.2)
+
+    if label == 'han390' then
+      webview:show()
+    else
+      webview:hide()
+    end
   end
 
   self.last_alerted_source_id = nil
