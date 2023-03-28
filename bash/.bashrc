@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1090
 #
 # ~/.bashrc
 # Bash startup file for interactive non-login shells
 # Since $HOME/.bash_profile sources this file,
 # it sourced for interactive login shells too
 
-## PLUGINS {{{1
+for file in ${HOME}/.bashrc.d; do
+  # shellcheck source=/dev/null
+  source "${file}"
+done
+
+# TODO: Move plugin scripts to bashrc.d
+## PLUGINS
 PREFIX="${HOME}/.local"
 
 # Make local tmp folder
@@ -14,7 +19,7 @@ PREFIX="${HOME}/.local"
 # Make local share folder
 ! [[ -d "${PREFIX}/share" ]] && mkdir -p "${PREFIX}/share"
 
-## git-prompt {{{2
+## git-prompt
 ## https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
 NAME="git-prompt"
 
@@ -32,11 +37,12 @@ fi
 unset URL
 
 # Activate
+# shellcheck source=/dev/null
 [[ -f "${PREFIX}/share/${NAME}.sh" ]] && \
   source "${PREFIX}/share/${NAME}.sh"
 unset NAME
 
-## bash-completion {{{2
+## bash-completion
 ## https://github.com/scop/bash-completion
 NAME="bash-completion"
 
@@ -58,40 +64,26 @@ if false; then
 fi
 
 # Activate
+# shellcheck source=/dev/null
 [[ ${PS1} && -f "${PREFIX}/share/${NAME}" ]] && \
   . "${PREFIX}/share/${NAME}"
 unset NAME
 
-# }}}
-
 unset PREFIX
-# }}}
 
-# Source the global bash startup file {{{1
-# shellcheck disable=SC1091
+# Source the global bash startup file
+# shellcheck source=/etc/bashrc
 [[ -f "/etc/bashrc" ]] && source "/etc/bashrc";
 
-# Source the shell-independent startup file {{{1
-# shellcheck disable=SC1091
+# Source the shell-independent startup file
+# shellcheck source=/dev/null
 [[ -f "${HOME}/.shrc" ]] && source "${HOME}/.shrc";
-
-#}}}
 
 ## Bash-dependent startup configurations
 alias path='printf \"${PATH//:/\\n}\\n\"'
-# shopt -s globstar
+shopt -s globstar
 
-cdls() {
-  cd $@; ls
-}
-
-## Source bash-dependent external configurations {{{1
-# shellcheck disable=SC2043
-for file in "${HOME}"/.bash_prompt; do
-  [[ -f "${file}" ]] && source "${file}";
-done
-unset file;
-
-# }}}
+# shellcheck source=/dev/null
+[[ -f "${HOME}/.bash_prompt" ]] && source "${HOME}/.bash_prompt"
 
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta:fdm=marker
