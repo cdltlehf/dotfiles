@@ -5,3 +5,4 @@ abbreviate <buffer> sh#! #!/bin/sh
 abbreviate <buffer> bash#! #!/bin/bash
 
 compiler shellcheck
+
