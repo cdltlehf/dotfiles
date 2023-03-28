@@ -9,6 +9,8 @@
 	; misc
 	cim = commit -m
 	root = rev-parse --show-toplevel
+	config-host = !touch ~/.gitconfig.host \
+		&& git config --file ~/.gitconfig.host
 
 [color]
 	ui = auto
@@ -28,8 +30,8 @@
 [commit]
 	template = ~/.gitmessage.txt
 
-[include]
-	path = .gitconfig.local
-
 [init]
 	defaultBranch = main
+
+[include]
+	path = .gitconfig.host
