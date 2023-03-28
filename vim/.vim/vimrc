@@ -23,37 +23,54 @@ endfor
 set number
 set undofile
 
-" Set terminal-things
-set termguicolors
-let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
-let &t_8b="\<esc>[48;2;%lu;%lu;%lum"
+" :help 'termguicolors'
+if has('termguicolors')
+	set termguicolors
+endif
+
+" :help xterm-true-color
+" let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
+" let &t_8b="\<esc>[48;2;%lu;%lu;%lum"
+
 " :help termcap-cursor-shape
 if &term =~ "xterm"
-  let &t_SI="\<esc>[5 q" " blinking bar
-  let &t_SR="\<esc>[3 q" " blinking underline
-  let &t_EI="\<esc>[0 q" " block
+	let &t_SI="\<esc>[5 q" " blinking bar
+	let &t_SR="\<esc>[3 q" " blinking underline
+	let &t_EI="\<esc>[0 q" " block
 endif
 
 " https://github.com/vim/vim/commit/e07e797db0c5ef1aafc650d8bb0d39fb052cf1e1
 set ttimeout
 set ttimeoutlen=100
 
+
 augroup gitgutter_listener
   autocmd!
   autocmd User GitGutter let &l:statusline=&l:statusline
 augroup END
 
+
 vnoremap < <gv
 vnoremap > >gv
 vnoremap * y/<c-r>"<cr>
 
+
 nnoremap <leader>b :<c-u>ls<cr>:<c-u>b<space>
 nnoremap <silent> <leader>m :<c-u>make!<cr>
-" TODO: The below ruins last search pattern register
+" TODO: The below ruins the last search pattern register
 nnoremap <silent> <leader>s mzHmy:<c-u>%s/\s\+$//e<cr>'yz<cr>`z:<c-u>noh<cr>
 nnoremap <silent> <leader>q :<c-u>b#<cr>
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 
+
+" :help section
+map [[ ?{<cr>w99[{
+map ][ /{<cr>b99[{
+map ]] j0[[%/{<cr>
+map [] k$][%?}<cr>
+
+
+" :help 'colorcolumn'
 if exists('&colorcolumn')
   set colorcolumn=81
 endif
