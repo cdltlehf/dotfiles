@@ -5,10 +5,12 @@
 # Since $HOME/.bash_profile sources this file,
 # it sourced for interactive login shells too
 
-for file in ${HOME}/.bashrc.d; do
-  # shellcheck source=/dev/null
-  source "${file}"
-done
+if [[ -d "${HOME}/.bashrc.d" ]]; then
+  for file in ${HOME}/.bashrc.d; do
+    # shellcheck source=/dev/null
+    source "${file}"
+  done
+fi
 
 # TODO: Move plugin scripts to bashrc.d
 ## PLUGINS
