@@ -21,7 +21,6 @@ for f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
 endfor
 
 set number
-
 set undofile
 
 " Set terminal-things
