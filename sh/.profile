@@ -3,4 +3,4 @@
 # ~/.profile
 # Shell-independent startup file for login shells
 
-ENV="$HOME/.shrc"; export ENV
+ENV="${HOME}/.shrc"; export ENV

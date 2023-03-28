@@ -55,7 +55,7 @@ if false; then
   echo -n "Install ${NAME}...";
   # (git clone --quiet --depth=1 \
     (git clone --depth=1 \
-    https://github.com/scop/${NAME}.git \
+    "https://github.com/scop/${NAME}.git" \
     "${PREFIX}/tmp/${NAME}" &&
     cd "${PREFIX}/tmp/${NAME}" &&
     autoreconf
@@ -67,7 +67,7 @@ fi
 
 # Activate
 # shellcheck source=/dev/null
-[[ ${PS1} && -f "${PREFIX}/share/${NAME}" ]] && \
+[[ -n "${PS1}" && -f "${PREFIX}/share/${NAME}" ]] && \
   . "${PREFIX}/share/${NAME}"
 unset NAME
 
