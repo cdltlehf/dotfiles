@@ -1,4 +1,3 @@
-" ~/.vim/after/ftplugin/zsh.vim
+" ~/.vim/ftplugin/zsh.vim
 
-abbreviate <buffer> #! #!/bin/zsh
 compiler zsh
