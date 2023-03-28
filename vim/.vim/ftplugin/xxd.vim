@@ -1,3 +1,3 @@
-" ~/.vim/after/ftplugin/xxd.vim
+" ~/.vim/ftplugin/xxd.vim
 
 set nospell

@@ -1,4 +1,4 @@
-" ~/.vim/after/ftplugin/text.vim
+" ~/.vim/ftplugin/text.vim
 " TODO: Set snippet from file
 " TODO: Add some input mode maps
 

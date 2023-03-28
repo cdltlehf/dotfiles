@@ -1,6 +1,3 @@
-" Vim-lsp Settings {{{1
-
-" set completeopt-=preview
 let g:lsp_signature_help_enabled = 0
 
 if executable('clangd')

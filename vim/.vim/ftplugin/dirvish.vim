@@ -1,3 +1,3 @@
-" ~/.vim/after/ftplugin/dirvish.vim
+" ~/.vim/ftplugin/dirvish.vim
 
 setlocal nospell

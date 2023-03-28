@@ -16,11 +16,11 @@ set display=lastline
 set encoding=utf-8
 scriptencoding utf-8
 if has('nvim')
-	set fillchars=vert:│,fold:·,sep:│
+  set fillchars=vert:│,fold:·,sep:│
 elseif v:version >= 900
-	set fillchars=vert:│,foldopen:-,foldclose:+
+  set fillchars=vert:│,foldopen:-,foldclose:+
 else
-	set fillchars=vert:│,fold:·
+  set fillchars=vert:│,fold:·
 endif
 set formatoptions=tcqj
 set nofsync
@@ -33,9 +33,9 @@ set langnoremap
 set nolangremap
 set laststatus=2
 if has('nvim')
-	set listchars=tab:>\ \ ,trail:-,nbsp:+
+  set listchars=tab:>\ \ ,trail:-,nbsp:+
 else
-	set listchars=tab:>\ ,trail:-,nbsp:+
+  set listchars=tab:>\ ,trail:-,nbsp:+
 endif
 set mouse=nvi
 set mousemodel=popup_setpos
@@ -47,19 +47,15 @@ set showcmd
 set sidescroll=1
 set smarttab
 set nostartofline
-if has('nvim')
-	set switchbuf=uselast
-endif
+if has('nvim') | set switchbuf=uselast | endif
 set tabpagemax=50
 set tags=./tags;,tags " :help file-searching
 set ttimeoutlen=50
-set undodir=~/.local/state/nvim/undo
-set viewoptions+=unix,slash viewoptions-=options
+if has('persistent_undo') | set undodir=~/.local/state/nvim/undo | endif
+if has('mksession') | set viewoptions+=unix,slash viewoptions-=options | endif
+if has('wildmenu') | set wildmenu | endif
 set viminfo+=!
-set wildmenu
-if has('nvim')
-	set wildoptions=pum,tagfile
-endif
+if has('nvim') | set wildoptions=pum,tagfile | endif
 
 packadd! matchit
 let g:vimsyn_embed='l'
