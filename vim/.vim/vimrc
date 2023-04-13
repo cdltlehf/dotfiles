@@ -21,6 +21,8 @@ for s:f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
   execute 'source' s:f
 endfor
 
+" :help filetype
+filetype plugin indent on
 
 " :help 'termguicolors'
 if has('termguicolors') | set termguicolors | endif

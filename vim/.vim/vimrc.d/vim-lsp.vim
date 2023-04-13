@@ -4,8 +4,10 @@ if executable('clangd')
   autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'clangd',
         \ 'cmd': {server_info->[
-        \   'clangd', '--all-scopes-completion',
-        \   '--completion-style=bundled']},
+        \   'clangd',
+        \   '--all-scopes-completion',
+        \   '--completion-style=bundled',
+        \ ]},
         \ 'root_uri':{server_info->lsp#utils#path_to_uri(
         \   lsp#utils#find_nearest_parent_file_directory(
         \     lsp#utils#get_buffer_path(),
@@ -20,17 +22,17 @@ if executable('pylsp')
         \ 'allowlist': ['python']})
 endif
 
-if executable('cmake-language-server')
-  autocmd User lsp_setup call lsp#register_server({
-        \ 'name': 'cmake',
-        \ 'cmd': {server_info->['cmake-language-server']},
-        \ 'root_uri': {
-        \   server_info->lsp#utils#path_to_uri(
-        \     lsp#utils#find_nearest_parent_file_directory(
-        \       lsp#utils#get_buffer_path(), 'build/'))},
-        \ 'whitelist': ['cmake'],
-        \ 'initialization_options': {'buildDirectory': 'build'}})
-endif
+"if executable('cmake-language-server')
+"  autocmd User lsp_setup call lsp#register_server({
+"        \ 'name': 'cmake',
+"        \ 'cmd': {server_info->['cmake-language-server']},
+"        \ 'root_uri': {
+"        \   server_info->lsp#utils#path_to_uri(
+"        \     lsp#utils#find_nearest_parent_file_directory(
+"        \       lsp#utils#get_buffer_path(), 'build/'))},
+"        \ 'whitelist': ['cmake'],
+"        \ 'initialization_options': {'buildDirectory': 'build'}})
+"endif
 
 function! s:lsp_buffer_mappings()
   nmap <buffer> gd <Plug>(lsp-definition)
@@ -43,7 +45,6 @@ function! s:lsp_buffer_mappings()
   " nmap <buffer> <LocalLeader>ca <Plug>(lsp-code-action)
   " nmap <buffer> <localLeader>cl <Plug>(lsp-code-lens)
   nmap <buffer> <LocalLeader>rn <Plug>(lsp-rename)
-  nmap <buffer> <f2> <Plug>(lsp-rename)
   nmap <buffer> K <Plug>(lsp-hover)
   nmap <buffer> <LocalLeader>fm <Plug>(lsp-document-format)
   xmap <buffer> <LocalLeader>fm <Plug>(lsp-document-format)

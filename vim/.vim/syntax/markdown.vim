@@ -17,8 +17,12 @@ hi def link markdownListMarkerWithoutContents Comment
 hi def link markdownOrderedListMarkerWithoutContents Comment
 
 " Overwrite a Tim Pope's markdown(Ordered)ListMarker syntax
-syntax clear markdownListMarker
-syntax clear markdownOrderedListMarker
+if hlexists("markdownListMarker")
+  syntax clear markdownListMarker
+endif
+if hlexists("markdownOrderedListMarker")
+  syntax clear markdownOrderedListMarker
+endif
 syn match markdownListMarker
       \ "\%(\t\| \{0,4\}\)*[-*+]\%(\s\+\S\)\@=" contained
 syn match markdownOrderedListMarker
