@@ -9,7 +9,7 @@ function! s:StripTrailingWhitespace()
     normal `z
   endif
 endfunction
-command StripTrailingWhitespace call s:StripTrailingWhitespace()
+command! StripTrailingWhitespace call s:StripTrailingWhitespace()
 
 nnoremap <leader>a
       \ :<c-u>argadd <c-r>=filenameescape(expand('%:p:h'))<cr>/*<c-d>
