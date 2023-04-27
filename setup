@@ -1,27 +1,21 @@
 #!/bin/bash -ue
 
-# Treat unset variables and parameters as an error
-# (= `set -u`)
-set -o nounset
-
-# Exit immediately
-# (= `set -e`)
-set -o errexit
+# -u, nounset: Treat unset variables and parameters as an error
+# -e, errexit: Exit immediately
 
 # Print a trace of commands
 # set -o xtrace # (= `set -x`)
 
-# Get base directory
-BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Get kernel name
-UNAME=$(uname)
+# Get base directory (e.g., `$HOME/dotfiles`)
+basedir="$(realpath "$(dirname "$0")")"
+# Get kernel name (e.g., Darwin)
+uname=$(uname)
 
 # Update dotfiles
-# command -v git > /dev/null && (cd "$BASEDIR" && git pull origin main);
+# command -v git > /dev/null && (cd "$basedir" && git pull origin main);
 
 symlink_home() {
-  local source_file=$1
+  local source_file="$1"
 
   # If the source file not exists, return with an error
   if [[ ! -e "${source_file}" ]]; then return 1; fi
@@ -59,55 +53,56 @@ symlink_home() {
 # TODO: Think about how to deal with ~/.config
 
 # Array of common XDG_CONFIG_HOME dotfiles
-DOTFILES_COMMON=(
-  "${BASEDIR}/bash/.bash_profile"
-  "${BASEDIR}/bash/.bash_prompt"
-  "${BASEDIR}/bash/.bashrc"
+dotfiles_common=(
+  "${basedir}/bash/.bash_profile"
+  "${basedir}/bash/.bash_prompt"
+  "${basedir}/bash/.bashrc"
 
-  "${BASEDIR}/etc/.inputrc"
+  "${basedir}/etc/.inputrc"
 
-  "${BASEDIR}/git/.gitconfig"
-  "${BASEDIR}/git/.gitmessage.txt"
+  "${basedir}/git/.gitconfig"
+  "${basedir}/git/.gitmessage.txt"
 
-  "${BASEDIR}/sh/.aliases"
-  "${BASEDIR}/sh/.profile"
-  "${BASEDIR}/sh/.shrc"
+  "${basedir}/sh/.aliases"
+  "${basedir}/sh/.profile"
+  "${basedir}/sh/.shrc"
 
-  "${BASEDIR}/tmux/.tmux.conf"
+  "${basedir}/tmux/.tmux.conf"
+  "${basedir}/tmux/.tmux.conf.d/"
 
-  "${BASEDIR}/vim/.vim/"
-  "${BASEDIR}/config/.config/"
+  "${basedir}/vim/.vim/"
+  "${basedir}/config/.config/"
 
-  "${BASEDIR}/zsh/.zshrc"
-  "${BASEDIR}/zsh/.zsh_prompt"
+  "${basedir}/zsh/.zshrc"
+  "${basedir}/zsh/.zsh_prompt"
 )
 
 echo "Make symbolic links of common dotfiles..."
-for dotfile in "${DOTFILES_COMMON[@]}"; do
+for dotfile in "${dotfiles_common[@]}"; do
   symlink_home "${dotfile}" || true
 done
 unset dotfile
 echo "Done."
 
 # Array of dotfiles for Darwin (macos)
-DOTFILES_DARWIN=(
-  "${BASEDIR}/macos/.hammerspoon/"
-  # "${BASEDIR}/macos/.skhdrc"
-  "${BASEDIR}/macos/.ubersichtrc"
-  # "${BASEDIR}/macos/.yabairc"
+dotfiles_darwin=(
+  "${basedir}/macos/.hammerspoon/"
+  # "${basedir}/macos/.skhdrc"
+  "${basedir}/macos/.ubersichtrc"
+  # "${basedir}/macos/.yabairc"
 )
 
 # Array of default configuration files for Darwin
-MACOS_DEFAULTS=(
-  # "${BASEDIR}/macos/defaults/.macos"
-  "${BASEDIR}/macos/defaults/.macos.dock"
-  "${BASEDIR}/macos/defaults/.macos.screencapture"
-  "${BASEDIR}/macos/defaults/.macos.screensaver"
-  "${BASEDIR}/macos/defaults/.macos.keyboard"
+macos_defaults=(
+  # "${basedir}/macos/defaults/.macos"
+  "${basedir}/macos/defaults/.macos.dock"
+  "${basedir}/macos/defaults/.macos.screencapture"
+  "${basedir}/macos/defaults/.macos.screensaver"
+  "${basedir}/macos/defaults/.macos.keyboard"
 )
 
 # Do platform dependent configurations
-case ${UNAME} in
+case ${uname} in
   # TODO: Be sudoer for some commands
 
   # Do configurations of Darwin (macos)
@@ -121,13 +116,13 @@ case ${UNAME} in
 
   # NOTE: These default files should be brew package independent
   echo "Run \`default ...\` commands for macos."
-  for defaults in "${MACOS_DEFAULTS[@]}"; do
+  for defaults in "${macos_defaults[@]}"; do
     command zsh "${defaults}"
   done
   unset defaults
 
   echo "Make symbolic links of dotfiles for macos..."
-  for dotfile in "${DOTFILES_DARWIN[@]}"; do
+  for dotfile in "${dotfiles_darwin[@]}"; do
     symlink_home "${dotfile}" || true
   done
   echo "Done."
@@ -160,14 +155,14 @@ case ${UNAME} in
   esac
   unset yn
 
-  echo "Install brew packages in ${BASEDIR}/macos/Brewfile"
+  echo "Install brew packages in ${basedir}/macos/Brewfile"
   command -v brew &> /dev/null \
-    && brew bundle --file "${BASEDIR}/macos/Brewfile"
+    && brew bundle --file "${basedir}/macos/Brewfile"
 
   # iTerm
   echo "Add terminfo. It may override local terminfo"
-  tic -x "${BASEDIR}/term/xterm-256color-italic.terminfo"
-  tic -x "${BASEDIR}/term/tmux-256color.terminfo"
+  tic -x "${basedir}/term/xterm-256color-italic.terminfo"
+  tic -x "${basedir}/term/tmux-256color.terminfo"
 
   read -rp "Open iTerm? (y/n) " yn
   case $yn in
@@ -211,7 +206,7 @@ esac
 
 echo "Restart your login shell with \`exec \"\${SHELL}\" --login\`"
 unset -f symlink_home
-unset UNAME
-unset BASEDIR
+unset uname
+unset basedir
 
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta
