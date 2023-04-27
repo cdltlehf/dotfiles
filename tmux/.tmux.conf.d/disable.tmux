@@ -36,7 +36,7 @@ bind-key -T enable_pending Escape \
   set-option key-table disabled
 
 bind-key -T enable_pending C-b \
-  set-option send-keys C-b
+  set-option send-keys C-b \
   set-option key-table disabled
 
 bind-key -T enable E \
