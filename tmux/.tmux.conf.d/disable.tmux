@@ -36,10 +36,10 @@ bind-key -T enable_pending Escape \
   set-option key-table disabled
 
 bind-key -T enable_pending C-b \
-  set-option send-keys C-b
-  set-option key-table disabled
+  send-keys C-b\; \
+  set-option key-table disabled\;
 
-bind-key -T enable E \
+bind-key -T enable_pending E \
   set-option -u key-table\; \
   set-option -u prefix\; \
   set-option -u status-left\; \
