@@ -14,7 +14,7 @@ if exists('g:loaded_minpac')
 
     call minpac#init()
     call minpac#add('k-takata/minpac', {'type': 'opt'})
-    call minpac#add('dracula/vim', {'type': 'opt'})
+    call minpac#add('dracula/vim', {'type': 'opt', 'name': 'dracula'})
     call minpac#add('airblade/vim-gitgutter', {'type': 'opt'})
     "call minpac#add( 'preservim/tagbar')
     call minpac#add('justinmk/vim-dirvish', {'type': 'opt'})
@@ -42,6 +42,8 @@ silent! packadd asyncomplete-lsp.vim
 for s:f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
   execute 'source' s:f
 endfor
+
+silent! colorscheme dracula
 
 " :help 'termguicolors'
 if has('termguicolors') | set termguicolors | endif

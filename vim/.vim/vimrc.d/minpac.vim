@@ -8,7 +8,7 @@ if empty(glob(s:data_dir . '/pack/minpac/opt/minpac'))
           \ . s:data_dir . '/pack/minpac/opt/minpac')
     if v:shell_error == 0
       source $MYVIMRC
-      echo "Minpack is installed."
+      echo "Minpack is installed. "
             \ . "Run `:PackUpdate` to install and update packs"
     else
       echo "Failed to install minpac. Check your git settings."
