@@ -34,20 +34,29 @@ endif
 "        \ 'initialization_options': {'buildDirectory': 'build'}})
 "endif
 
-function! s:lsp_buffer_mappings()
-  nmap <buffer> gd <Plug>(lsp-definition)
-  " nmap <buffer> gi <Plug>(lsp-implementation)
-  " nmap <buffer> gr <Plug>(lsp-references)
-  " nmap <buffer> gy <Plug>(lsp-type-definition)
-  nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
-  nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
-  " nmap <buffer> \g <Plug>(lsp-document-diagnostics)
-  " nmap <buffer> <LocalLeader>ca <Plug>(lsp-code-action)
-  " nmap <buffer> <localLeader>cl <Plug>(lsp-code-lens)
-  nmap <buffer> <LocalLeader>rn <Plug>(lsp-rename)
-  nmap <buffer> K <Plug>(lsp-hover)
-  nmap <buffer> <LocalLeader>fm <Plug>(lsp-document-format)
-  xmap <buffer> <LocalLeader>fm <Plug>(lsp-document-format)
+function! s:on_lsp_buffer_enabled() abort
+  setlocal omnifunc=lsp#complete
+  setlocal signcolumn=yes
+  if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+
+  nmap <buffer> gd <plug>(lsp-definition)
+  nmap <buffer> gs <plug>(lsp-document-symbol-search)
+  nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+  nmap <buffer> gr <plug>(lsp-references)
+  nmap <buffer> gi <plug>(lsp-implementation)
+  nmap <buffer> gt <plug>(lsp-type-definition)
+  nmap <buffer> <localleader>rn <plug>(lsp-rename)
+  nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+  nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+  nmap <buffer> K <plug>(lsp-hover)
+  " nmap <buffer> \g <plug>(lsp-document-diagnostics)
+  " nmap <buffer> <localleader>ca <plug>(lsp-code-action)
+  " nmap <buffer> <localleader>cl <plug>(lsp-code-lens)
+  let g:lsp_signature_help_enabled = 0
+  nmap <buffer> <localleader>fm <plug>(lsp-document-format)
 endfunction
 
-autocmd User lsp_buffer_enabled call s:lsp_buffer_mappings()
+augroup lsp_install
+  autocmd!
+  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END

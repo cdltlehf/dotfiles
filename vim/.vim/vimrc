@@ -21,8 +21,10 @@ if exists('g:loaded_minpac')
     call minpac#add('tpope/vim-fugitive', {'type': 'opt'})
     "call minpac#add( 'dense-analysis/ale')
     call minpac#add('prabirshrestha/vim-lsp', {'type': 'opt'})
+    call minpac#add('mattn/vim-lsp-settings', {'type': 'opt'})
     call minpac#add('prabirshrestha/asyncomplete.vim', {'type': 'opt'})
     call minpac#add('prabirshrestha/asyncomplete-lsp.vim', {'type': 'opt'})
+    call minpac#add('github/copilot.vim', {'type': 'opt'})
   endfunction
 
   command! PackUpdate source $MYVIMRC | call s:PackInit() | call minpac#update()
@@ -35,8 +37,10 @@ silent! packadd vim-gitgutter
 silent! packadd vim-dirvish
 silent! packadd vim-fugitive
 silent! packadd vim-lsp
+silent! packadd vim-lsp-settings
 silent! packadd asyncomplete.vim
 silent! packadd asyncomplete-lsp.vim
+silent! packadd copilot.vim
 
 " Source files in vimrc.d
 for s:f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
