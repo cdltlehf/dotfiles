@@ -1,4 +1,4 @@
-let g:lsp_signature_help_enabled = 0
+" https://github.com/prabirshrestha/vim-lsp
 
 if executable('clangd')
   autocmd User lsp_setup call lsp#register_server({
