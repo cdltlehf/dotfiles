@@ -7,9 +7,10 @@ if empty(glob(s:data_dir . '/pack/minpac/opt/minpac'))
     call system('git clone https://github.com/k-takata/minpac.git '
           \ . s:data_dir . '/pack/minpac/opt/minpac')
     if v:shell_error == 0
-      source $MYVIMRC
-      echo "Minpack is installed. "
+      let s:msg = "Minpack is installed. "
             \ . "Run `:PackUpdate` to install and update packs"
+      call input(s:msg)
+      source $MYVIMRC
     else
       echo "Failed to install minpac. Check your git settings."
     endif
@@ -22,11 +23,6 @@ if empty(glob(s:data_dir . '/pack/minpac/opt/minpac'))
           \ if input('Install minpac [y/N]? ') =~? '^y'
             \|echo ""
             \|call s:InstallMinpack()
-            \|if v:shell_error == 0
-              \|source $MYVIMRC
-            \|else
-              \|echo "Failed to install minpac. Check your git settings."
-            \|endif
           \|else
             \|echo ""
           \|endif
