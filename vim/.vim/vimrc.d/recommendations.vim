@@ -12,7 +12,7 @@ endfunction
 command! StripTrailingWhitespace call s:StripTrailingWhitespace()
 
 nnoremap <leader>a
-      \ :<c-u>argadd <c-r>=filenameescape(expand('%:p:h'))<cr>/*<c-d>
+      \ :<c-u>argadd <c-r>=fnameescape(expand('%:p:h'))<cr>/*<c-d>
 nnoremap <leader>b :<c-u>ls<cr>:b <c-d>
 nnoremap <leader>e :<c-u>e **/
 nnoremap <leader>g :<c-u>grep<space>
