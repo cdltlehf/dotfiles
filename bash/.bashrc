@@ -83,7 +83,7 @@ unset PREFIX
 
 ## Bash-dependent startup configurations
 alias path='printf \"${PATH//:/\\n}\\n\"'
-shopt -s globstar
+# shopt -s globstar
 
 # shellcheck source=/dev/null
 [[ -f "${HOME}/.bash_prompt" ]] && source "${HOME}/.bash_prompt"
