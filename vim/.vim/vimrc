@@ -99,6 +99,13 @@ xnoremap < <gv
 xnoremap > >gv
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 
+nnoremap <leader>y "+y
+nnoremap <leader>d "+d
+nnoremap <leader>p "+p
+xnoremap <leader>y "+y
+xnoremap <leader>d "+d
+xnoremap <leader>p "+p
+
 " soure host-local vimrc
 let s:vimrc_host = expand('$HOME/.vimrc.host')
 if filereadable(s:vimrc_host) | execute "source " . s:vimrc_host | endif
