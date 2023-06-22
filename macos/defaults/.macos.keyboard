@@ -26,7 +26,10 @@ if false; then
 else
   echo 'Set the following manually'
   echo '... > Keyboard > Modifier keys > Caps Lock Key (Control)'
+  echo 'replace ~/Library/Preferences/com.apple.symbolichotkeys.plist'
 fi
+
+# https://qnibus.com/blog/m1-맥에서-shiftspace-한영-전환-사용하기/
 
 echo '... > Text > Correct spelling automatically (disable)'
 defaults write NSGlobalDomain \
