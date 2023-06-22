@@ -59,7 +59,6 @@ function! s:on_lsp_buffer_enabled() abort
   " nnoremap <buffer> <localleader>cl <plug>(lsp-code-lens)
   let g:lsp_signature_help_enabled = 0
   nnoremap <buffer> <localleader>fm <plug>(lsp-document-format)
-  nnoremap
 endfunction
 
 augroup lsp_install
