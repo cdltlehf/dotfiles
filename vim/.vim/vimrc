@@ -16,15 +16,17 @@ if exists('g:loaded_minpac')
     call minpac#add('k-takata/minpac', {'type': 'opt'})
     call minpac#add('dracula/vim', {'type': 'opt', 'name': 'dracula'})
     call minpac#add('airblade/vim-gitgutter', {'type': 'opt'})
-    "call minpac#add( 'preservim/tagbar')
+    call minpac#add('preservim/tagbar')
     call minpac#add('justinmk/vim-dirvish', {'type': 'opt'})
     call minpac#add('tpope/vim-fugitive', {'type': 'opt'})
-    "call minpac#add( 'dense-analysis/ale')
+    call minpac#add('dense-analysis/ale')
     call minpac#add('prabirshrestha/vim-lsp', {'type': 'opt'})
     call minpac#add('mattn/vim-lsp-settings', {'type': 'opt'})
     call minpac#add('prabirshrestha/asyncomplete.vim', {'type': 'opt'})
     call minpac#add('prabirshrestha/asyncomplete-lsp.vim', {'type': 'opt'})
     call minpac#add('github/copilot.vim', {'type': 'opt'})
+    call minpac#add('junegunn/fzf', {'type': 'opt', 'do': {-> fzf#install()}})
+    call minpac#add('junegunn/fzf.vim')
   endfunction
 
   command! PackUpdate source $MYVIMRC | call s:PackInit() | call minpac#update()
@@ -38,6 +40,10 @@ silent! packadd vim-dirvish
 silent! packadd vim-fugitive
 silent! packadd vim-lsp
 silent! packadd vim-lsp-settings
+silent! packadd ale
+silent! packadd tagbar
+silent! packadd fzf
+silent! packadd fzf.vim
 silent! packadd asyncomplete.vim
 silent! packadd asyncomplete-lsp.vim
 silent! packadd copilot.vim

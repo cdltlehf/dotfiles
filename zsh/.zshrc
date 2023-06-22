@@ -160,7 +160,7 @@ for file in "$HOME/.zsh_prompt"; do
   [[ -f "$file" ]] && source "$file";
 done
 unset file;
-
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # }}}
 
 # vim:ft=zsh:ts=2:sts=2:sw=2:et:sta:fdm=marker
