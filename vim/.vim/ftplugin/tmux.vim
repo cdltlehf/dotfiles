@@ -3,3 +3,6 @@
 if exists('*GetShIndent')
   setlocal indentexpr=GetShIndent()
 endif
+
+let &l:comments=":#"
+let &l:commentstring="# %s"

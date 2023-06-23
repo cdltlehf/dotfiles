@@ -104,10 +104,11 @@ function! BufferLine() abort "{{{1
     if l:bufname ==# ''
       let l:untitled = 1
 
-    elseif l:i != bufnr('%')
+    " elseif l:i != bufnr('%')
+    else
       let l:bufname = fnamemodify(bufname(l:i), ":~:.")
-      let l:bufname =
-            \ substitute(l:bufname, '\(\.[^/]\|[^/]\)[^/]*/', '\1/', 'g')
+      let l:bufname = substitute(
+            \ l:bufname, '\(\.[^/]\|[^/]\)[^/]*/', '\1/', 'g')
 
     end
 
