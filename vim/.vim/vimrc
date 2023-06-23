@@ -102,5 +102,6 @@ nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 " soure host-local vimrc
 let s:vimrc_host = expand('$HOME/.vimrc.host')
 if filereadable(s:vimrc_host) | execute "source " . s:vimrc_host | endif
+setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab
 
 command! Reload source $MYVIMRC
