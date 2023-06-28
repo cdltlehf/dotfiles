@@ -14,17 +14,28 @@ if exists('g:loaded_minpac')
 
     call minpac#init()
     call minpac#add('k-takata/minpac', {'type': 'opt'})
+
     call minpac#add('dracula/vim', {'type': 'opt', 'name': 'dracula'})
+
     call minpac#add('airblade/vim-gitgutter', {'type': 'opt'})
-    call minpac#add('preservim/tagbar')
-    call minpac#add('justinmk/vim-dirvish', {'type': 'opt'})
     call minpac#add('tpope/vim-fugitive', {'type': 'opt'})
-    call minpac#add('dense-analysis/ale')
-    call minpac#add('prabirshrestha/vim-lsp', {'type': 'opt'})
+    call minpac#add('justinmk/vim-dirvish', {'type': 'opt'})
+
+    call minpac#add('dense-analysis/ale', {'type': 'opt'})
+    call minpac#add('rhysd/vim-lsp-ale', {'type': 'opt'})
     call minpac#add('mattn/vim-lsp-settings', {'type': 'opt'})
+
+    call minpac#add('SirVer/ultisnips', {'type': 'opt'})
+    call minpac#add('honza/vim-snippets', {'type': 'opt'})
+
     call minpac#add('prabirshrestha/asyncomplete.vim', {'type': 'opt'})
     call minpac#add('prabirshrestha/asyncomplete-lsp.vim', {'type': 'opt'})
+    call minpac#add(
+          \ 'prabirshrestha/asyncomplete-ultisnips.vim', {'type': 'opt'})
+    call minpac#add('prabirshrestha/vim-lsp', {'type': 'opt'})
+
     call minpac#add('github/copilot.vim', {'type': 'opt'})
+
     call minpac#add('junegunn/fzf', {'type': 'opt', 'do': {-> fzf#install()}})
     call minpac#add('junegunn/fzf.vim')
   endfunction
@@ -35,18 +46,27 @@ if exists('g:loaded_minpac')
 endif
 
 silent! packadd dracula
+
 silent! packadd vim-gitgutter
-silent! packadd vim-dirvish
 silent! packadd vim-fugitive
+silent! packadd vim-dirvish
+
+" silent! packadd ale
 silent! packadd vim-lsp
+silent! packadd vim-lsp-ale
 silent! packadd vim-lsp-settings
-silent! packadd ale
-silent! packadd tagbar
-silent! packadd fzf
-silent! packadd fzf.vim
+
+silent! packadd ultisnips
+silent! packadd vim-snippets
+silent! packadd asyncomplete-ultisnips.vim
+
 silent! packadd asyncomplete.vim
 silent! packadd asyncomplete-lsp.vim
+
 silent! packadd copilot.vim
+
+silent! packadd fzf
+silent! packadd fzf.vim
 
 " Source files in vimrc.d
 for s:f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
@@ -117,3 +137,5 @@ let s:vimrc_host = expand('$HOME/.vimrc.host')
 if filereadable(s:vimrc_host) | execute "source " . s:vimrc_host | endif
 
 command! Reload source $MYVIMRC
+
+nnoremap <leader>rr :Reload<cr>
