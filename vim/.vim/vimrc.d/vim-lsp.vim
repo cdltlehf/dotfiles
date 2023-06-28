@@ -1,39 +1,5 @@
 " https://github.com/prabirshrestha/vim-lsp
 
-"if executable('clangd')
-"  autocmd User lsp_setup call lsp#register_server({
-"        \ 'name': 'clangd',
-"        \ 'cmd': {server_info->[
-"        \   'clangd',
-"        \   '--all-scopes-completion',
-"        \   '--completion-style=bundled',
-"        \ ]},
-"        \ 'root_uri':{server_info->lsp#utils#path_to_uri(
-"        \   lsp#utils#find_nearest_parent_file_directory(
-"        \     lsp#utils#get_buffer_path(),
-"        \     ['.clangd', 'compile_commands.json', '.git/']))},
-"        \ 'allowlist': ['c', 'cpp', 'cc']})
-"endif
-"
-"if executable('pylsp')
-"  autocmd User lsp_setup call lsp#register_server({
-"        \ 'name': 'python-lsp-server',
-"        \ 'cmd': {server_info->['pylsp']},
-"        \ 'allowlist': ['python']})
-"endif
-
-"if executable('cmake-language-server')
-"  autocmd User lsp_setup call lsp#register_server({
-"        \ 'name': 'cmake',
-"        \ 'cmd': {server_info->['cmake-language-server']},
-"        \ 'root_uri': {
-"        \   server_info->lsp#utils#path_to_uri(
-"        \     lsp#utils#find_nearest_parent_file_directory(
-"        \       lsp#utils#get_buffer_path(), 'build/'))},
-"        \ 'whitelist': ['cmake'],
-"        \ 'initialization_options': {'buildDirectory': 'build'}})
-"endif
-
 function! s:on_lsp_buffer_enabled() abort
   setlocal omnifunc=lsp#complete
   setlocal signcolumn=yes
