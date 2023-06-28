@@ -7,37 +7,45 @@ if &g:compatible
   set nocompatible
 endif
 
+" custom wrapper function for minpac#add with opt type
+" https://github.com/k-takata/minpac/issues/113
+function! s:pac_add(url, ...) abort
+  let l:options = get(a:000, 0, {})
+  call minpac#add(a:url, extend({'type': 'opt'}, l:options, 'force'))
+endfunction
+
 silent! packadd minpac
 if exists('g:loaded_minpac')
   function! s:PackInit() abort
     packadd minpac
 
     call minpac#init()
-    call minpac#add('k-takata/minpac', {'type': 'opt'})
+    call s:pac_add('k-takata/minpac')
 
-    call minpac#add('dracula/vim', {'type': 'opt', 'name': 'dracula'})
+    call s:pac_add('dracula/vim', {'name': 'dracula'})
 
-    call minpac#add('airblade/vim-gitgutter', {'type': 'opt'})
-    call minpac#add('tpope/vim-fugitive', {'type': 'opt'})
-    call minpac#add('justinmk/vim-dirvish', {'type': 'opt'})
+    call s:pac_add('airblade/vim-gitgutter')
+    call s:pac_add('tpope/vim-fugitive')
+    call s:pac_add('justinmk/vim-dirvish')
 
-    call minpac#add('dense-analysis/ale', {'type': 'opt'})
-    call minpac#add('rhysd/vim-lsp-ale', {'type': 'opt'})
-    call minpac#add('mattn/vim-lsp-settings', {'type': 'opt'})
+    call s:pac_add('dense-analysis/ale')
+    call s:pac_add('rhysd/vim-lsp-ale')
+    call s:pac_add('mattn/vim-lsp-settings')
 
-    call minpac#add('SirVer/ultisnips', {'type': 'opt'})
-    call minpac#add('honza/vim-snippets', {'type': 'opt'})
+    call s:pac_add('SirVer/ultisnips')
+    call s:pac_add('honza/vim-snippets')
 
-    call minpac#add('prabirshrestha/asyncomplete.vim', {'type': 'opt'})
-    call minpac#add('prabirshrestha/asyncomplete-lsp.vim', {'type': 'opt'})
-    call minpac#add(
-          \ 'prabirshrestha/asyncomplete-ultisnips.vim', {'type': 'opt'})
-    call minpac#add('prabirshrestha/vim-lsp', {'type': 'opt'})
+    call s:pac_add('prabirshrestha/asyncomplete.vim')
+    call s:pac_add('prabirshrestha/asyncomplete-lsp.vim')
+    call s:pac_add('prabirshrestha/asyncomplete-ultisnips.vim')
+    call s:pac_add('prabirshrestha/vim-lsp')
 
-    call minpac#add('github/copilot.vim', {'type': 'opt'})
+    call s:pac_add('github/copilot.vim')
 
-    call minpac#add('junegunn/fzf', {'type': 'opt', 'do': {-> fzf#install()}})
-    call minpac#add('junegunn/fzf.vim')
+    call s:pac_add('junegunn/fzf', {'do': {-> fzf#install()}})
+    call s:pac_add('junegunn/fzf.vim')
+
+    call s:pac_add('takac/vim-hardtime')
   endfunction
 
   command! PackUpdate source $MYVIMRC | call s:PackInit() | call minpac#update()
@@ -67,6 +75,8 @@ silent! packadd copilot.vim
 
 silent! packadd fzf
 silent! packadd fzf.vim
+
+silent! packadd vim-hardtime
 
 " Source files in vimrc.d
 for s:f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
@@ -137,6 +147,7 @@ let s:vimrc_host = expand('$HOME/.vimrc.host')
 if filereadable(s:vimrc_host) | execute "source " . s:vimrc_host | endif
 setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab
 
-command! Reload source $MYVIMRC
+" :help last-pattern
+command! Reload source $MYVIMRC | let @/ = ""
 
 nnoremap <leader>rr :Reload<cr>
