@@ -61,8 +61,8 @@ silent! packadd vim-gitgutter
 silent! packadd vim-fugitive
 silent! packadd vim-dirvish
 
-silent! packadd ale
-silent! packadd vim-lsp-ale
+" silent! packadd ale
+" silent! packadd vim-lsp-ale
 silent! packadd vim-lsp-settings
 
 silent! packadd ultisnips
@@ -73,7 +73,7 @@ silent! packadd asyncomplete-lsp.vim
 silent! packadd asyncomplete-ultisnips.vim
 silent! packadd vim-lsp
 
-silent! packadd vim-polyglot
+" silent! packadd vim-polyglot
 
 silent! packadd copilot.vim
 
