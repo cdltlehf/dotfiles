@@ -23,7 +23,6 @@ function! s:on_lsp_buffer_enabled() abort
   " nnoremap <buffer> \g <plug>(lsp-document-diagnostics)
   " nnoremap <buffer> <localleader>ca <plug>(lsp-code-action)
   " nnoremap <buffer> <localleader>cl <plug>(lsp-code-lens)
-  let g:lsp_signature_help_enabled = 0
   nnoremap <buffer> <localleader>fm <plug>(lsp-document-format)
 endfunction
 
@@ -31,3 +30,5 @@ augroup lsp_install
   autocmd!
   autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
+
+let g:lsp_diagnostics_echo_cursor = 1
