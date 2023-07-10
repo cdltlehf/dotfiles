@@ -40,6 +40,8 @@ if exists('g:loaded_minpac')
     call s:pac_add('prabirshrestha/asyncomplete-ultisnips.vim')
     call s:pac_add('prabirshrestha/vim-lsp')
 
+    call s:pac_add('sheerun/vim-polyglot')
+
     call s:pac_add('github/copilot.vim')
 
     call s:pac_add('junegunn/fzf', {'do': {-> fzf#install()}})
@@ -60,16 +62,18 @@ silent! packadd vim-fugitive
 silent! packadd vim-dirvish
 
 silent! packadd ale
-silent! packadd vim-lsp
 silent! packadd vim-lsp-ale
 silent! packadd vim-lsp-settings
 
 silent! packadd ultisnips
 silent! packadd vim-snippets
-silent! packadd asyncomplete-ultisnips.vim
 
 silent! packadd asyncomplete.vim
 silent! packadd asyncomplete-lsp.vim
+silent! packadd asyncomplete-ultisnips.vim
+silent! packadd vim-lsp
+
+silent! packadd vim-polyglot
 
 silent! packadd copilot.vim
 
@@ -122,7 +126,8 @@ set smartcase
 if has('persistent_undo') | set undofile | endif
 set list
 set visualbell
-if exists('syntax') | set spell | endif
+if has('syntax') | set spell | endif
+set nowrap
 
 let &spellfile = expand('$HOME/.local/share/vim/spell/en.utf-8.add')
 let s:spelldir = fnamemodify(&spellfile, ':p:h')
@@ -142,7 +147,7 @@ xnoremap <leader>y "+y
 xnoremap <leader>d "+d
 xnoremap <leader>p "+p
 
-" soure host-local vimrc
+" source host-local vimrc
 let s:vimrc_host = expand('$HOME/.vimrc.host')
 if filereadable(s:vimrc_host) | execute "source " . s:vimrc_host | endif
 setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab
