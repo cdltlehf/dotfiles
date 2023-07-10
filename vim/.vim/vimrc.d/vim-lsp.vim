@@ -32,3 +32,21 @@ augroup lsp_install
 augroup END
 
 let g:lsp_diagnostics_echo_cursor = 1
+
+let g:lsp_diagnostics_signs_error = {'text': 'X'}
+let g:lsp_diagnostics_signs_warning = {'text': '!'}
+
+function! s:on_colorscheme() abort
+  if exists('g:colors_name') && g:colors_name ==# 'dracula'
+    highlight link LspErrorHighlight DraculaRed
+    highlight link LspWarningHighlight DraculaOrange
+
+    highlight link LspErrorText DraculaRed
+    highlight link LspWarningText DraculaOrange
+  endif
+endfunction
+
+augroup DraculaColor
+  autocmd!
+  autocmd ColorScheme * call s:on_colorscheme()
+augroup END
