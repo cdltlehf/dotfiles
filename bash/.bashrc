@@ -88,6 +88,8 @@ alias path='printf \"${PATH//:/\\n}\\n\"'
 # shellcheck source=/dev/null
 [[ -f "${HOME}/.bash_prompt" ]] && source "${HOME}/.bash_prompt"
 # shellcheck source=/dev/null
+[[ -f "${HOME}/.bashrc.host" ]] && source "${HOME}/.bashrc.host"
+# shellcheck source=/dev/null
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta:fdm=marker
