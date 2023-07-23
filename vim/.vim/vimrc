@@ -48,6 +48,7 @@ if exists('g:loaded_minpac')
     call s:pac_add('junegunn/fzf.vim')
 
     call s:pac_add('takac/vim-hardtime')
+    call s:pac_add('kkoomen/vim-doge', {'do': {-> doge#install()}})
   endfunction
 
   command! PackUpdate source $MYVIMRC | call s:PackInit() | call minpac#update()
@@ -65,12 +66,12 @@ silent! packadd vim-dirvish
 " silent! packadd vim-lsp-ale
 silent! packadd vim-lsp-settings
 
-silent! packadd ultisnips
-silent! packadd vim-snippets
+"silent! packadd ultisnips
+"silent! packadd vim-snippets
 
 silent! packadd asyncomplete.vim
 silent! packadd asyncomplete-lsp.vim
-silent! packadd asyncomplete-ultisnips.vim
+" silent! packadd asyncomplete-ultisnips.vim
 silent! packadd vim-lsp
 
 " silent! packadd vim-polyglot
@@ -81,6 +82,8 @@ silent! packadd fzf
 silent! packadd fzf.vim
 
 silent! packadd vim-hardtime
+
+silent! packadd vim-doge
 
 " Source files in vimrc.d
 for s:f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
@@ -140,12 +143,12 @@ xnoremap < <gv
 xnoremap > >gv
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 
-nnoremap <leader>y "+y
-nnoremap <leader>d "+d
-nnoremap <leader>p "+p
-xnoremap <leader>y "+y
-xnoremap <leader>d "+d
-xnoremap <leader>p "+p
+" nnoremap <leader>y "+y
+" nnoremap <leader>d "+d
+" nnoremap <leader>p "+p
+" xnoremap <leader>y "+y
+" xnoremap <leader>d "+d
+" xnoremap <leader>p "+p
 
 " source host-local vimrc
 let s:vimrc_host = expand('$HOME/.vimrc.host')

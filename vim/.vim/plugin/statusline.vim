@@ -116,6 +116,8 @@ function! StatusLineMode() abort "{{{1
   " Terminal-Job mode {{{2
   elseif l:mode ==# 't'
     " Terminal-Job mode: keys go to the job
+    highlight link StatusLineMode StatusLineCommand
+    return 'TERMINAL'
   endif
 
   " }}}
