@@ -11,14 +11,10 @@ function! s:on_lsp_buffer_enabled() abort
   nmap <buffer> gr <plug>(lsp-references)
   nmap <buffer> gi <plug>(lsp-implementation)
   nmap <buffer> gt <plug>(lsp-type-definition)
-  nmap <buffer> <localleader>rn <plug>(lsp-rename)
+  nmap <buffer> <localleader>rn <plug>(lsp-rename)<C-u>
   nmap <buffer> [g <plug>(lsp-previous-diagnostic)
   nmap <buffer> ]g <plug>(lsp-next-diagnostic)
   nmap <buffer> K <plug>(lsp-hover)
-
-  " scroll pop-up
-  nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-  nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 
   " nnoremap <buffer> \g <plug>(lsp-document-diagnostics)
   " nnoremap <buffer> <localleader>ca <plug>(lsp-code-action)
@@ -35,6 +31,7 @@ let g:lsp_diagnostics_echo_cursor = 1
 
 let g:lsp_diagnostics_signs_error = {'text': 'X'}
 let g:lsp_diagnostics_signs_warning = {'text': '!'}
+let g:lsp_diagnostics_virtual_text_enabled = "right"
 
 function! s:on_colorscheme() abort
   if exists('g:colors_name') && g:colors_name ==# 'dracula'
