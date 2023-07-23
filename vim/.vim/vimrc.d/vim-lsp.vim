@@ -31,7 +31,9 @@ let g:lsp_diagnostics_echo_cursor = 1
 
 let g:lsp_diagnostics_signs_error = {'text': 'X'}
 let g:lsp_diagnostics_signs_warning = {'text': '!'}
-let g:lsp_diagnostics_virtual_text_enabled = "right"
+let g:lsp_diagnostics_virtual_text_prefix = "> "
+let g:lsp_diagnostics_virtual_text_align = "right"
+let g:lsp_diagnostics_virtual_text_wrap = "truncate"
 
 function! s:on_colorscheme() abort
   if exists('g:colors_name') && g:colors_name ==# 'dracula'
