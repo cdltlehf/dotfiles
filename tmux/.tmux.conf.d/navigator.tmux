@@ -23,7 +23,6 @@ bind-key -r L resize-pane -R 5
 # Split window with a current path
 bind-key "%" split-window -h -c "#{pane_current_path}"
 bind-key '"' split-window -v -c "#{pane_current_path}"
-bind-key "c" new-window -c "#{pane_current_path}"
 
 # Navigate window
 bind-key -r C-p previous-window
