@@ -44,11 +44,13 @@ if exists('g:loaded_minpac')
 
     call s:pac_add('github/copilot.vim')
 
-    call s:pac_add('junegunn/fzf', {'do': {-> fzf#install()}})
+    call s:pac_add('junegunn/fzf',
+          \ {'do': 'silent! packadd fzf | call fzf#install()'})
     call s:pac_add('junegunn/fzf.vim')
 
     call s:pac_add('takac/vim-hardtime')
-    call s:pac_add('kkoomen/vim-doge', {'do': {-> doge#install()}})
+    call s:pac_add('kkoomen/vim-doge',
+          \ {'do': 'silent! packadd vim-doge | call doge#install()'})
   endfunction
 
   command! PackUpdate source $MYVIMRC | call s:PackInit() | call minpac#update()
