@@ -84,7 +84,7 @@ silent! packadd asyncomplete-lsp.vim
 " silent! packadd asyncomplete-ultisnips.vim
 silent! packadd vim-lsp
 
-" silent! packadd vim-polyglot
+silent! packadd vim-polyglot
 
 silent! packadd copilot.vim
 
