@@ -1,4 +1,4 @@
-if has('python3')
+if has('python3') && exists("*asyncomplete#regester_source")
   let g:UltiSnipsExpandTrigger="<c-e>"
   call asyncomplete#register_source(
       \ asyncomplete#sources#ultisnips#get_source_options({
