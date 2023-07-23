@@ -157,6 +157,7 @@ augroup statusline_highlight "{{{
         \ . ' cterm=bold gui=bold'
 
   "}}}
+
   " Fugitive statusline {{{
   if exists('g:loaded_fugitive')
     autocmd ColorScheme,VimEnter *
@@ -164,10 +165,10 @@ augroup statusline_highlight "{{{
           \|execute 'highlight FugitiveStatusline'
           \ . ' guibg=' . s:comment . ' guifg=' . s:background
           \ . ' cterm=None gui=None'
-  end
+  endif
 
-  "}}}
-  " Right statusline {{{ 
+  " }}}
+  " Right statusline {{{
   autocmd ColorScheme,VimEnter *
         \ highlight clear StatusLineRight1
         \|highlight clear StatusLineRight2
@@ -185,35 +186,35 @@ augroup statusline_highlight "{{{
   "}}}
 augroup end " }}}
 
-augroup statusline_string "{{{1
+function! s:activate_statusline() abort
+  let &l:statusline = '%#StatusLineMode# %{StatusLineMode()} '
+  if exists('g:loaded_fugitive')
+    let &l:statusline .= ''
+          \.'%#FugitiveStatusline#'
+          \.'%{substitute(FugitiveStatusline(), "^\\[\\|\\]$", " ", "g")}'
+  endif
+  let &l:statusline .= '%#StatusLine# %<%f %m%r%h%w '
+  let &l:statusline .= '%='
+  let &l:statusline .= ''
+        \.' %y '
+        \.'%#StatusLineRight1# %{&fileencoding}[%{&fileformat}] '
+        \.'%#StatusLineRight2# %3.p%% :%5.l/%L:%2.c '
+endfunction
+
+function! s:deactivate_statusline() abort
+  let &l:statusline = ''
+        \.'%#StatusLineInactive# INACTIVE '
+        \.'%#StatusLine# %<%f %m%r%h%w '
+  let &l:statusline .= '%='
+  let &l:statusline .= ''
+        \.' %y '
+        \.'%#StatusLineInactive# %{&fileencoding}[%{&fileformat}] '
+endfunction
+
+augroup statusline_string
   autocmd!
-  " Active statusline "{{{
-  autocmd WinEnter,BufEnter *
-        \ let &l:statusline = '%#StatusLineMode# %{StatusLineMode()} '
-        \|if exists('g:loaded_fugitive')
-        \|  let &l:statusline .= ''
-        \ . '%#FugitiveStatusline#'
-        \. '%{substitute(FugitiveStatusline(), "^\\[\\|\\]$", " ", "g")}'
-        \|endif
-        \|let &l:statusline .= '%#StatusLine# %<%f %m%r%h%w '
-        \|let &l:statusline .= '%='
-        \|let &l:statusline .= ''
-        \ . ' %y '
-        \ . '%#StatusLineRight1# %{&fileencoding}[%{&fileformat}] '
-        \ . '%#StatusLineRight2# %3.p%% :%5.l/%L:%2.c '
-
-  "}}}
-  " Inactive statusline {{{
-  autocmd WinLeave,BufLeave *
-        \ let &l:statusline = ''
-        \ . '%#StatusLineInactive# INACTIVE '
-        \ . '%#StatusLine# %<%f %m%r%h%w '
-        \|let &l:statusline .= '%='
-        \|let &l:statusline .= ''
-        \ . ' %y '
-        \ . '%#StatusLineInactive# %{&fileencoding}[%{&fileformat}] '
-
-  "}}}
-augroup end "}}}
+  autocmd WinEnter,BufEnter * call s:activate_statusline()
+  autocmd WinLeave,BufLeave * call s:deactivate_statusline()
+augroup end
 
 " vim: set ft=vim fdm=marker ts=2 sts=2 sw=2 fdl=0:
