@@ -24,6 +24,8 @@ if exists('g:loaded_minpac')
 
     call s:pac_add('dracula/vim', {'name': 'dracula'})
 
+    call s:pac_add('tpope/vim-repeat')
+
     call s:pac_add('airblade/vim-gitgutter')
     call s:pac_add('tpope/vim-fugitive')
     call s:pac_add('justinmk/vim-dirvish')
@@ -63,6 +65,7 @@ silent! packadd dracula
 silent! packadd vim-gitgutter
 silent! packadd vim-fugitive
 silent! packadd vim-dirvish
+silent! packadd vim-repeat
 
 " silent! packadd ale
 " silent! packadd vim-lsp-ale
