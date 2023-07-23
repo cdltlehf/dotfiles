@@ -1,4 +1,4 @@
-" ~/.vim/ftplugin/markdown.vim
+" ~/.vim/after/ftplugin/markdown.vim
 
 setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
 
