@@ -17,7 +17,7 @@ function! s:on_lsp_buffer_enabled() abort
   nmap <buffer> K <plug>(lsp-hover)
 
   " nnoremap <buffer> \g <plug>(lsp-document-diagnostics)
-  " nnoremap <buffer> <localleader>ca <plug>(lsp-code-action)
+  nnoremap <buffer> <localleader>ca <plug>(lsp-code-action)
   " nnoremap <buffer> <localleader>cl <plug>(lsp-code-lens)
   nnoremap <buffer> <localleader>fm <plug>(lsp-document-format)
 endfunction
@@ -29,10 +29,13 @@ augroup END
 
 let g:lsp_diagnostics_echo_cursor = 1
 
-let g:lsp_diagnostics_signs_error = {'text': 'X'}
-let g:lsp_diagnostics_signs_warning = {'text': '!'}
-let g:lsp_diagnostics_virtual_text_prefix = "> "
-let g:lsp_diagnostics_virtual_text_align = "right"
+" let g:lsp_diagnostics_signs_error = {'text': 'X'}
+let g:lsp_diagnostics_signs_error = {'text': "\uea87"}
+" let g:lsp_diagnostics_signs_warning = {'text': '!'}
+let g:lsp_diagnostics_signs_warning = {'text': "\uf071"}
+
+let g:lsp_diagnostics_virtual_text_prefix = " "
+let g:lsp_diagnostics_virtual_text_align = "after"
 let g:lsp_diagnostics_virtual_text_wrap = "truncate"
 
 function! s:on_colorscheme() abort

@@ -55,6 +55,8 @@ if exists('g:loaded_minpac')
     call s:pac_add('takac/vim-hardtime')
     call s:pac_add('kkoomen/vim-doge',
           \ {'do': 'silent! packadd vim-doge | call doge#install()'})
+
+    call s:pac_add('ryanoasis/vim-devicons')
   endfunction
 
   command! PackUpdate source $MYVIMRC | call s:PackInit() | call minpac#update()
@@ -94,6 +96,8 @@ silent! packadd fzf.vim
 silent! packadd vim-hardtime
 
 silent! packadd vim-doge
+
+silent! packadd vim-devicons
 
 " Source files in vimrc.d
 for s:f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
