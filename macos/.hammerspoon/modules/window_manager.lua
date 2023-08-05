@@ -128,6 +128,19 @@ function WindowManager.new(leader)
   self.show_indicator = false
   self.boxes = {}
 
+  self.border = nil
+  local allwindows = hs.window.filter.new(nil)
+  local events = {
+    hs.window.filter.windowFocused,
+    hs.window.filter.windowMoved,
+    hs.window.filter.windowFocused,
+    hs.window.filter.windowUnfocused,
+  }
+  for _, event in ipairs(events) do
+    allwindows:subscribe(event, function() self:redrawBorder() end)
+  end
+  self:redrawBorder()
+
   self.dragging_eventtap = eventtap.new({
     eventtap.event.types.leftMouseDragged,
     eventtap.event.types.leftMouseDown }, function(event)
@@ -144,6 +157,7 @@ function WindowManager.new(leader)
       }
       self.draw_timer:stop()
       self.target_window:setFrame(new_frame, 0)
+      self:redrawBorder()
       return true, {}
     end)
 
@@ -239,6 +253,7 @@ function WindowManager:_initialize_modal(leader)
         ratio[1], ratio[2], ratio[3], ratio[4],
         self.padding)
       self.target_window:setFrame(f, DURATION)
+      self:redrawBorder()
     end)
   end
 
@@ -283,7 +298,6 @@ function WindowManager:_initialize_modal(leader)
     if next_space then
       spaces.gotoSpace(next_space)
     else
-      hs.printf("?")
       -- Else if there is an previous space, go to the space
       local prev_space = getPrevSpace()
       if prev_space then
@@ -366,6 +380,29 @@ end
 
 function WindowManager:stop()
   self.activate_eventtap:stop()
+end
+
+function WindowManager:redrawBorder()
+
+  if self.border ~= nil then
+    self.border:delete()
+    self.border = nil
+  end
+
+  local win = hs.window.focusedWindow()
+  if win == nil then return end
+
+  local top_left = win:topLeft()
+  if top_left['x'] == 0 and top_left['y'] == 0 then return end
+
+  local size = win:size()
+  self.border = hs.drawing.rectangle(
+    hs.geometry.rect(top_left['x'], top_left['y'], size['w'], size['h']))
+  self.border:setRoundedRectRadii(10, 10)
+  self.border:setStrokeColor({ hex="#bd93f9", alpha=1.0 })
+  self.border:setFill(false)
+  self.border:setStrokeWidth(3)
+  self.border:show()
 end
 
 return WindowManager
