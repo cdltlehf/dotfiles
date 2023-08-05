@@ -44,8 +44,9 @@ function KeyboardManager.new(default_source_id)
 
     local label = self.last_alerted_source_id:match(".%w+$"):sub(2)
     self.last_alert_uuid = alert.show(label, 0.2)
+    print(self.last_alerted_source_id)
 
-    if label == 'han390' then
+    if label == '390Sebulshik' then
       webview:show()
     else
       webview:hide()
