@@ -30,8 +30,8 @@ augroup END
 let g:lsp_diagnostics_echo_cursor = 1
 
 " let g:lsp_diagnostics_signs_error = {'text': 'X'}
-let g:lsp_diagnostics_signs_error = {'text': "\uea87"}
 " let g:lsp_diagnostics_signs_warning = {'text': '!'}
+let g:lsp_diagnostics_signs_error = {'text': "\uea87"}
 let g:lsp_diagnostics_signs_warning = {'text': "\uf071"}
 
 let g:lsp_diagnostics_virtual_text_prefix = " "
