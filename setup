@@ -36,7 +36,7 @@ symlink_home() {
     read -rp \
       "[O]verwrite the file, (B)ackup, (S)kip: " opt
           case ${opt} in
-            [Oo] | "" ) rm "${target_file}" ;;
+            [Oo] | "" ) rm -rf "${target_file}" ;;
             [Bb] ) mv "${target_file}" "${target_file}.$(date +%s)" ;;
             [Ss] ) return 0 ;;
             * ) return 1 ;;
