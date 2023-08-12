@@ -93,3 +93,7 @@ alias path='printf \"${PATH//:/\\n}\\n\"'
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta:fdm=marker
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
