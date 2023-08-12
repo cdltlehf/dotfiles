@@ -44,6 +44,7 @@ if exists('g:loaded_minpac')
           \ {'do': 'silent! packadd fzf | call fzf#install()'})
     call s:pac_add('junegunn/fzf.vim')
 
+    call s:pac_add('ryanoasis/vim-devicons')
   endfunction
 
   command! PackUpdate source $MYVIMRC | call s:PackInit() | call minpac#update()
@@ -72,12 +73,19 @@ silent! packadd copilot.vim
 silent! packadd fzf
 silent! packadd fzf.vim
 
+silent! packadd vim-devicons
+
+silent! packadd bufferline
+silent! packadd sensible
+silent! packadd statusline
+silent! packadd unimpaired
+
+silent! colorscheme dracula16
+
 " Source files in vimrc.d
 for s:f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
   execute 'source' s:f
 endfor
-
-silent! colorscheme dracula16
 
 " :help 'termguicolors'
 " if has('termguicolors') | set termguicolors | endif

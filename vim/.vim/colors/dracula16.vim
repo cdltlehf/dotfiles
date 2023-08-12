@@ -1,145 +1,146 @@
 set background=dark
 
-hi clear
+highlight clear
 let g:colors_name = 'dracula16'
 
 let &t_Co=16
 
 " :help group-name
-hi! Comment ctermfg=darkgrey ctermbg=none cterm=none
+highlight Comment ctermfg=darkgrey ctermbg=none cterm=none
 
-hi! Constant ctermfg=darkblue ctermbg=none cterm=none
-hi! String ctermfg=darkyellow ctermbg=none cterm=none
-hi! Character ctermfg=darkmagenta ctermbg=none cterm=none
-hi! link Number Constant
-hi! link Boolean Constant
-hi! link Float Constant
+highlight Constant ctermfg=darkblue ctermbg=none cterm=none
+highlight String ctermfg=darkyellow ctermbg=none cterm=none
+highlight Character ctermfg=darkmagenta ctermbg=none cterm=none
+highlight! link Number Constant
+highlight! link Boolean Constant
+highlight! link Float Constant
 
-hi! Identifier ctermfg=none ctermbg=none cterm=none
-hi! Function ctermfg=darkgreen ctermbg=none cterm=none
+highlight Identifier ctermfg=none ctermbg=none cterm=none
+highlight Function ctermfg=darkgreen ctermbg=none cterm=none
 
-hi! Statement ctermfg=darkmagenta ctermbg=none cterm=none
-hi! link Conditional Statement
-hi! link Repeat Statement
-hi! link Label Statement
-hi! link Operator Statement
-hi! link Keyword Statement
-hi! link Exception Statement
+highlight Statement ctermfg=darkmagenta ctermbg=none cterm=none
+highlight! link Conditional Statement
+highlight! link Repeat Statement
+highlight! link Label Statement
+highlight! link Operator Statement
+highlight! link Keyword Statement
+highlight! link Exception Statement
 
-hi! PreProc ctermfg=darkmagenta ctermbg=none cterm=none
-hi! link Include PreProc
-hi! link Define PreProc
-hi! link Macro PreProc
-hi! link PreCondit PreProc
+highlight PreProc ctermfg=darkmagenta ctermbg=none cterm=none
+highlight! link Include PreProc
+highlight! link Define PreProc
+highlight! link Macro PreProc
+highlight! link PreCondit PreProc
 
-hi! Type ctermfg=darkcyan ctermbg=none cterm=italic
-hi! StorageClass ctermfg=darkmagenta ctermbg=none cterm=none
-hi! link Structure StroageClass
-hi! link Typedef StorageClass
+highlight Type ctermfg=darkcyan ctermbg=none cterm=italic
+highlight StorageClass ctermfg=darkmagenta ctermbg=none cterm=none
+highlight! link Structure StroageClass
+highlight! link Typedef StorageClass
 
-hi! Special ctermfg=darkmagenta ctermbg=none cterm=none
-hi! link SpecialChar Special
-hi! Tag ctermfg=darkcyan ctermbg=none cterm=none
-hi! Delimiter ctermfg=none ctermbg=none cterm=none
-hi! SpecialComment ctermfg=darkcyan ctermbg=none cterm=italic
-hi! link Debug Special
+highlight Special ctermfg=darkmagenta ctermbg=none cterm=none
+highlight! link SpecialChar Special
+highlight Tag ctermfg=darkcyan ctermbg=none cterm=none
+highlight Delimiter ctermfg=none ctermbg=none cterm=none
+highlight SpecialComment ctermfg=darkcyan ctermbg=none cterm=italic
+highlight! link Debug Special
 
-hi! Underlined ctermfg=none ctermbg=none cterm=underline
+highlight Underlined ctermfg=none ctermbg=none cterm=underline
+highlight Ignore cterm=none ctermbg=none cterm=none
 
-hi! Ignore cterm=none ctermbg=none cterm=none
-
-hi! Error ctermfg=darkred ctermbg=none cterm=none
-
-hi! Todo ctermfg=darkyellow ctermbg=none cterm=bold
-
+highlight Error ctermfg=darkred ctermbg=none cterm=bold
+highlight Todo ctermfg=darkyellow ctermbg=none cterm=bold
 
 " :help highlight-groups
-hi! ColorColumn ctermfg=none ctermbg=black cterm=none
+highlight ColorColumn ctermfg=none ctermbg=black cterm=none
 
-hi! Conceal ctermfg=darkcyan ctermbg=none cterm=none
+highlight Conceal ctermfg=darkcyan ctermbg=none cterm=none
 
-hi! Cursor ctermfg=none ctermbg=none cterm=none
-hi! link lCursor Cursor
-hi! link CursorIM Cursor
-hi! link CursorColumn ColorColumn
-hi! link CursorLine CursorColumn
+highlight Cursor ctermfg=none ctermbg=none cterm=none
+highlight! link lCursor Cursor
+highlight! link CursorIM Cursor
+highlight! link CursorColumn ColorColumn
+highlight! link CursorLine CursorColumn
 
-hi! Directory ctermfg=darkblue ctermbg=none cterm=bold
+highlight Directory ctermfg=darkblue ctermbg=none cterm=bold
 
-hi! DiffAdd ctermfg=darkgreen ctermbg=none cterm=none
-hi! DiffChange ctermfg=darkyellow ctermbg=black cterm=none
-hi! DiffDelete ctermfg=darkred ctermbg=darkmagenta cterm=none
-hi! DiffText ctermfg=black ctermbg=darkyellow cterm=none
+highlight DiffAdd ctermfg=darkgreen ctermbg=none cterm=none
+highlight DiffChange ctermfg=darkyellow ctermbg=none cterm=none
+highlight DiffDelete ctermfg=darkmagenta ctermbg=none cterm=underline
+highlight DiffText ctermfg=darkyellow ctermbg=none cterm=underline
 
-hi! link EndOfBuffer NonText
+highlight! link EndOfBuffer NonText
 
-hi! link ErrorMsg Error
+highlight! link ErrorMsg Error
 
-hi! VertSplit ctermfg=darkgrey ctermbg=none cterm=none
-hi! Folded ctermfg=darkgrey ctermbg=black cterm=none
-hi! FoldColumn ctermfg=darkgrey ctermbg=none cterm=none
-hi! IncSearch ctermfg=black ctermbg=darkyellow cterm=none
+highlight VertSplit ctermfg=darkgrey ctermbg=none cterm=none
+highlight Folded ctermfg=darkgrey ctermbg=black cterm=none
+highlight FoldColumn ctermfg=darkgrey ctermbg=none cterm=none
+highlight IncSearch ctermfg=black ctermbg=darkyellow cterm=none
 
-hi! link SignColumn Comment
+highlight! link SignColumn Comment
 
-hi! LineNr ctermfg=darkgrey ctermbg=none cterm=none
-hi! link LineNrAbove LineNr
-hi! link LineNrBelow LineNr
+highlight LineNr ctermfg=darkgrey ctermbg=none cterm=none
+highlight! link LineNrAbove LineNr
+highlight! link LineNrBelow LineNr
 
-hi! CursorLineNr ctermfg=darkyellow ctermbg=black cterm=none
-hi! link CursorLineFold CursorLine
-hi! link CursorLineSign CursorLine
+highlight CursorLineNr ctermfg=darkyellow ctermbg=black cterm=none
+highlight! link CursorLineFold CursorLine
+highlight! link CursorLineSign CursorLine
 
-hi! MatchParen ctermfg=darkgreen ctermbg=none cterm=underline
+highlight MatchParen ctermfg=darkgreen ctermbg=none cterm=underline
 
-hi! link MessageWindow WarningMsg
-hi! link ModeMsg Normal
-hi! MoreMsg ctermfg=none ctermbg=none cterm=bold
-hi! NonText ctermfg=darkgrey ctermbg=none cterm=none
+highlight! link MessageWindow WarningMsg
+highlight! link ModeMsg Normal
+highlight MoreMsg ctermfg=none ctermbg=none cterm=bold
+highlight NonText ctermfg=darkgrey ctermbg=none cterm=none
 
-hi! Normal ctermfg=none ctermbg=none cterm=none
+highlight Normal ctermfg=none ctermbg=none cterm=none
 
-hi! Pmenu ctermfg=none ctermbg=darkgrey cterm=none
-hi! PmenuSel ctermfg=none ctermbg=black cterm=none
-" hi! PmenuKind
-" hi! PmenuKindSel
-" hi! PmenuExtra
-" hi! PmenuExtraSel
-hi! link PmenuSbar Pmenu
-" hi! PmenuThumb
+highlight Pmenu ctermfg=none ctermbg=black cterm=none
+highlight PmenuSel ctermfg=black ctermbg=blue cterm=bold
+highlight! link PmenuKind Pmenu
+highlight! link PmenuKindSel PmenuSel
+highlight! link PmenuExtra Pmenu
+highlight! link PmenuExtraSel Pmenusel
+highlight! link PmenuSbar Pmenu
+highlight PmenuThumb ctermfg=black ctermbg=white cterm=none
 
-hi! link PopupNotification WarningMsg
+highlight! link PopupNotification WarningMsg
 
-hi! Question ctermfg=none ctermbg=none cterm=bold
-" hi! QuickFixLine
+highlight Question ctermfg=none ctermbg=none cterm=bold
+highlight! link QuickFixLine PmenuSel
 
-hi! Search ctermfg=green ctermbg=none cterm=inverse
-" hi! CurSearch
+highlight Search ctermfg=green ctermbg=none cterm=inverse
+highlight! link CurSearch Search
 
-hi! SpecialKey ctermfg=darkmagenta ctermbg=none cterm=none
-hi! SpellBad ctermfg=darkred ctermbg=none cterm=undercurl
-hi! SpellCap ctermfg=darkcyan ctermbg=none cterm=undercurl
-hi! SpellLocal ctermfg=darkyellow ctermbg=none cterm=undercurl
-hi! SpellRare ctermfg=darkcyan ctermbg=none cterm=undercurl
+highlight SpecialKey ctermfg=darkmagenta ctermbg=none cterm=none
+highlight SpellBad ctermfg=darkred ctermbg=none cterm=underline
+highlight SpellCap ctermfg=darkyellow ctermbg=none cterm=underline
+highlight! link SpellLocal SpellCap
+highlight! link SpellRare SpellCap
 
-hi! StatusLine ctermfg=none ctermbg=lightgrey cterm=bold
-hi! StatusLineNC ctermfg=none ctermbg=darkgrey cterm=none
-hi! link StatusLineTerm StatusLine
-hi! link StatusLineTermNC StatusLineNC
+highlight StatusLine ctermfg=none ctermbg=black cterm=none
+highlight StatusLineNC ctermfg=darkgrey ctermbg=black cterm=none
+highlight! link StatusLineTerm StatusLine
+highlight! link StatusLineTermNC StatusLineNC
 
-hi! TabLine ctermfg=none ctermbg=none cterm=none
-hi! TabLineFill ctermfg=black ctermbg=none cterm=none
-hi! link TabLineSel Normal
+highlight TabLine ctermfg=darkgrey ctermbg=black cterm=none
+highlight! link TabLineFill TabLine
+highlight TabLineSel ctermfg=none ctermbg=none cterm=none
+" highlight Terminal
 
-" hi! Terminal
+highlight Title ctermfg=darkgreen ctermbg=none cterm=bold
+highlight Visual ctermfg=black ctermbg=white cterm=none
+highlight! link VisualNOS Visual
 
-hi! Title ctermfg=darkgreen ctermbg=none cterm=bold
-hi! Visual ctermfg=none ctermbg=darkgrey cterm=none
-hi! link VisualNOS Visual
+highlight WarningMsg ctermfg=darkyellow ctermbg=none cterm=inverse
+highlight WildMenu ctermfg=black ctermbg=darkblue cterm=bold
 
-hi! WarningMsg ctermfg=darkyellow ctermbg=none cterm=inverse
-hi! WildMenu ctermfg=black ctermbg=darkblue cterm=none
+" highlight Menu
+" highlight Scrollbar
+" highlight Tooltip
 
-" hi! Menu
-" hi! Scrollbar
-" hi! Tooltip
+" vim-gitgutter
+highlight GitGuttterAdd ctermfg=darkgreen ctermbg=none cterm=none
+highlight GitGuttterChange ctermfg=darkyellow ctermbg=none cterm=none
+highlight GitGuttterDelete ctermfg=darkred ctermbg=none cterm=none
