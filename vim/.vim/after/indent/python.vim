@@ -58,8 +58,8 @@ function! GetCustomPythonIndent(lnum)
     endif
   endif
 
-  " If the line starts with close paren, align with its opening paren
-  " align with previous 'with' or 'def' statement
+  " If the line starts with close paren, align with start of line of its
+  " opening paren
   " E.g.
   "   foo = [
   "     0,
