@@ -52,6 +52,11 @@ if exists('g:loaded_minpac')
   command! PackStatus packadd minpac | call minpac#status()
 endif
 
+" Source files in vimrc.d/preload
+for s:f in split(glob('~/.vim/vimrc.d/preload/*.vim'), '\n')
+  execute 'source' s:f
+endfor
+
 silent! packadd vim-repeat
 silent! packadd vim-surround
 silent! packadd vim-commentary
