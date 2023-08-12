@@ -12,6 +12,7 @@ HOME_SHRC_SOURCED="1"
 PATH="${HOME}/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
 PATH="${HOME}/dotfiles/bin:${PATH}"
+PATH="${HOME}/Library/Python/3.11/bin:${PATH}"
 export PATH
 
 # Set locale
