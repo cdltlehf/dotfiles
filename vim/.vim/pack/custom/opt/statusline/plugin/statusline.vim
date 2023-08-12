@@ -1,20 +1,4 @@
 " status line
-" Dracula Color Palette {{{1
-" https://spec.draculatheme.com/
-let s:background='#282a36'
-let s:foreground='#f8f8f2'
-let s:selection='#44475a'
-let s:comment='#6272a4'
-
-let s:red='#ff5555'
-let s:orange='#ffb86c'
-let s:yellow='#f1fa8c'
-let s:green='#50fa7b'
-let s:purple='#bd93f9'
-let s:cyan='#8be9fd'
-let s:pink='#ff79c6'
-
-"}}}
 
 function! StatusLineMode() abort "{{{1
   let l:mode = mode(1)
@@ -128,60 +112,36 @@ endfunction "}}}
 
 augroup statusline_highlight "{{{
   autocmd!
-  " TODO: Set cterm color too...
   " Left statusline {{{
   autocmd ColorScheme,VimEnter *
-        \ highlight clear StatusLineNormal
-        \|highlight clear StatusLineInsert
-        \|highlight clear StatusLineVisual
-        \|highlight clear StatusLineCommand
-        \|highlight clear StatusLineUnknown
-        \|highlight clear StatusLineInactive
-        \|execute 'highlight StatusLineNormal'
-        \ . ' guibg=' . s:green . ' guifg=' . s:background
-        \ . ' cterm=bold gui=bold'
-        \|execute 'highlight StatusLineInsert'
-        \ . ' guibg=' . s:yellow . ' guifg=' . s:background
-        \ . ' cterm=bold gui=bold'
-        \|execute 'highlight StatusLineVisual'
-        \ . ' guibg=' . s:purple . ' guifg=' . s:background
-        \ . ' cterm=bold gui=bold'
-        \|execute 'highlight StatusLineCommand'
-        \ . ' guibg=' . s:cyan . ' guifg=' . s:background
-        \ . ' cterm=bold gui=bold'
-        \|execute 'highlight StatusLineUnknown'
-        \ . ' guibg=' . s:red . ' guifg=' . s:background
-        \ . ' cterm=bold gui=bold'
-        \|execute 'highlight StatusLineInactive'
-        \ . ' guibg=' . s:comment . ' guifg=' . s:background
-        \ . ' cterm=bold gui=bold'
-
+        \ highlight StatusLineNormal
+        \  ctermfg=black ctermbg=darkgreen cterm=bold
+        \|highlight StatusLineInsert
+        \  ctermfg=black ctermbg=darkyellow cterm=bold
+        \|highlight StatusLineVisual
+        \  ctermfg=black ctermbg=darkblue cterm=bold
+        \|highlight StatusLineCommand
+        \  ctermfg=black ctermbg=darkcyan cterm=bold
+        \|highlight StatusLineUnknown
+        \  ctermfg=black ctermbg=darkred cterm=bold
+        \|highlight StatusLineInactive
+        \  ctermfg=black ctermbg=darkgrey cterm=bold
   "}}}
 
   " Fugitive statusline {{{
   if exists('g:loaded_fugitive')
     autocmd ColorScheme,VimEnter *
-          \ highlight clear FugitiveStatusline
-          \|execute 'highlight FugitiveStatusline'
-          \ . ' guibg=' . s:comment . ' guifg=' . s:background
-          \ . ' cterm=None gui=None'
+          \ highlight FugitiveStatusline
+          \   ctermfg=black ctermbg=darkgrey cterm=bold
   endif
 
   " }}}
   " Right statusline {{{
   autocmd ColorScheme,VimEnter *
-        \ highlight clear StatusLineRight1
-        \|highlight clear StatusLineRight2
-        \|highlight clear StatusLine
-        \|execute 'highlight StatusLineRight1'
-        \ . ' guibg=' . s:cyan . ' guifg=' . s:background
-        \ . ' cterm=None gui=None'
-        \|execute 'highlight StatusLineRight2'
-        \ . ' guibg=' . s:orange . ' guifg=' . s:background
-        \ . ' cterm=None gui=None'
-        \|execute 'highlight StatusLine'
-        \ . ' guibg=' . s:selection . ' guifg=' . s:foreground
-        \ . ' cterm=None gui=None'
+        \ highlight StatusLineRight1
+        \   ctermfg=black ctermbg=darkcyan cterm=none
+        \|highlight StatusLineRight2
+        \   ctermfg=black ctermbg=darkyellow cterm=none
 
   "}}}
 augroup end " }}}
@@ -191,9 +151,14 @@ function! s:activate_statusline() abort
   if exists('g:loaded_fugitive')
     let &l:statusline .= ''
           \.'%#FugitiveStatusline#'
-          \.'%{substitute(FugitiveStatusline(), "^\\[\\|\\]$", " ", "g")}'
+          \.'%{substitute('
+          \.  'substitute(FugitiveStatusline(),"\\[Git(",'
+          \.    '" \uea68 ", ""),'
+          \.  '")]",'
+          \.  '" ", ""'
+          \.')}'
   endif
-  let &l:statusline .= '%#StatusLine# %<%f %m%r%h%w '
+  let &l:statusline .= '%* %<%f %m%r%h%w '
   let &l:statusline .= '%='
   let &l:statusline .= ''
         \.' %y '
@@ -204,11 +169,11 @@ endfunction
 function! s:deactivate_statusline() abort
   let &l:statusline = ''
         \.'%#StatusLineInactive# INACTIVE '
-        \.'%#StatusLine# %<%f %m%r%h%w '
+        \.'%* %<%f %m%r%h%w '
   let &l:statusline .= '%='
   let &l:statusline .= ''
         \.' %y '
-        \.'%#StatusLineInactive# %{&fileencoding}[%{&fileformat}] '
+        \.'%* %{&fileencoding}[%{&fileformat}] '
 endfunction
 
 augroup statusline_string
