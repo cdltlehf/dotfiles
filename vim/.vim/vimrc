@@ -22,8 +22,6 @@ if exists('g:loaded_minpac')
     call minpac#init()
     call s:pac_add('k-takata/minpac')
 
-    call s:pac_add('dracula/vim', {'name': 'dracula'})
-
     call s:pac_add('tpope/vim-repeat')
     call s:pac_add('tpope/vim-surround')
     call s:pac_add('tpope/vim-commentary')
@@ -32,17 +30,11 @@ if exists('g:loaded_minpac')
     call s:pac_add('tpope/vim-fugitive')
     call s:pac_add('justinmk/vim-dirvish')
 
-    call s:pac_add('dense-analysis/ale')
-    call s:pac_add('rhysd/vim-lsp-ale')
+    call s:pac_add('prabirshrestha/vim-lsp')
     call s:pac_add('mattn/vim-lsp-settings')
-
-    call s:pac_add('SirVer/ultisnips')
-    call s:pac_add('honza/vim-snippets')
 
     call s:pac_add('prabirshrestha/asyncomplete.vim')
     call s:pac_add('prabirshrestha/asyncomplete-lsp.vim')
-    call s:pac_add('prabirshrestha/asyncomplete-ultisnips.vim')
-    call s:pac_add('prabirshrestha/vim-lsp')
 
     call s:pac_add('sheerun/vim-polyglot')
 
@@ -52,19 +44,12 @@ if exists('g:loaded_minpac')
           \ {'do': 'silent! packadd fzf | call fzf#install()'})
     call s:pac_add('junegunn/fzf.vim')
 
-    call s:pac_add('takac/vim-hardtime')
-    call s:pac_add('kkoomen/vim-doge',
-          \ {'do': 'silent! packadd vim-doge | call doge#install()'})
-
-    call s:pac_add('ryanoasis/vim-devicons')
   endfunction
 
   command! PackUpdate source $MYVIMRC | call s:PackInit() | call minpac#update()
   command! PackClean  source $MYVIMRC | call s:PackInit() | call minpac#clean()
   command! PackStatus packadd minpac | call minpac#status()
 endif
-
-silent! packadd dracula
 
 silent! packadd vim-repeat
 silent! packadd vim-surround
@@ -74,40 +59,28 @@ silent! packadd vim-gitgutter
 silent! packadd vim-fugitive
 silent! packadd vim-dirvish
 
-" silent! packadd ale
-" silent! packadd vim-lsp-ale
+silent! packadd vim-lsp
 silent! packadd vim-lsp-settings
-
-"silent! packadd ultisnips
-"silent! packadd vim-snippets
 
 silent! packadd asyncomplete.vim
 silent! packadd asyncomplete-lsp.vim
-" silent! packadd asyncomplete-ultisnips.vim
-silent! packadd vim-lsp
 
-silent! packadd vim-polyglot
+" silent! packadd vim-polyglot
 
 silent! packadd copilot.vim
 
 silent! packadd fzf
 silent! packadd fzf.vim
 
-silent! packadd vim-hardtime
-
-silent! packadd vim-doge
-
-silent! packadd vim-devicons
-
 " Source files in vimrc.d
 for s:f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
   execute 'source' s:f
 endfor
 
-silent! colorscheme dracula
+silent! colorscheme dracula16
 
 " :help 'termguicolors'
-if has('termguicolors') | set termguicolors | endif
+" if has('termguicolors') | set termguicolors | endif
 
 " :help xterm-true-color
 " let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
