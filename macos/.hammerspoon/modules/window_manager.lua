@@ -129,6 +129,7 @@ function WindowManager.new(leader)
   self.boxes = {}
 
   self.border = nil
+  self.border_width = 10
   local allwindows = hs.window.filter.new(nil)
   local events = {
     hs.window.filter.windowFocused,
@@ -397,11 +398,18 @@ function WindowManager:redrawBorder()
 
   local size = win:size()
   self.border = hs.drawing.rectangle(
-    hs.geometry.rect(top_left['x'], top_left['y'], size['w'], size['h']))
+    hs.geometry.rect(
+      top_left['x'] - self.border_width/4,
+      top_left['y'] - self.border_width/4,
+      size['w'] + self.border_width/2,
+      size['h'] + self.border_width/2
+    )
+  )
+  self.border:sendToBack()
   self.border:setRoundedRectRadii(10, 10)
   self.border:setStrokeColor({ hex="#bd93f9", alpha=1.0 })
   self.border:setFill(false)
-  self.border:setStrokeWidth(3)
+  self.border:setStrokeWidth(self.border_width)
   self.border:show()
 end
 
