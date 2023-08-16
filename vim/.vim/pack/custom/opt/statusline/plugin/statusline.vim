@@ -1,9 +1,9 @@
 " status line
 
-function! StatusLineMode() abort "{{{1
+function! StatusLineMode() abort
   let l:mode = mode(1)
 
-  " Normal mode {{{2
+  " Normal mode
   if l:mode ==# 'n'
     " Normal, Terminal-Normal
     highlight link StatusLineMode StatusLineNormal
@@ -23,7 +23,7 @@ function! StatusLineMode() abort "{{{1
   elseif l:mode ==# 'nt'
     "Terminal-Normal
 
-  " Visual mode {{{2
+  " Visual mode
   elseif l:mode ==# 'v'
     " Visual by character
     highlight link StatusLineMode StatusLineVisual
@@ -37,7 +37,7 @@ function! StatusLineMode() abort "{{{1
     highlight link StatusLineMode StatusLineVisual
     return 'VISUAL BLOCK'
 
-  " Select mode {{{2
+  " Select mode
   elseif l:mode ==# 's'
     " Select by character
   elseif l:mode ==# 'S'
@@ -47,7 +47,7 @@ function! StatusLineMode() abort "{{{1
   elseif l:mode ==# '\<C-S>'
     " Select blockwise
 
-  " Insert mode {{{2
+  " Insert mode
   elseif l:mode ==# 'i'
     " Insert
     highlight link StatusLineMode StatusLineInsert
@@ -77,13 +77,13 @@ function! StatusLineMode() abort "{{{1
     highlight link StatusLineMode StatusLineInsert
     return 'REPLACE'
 
-  " Cmdline mode {{{2
+  " Cmdline mode
   elseif l:mode ==# 'c'
     " Command-line editing
     highlight link StatusLineMode StatusLineCommand
     return 'SEARCH'
 
-  " Ex mode {{{2
+  " Ex mode
   elseif l:mode ==# 'cv'
     " Vim Ex mode |gQ|
   elseif l:mode ==# 'ce'
@@ -97,54 +97,37 @@ function! StatusLineMode() abort "{{{1
   elseif l:mode ==# '!'
     " Shell or external command is executing
 
-  " Terminal-Job mode {{{2
+  " Terminal-Job mode
   elseif l:mode ==# 't'
     " Terminal-Job mode: keys go to the job
     highlight link StatusLineMode StatusLineCommand
     return 'TERMINAL'
   endif
 
-  " }}}
-
   highlight link StatusLineMode StatusLineUnknown
   return 'UNKNOWN(' . l:mode . ')'
-endfunction "}}}
+endfunction
 
-augroup statusline_highlight "{{{
+augroup statusline_highlight
   autocmd!
-  " Left statusline {{{
   autocmd ColorScheme,VimEnter *
         \ highlight StatusLineNormal
-        \  ctermfg=black ctermbg=darkgreen cterm=bold
+        \   ctermfg=black ctermbg=darkgreen cterm=bold
         \|highlight StatusLineInsert
-        \  ctermfg=black ctermbg=darkyellow cterm=bold
+        \   ctermfg=black ctermbg=darkyellow cterm=bold
         \|highlight StatusLineVisual
-        \  ctermfg=black ctermbg=darkblue cterm=bold
+        \   ctermfg=black ctermbg=darkblue cterm=bold
         \|highlight StatusLineCommand
-        \  ctermfg=black ctermbg=darkcyan cterm=bold
+        \   ctermfg=black ctermbg=darkcyan cterm=bold
         \|highlight StatusLineUnknown
-        \  ctermfg=black ctermbg=darkred cterm=bold
+        \   ctermfg=black ctermbg=darkred cterm=bold
         \|highlight StatusLineInactive
-        \  ctermfg=black ctermbg=darkgrey cterm=bold
-  "}}}
-
-  " Fugitive statusline {{{
-  if exists('g:loaded_fugitive')
-    autocmd ColorScheme,VimEnter *
-          \ highlight FugitiveStatusline
-          \   ctermfg=black ctermbg=darkgrey cterm=bold
-  endif
-
-  " }}}
-  " Right statusline {{{
-  autocmd ColorScheme,VimEnter *
-        \ highlight StatusLineRight1
+        \   ctermfg=black ctermbg=darkgrey cterm=bold
+        \|highlight StatusLineRight1
         \   ctermfg=black ctermbg=darkcyan cterm=none
         \|highlight StatusLineRight2
         \   ctermfg=black ctermbg=darkyellow cterm=none
-
-  "}}}
-augroup end " }}}
+augroup end
 
 function! s:activate_statusline() abort
   let &l:statusline = '%#StatusLineMode# %{StatusLineMode()} '
@@ -155,7 +138,7 @@ function! s:activate_statusline() abort
           \.  'substitute(FugitiveStatusline(),"\\[Git(",'
           \.    '" \uea68 ", ""),'
           \.  '")]",'
-          \.  '" ", ""'
+          \.  '" \u2502", ""'
           \.')}'
   endif
   let &l:statusline .= '%* %<%f %m%r%h%w '
@@ -181,5 +164,14 @@ augroup statusline_string
   autocmd WinEnter,BufEnter * call s:activate_statusline()
   autocmd WinLeave,BufLeave * call s:deactivate_statusline()
 augroup end
+
+if exists('g:loaded_fugitive')
+  augroup fugitive_statusline_highlight
+    autocmd!
+    autocmd ColorScheme,VimEnter *
+          \ highlight FugitiveStatusline
+          \   ctermfg=darkgrey ctermbg=black cterm=bold
+  augroup end
+endif
 
 " vim: set ft=vim fdm=marker ts=2 sts=2 sw=2 fdl=0:
