@@ -48,10 +48,10 @@ highlight Underlined ctermfg=none ctermbg=none cterm=underline
 highlight Ignore cterm=none ctermbg=none cterm=none
 
 highlight Error ctermfg=darkred ctermbg=none cterm=bold
-highlight Todo ctermfg=darkyellow ctermbg=none cterm=bold
+highlight Todo ctermfg=darkyellow ctermbg=none cterm=none
 
 " :help highlight-groups
-highlight ColorColumn ctermfg=none ctermbg=black cterm=none
+highlight ColorColumn ctermfg=none ctermbg=darkgrey cterm=none
 
 highlight Conceal ctermfg=darkcyan ctermbg=none cterm=none
 
@@ -61,7 +61,7 @@ highlight! link CursorIM Cursor
 highlight! link CursorColumn ColorColumn
 highlight! link CursorLine CursorColumn
 
-highlight Directory ctermfg=darkblue ctermbg=none cterm=bold
+highlight Directory ctermfg=darkblue ctermbg=none cterm=none
 
 highlight DiffAdd ctermfg=darkgreen ctermbg=none cterm=none
 highlight DiffChange ctermfg=darkyellow ctermbg=none cterm=none
@@ -120,7 +120,7 @@ highlight! link SpellLocal SpellCap
 highlight! link SpellRare SpellCap
 
 highlight StatusLine ctermfg=none ctermbg=black cterm=none
-highlight StatusLineNC ctermfg=darkgrey ctermbg=black cterm=none
+highlight StatusLineNC ctermfg=white ctermbg=black cterm=none
 highlight! link StatusLineTerm StatusLine
 highlight! link StatusLineTermNC StatusLineNC
 

@@ -3,13 +3,13 @@
 set showtabline=2
 set tabline=%!TabLine()
 
-augroup tabline_highlight
+augroup bufferline_highligh
   autocmd!
-  autocmd ColorScheme *
-        \ highlight TabLineSelNr ctermfg=darkgreen
-augroup END
+  autocmd ColorScheme,VimEnter *
+        \ highlight TabLineSelNr ctermfg=darkgreen ctermbg=none cterm=none
+augroup end
 
-function! TabLine() abort "{{{1
+function! TabLine() abort
   if tabpagenr('$') ==# 1
     return BufferLine()
   else
@@ -31,9 +31,9 @@ function! TabLine() abort "{{{1
     let l:s .= '%#TabLineFill#'
     return l:s
   endif
-endfunction "}}}
+endfunction
 
-function! BufferLine() abort "{{{1
+function! BufferLine() abort
   let l:s = ''
   let l:bufls = filter(range(1, bufnr('$')), 'buflisted(v:val)')
 
@@ -43,9 +43,15 @@ function! BufferLine() abort "{{{1
     if empty(l:bufname)
       let l:bufname = '[No Name]'
     else
-      let l:bufname = fnamemodify(bufname(l:i), ":~:.")
+      let l:bufname = fnamemodify(bufname(l:i), ":p:~:.")
       let l:bufname = substitute(
             \ l:bufname, '\(\.[^/]\|[^/]\)[^/]*/', '\1/', 'g')
+      if l:i != bufnr('%')
+        let l:bufname = substitute(
+              \ l:bufname,
+              \ '\(\.\{0,1}\w\)/\%(\.\{0,1}\w/\)\{3,}',
+              \ '\1/.../', 'g')
+      endif
     endif
 
     let l:flags = ''
@@ -67,6 +73,6 @@ function! BufferLine() abort "{{{1
 
   let l:s .= '%#TabLineFill#'
   return l:s
-endfunction "}}}
+endfunction
 
 " vim: set ft=vim fdm=marker ts=2 sts=2 sw=2 fdl=0:
