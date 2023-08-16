@@ -75,7 +75,7 @@ highlight! link ErrorMsg Error
 highlight VertSplit ctermfg=darkgrey ctermbg=none cterm=none
 highlight Folded ctermfg=darkgrey ctermbg=black cterm=none
 highlight FoldColumn ctermfg=darkgrey ctermbg=none cterm=none
-highlight IncSearch ctermfg=black ctermbg=darkyellow cterm=none
+highlight IncSearch ctermfg=darkyellow ctermbg=none cterm=inverse
 
 highlight! link SignColumn Comment
 
@@ -97,20 +97,20 @@ highlight NonText ctermfg=darkgrey ctermbg=none cterm=none
 highlight Normal ctermfg=none ctermbg=none cterm=none
 
 highlight Pmenu ctermfg=none ctermbg=black cterm=none
-highlight PmenuSel ctermfg=black ctermbg=blue cterm=bold
+highlight PmenuSel ctermfg=darkblue ctermbg=none cterm=bold,inverse
 highlight! link PmenuKind Pmenu
 highlight! link PmenuKindSel PmenuSel
 highlight! link PmenuExtra Pmenu
 highlight! link PmenuExtraSel Pmenusel
 highlight! link PmenuSbar Pmenu
-highlight PmenuThumb ctermfg=black ctermbg=white cterm=none
+highlight PmenuThumb ctermfg=none ctermbg=white cterm=none
 
 highlight! link PopupNotification WarningMsg
 
 highlight Question ctermfg=none ctermbg=none cterm=bold
 highlight! link QuickFixLine PmenuSel
 
-highlight Search ctermfg=green ctermbg=none cterm=inverse
+highlight Search ctermfg=darkgreen ctermbg=none cterm=inverse
 highlight! link CurSearch Search
 
 highlight SpecialKey ctermfg=darkmagenta ctermbg=none cterm=none
@@ -120,7 +120,7 @@ highlight! link SpellLocal SpellCap
 highlight! link SpellRare SpellCap
 
 highlight StatusLine ctermfg=none ctermbg=black cterm=none
-highlight StatusLineNC ctermfg=white ctermbg=black cterm=none
+highlight StatusLineNC ctermfg=darkgrey ctermbg=black cterm=none
 highlight! link StatusLineTerm StatusLine
 highlight! link StatusLineTermNC StatusLineNC
 
@@ -130,11 +130,11 @@ highlight TabLineSel ctermfg=none ctermbg=none cterm=none
 " highlight Terminal
 
 highlight Title ctermfg=darkgreen ctermbg=none cterm=bold
-highlight Visual ctermfg=black ctermbg=white cterm=none
+highlight Visual ctermfg=white ctermbg=none cterm=inverse
 highlight! link VisualNOS Visual
 
 highlight WarningMsg ctermfg=darkyellow ctermbg=none cterm=inverse
-highlight WildMenu ctermfg=black ctermbg=darkblue cterm=bold
+highlight WildMenu ctermfg=darkblue ctermbg=none cterm=bold,inverse
 
 " highlight Menu
 " highlight Scrollbar
