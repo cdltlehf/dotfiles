@@ -14,7 +14,7 @@ bind-key D \
   set-option window-status-current-format \
   "#[bg=black,fg=brightblack] #I #W#F "\; \
   \
-  display-message "Tmux is now disabled. Press C-b E to enable" \;
+  display-message "Tmux is now disabled. Press C-b C-b to enable" \;
 
 bind-key -T disabled C-b \
   set-option key-table enable_pending
@@ -26,7 +26,7 @@ bind-key -T enable_pending C-b \
   send-keys C-b\; \
   set-option key-table disabled\;
 
-bind-key -T enable_pending E \
+bind-key -T enable_pending C-b \
   set-option -u key-table\; \
   set-option -u prefix\; \
   set-option -u status-left\; \
