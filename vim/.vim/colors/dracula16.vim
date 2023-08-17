@@ -124,9 +124,9 @@ highlight StatusLineNC ctermfg=darkgrey ctermbg=black cterm=none
 highlight! link StatusLineTerm StatusLine
 highlight! link StatusLineTermNC StatusLineNC
 
-highlight TabLine ctermfg=darkgrey ctermbg=black cterm=none
+highlight TabLine ctermfg=none ctermbg=black cterm=none
 highlight! link TabLineFill TabLine
-highlight TabLineSel ctermfg=none ctermbg=none cterm=none
+highlight TabLineSel ctermfg=darkblue ctermbg=black cterm=inverse
 " highlight Terminal
 
 highlight Title ctermfg=darkgreen ctermbg=none cterm=bold
