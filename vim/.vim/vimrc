@@ -84,6 +84,7 @@ silent! packadd bufferline
 silent! packadd sensible
 silent! packadd statusline
 silent! packadd unimpaired
+silent packadd vim-scriptease
 
 silent! colorscheme dracula16
 

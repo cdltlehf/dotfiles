@@ -146,8 +146,7 @@ highlight GitGuttterChange ctermfg=darkyellow ctermbg=none cterm=none
 highlight GitGuttterDelete ctermfg=darkred ctermbg=none cterm=none
 
 " vim-polyglot
-highlight helpIdentifier ctermfg=darkyellow ctermbg=none cterm=none
-highlight! link helpHyperTextJump helpIdentifier
-highlight! link helpVim helpIdentifier
-highlight! link helpCommand helpIdentifier
-
+highlight helpHyperTextJump ctermfg=darkcyan ctermbg=none cterm=none
+highlight! link helpExample String
+highlight! link helpVim Error
+highlight! link helpCommand Error

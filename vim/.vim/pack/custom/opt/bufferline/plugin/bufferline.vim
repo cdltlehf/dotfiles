@@ -62,13 +62,13 @@ function! BufferLine() abort
     endif
 
     if l:i != bufnr('%')
-      let l:s .= '%#TabLine# ' . l:i . " \u258f"
+      let l:s .= '%#TabLine# ' . l:i . " "
       let l:s .= '%#TabLine#' . l:bufname
     else
       let l:s .= '%#TabLineSelNr# ' . l:i . " \u258f"
       let l:s .= '%#TabLineSel#' . l:bufname
     endif
-    let l:s .= l:flags . ' '
+    let l:s .= l:flags . " "
   endfor
 
   let l:s .= '%#TabLineFill#'
