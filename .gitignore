@@ -2,6 +2,10 @@ Brewfile.lock.json
 .DS_Store
 vim/.vim/pack/minpac/
 
+*.bak
+*.swp
+*~
+
 .config/
 !.config/bat
 !.config/kitty
