@@ -1,6 +1,7 @@
 " https://github.com/k-takata/minpac
 
-let s:data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+" let s:data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+let s:data_dir = '~/.vim'
 
 if empty(glob(s:data_dir . '/pack/minpac/opt/minpac'))
   function! s:InstallMinpack() abort

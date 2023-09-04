@@ -16,7 +16,7 @@ set display=lastline
 set encoding=utf-8
 scriptencoding utf-8
 if has('nvim')
-  set fillchars=vert:│,fold:·,sep:│
+  set fillchars=vert:│,fold:·,foldsep:│
 elseif v:version >= 900
   set fillchars=vert:│,foldopen:-,foldclose:+
 else
