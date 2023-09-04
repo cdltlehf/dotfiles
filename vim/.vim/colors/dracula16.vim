@@ -40,18 +40,18 @@ highlight! link Typedef StorageClass
 highlight Special ctermfg=darkmagenta ctermbg=none cterm=none
 highlight! link SpecialChar Special
 highlight Tag ctermfg=darkcyan ctermbg=none cterm=none
-highlight Delimiter ctermfg=none ctermbg=none cterm=none
+highlight Delimiter ctermfg=darkyellow ctermbg=none cterm=none
 highlight SpecialComment ctermfg=darkcyan ctermbg=none cterm=italic
 highlight! link Debug Special
 
 highlight Underlined ctermfg=none ctermbg=none cterm=underline
 highlight Ignore cterm=none ctermbg=none cterm=none
 
-highlight Error ctermfg=darkred ctermbg=none cterm=bold
+highlight Error ctermfg=darkred ctermbg=none cterm=none
 highlight Todo ctermfg=darkyellow ctermbg=none cterm=none
 
 " :help highlight-groups
-highlight ColorColumn ctermfg=none ctermbg=darkgrey cterm=none
+highlight ColorColumn ctermfg=white ctermbg=darkgrey cterm=none
 
 highlight Conceal ctermfg=darkcyan ctermbg=none cterm=none
 
@@ -75,7 +75,7 @@ highlight! link ErrorMsg Error
 highlight VertSplit ctermfg=darkgrey ctermbg=none cterm=none
 highlight Folded ctermfg=darkgrey ctermbg=black cterm=none
 highlight FoldColumn ctermfg=darkgrey ctermbg=none cterm=none
-highlight IncSearch ctermfg=darkyellow ctermbg=none cterm=inverse
+highlight! link IncSearch CurSearch
 
 highlight! link SignColumn Comment
 
@@ -111,7 +111,7 @@ highlight Question ctermfg=none ctermbg=none cterm=bold
 highlight! link QuickFixLine PmenuSel
 
 highlight Search ctermfg=darkgreen ctermbg=none cterm=inverse
-highlight! link CurSearch Search
+highlight CurSearch ctermfg=darkyellow ctermbg=none cterm=inverse
 
 highlight SpecialKey ctermfg=darkmagenta ctermbg=none cterm=none
 highlight SpellBad ctermfg=darkred ctermbg=none cterm=underline
@@ -144,3 +144,10 @@ highlight WildMenu ctermfg=darkblue ctermbg=none cterm=bold,inverse
 highlight GitGuttterAdd ctermfg=darkgreen ctermbg=none cterm=none
 highlight GitGuttterChange ctermfg=darkyellow ctermbg=none cterm=none
 highlight GitGuttterDelete ctermfg=darkred ctermbg=none cterm=none
+
+" vim-polyglot
+highlight helpIdentifier ctermfg=darkyellow ctermbg=none cterm=none
+highlight! link helpHyperTextJump helpIdentifier
+highlight! link helpVim helpIdentifier
+highlight! link helpCommand helpIdentifier
+

@@ -154,6 +154,16 @@ nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 " xnoremap <leader>d "+d
 " xnoremap <leader>p "+p
 
+if !has('nvim')
+  augroup terminal_win_open
+    autocmd!
+    autocmd TerminalWinOpen *
+          \ setlocal nobuflisted
+          \|setlocal nospell
+          \|setlocal colorcolumn=
+  augroup end
+endif
+
 " source host-local vimrc
 let s:vimrc_host = expand('$HOME/.vimrc.host')
 if filereadable(s:vimrc_host) | execute "source " . s:vimrc_host | endif

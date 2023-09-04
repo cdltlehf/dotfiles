@@ -112,17 +112,17 @@ augroup statusline_highlight
   autocmd!
   autocmd ColorScheme,VimEnter *
         \ highlight StatusLineNormal
-        \   ctermfg=black ctermbg=darkgreen cterm=bold
+        \   ctermfg=black ctermbg=darkgreen cterm=none
         \|highlight StatusLineInsert
-        \   ctermfg=black ctermbg=darkyellow cterm=bold
+        \   ctermfg=black ctermbg=darkyellow cterm=none
         \|highlight StatusLineVisual
-        \   ctermfg=black ctermbg=darkblue cterm=bold
+        \   ctermfg=black ctermbg=darkblue cterm=none
         \|highlight StatusLineCommand
-        \   ctermfg=black ctermbg=darkcyan cterm=bold
+        \   ctermfg=black ctermbg=darkcyan cterm=none
         \|highlight StatusLineUnknown
-        \   ctermfg=black ctermbg=darkred cterm=bold
+        \   ctermfg=black ctermbg=darkred cterm=none
         \|highlight StatusLineInactive
-        \   ctermfg=black ctermbg=darkgrey cterm=bold
+        \   ctermfg=black ctermbg=darkgrey cterm=none
         \|highlight StatusLineRight1
         \   ctermfg=black ctermbg=darkcyan cterm=none
         \|highlight StatusLineRight2
@@ -170,7 +170,7 @@ if exists('g:loaded_fugitive')
     autocmd!
     autocmd ColorScheme,VimEnter *
           \ highlight FugitiveStatusline
-          \   ctermfg=darkgrey ctermbg=black cterm=bold
+          \   ctermfg=white ctermbg=black cterm=none
   augroup end
 endif
 
