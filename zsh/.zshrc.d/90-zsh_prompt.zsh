@@ -1,6 +1,6 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 #
-# ~/.zsh_prompt
+# ~/.zshrc.d/zsh_prompt.zsh
 
 setopt PROMPT_SUBST
 ZLE_RPROMPT_INDENT=0

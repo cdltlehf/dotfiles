@@ -55,26 +55,21 @@ symlink_home() {
 # Array of common XDG_CONFIG_HOME dotfiles
 dotfiles_common=(
   "${basedir}/bash/.bash_profile"
-  "${basedir}/bash/.bash_prompt"
   "${basedir}/bash/.bashrc"
-
+  "${basedir}/bash/.bashrc.d/"
+  "${basedir}/config/.config/"
   "${basedir}/etc/.inputrc"
-
   "${basedir}/git/.gitconfig"
   "${basedir}/git/.gitmessage.txt"
-
   "${basedir}/sh/.aliases"
   "${basedir}/sh/.profile"
   "${basedir}/sh/.shrc"
-
+  "${basedir}/sh/.shrc.d/"
   "${basedir}/tmux/.tmux.conf"
   "${basedir}/tmux/.tmux.conf.d/"
-
   "${basedir}/vim/.vim/"
-  "${basedir}/config/.config/"
-
   "${basedir}/zsh/.zshrc"
-  "${basedir}/zsh/.zsh_prompt"
+  "${basedir}/zsh/.zshrc.d/"
 )
 
 echo "Make symbolic links of common dotfiles..."
