@@ -3,10 +3,18 @@
 # ~/.shrc
 # Shell-independent startup file (for any kind of shells)
 
-if [ -n "${HOME_SHRC_SOURCED}" ]; then
+if [ -n "${__HOME_SHRC_SOURCED}" ]; then
   echo "${HOME}/.shrc sourced twice!"
 fi
-HOME_SHRC_SOURCED="1"
+__HOME_SHRC_SOURCED="1"
+
+# Source files in .shrc.d
+if [ -d "${HOME}/.shrc.d" ]; then
+  for file in "${HOME}"/.shrc.d/*.sh; do
+    # shellcheck source=/dev/null
+    . "${file}"
+  done
+fi
 
 # User specific environment
 PATH="${HOME}/bin:${PATH}"
@@ -19,6 +27,11 @@ export PATH
 # Set locale
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+
+# Export editors
+export VISUAL='vim';
+export EDITOR='vim -E';
+export PAGER='less';
 
 # Cygwin environment variables
 # https://cygwin.com/cygwin-ug-net/using-cygwinenv.html
@@ -52,6 +65,5 @@ fi
 for file in "${HOME}/.aliases"; do
   [ -f "${file}" ] && . "${file}"
 done;
-unset file;
 
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta

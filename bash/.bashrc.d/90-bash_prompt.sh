@@ -34,7 +34,7 @@ _PS1_2+=$'\n'
 _PS1_2+='$([[ $? == 0 ]] && echo "$ " || echo "\[\033[1;38m\]?$? \[\033[0m\]")'
 
 # Continued prompt
-# NOTE: It uses 256-color
+# XXX: It uses 256-color
 PS2=$"\[\033[38;5;103m\]> \[\033[0m\]"
 
 if command -v __git_ps1 > /dev/null 2>&1; then

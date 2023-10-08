@@ -2,6 +2,7 @@
 #
 # ~/.bash_profile
 # Bash startup file for login shells
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html
 
 # Source the shell-independent startup file for login shells
 # shellcheck source=/dev/null
