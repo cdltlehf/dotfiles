@@ -5,43 +5,53 @@
 # Use the follows as possible: bat, lsd
 
 # Easier navigation
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias ~='cd ~'
+alias ..='command cd ..'
+alias ...='command cd ../..'
+alias ....='command cd ../../..'
+alias .....='command cd ../../../..'
+alias ~='command cd ~'
 
 # Fool-proof aliases
-alias rm='rm -i'
-alias mv='mv -i'
-alias cp='cp -i'
-alias ln='ln -i'
+alias rm='command rm -i'
+alias mv='command mv -i'
+alias cp='command cp -i'
+alias ln='command ln -i'
 
 # Replace `cat` with `bat`
 if command -v bat > /dev/null 2>&1; then
-  alias cat='bat --plain --paging never  --wrap character'
-  export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+  alias cat='command bat --plain --paging never --wrap character'
+  export MANPAGER="command sh -c 'col -bx | bat -l man -p'"
 fi
 
 # Colorize `ls` & Replace `ls` with `lsd`
 # Lsd
 if command -v bat > /dev/null 2>&1; then
   alias ls='command lsd'
-  alias lsd="ls -lF --color=always --icon=always | grep --color=never '^[^\.]'"
+  alias lsd="command ls -lF --color=always --icon=always | grep --color=never '^[^\.]'"
 else
-  alias ls='ls --color=auto'
-  alias lsd='ls -lF | grep --color=never '\''^d'\'''
+  alias ls='command ls --color=auto'
+  alias lsd='command ls -lF | grep --color=never '\''^d'\'''
 fi
-alias l='ls -lFh'
-alias la='ls -lFAh'
+alias l='command ls -lFh'
+alias la='command ls -lFAh'
 
 # Colorize `grep`
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
+alias grep='command grep --color=auto'
+alias egrep='command egrep --color=auto'
+alias fgrep='command fgrep --color=auto'
 
 # Reload the shell as login shell
 alias reload='exec ${SHELL} --login'
+
+# open command
+if ! command -v open > /dev/null 2>&1; then
+  case `uname` in
+    MSYS*)
+      alias open='command start'
+      ;;
+    *) ;;
+  esac
+fi
 
 # Python virtual environment
 alias ve='python3 -m venv ./.venv'

@@ -5,55 +5,56 @@
 
 export VIRTUAL_ENV_DISABLE_PROMPT
 
-_PS1_1=$'\n'
-
-# Username
-if [[ "${USER}" == "root" ]]; then
-  _PS1_1+=$"\[\033[31m\]\u\[\033[0m\]"
-else
-  _PS1_1+=$"\[\033[35m\]\u\[\033[0m\]"
-fi;
-
-# Hostname
-if [[ -n "${SSH_TTY}" ]]; then
-  _PS1_1+=$" at \[\033[31m\]\h\[\033[0m\]"
-else
-  _PS1_1+=$" at \[\033[36m\]\h\[\033[0m\]"
-fi;
-
-# Current working directory
-_PS1_1+=$" in \[\033[33m\]\w\[\033[0m\]"
-
-# Git prompt
-# _PS1_1+='$(__git_ps1 " on %s")'
-
-# Environment
-_PS1_2='$([ -z $VIRTUAL_ENV ] && echo ""'
-_PS1_2+='|| echo " via \[\033[34m\]"$(basename "$VIRTUAL_ENV")"\[\033[0m\]")'
-_PS1_2+=$'\n'
-_PS1_2+='$([[ $? == 0 ]] && echo "$ " || echo "\[\033[1;38m\]?$? \[\033[0m\]")'
-
-# Continued prompt
-# XXX: It uses 256-color
-PS2=$"\[\033[38;5;103m\]> \[\033[0m\]"
-
-if command -v __git_ps1 > /dev/null 2>&1; then
-  # GIT_PS1 environment variables {{{
-  export GIT_PS1_SHOWDIRTYSTATE=1
-  export GIT_PS1_SHOWSTASHSTATE=1
-  export GIT_PS1_SHOWUPSTREAM="auto"
-  # export GIT_PS1_STATESEPARATOR
-  # export GIT_PS1_COMPRESSSPARSESTATE
-  # export GIT_PS1_OMITSPARSESTATE
-  # export GIT_PS1_DESCRIBE_STYLE
-  export GIT_PS1_SHOWCOLORHINTS=1
-
-  #}}}
-  PROMPT_COMMAND="__git_ps1 \"${_PS1_1}\" \"${_PS1_2}\" \" on %s\""
-else
-  PS1="${_PS1_1}${_PS1_2}"
+if ! declare -F __git_ps1 > /dev/null 2>&1; then
+  echo "placeholder __git_ps1"
+  __git_ps1() {
+    echo ""
+  }
 fi
-unset _PS1_1
-unset _PS1_2
+
+__prompt_command() {
+  local exit_code=$?
+  PS1=$'\n'
+
+  # Username
+  if [[ "${USER}" == "root" ]]; then
+    PS1+="\[\033[31m\]\u\[\033[0m\]"
+  else
+    PS1+="\[\033[35m\]\u\[\033[0m\]"
+  fi;
+
+  # Hostname
+  if [[ -n "${SSH_TTY}" ]]; then
+    PS1+=" at \[\033[31m\]\h\[\033[0m\]"
+  else
+    PS1+=" at \[\033[36m\]\h\[\033[0m\]"
+  fi;
+
+  # Current working directory
+  PS1+=$" in \[\033[33m\]\w\[\033[0m\]"
+
+  # Git prompt
+  PS1+="$(__git_ps1 " on %s")"
+
+  # Environment
+  if ! [[ -z $VIRTUAL_ENV ]]; then
+    PS1+=" via \[\033[34m\]"$(basename "$VIRTUAL_ENV")"\[\033[0m\]"
+  fi;
+
+  PS1+="\n"
+
+  # Return
+  if ! [ "${exit_code}" != 0 ]; then
+    PS1+="\$ "
+  else
+    PS1+="\[\033[31m\](${exit_code})$\[\033[0m\] "
+  fi;
+
+  # Continued prompt
+  # XXX: It uses 256-color
+  PS2=$"\[\033[38;5;103m\]> \[\033[0m\]"
+}
+
+PROMPT_COMMAND=__prompt_command
 
 # vim:ts=2:sts=2:sw=2:et:sta:fdm=marker:fdl=0
