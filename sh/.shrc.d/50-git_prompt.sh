@@ -32,6 +32,16 @@ __main() {
   if [ -f "${__target}" ]; then
     # shellcheck source=/dev/null
     . "${__target}"
+
+    # GIT_PS1 environment variables
+    export GIT_PS1_SHOWDIRTYSTATE=1
+    export GIT_PS1_SHOWSTASHSTATE=1
+    export GIT_PS1_SHOWUPSTREAM="auto"
+    # export GIT_PS1_STATESEPARATOR
+    # export GIT_PS1_COMPRESSSPARSESTATE
+    # export GIT_PS1_OMITSPARSESTATE
+    # export GIT_PS1_DESCRIBE_STYLE
+    export GIT_PS1_SHOWCOLORHINTS=1
   else
     echo "Install git-prompt at ${__target}..."
     if __install_git_prompt "${__target}"; then
