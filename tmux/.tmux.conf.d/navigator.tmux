@@ -11,8 +11,8 @@ bind-key l select-pane -R
 bind-key C-l select-pane -R
 
 # window moving
-bind-key -r "<" swap-window -d -t -1 \; previous-window
-bind-key -r ">" swap-window -d -t +1 \; next-window
+bind-key -r "<" swap-window -d -t -1
+bind-key -r ">" swap-window -d -t +1
 
 # pane resizing
 bind-key -r H resize-pane -L 5
