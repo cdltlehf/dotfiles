@@ -22,9 +22,10 @@ if exists('g:loaded_minpac')
     call minpac#init()
     call s:pac_add('k-takata/minpac')
 
+    call s:pac_add('tpope/vim-abolish')
+    call s:pac_add('tpope/vim-commentary')
     call s:pac_add('tpope/vim-repeat')
     call s:pac_add('tpope/vim-surround')
-    call s:pac_add('tpope/vim-commentary')
 
     call s:pac_add('airblade/vim-gitgutter')
     call s:pac_add('tpope/vim-fugitive')
@@ -57,9 +58,10 @@ for s:f in split(glob('~/.vim/vimrc.d/preload/*.vim'), '\n')
   execute 'source' s:f
 endfor
 
+silent! packadd vim-abolish
+silent! packadd vim-commentary
 silent! packadd vim-repeat
 silent! packadd vim-surround
-silent! packadd vim-commentary
 
 silent! packadd vim-gitgutter
 silent! packadd vim-fugitive
