@@ -73,7 +73,7 @@ silent! packadd vim-lsp-settings
 silent! packadd asyncomplete.vim
 silent! packadd asyncomplete-lsp.vim
 
-silent! packadd vim-polyglot
+" silent! packadd vim-polyglot
 
 silent! packadd copilot.vim
 

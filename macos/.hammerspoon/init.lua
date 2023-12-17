@@ -24,6 +24,10 @@ hs.keycodes.inputSourceChanged(keyboard_manager.input_source_changed_callback)
 
 hs.hotkey.bind(leader, "r", hs.reload)
 local shift_leader = { "shift", table.unpack(leader) }
-hs.hotkey.bind(shift_leader, "l", hs.caffeinate.lockScreen)
+-- hs.hotkey.bind(shift_leader, "l", hs.caffeinate.lockScreen)
+hs.hotkey.bind(
+  shift_leader, "l",
+  function() hs.alert.show('use ctrl+command-q', 0.5) end
+)
 
 hs.alert.show("Hammer spoon loaded")

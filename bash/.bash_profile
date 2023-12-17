@@ -13,3 +13,4 @@
 [[ -f "${HOME}/.bashrc" ]] && source "${HOME}/.bashrc";
 
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta
+. "$HOME/.cargo/env"

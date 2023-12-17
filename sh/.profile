@@ -4,3 +4,4 @@
 # Shell-independent startup file for login shells
 
 ENV="${HOME}/.shrc"; export ENV
+. "$HOME/.cargo/env"

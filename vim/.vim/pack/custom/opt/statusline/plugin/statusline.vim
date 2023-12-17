@@ -81,7 +81,7 @@ function! StatusLineMode() abort
   elseif l:mode ==# 'c'
     " Command-line editing
     highlight link StatusLineMode StatusLineCommand
-    return 'SEARCH'
+    return 'COMMAND'
 
   " Ex mode
   elseif l:mode ==# 'cv'
