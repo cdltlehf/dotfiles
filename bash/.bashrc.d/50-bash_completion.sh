@@ -41,15 +41,15 @@ __main() {
   if [[ -n "${PS1}" && -f ${target} ]]; then
     # shellcheck source=/dev/null
     . "${target}"
-  else
-    echo -n "Install bash-completion at ${target}"
-    if __install_bash_completion "${target}"; then
-      echo "done"
-      # shellcheck source=/dev/null
-      . "${target}"
-    else
-      echo "failed"
-    fi
+  # else
+  #   echo -n "Install bash-completion at ${target}"
+  #   if __install_bash_completion "${target}"; then
+  #     echo "done"
+  #     # shellcheck source=/dev/null
+  #     . "${target}"
+  #   else
+  #     echo "failed"
+  #   fi
   fi
 }
 

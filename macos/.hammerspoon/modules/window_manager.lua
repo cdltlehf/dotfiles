@@ -129,7 +129,7 @@ function WindowManager.new(leader)
   self.boxes = {}
 
   self.border = nil
-  self.border_width = 10
+  self.border_width = 0
   local allwindows = hs.window.filter.new(nil)
   local events = {
     hs.window.filter.windowFocused,
@@ -384,9 +384,9 @@ function WindowManager:stop()
 end
 
 function WindowManager:redrawBorder()
+  if true then return end
 
   if self.border ~= nil then
-    self.border:delete()
     self.border = nil
   end
 

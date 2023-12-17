@@ -66,4 +66,5 @@ for file in "${HOME}/.aliases"; do
   [ -f "${file}" ] && . "${file}"
 done;
 
+. "$HOME/.cargo/env"
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta
