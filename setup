@@ -44,7 +44,7 @@ symlink_home() {
   fi
 
   # Make a target symlink verbosely
-  ln -s "${source_file}" "${target_file}"
+  ln -sfn "${source_file}" "${target_file}"
   echo "${target_file} -> ${source_file}"
   return 0
 }
@@ -89,11 +89,14 @@ dotfiles_darwin=(
 
 # Array of default configuration files for Darwin
 macos_defaults=(
-  # "${basedir}/macos/defaults/.macos"
+  "${basedir}/macos/defaults/.macos"
+  "${basedir}/macos/defaults/.macos.application"
   "${basedir}/macos/defaults/.macos.dock"
+  "${basedir}/macos/defaults/.macos.finder"
+  "${basedir}/macos/defaults/.macos.keyboard"
+  "${basedir}/macos/defaults/.macos.menubar"
   "${basedir}/macos/defaults/.macos.screencapture"
   "${basedir}/macos/defaults/.macos.screensaver"
-  "${basedir}/macos/defaults/.macos.keyboard"
 )
 
 # Do platform dependent configurations
