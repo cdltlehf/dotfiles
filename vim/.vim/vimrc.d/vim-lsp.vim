@@ -16,10 +16,12 @@ function! s:on_lsp_buffer_enabled() abort
   nmap <buffer> ]g <plug>(lsp-next-diagnostic)
   nmap <buffer> K <plug>(lsp-hover)
 
-  " nnoremap <buffer> \g <plug>(lsp-document-diagnostics)
+  " nnoremap <buffer> <localleader>g <plug>(lsp-document-diagnostics)
   nnoremap <buffer> <localleader>ca <plug>(lsp-code-action)
   " nnoremap <buffer> <localleader>cl <plug>(lsp-code-lens)
   nnoremap <buffer> <localleader>fm <plug>(lsp-document-format)
+  " NOTE: https://clang.llvm.org/docs/ClangFormat.html#vim-integration
+  nnoremap <buffer> <c-k> <plug>(lsp-document-format)
 endfunction
 
 augroup lsp_install
@@ -67,3 +69,13 @@ augroup vim_lsp_my_colorschemes
         \|highlight! link LspInformationVirtualText LspInformationText
         \|highlight! link LspHintVirtualText LspHintText
 augroup END
+
+" :help vim-lsp-folding
+set foldmethod=expr
+set foldexpr=lsp#ui#vim#folding#foldexpr()
+set foldtext=lsp#ui#vim#folding#foldtext()
+
+" :help vim-lsp-semantic
+if has('textprop') || has('nvim')
+  let g:lsp_semantic_enabled = 1
+endif

@@ -1,0 +1,21 @@
+# https://packaging.python.org/en/latest/specifications/
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{project-name}}"
+version = "{{version}}"
+# description = "{{description}}"
+# readme = "README.md"
+# requires-python = ">=3.9"
+# license = {file = "LICENSE"}
+# authors = [
+#   {name = "{{name}}", email = "{{email}}"},
+# ]
+# maintainers = [
+#   {name = "{{name}}", email = "{{email}}"}
+# ]
+# dependencies = [
+# ]

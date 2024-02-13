@@ -138,6 +138,7 @@ set list
 set visualbell
 if has('syntax') | set spell | endif
 set nowrap
+set foldlevel=99
 
 let &spellfile = expand('$HOME/.local/share/vim/spell/en.utf-8.add')
 let s:spelldir = fnamemodify(&spellfile, ':p:h')
