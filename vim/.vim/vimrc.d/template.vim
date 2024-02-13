@@ -6,7 +6,7 @@ function s:set_guard() abort
   call appendbufline('%', '$', "")
   call appendbufline('%', '$', "")
   call appendbufline('%', '$', "")
-  call appendbufline('%', '$', "#endif // " . s:guard)
+  call appendbufline('%', '$', "#endif  // " . s:guard)
   call cursor(4, 0)
   echo s:guard
 endfunction
