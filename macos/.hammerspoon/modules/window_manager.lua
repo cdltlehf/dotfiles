@@ -77,12 +77,21 @@ WindowManager.keymap[''] = { -- Default
   { 0.25, 0.25, 0.5, 0.5 },
   ['h']='h', ['l']='l'
 }
-WindowManager.keymap['h'] = { -- Left
+
+WindowManager.keymap['h'] = { -- Left Half
   { 0, 0, 0.5, 1 },
+  ['k']='hk', ['j']='hj', ['l']='hl', ['h']='hh'
+}
+WindowManager.keymap['hh'] = { -- Left Third
+  { 0, 0, 0.3, 1 },
+  ['k']='hk', ['j']='hj', ['l']='l'
+}
+WindowManager.keymap['hl'] = { -- Left Two Thirds
+  { 0, 0, 0.7, 1 },
   ['k']='hk', ['j']='hj', ['l']='l'
 }
 
-WindowManager.keymap['j'] = { -- Down
+WindowManager.keymap['j'] = { -- Bottom Half
   { 0, 0.5, 1, 0.5 },
   ['k']='kk', ['h']='hj', ['l']='lj'
 }
@@ -90,9 +99,18 @@ WindowManager.keymap['k'] = { -- Full
   { 0, 0, 1, 1 },
   ['k']='kk', ['j']='j'
 }
-WindowManager.keymap['l'] = { -- Right
+
+WindowManager.keymap['l'] = { -- Right Half
   { 0.5, 0, 0.5, 1 },
-  ['k']='lk', ['j']='lj', ['h']='h'
+  ['k']='lk', ['j']='lj', ['h']='lh', ['l']='ll'
+}
+WindowManager.keymap['ll'] = { -- Right Third
+  { 0.7, 0, 0.3, 1 },
+  ['k']='hk', ['j']='hj', ['l']='l'
+}
+WindowManager.keymap['lh'] = { -- Right Two Thirds
+  { 0.3, 0, 0.7, 1 },
+  ['k']='hk', ['j']='hj', ['l']='l'
 }
 
 WindowManager.keymap['hj'] = { -- Left-down
@@ -223,7 +241,7 @@ function WindowManager:_initialize_modal(leader)
 
       -- Exceptional cases, which change space of the window
       local is_space_changed = false
-      if self.state == 'l' and key == 'l' then
+      if self.state == 'll' and key == 'l' then
         local next_space = getNextSpace()
         if next_space then
           spaces.gotoSpace(next_space)
@@ -231,7 +249,7 @@ function WindowManager:_initialize_modal(leader)
           spaces.moveWindowToSpace(self.target_window, next_space)
           is_space_changed = true
         end
-      elseif self.state == 'h' and key == 'h' then
+      elseif self.state == 'hh' and key == 'h' then
         local prev_space = getPrevSpace()
         if prev_space then
           self.state = 'k'

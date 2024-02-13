@@ -6,14 +6,14 @@ local print = function(...)
   hs.rawprint(...)
   hs.console.printStyledtext(...)
 end
-local leader = { "ctrl", "cmd" }
+local modifiers = { "ctrl", "alt" }
 
 hs.console.clearConsole()
 
 local alert_style = AlertStyle.getStyle()
 hs.alert.defaultStyle = alert_style
 
-local window_manager = WindowManager.new(leader)
+local window_manager = WindowManager.new(modifiers)
 window_manager:start()
 
 local english_source_id = "com.apple.keylayout.ABC"
@@ -22,11 +22,9 @@ local keyboard_manager = KeyboardManager.new(english_source_id)
 keyboard_manager:start()
 hs.keycodes.inputSourceChanged(keyboard_manager.input_source_changed_callback)
 
-hs.hotkey.bind(leader, "r", hs.reload)
-local shift_leader = { "shift", table.unpack(leader) }
--- hs.hotkey.bind(shift_leader, "l", hs.caffeinate.lockScreen)
+hs.hotkey.bind(modifiers, "r", hs.reload)
 hs.hotkey.bind(
-  shift_leader, "l",
+  { "ctrl", "cmd", "shift" }, "l",
   function() hs.alert.show('use ctrl+command-q', 0.5) end
 )
 

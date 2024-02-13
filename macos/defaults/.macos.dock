@@ -40,6 +40,7 @@ defaults write com.apple.dock persistent-apps -array {}
 defaults write com.apple.dock persistent-others -array {}
 
 defaults write com.apple.dock position-immutable -bool true
+defaults write com.apple.dock showhidden -bool true
 
 echo '... > Show indicators for open applications (disable)'
 defaults write com.apple.dock show-process-indicators -bool false
