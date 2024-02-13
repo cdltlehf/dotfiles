@@ -1,6 +1,10 @@
 #!/usr/bin/env zsh
 ## Custom defaults for some applications
 
+# Simulator
+sudo ln -sfn "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app" "/Applications/Simulator.app"
+sudo ln -sfn "/Applications/Xcode.app/Contents/Developer/Applications/Simulator (Watch).app" "/Applications/Simulator (Watch).app"
+
 # Chrome
 defaults write com.google.Chrome \
   AppleEnableSwipeNavigateWithScrolls -bool false
