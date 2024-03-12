@@ -150,3 +150,22 @@ highlight helpHyperTextJump ctermfg=darkcyan ctermbg=none cterm=none
 highlight! link helpExample String
 highlight! link helpVim Error
 highlight! link helpCommand Error
+
+" vim-copilot
+highlight CopilotSuggestions ctermfg=darkgrey
+
+" vim-lsp
+highlight! link LspErrorHighlight Error
+highlight! link LspWarningHighlight Todo
+highlight LspInformationHighlight ctermfg=darkblue ctermbg=none cterm=none
+highlight LspHintHighlight ctermfg=darkgreen ctermbg=none cterm=none
+
+highlight! link LspErrorText Error
+highlight! link LspWarningText Todo
+highlight! link LspInformationText LspInformationHighlight
+highlight! link LspHintText LspHintHighlight
+
+highlight! link LspErrorVirtualText LspErrorText
+highlight! link LspWarningVirtualText LspWarningText
+highlight! link LspInformationVirtualText LspInformationText
+highlight! link LspHintVirtualText LspHintText

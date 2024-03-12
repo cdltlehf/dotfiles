@@ -48,28 +48,6 @@ let g:lsp_diagnostics_signs_priority_map = {
         \'clangd_LspInformation': 11
         \}
 
-" :help colorscheme-override
-augroup vim_lsp_my_colorschemes
-  autocmd!
-  autocmd Colorscheme *
-        \ highlight! link LspErrorHighlight Error
-        \|highlight! link LspWarningHighlight Todo
-        \|highlight LspInformationHighlight
-        \   ctermfg=darkblue ctermbg=none cterm=none
-        \|highlight LspHintHighlight
-        \   ctermfg=darkgreen ctermbg=none cterm=none
-        \
-        \|highlight! link LspErrorText Error
-        \|highlight! link LspWarningText Todo
-        \|highlight! link LspInformationText LspInformationHighlight
-        \|highlight! link LspHintText LspHintHighlight
-        \
-        \|highlight! link LspErrorVirtualText LspErrorText
-        \|highlight! link LspWarningVirtualText LspWarningText
-        \|highlight! link LspInformationVirtualText LspInformationText
-        \|highlight! link LspHintVirtualText LspHintText
-augroup END
-
 " :help vim-lsp-folding
 set foldmethod=expr
 set foldexpr=lsp#ui#vim#folding#foldexpr()
