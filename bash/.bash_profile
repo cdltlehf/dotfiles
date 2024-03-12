@@ -12,5 +12,6 @@
 # shellcheck source=/dev/null
 [[ -f "${HOME}/.bashrc" ]] && source "${HOME}/.bashrc";
 
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta
-. "$HOME/.cargo/env"
