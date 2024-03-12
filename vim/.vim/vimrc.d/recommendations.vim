@@ -18,6 +18,6 @@ nnoremap <leader>e :<c-u>e **/
 nnoremap <leader>g :<c-u>grep<space>
 nnoremap <leader>i :Ilist<space>
 nnoremap <leader>j :<c-u>tjump /
-nnoremap <leader>m :<c-u>make<cr>
+" nnoremap <leader>m :<c-u>make<cr>
 nnoremap <leader>s :<c-u>StripTrailingWhitespace<cr>
 nnoremap <leader>q :b#<cr>

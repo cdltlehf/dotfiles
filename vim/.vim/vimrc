@@ -20,32 +20,32 @@ if exists('g:loaded_minpac')
     packadd minpac
 
     call minpac#init()
-    call s:pac_add('k-takata/minpac')
+    call minpac#add('k-takata/minpac')
 
-    call s:pac_add('tpope/vim-abolish')
-    call s:pac_add('tpope/vim-commentary')
-    call s:pac_add('tpope/vim-repeat')
-    call s:pac_add('tpope/vim-surround')
+    call minpac#add('airblade/vim-gitgutter')
 
-    call s:pac_add('airblade/vim-gitgutter')
-    call s:pac_add('tpope/vim-fugitive')
-    call s:pac_add('justinmk/vim-dirvish')
+    call minpac#add('github/copilot.vim')
 
-    call s:pac_add('prabirshrestha/vim-lsp')
-    call s:pac_add('mattn/vim-lsp-settings')
+    call minpac#add('junegunn/fzf', {'do': { -> fzf#install() } })
+    call minpac#add('junegunn/fzf.vim')
 
-    call s:pac_add('prabirshrestha/asyncomplete.vim')
-    call s:pac_add('prabirshrestha/asyncomplete-lsp.vim')
+    call minpac#add('justinmk/vim-dirvish')
 
-    call s:pac_add('sheerun/vim-polyglot')
+    call minpac#add('mattn/vim-lsp-settings')
 
-    call s:pac_add('github/copilot.vim')
+    call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
+    call minpac#add('prabirshrestha/asyncomplete.vim')
+    call minpac#add('prabirshrestha/vim-lsp')
 
-    call s:pac_add('junegunn/fzf',
-          \ {'do': 'silent! packadd fzf | call fzf#install()'})
-    call s:pac_add('junegunn/fzf.vim')
+    call minpac#add('ryanoasis/vim-devicons')
 
-    call s:pac_add('ryanoasis/vim-devicons')
+    call minpac#add('takac/vim-hardtime')
+
+    call minpac#add('tpope/vim-abolish')
+    call minpac#add('tpope/vim-commentary')
+    call minpac#add('tpope/vim-fugitive')
+    call minpac#add('tpope/vim-repeat')
+    call minpac#add('tpope/vim-surround')
   endfunction
 
   command! PackUpdate source $MYVIMRC | call s:PackInit() | call minpac#update()
@@ -57,36 +57,6 @@ endif
 for s:f in split(glob('~/.vim/vimrc.d/preload/*.vim'), '\n')
   execute 'source' s:f
 endfor
-
-silent! packadd vim-abolish
-silent! packadd vim-commentary
-silent! packadd vim-repeat
-silent! packadd vim-surround
-
-silent! packadd vim-gitgutter
-silent! packadd vim-fugitive
-silent! packadd vim-dirvish
-
-silent! packadd vim-lsp
-silent! packadd vim-lsp-settings
-
-silent! packadd asyncomplete.vim
-silent! packadd asyncomplete-lsp.vim
-
-" silent! packadd vim-polyglot
-
-silent! packadd copilot.vim
-
-silent! packadd fzf
-silent! packadd fzf.vim
-
-silent! packadd vim-devicons
-
-silent! packadd bufferline
-silent! packadd sensible
-silent! packadd statusline
-silent! packadd unimpaired
-silent packadd vim-scriptease
 
 silent! colorscheme dracula16
 
@@ -108,9 +78,14 @@ if &term =~ "xterm"
   let &t_SR="\<esc>[3 q" " blinking underline
   let &t_EI="\<esc>[0 q" " block
 endif
+
 augroup termcap_cursor_shape
   autocmd!
   autocmd VimEnter * silent !echo -ne "\e[0 q"
+  " :help exists
+  if exists('##VimResume')
+    autocmd VimResume * silent !echo -ne "\e[0 q"
+  endif
 augroup END
 
 " https://github.com/vim/vim/commit/e07e797db0c5ef1aafc650d8bb0d39fb052cf1e1
@@ -149,14 +124,6 @@ cabbr <expr> %% expand('%:p:h')
 
 xnoremap < <gv
 xnoremap > >gv
-nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
-
-" nnoremap <leader>y "+y
-" nnoremap <leader>d "+d
-" nnoremap <leader>p "+p
-" xnoremap <leader>y "+y
-" xnoremap <leader>d "+d
-" xnoremap <leader>p "+p
 
 if !has('nvim')
   augroup terminal_win_open
@@ -176,4 +143,11 @@ setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab
 " :help last-pattern
 command! Reload source $MYVIMRC | let @/ = ""
 
+" :help wildmode
+set wildmode=longest,full
+
+" :help <leader>
+" See more ~/.vim/vimrc.d/recommendations.vim
+nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 nnoremap <leader>rr :Reload<cr>
+nnoremap <leader>mm :<c-u>make<cr>
