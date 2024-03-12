@@ -17,9 +17,7 @@ endfunction
 silent! packadd minpac
 if exists('g:loaded_minpac')
   function! s:PackInit() abort
-    packadd minpac
-
-    call minpac#init()
+    call minpac#init({'progress_open': 'none'})
     call minpac#add('k-takata/minpac')
 
     call minpac#add('airblade/vim-gitgutter')
@@ -37,8 +35,6 @@ if exists('g:loaded_minpac')
     call minpac#add('prabirshrestha/asyncomplete.vim')
     call minpac#add('prabirshrestha/vim-lsp')
 
-    call minpac#add('ryanoasis/vim-devicons')
-
     call minpac#add('takac/vim-hardtime')
 
     call minpac#add('tpope/vim-abolish')
@@ -48,9 +44,11 @@ if exists('g:loaded_minpac')
     call minpac#add('tpope/vim-surround')
   endfunction
 
-  command! PackUpdate source $MYVIMRC | call s:PackInit() | call minpac#update()
-  command! PackClean  source $MYVIMRC | call s:PackInit() | call minpac#clean()
-  command! PackStatus packadd minpac | call minpac#status()
+  command! PackUpdate
+        \ source $MYVIMRC | call s:PackInit() | call minpac#update()
+  command! PackClean
+        \ source $MYVIMRC | call s:PackInit() | call minpac#clean()
+  command! PackStatus call minpac#status()
 endif
 
 " Source files in vimrc.d/preload
@@ -140,9 +138,6 @@ let s:vimrc_host = expand('$HOME/.vimrc.host')
 if filereadable(s:vimrc_host) | execute "source " . s:vimrc_host | endif
 setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab
 
-" :help last-pattern
-command! Reload source $MYVIMRC | let @/ = ""
-
 " :help wildmode
 set wildmode=longest,full
 
@@ -151,3 +146,15 @@ set wildmode=longest,full
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 nnoremap <leader>rr :Reload<cr>
 nnoremap <leader>mm :<c-u>make<cr>
+
+" :help last-pattern
+let @/ = ""
+
+if exists(':PackUpdate') != 0
+  augroup pack_update
+    autocmd!
+    autocmd VimEnter * PackUpdate
+  augroup END
+endif
+
+command! Reload call input('reload') | source $MYVIMRC
