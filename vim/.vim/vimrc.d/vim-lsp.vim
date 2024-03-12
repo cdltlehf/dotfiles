@@ -37,7 +37,7 @@ let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_diagnostics_signs_error = {'text': "\uEA87"}
 let g:lsp_diagnostics_signs_warning = {'text': "\uF071"}
 
-let g:lsp_diagnostics_virtual_text_prefix = "\u258C"
+let g:lsp_diagnostics_virtual_text_prefix = "    \u258C"
 let g:lsp_diagnostics_virtual_text_align = "after"
 let g:lsp_diagnostics_virtual_text_wrap = "truncate"
 
