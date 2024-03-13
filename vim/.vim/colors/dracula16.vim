@@ -152,7 +152,7 @@ highlight! link helpVim Error
 highlight! link helpCommand Error
 
 " vim-copilot
-highlight CopilotSuggestions ctermfg=darkgrey
+highlight CopilotSuggestion ctermfg=darkgrey
 
 " vim-lsp
 highlight! link LspErrorHighlight Error

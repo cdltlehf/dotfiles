@@ -150,11 +150,12 @@ nnoremap <leader>mm :<c-u>make<cr>
 " :help last-pattern
 let @/ = ""
 
-if exists(':PackUpdate') != 0
+if exists(':PackUpdate') != 0 && exists(':PackClean') != 0
   augroup pack_update
     autocmd!
     autocmd VimEnter * PackUpdate
+    autocmd VimEnter * PackClean
   augroup END
 endif
 
-command! Reload call input('reload') | source $MYVIMRC
+command! Reload source $MYVIMRC
