@@ -27,8 +27,6 @@ if exists('g:loaded_minpac')
     call minpac#add('junegunn/fzf', {'do': { -> fzf#install() } })
     call minpac#add('junegunn/fzf.vim')
 
-    call minpac#add('justinmk/vim-dirvish')
-
     call minpac#add('mattn/vim-lsp-settings')
 
     call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
@@ -42,6 +40,7 @@ if exists('g:loaded_minpac')
     call minpac#add('tpope/vim-fugitive')
     call minpac#add('tpope/vim-repeat')
     call minpac#add('tpope/vim-surround')
+    call minpac#add('tpope/vim-vinegar')
   endfunction
 
   command! PackUpdate
@@ -142,10 +141,15 @@ setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab
 set wildmode=longest,full
 
 " :help <leader>
-" See more ~/.vim/vimrc.d/recommendations.vim
+" See more
+" ~/.vim/vimrc.d/recommendations.vim
+" ~/.vim/vimrc.d/fzf.vim
+let mapleader = "\<Space>"
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
-nnoremap <leader>rr :Reload<cr>
-nnoremap <leader>mm :<c-u>make<cr>
+nnoremap <leader>rr :<c-u>Reload<cr>
+nnoremap <leader>mm :<c-u>make!<cr>
+nnoremap <leader>cc :<c-u>cclose<cr>
+
 
 " :help last-pattern
 let @/ = ""
