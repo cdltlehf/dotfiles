@@ -15,7 +15,7 @@
 
 ## Bash-dependent startup configurations
 alias path='printf \"${PATH//:/\\n}\\n\"'
-# shopt -s globstar
+shopt -s globstar 2> /dev/null || true
 CDPATH=:$HOME
 
 # shellcheck source=/dev/null
