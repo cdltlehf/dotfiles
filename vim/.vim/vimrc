@@ -123,7 +123,7 @@ cabbr <expr> %% expand('%:p:h')
 xnoremap < <gv
 xnoremap > >gv
 
-if !has('nvim')
+if !has('nvim') && exists('*TerminalWinOpen')
   augroup terminal_win_open
     autocmd!
     autocmd TerminalWinOpen *
