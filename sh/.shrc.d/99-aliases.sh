@@ -1,15 +1,10 @@
-#!/usr/bin/sh
-#
-# ~/.aliases
-# Shell-independent aliases
-# Use the follows as possible: bat, lsd
+#!/usr/sh
 
 # Easier navigation
 alias ..='command cd ..'
 alias ...='command cd ../..'
 alias ....='command cd ../../..'
 alias .....='command cd ../../../..'
-alias ~='command cd ~'
 
 # Fool-proof aliases
 alias rm='command rm -i'
@@ -80,5 +75,3 @@ case $0 in
     ;;
   *) ;;
 esac
-
-# vim:ft=sh:ts=2:sts=2:sw=2:et:sta
