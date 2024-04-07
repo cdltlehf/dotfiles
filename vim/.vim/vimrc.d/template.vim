@@ -1,4 +1,6 @@
-function s:set_guard() abort
+function! s:set_guard() abort
+  if !exists('*appendbufline') | return | endif
+
   let s:filename = expand('%:t')
   let s:guard = substitute(toupper(s:filename), '\c[^a-z0-9_]', '_', 'g')."_"
   call setbufline('%', '$', "#ifndef " . s:guard)
