@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =2
+let g:netrw_dirhist_2='/home/cdltlehf/projects/srvm_small/benchmark/makefiles'
+let g:netrw_dirhist_1='/home/cdltlehf/projects/srvm_small/benchmark/data-build/intermediate'
+let g:netrw_dirhist_0='/home/cdltlehf/projects/srvm_small/benchmark/makefiles'
+let g:netrw_dirhist_9='/home/cdltlehf/projects/srvm/benchmark'
+let g:netrw_dirhist_8='/home/cdltlehf/projects/srvm/benchmark/src'
+let g:netrw_dirhist_7='/home/cdltlehf/projects/srvm/benchmark/makefiles'
+let g:netrw_dirhist_6='/home/cdltlehf/projects/srvm/benchmark/src'
+let g:netrw_dirhist_5='/home/cdltlehf/projects/srvm/benchmark'
+let g:netrw_dirhist_4='/home/cdltlehf/projects/srvm/benchmark/scripts'
+let g:netrw_dirhist_3='/home/cdltlehf/projects/srvm/benchmark/src'

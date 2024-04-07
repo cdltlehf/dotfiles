@@ -41,6 +41,7 @@ if exists('g:loaded_minpac')
     call minpac#add('tpope/vim-repeat')
     call minpac#add('tpope/vim-surround')
     call minpac#add('tpope/vim-vinegar')
+    call minpac#add('tpope/vim-dispatch')
   endfunction
 
   command! PackUpdate
@@ -91,8 +92,8 @@ set ttimeoutlen=100
 
 " :help section
 map [[ ?{<cr>w99[{
-map ][ /{<cr>b99[{
-map ]] j0[[%/{<cr>
+  map ][ /{<cr>b99[{
+  map ]] j0[[%/{<cr>
 map [] k$][%?}<cr>
 
 " :help 'colorcolumn'
@@ -146,10 +147,10 @@ set wildmode=longest,full
 " ~/.vim/vimrc.d/fzf.vim
 let mapleader = "\<Space>"
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
-nnoremap <leader>rr :<c-u>Reload<cr>
 nnoremap <leader>mm :<c-u>make!<cr>
 nnoremap <leader>cc :<c-u>cclose<cr>
-
+nnoremap <leader>vv :<c-u>:edit $MYVIMRC<cr>
+nnoremap <leader>vr :<c-u>Reload<cr>
 
 " :help last-pattern
 let @/ = ""
@@ -161,5 +162,8 @@ if exists(':PackUpdate') != 0 && exists(':PackClean') != 0
     autocmd VimEnter * PackClean
   augroup END
 endif
+
+autocmd BufWinEnter *
+      \ if line2byte(line("$") + 1) > 1000000 | syntax clear | endif
 
 command! Reload source $MYVIMRC
