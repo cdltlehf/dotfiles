@@ -61,7 +61,6 @@ dotfiles_common=(
   "${basedir}/etc/.inputrc"
   "${basedir}/git/.gitconfig"
   "${basedir}/git/.gitmessage.txt"
-  "${basedir}/sh/.aliases"
   "${basedir}/sh/.profile"
   "${basedir}/sh/.shrc"
   "${basedir}/sh/.shrc.d/"
@@ -77,6 +76,11 @@ for dotfile in "${dotfiles_common[@]}"; do
   symlink_home "${dotfile}" || true
 done
 unset dotfile
+
+${base_dir}/scripts/installers/git_prompt_installer.sh
+${base_dir}/scripts/installers/node_installer.sh
+${base_dir}/scripts/installers/vim_installer.sh
+
 echo "Done."
 
 # Array of dotfiles for Darwin (macos)

@@ -17,11 +17,9 @@ if [ -d "${HOME}/.shrc.d" ]; then
 fi
 
 # User specific environment
-PATH="${HOME}/bin:${PATH}"
 PATH="${HOME}/.local/bin:${PATH}"
 PATH="${HOME}/.local/usr/bin:${PATH}"
 PATH="${HOME}/dotfiles/bin:${PATH}"
-PATH="${HOME}/Library/Python/3.11/bin:${PATH}"
 export PATH
 
 # Set locale
@@ -33,39 +31,25 @@ export VISUAL='vim';
 export EDITOR='vim -E';
 export PAGER='less';
 
+# https://github.com/rust-lang/rustup
+# TODO: Find more detailed relative link
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+# https://github.com/nvm-sh/nvm
+export NVM_DIR="$HOME/.local/share/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
 # Cygwin environment variables
 # https://cygwin.com/cygwin-ug-net/using-cygwinenv.html
 export CYGWIN=winsymlinks:nativestrict
 export MSYS="${CYGWIN}"
 
+# TODO: Find related link
 if tty >/dev/null 2>&1; then
   stty stop ''; stty start ''
 fi
 
-# Inspect processes on GPUs
-nvidia_ps() {
-  _pids="$(nvidia-smi pmon -c 1 | awk '/^#/{next}{if ($2 != "-") print $2}')"
-  if [ -n "${_pids}" ]; then
-    echo "${_pids}" | xargs ps "$@"
-  else
-    echo "No processes are running."
-  fi
-  unset _pids
-}
-alias -- nvidia-ps="nvidia_ps"
-
-# Alias podman to docker
-if ! command docker 2> /dev/null; then
-  alias docker='podman'
-  alias docker-run='podman-run'
-fi
-
 # Source shell-independent external configurations
-# shellcheck disable=2066,1090
-for file in "${HOME}/.aliases"; do
-  [ -f "${file}" ] && . "${file}"
-done;
-
-[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+[ -f "HOME"/.aliases ] && . "${HOME}/.aliases"
 
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta

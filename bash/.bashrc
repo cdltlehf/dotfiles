@@ -13,10 +13,13 @@
 # shellcheck source=/dev/null
 [[ -f "${HOME}/.shrc" ]] && source "${HOME}/.shrc";
 
-## Bash-dependent startup configurations
+# Bash-dependent startup configurations
 alias path='printf \"${PATH//:/\\n}\\n\"'
 shopt -s globstar 2> /dev/null || true
 CDPATH=:$HOME
+
+# https://github.com/nvm-sh/nvm?tab=readme-ov-file#bash-completion
+[[ -r $NVM_DIR/bash_completion ]] && \. $NVM_DIR/bash_completion
 
 # shellcheck source=/dev/null
 [[ -f "${HOME}/.bashrc.host" ]] && source "${HOME}/.bashrc.host"
