@@ -77,9 +77,9 @@ for dotfile in "${dotfiles_common[@]}"; do
 done
 unset dotfile
 
-${base_dir}/scripts/installers/git_prompt_installer.sh
-${base_dir}/scripts/installers/node_installer.sh
-${base_dir}/scripts/installers/vim_installer.sh
+${basedir}/scripts/installers/git_prompt_installer.sh
+${basedir}/scripts/installers/node_installer.sh
+${basedir}/scripts/installers/vim_installer.sh
 
 echo "Done."
 
