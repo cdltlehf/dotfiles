@@ -1,12 +1,15 @@
 #!/bin/bash
 (
+NVM_DIR="${NVM_DIR:-"$HOME/.local/share/nvim"}"
+mkdir -p "$NVM_DIR"
+(
 export PROFILE=/dev/null
 curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh" \
   | bash
 )
 
 (
-export NVM_DIR="$HOME/.local/share/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install node
+)
 )
