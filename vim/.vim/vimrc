@@ -136,10 +136,9 @@ if !has('nvim') && exists('*TerminalWinOpen')
   augroup end
 endif
 
-" source host-local vimrc
-let s:vimrc_host = expand('$HOME/.vimrc.host')
-if filereadable(s:vimrc_host) | execute "source " . s:vimrc_host | endif
-setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab
+" source local vimrc
+let s:vimrc_local = expand('$HOME/.vimrc.local')
+if filereadable(s:vimrc_local) | execute "source " . s:vimrc_local | endif
 
 " :help wildmode
 set wildmode=longest,full
@@ -152,7 +151,7 @@ let mapleader = "\<Space>"
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 nnoremap <leader>mm :<c-u>make!<cr>
 nnoremap <leader>cc :<c-u>cclose<cr>
-nnoremap <leader>vv :<c-u>:edit $MYVIMRC<cr>
+nnoremap <leader>vv :<c-u>edit $MYVIMRC<cr>
 nnoremap <leader>vr :<c-u>Reload<cr>
 
 " :help last-pattern
