@@ -1,3 +1,4 @@
+; See more: https://github.com/tj/git-extras
 [alias]
 	; https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
 	co = checkout
@@ -9,8 +10,11 @@
 	; misc
 	cim = commit -m
 	root = rev-parse --show-toplevel
-	config-host = !touch ~/.gitconfig.host \
-		&& git config --file ~/.gitconfig.host
+	alias = !git config --get-regexp 'alias.*' \
+		| sed 's/^alias\\.//' | sed 's/ / = /' | sed 's/ \\+/ /g' \
+		| sort
+	config-private = !mkdir -p "~/.gitconfig.d" \
+		&& git config --file "~/.gitconfig.d/private.inc"
 
 [color]
 	ui = auto
@@ -33,5 +37,8 @@
 [init]
 	defaultBranch = main
 
+[user]
+	useConfigOnly = true
+
 [include]
-	path = .gitconfig.host
+	path = ~/.gitconfig.d/private.inc
