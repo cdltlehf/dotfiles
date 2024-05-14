@@ -3,7 +3,7 @@
 # ~/.shrc
 # Shell-independent startup file (for any kind of shells)
 
-if [ -n "${__HOME_SHRC_SOURCED}" ]; then
+if [ -n "${__HOME_SHRC_SOURCED:+}" ]; then
   echo "${HOME}/.shrc sourced twice!"
 fi
 __HOME_SHRC_SOURCED="1"
