@@ -1,7 +1,5 @@
 #!/bin/bash
 # shellcheck disable=2016
-#
-# ~/.bash_prompt
 
 export VIRTUAL_ENV_DISABLE_PROMPT
 
