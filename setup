@@ -77,10 +77,6 @@ for dotfile in "${dotfiles_common[@]}"; do
 done
 unset dotfile
 
-${basedir}/scripts/installers/git_prompt_installer
-${basedir}/scripts/installers/node_installer
-${basedir}/scripts/installers/vim_installer
-
 echo "Done."
 
 echo "Set configurations for ${kernel}."

@@ -25,7 +25,7 @@ CDPATH=:$HOME
 [[ -f "${HOME}/.bashrc.host" ]] && source "${HOME}/.bashrc.host"
 
 if [[ -d "${HOME}/.bashrc.d" ]]; then
-  for file in "${HOME}"/.bashrc.d/*.sh; do
+  for file in "${HOME}"/.bashrc.d/*.bash; do
     # shellcheck source=/dev/null
     source "${file}"
   done
