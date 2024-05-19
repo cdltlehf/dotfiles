@@ -19,6 +19,10 @@ done
 # XXX: Manual says that put this line to zprofile
 [[ -f "/opt/homebrew/bin/brew" ]] && eval $(/opt/homebrew/bin/brew shellenv)
 
+# https://github.com/junegunn/fzf
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] \
+  && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+
 # Zsh-dependent startup configurations
 # Set large history size
 HISTFILE=~/.histfile;
@@ -41,7 +45,3 @@ export KEYTIMEOUT=1;
 
 # Zsh aliases
 alias path='printf "${PATH:gs/:/\\n}\\n"'
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# vim:ft=zsh:ts=2:sts=2:sw=2:et:sta:fdm=marker

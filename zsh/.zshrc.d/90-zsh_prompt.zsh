@@ -1,6 +1,4 @@
 #!/usr/bin/env zsh
-#
-# ~/.zshrc.d/zsh_prompt.zsh
 
 setopt PROMPT_SUBST
 ZLE_RPROMPT_INDENT=0
@@ -56,7 +54,6 @@ fi
 unset _PS1_1
 unset _PS1_2
 
-# RPS (vi-mode indicator) {{{1
 RPS1="%F{0}%K{3} INSERT %k%f"
 update_vi_mode_indicator() {
   case $KEYMAP in
@@ -80,6 +77,3 @@ zle -N zle-line-finish hide_vi_mode_indicator
 zle -N zle-keymap-select update_vi_mode_indicator
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
-# }}}
-
-# vim:ts=2:sts=2:sw=2:et:sta:fdm=marker:fdl=0

@@ -1,6 +1,4 @@
 #!/usr/bin/env zsh
-#
-# ~/.zshrc.d/zsh_completions.zsh
 
 __install_zsh_completions() {
   local dependencies="git"
