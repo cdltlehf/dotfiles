@@ -27,4 +27,3 @@ do FG=${FGs// /}
   done
   echo;
 done
-echo
