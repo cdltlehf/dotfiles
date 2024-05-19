@@ -1,5 +1,4 @@
 #!/bin/bash
-# shellcheck disable=2016
 
 export VIRTUAL_ENV_DISABLE_PROMPT
 
@@ -35,8 +34,8 @@ __prompt_command() {
   PS1+="$(__git_ps1 " on %s")"
 
   # Environment
-  if ! [[ -z "${VIRTUAL_ENV:+}" ]]; then
-    PS1+=" via \[\033[34m\]"$(basename "$VIRTUAL_ENV")"\[\033[0m\]"
+  if [[ -n "${VIRTUAL_ENV:+}" ]]; then
+    PS1+=" via \[\033[34m\]$(basename "$VIRTUAL_ENV")\[\033[0m\]"
   fi;
 
   PS1+="\n"
@@ -54,5 +53,3 @@ __prompt_command() {
 }
 
 PROMPT_COMMAND=__prompt_command
-
-# vim:ts=2:sts=2:sw=2:et:sta:fdm=marker:fdl=0
