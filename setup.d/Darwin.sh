@@ -21,11 +21,6 @@ dotfiles_darwin=(
   # "${basedir}/macos/.yabairc"
 )
 
-# System Configurations
-sudo scutil --set ComputerName
-sudo scutil --set HostName
-sudo scutil --set LocalHostName
-
 # NOTE: These default files should be brew package independent
 echo "Run \`default ...\` commands for macos."
 for defaults in "${macos_defaults[@]}"; do
