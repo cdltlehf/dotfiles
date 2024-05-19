@@ -12,23 +12,21 @@ alias mv='command mv -i'
 alias cp='command cp -i'
 alias ln='command ln -i'
 
+# Colorize `ls`
+alias ls='ls --color=auto'
+alias la='ls -a'
+alias lla='ls -la'
+
 # Replace `cat` with `bat`
 if command -v bat > /dev/null 2>&1; then
   alias cat='command bat --plain --paging never --wrap character'
   export MANPAGER="command sh -c 'col -bx | bat -l man -p'"
 fi
 
-# Colorize `ls` & Replace `ls` with `lsd`
-# Lsd
-if command -v bat > /dev/null 2>&1; then
+# Replace `ls` with `lsd`
+if command -v lsd > /dev/null 2>&1; then
   alias ls='command lsd'
-  alias lsd="command ls -lF --color=always --icon=always | grep --color=never '^[^\.]'"
-else
-  alias ls='command ls --color=auto'
-  alias lsd='command ls -lF | grep --color=never '\''^d'\'''
 fi
-alias l='command ls -lFh'
-alias la='command ls -lFAh'
 
 # Colorize `grep`
 alias grep='command grep --color=auto'
