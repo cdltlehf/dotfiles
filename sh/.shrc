@@ -1,8 +1,6 @@
-#!/usr/bin/env sh
-#
-# ~/.shrc
-# Shell-independent startup file (for any kind of shells)
+#!/bin/sh
 
+# Shell-independent startup file (for any kind of shells)
 if [ -n "${__HOME_SHRC_SOURCED:+}" ]; then
   echo "${HOME}/.shrc sourced twice!"
 fi
@@ -31,14 +29,6 @@ export VISUAL='vim';
 export EDITOR='vim -E';
 export PAGER='less';
 
-# https://github.com/rust-lang/rustup
-# TODO: Find more detailed relative link
-[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-
-# https://github.com/nvm-sh/nvm
-export NVM_DIR="$HOME/.local/share/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
 # Cygwin environment variables
 # https://cygwin.com/cygwin-ug-net/using-cygwinenv.html
 export CYGWIN=winsymlinks:nativestrict
@@ -49,7 +39,6 @@ if tty >/dev/null 2>&1; then
   stty stop ''; stty start ''
 fi
 
-# Source shell-independent external configurations
-[ -f "HOME"/.aliases ] && . "${HOME}/.aliases"
+[ -f "$HOME"/.shrc.local ] && . "${HOME}/.shrc.local"
 
 # vim:ft=sh:ts=2:sts=2:sw=2:et:sta
