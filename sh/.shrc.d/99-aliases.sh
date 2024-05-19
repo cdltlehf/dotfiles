@@ -1,4 +1,4 @@
-#!/usr/sh
+#!/bin/sh
 
 # Easier navigation
 alias ..='command cd ..'
@@ -40,7 +40,7 @@ alias reload='exec ${SHELL} --login'
 
 # open command
 if ! command -v open > /dev/null 2>&1; then
-  case `uname` in
+  case $(uname) in
     MSYS*)
       alias open='command start'
       ;;
