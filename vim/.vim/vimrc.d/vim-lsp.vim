@@ -11,15 +11,15 @@ function! s:on_lsp_buffer_enabled() abort
   nmap <buffer> gr <plug>(lsp-references)
   nmap <buffer> gI <plug>(lsp-implementation)
   nmap <buffer> gt <plug>(lsp-type-definition)
-  nmap <buffer> <localleader>rn <plug>(lsp-rename)<C-u>
+  nmap <buffer> <leader>rn <plug>(lsp-rename)<C-u>
   nmap <buffer> [g <plug>(lsp-previous-diagnostic)
   nmap <buffer> ]g <plug>(lsp-next-diagnostic)
   nmap <buffer> K <plug>(lsp-hover)
 
-  " nnoremap <buffer> <localleader>g <plug>(lsp-document-diagnostics)
-  nnoremap <buffer> <localleader>ca <plug>(lsp-code-action)
-  " nnoremap <buffer> <localleader>cl <plug>(lsp-code-lens)
-  nnoremap <buffer> <localleader>fm <plug>(lsp-document-format)
+  " nnoremap <buffer> <leader>g <plug>(lsp-document-diagnostics)
+  nnoremap <buffer> <leader>ca <plug>(lsp-code-action)
+  " nnoremap <buffer> <leader>cl <plug>(lsp-code-lens)
+  nnoremap <buffer> <leader>fm <plug>(lsp-document-format)
   " NOTE: https://clang.llvm.org/docs/ClangFormat.html#vim-integration
   nnoremap <buffer> <c-k> <plug>(lsp-document-format)
 endfunction
