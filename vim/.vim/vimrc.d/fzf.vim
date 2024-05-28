@@ -2,7 +2,7 @@
 
 let g:fzf_layout = { 'down': '40%' }
 autocmd! FileType fzf
-autocmd  FileType fzf set laststatus=0 noshowmode noruler
+autocmd FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 nmap <leader><tab> <plug>(fzf-maps-n)
