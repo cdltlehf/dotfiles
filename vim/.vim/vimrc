@@ -151,7 +151,10 @@ let mapleader = "\<Space>"
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 nnoremap <leader>mm :<c-u>make!<cr>
 nnoremap <leader>cc :<c-u>cclose<cr>
+
 nnoremap <leader>vv :<c-u>edit $MYVIMRC<cr>
+nnoremap <leader>vd :<c-u>edit $MYVIMRC.d<cr>
+nnoremap <leader>vp :<c-u>edit ~/.vim/pack<cr>
 nnoremap <leader>vr :<c-u>Reload<cr>
 
 " :help last-pattern
