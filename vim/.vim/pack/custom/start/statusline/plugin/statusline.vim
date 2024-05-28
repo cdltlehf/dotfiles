@@ -22,6 +22,8 @@ function! StatusLineMode() abort
     "Normal in Virtual-Replace-mode
   elseif l:mode ==# 'nt'
     "Terminal-Normal
+    highlight link StatusLineMode StatusLineNormal
+    return 'TERMINAL NORMAL'
 
   " Visual mode
   elseif l:mode ==# 'v'
