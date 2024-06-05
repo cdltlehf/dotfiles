@@ -32,7 +32,7 @@
 	rebase = false
 
 [commit]
-	template = ~/.gitmessage.txt
+	template = ~/.config/git/message.txt
 
 [init]
 	defaultBranch = main

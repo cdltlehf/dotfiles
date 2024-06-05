@@ -1,18 +1,22 @@
-#!/bin/bash -ue
+#!/bin/bash
 
-# -u, nounset: Treat unset variables and parameters as an error
-# -e, errexit: Exit immediately
+set nounset
+set errexit
+shopt -s nullglob
 
 # Print a trace of commands
 # set -o xtrace # (= `set -x`)
 
+XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
 # Get base directory (e.g., `$HOME/dotfiles`)
 basedir="$(realpath "$(dirname "$0")")"
-# Get kernel name (e.g., Darwin)
-kernel="$(uname -s)"
+# Get OS name (e.g., Darwin)
+os="$(uname -s)"
 
 # Update dotfiles
 # command -v git > /dev/null && (cd "$basedir" && git pull origin main);
+
+echoerr() { echo $@ 1>&2; }
 
 symlink_home() {
   local source_file="$1"
@@ -45,44 +49,45 @@ symlink_home() {
 
   # Make a target symlink verbosely
   ln -sfn "${source_file}" "${target_file}"
-  echo "${target_file} -> ${source_file}"
+  echoerr "${target_file} -> ${source_file}"
   return 0
 }
 
 # Array of common dotfiles
-# TODO: Think about how to deal with ~/.config
-
-# Array of common XDG_CONFIG_HOME dotfiles
 dotfiles_common=(
   "${basedir}/bash/.bash_profile"
   "${basedir}/bash/.bashrc"
   "${basedir}/bash/.bashrc.d/"
-  "${basedir}/config/.config/"
   "${basedir}/etc/.inputrc"
-  "${basedir}/git/.gitconfig"
-  "${basedir}/git/.gitmessage.txt"
   "${basedir}/sh/.profile"
   "${basedir}/sh/.shrc"
   "${basedir}/sh/.shrc.d/"
-  "${basedir}/tmux/.tmux.conf"
-  "${basedir}/tmux/.tmux.conf.d/"
   "${basedir}/vim/.vim/"
   "${basedir}/zsh/.zshrc"
   "${basedir}/zsh/.zshrc.d/"
 )
 
-echo "Make symbolic links of common dotfiles..."
+echoerr "Make symbolic links of common dotfiles..."
 for dotfile in "${dotfiles_common[@]}"; do
   symlink_home "${dotfile}" || true
 done
 unset dotfile
+echoerr "Done."
 
-echo "Done."
+for i in ${basedir}/setup.d/*; do
+  echoerr "Run $i"
+  $i
+done
 
-echo "Set configurations for ${kernel}."
-kernel_setup_script="${basedir}/setup.d/${kernel}.sh"
-[[ -e "${kernel_setup_script}" ]] && source "${kernel_setup_script}"
+mkdir -p "${XDG_CONFIG_HOME}"
+for i in ${basedir}/xdg_config_home/*; do
+  echoerr "$i -> ${XDG_CONFIG_HOME}/$(basename $i)"
+  ln -sfn "$i" "${XDG_CONFIG_HOME}/$(basename $i)"
+done
+unset i
+
+echoerr "Set configurations for ${os}."
+os_setup="${basedir}/setup.os/setup##os.${os}"
+[[ -e "${os_setup}" ]] && "${os_setup}"
 
 echo "Restart your login shell with \`exec \"\${SHELL}\" --login\`"
-
-# vim:ft=sh:ts=2:sts=2:sw=2:et:sta
