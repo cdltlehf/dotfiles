@@ -3,10 +3,6 @@
 # ~/.zshrc
 # Zsh startup file for interactive shells
 
-# Source the global zsh startup file
-# XXX: It causes double sourcing...
-# [[ -f "/etc/zshrc" ]] && source "/etc/zshrc";
-
 # Source the shell-independent startup file
 [[ -f "$HOME/.shrc" ]] && source "$HOME/.shrc";
 
@@ -18,10 +14,6 @@ done
 # Brew environment
 # XXX: Manual says that put this line to zprofile
 [[ -f "/opt/homebrew/bin/brew" ]] && eval $(/opt/homebrew/bin/brew shellenv)
-
-# https://github.com/junegunn/fzf
-[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] \
-  && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 
 # Zsh-dependent startup configurations
 # Set large history size

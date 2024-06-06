@@ -26,14 +26,12 @@ echo "Run \`default ...\` commands for macos."
 for defaults in "${macos_defaults[@]}"; do
   command zsh "${defaults}"
 done
-unset defaults
 
 echo "Make symbolic links of dotfiles for macos..."
 for dotfile in "${dotfiles_darwin[@]}"; do
-  symlink_home "${dotfile}" || true
+  symlink_interactive "${dotfile}" "${HOME}/$(basename "${dotfile}")"
 done
 echo "Done."
-unset dotfile
 
 # NOTE: In general, the below code is redundant since git needs it
 xcode-select --install &> /dev/null || true
@@ -60,7 +58,6 @@ read -rp "Install rosetta? (Y/n) " yn
 case $yn in
   [Yy]* | " " ) sudo softwareupdate --install-rosetta || true ;;
 esac
-unset yn
 
 echo "Install brew packages in ${basedir}/macos/Brewfile"
 command -v brew &> /dev/null \
@@ -75,7 +72,6 @@ read -rp "Open iTerm? (y/n) " yn
 case $yn in
   [Yy]* ) open -a iTerm ;;
 esac
-unset yn
 echo "Do followings for iTerm settings:"
 cat <<END
 iTerm2 > Preferences... > Profiles > Other Actions... > Import JSON Profiles..."
@@ -86,7 +82,6 @@ read -rp "Open Hammerspoon? (y/n) " yn
 case $yn in
   [Yy]* ) open -a Hammerspoon ;;
 esac
-unset yn
 
 echo "Do followings for Hammerspoon settings:"
 echo "Hammerspoon > Preferences... > Launch Hammerspoon at login (enable)"
@@ -97,7 +92,6 @@ read -rp "Open BetterDiscord? (y/n) " yn
 case $yn in
   [Yy]* ) open -a BetterDiscord ;;
 esac
-unset yn
 
 echo "Do followings for Hammerspoon settings:"
 echo "Hammerspoon > Preferences... > Launch Hammerspoon at login (enable)"
