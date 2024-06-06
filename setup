@@ -16,15 +16,16 @@ os="$(uname -s)"
 # Update dotfiles
 # command -v git > /dev/null && (cd "$basedir" && git pull origin main);
 
-echoerr() { echo $@ 1>&2; }
+echoerr() { echo "$@" 1>&2; }
+export -f echoerr
 
-symlink_home() {
+symlink_interactive() {
   local source_file="$1"
-
   # If the source file not exists, return with an error
   if [[ ! -e "${source_file}" ]]; then return 1; fi
+
   local target_file
-  target_file="${HOME}/$(basename "$source_file")"
+  target_file="$2"
 
   # If the existing target is a symlink to the source file, return
   if [[ -L "${target_file}" ]] &&
@@ -48,10 +49,12 @@ symlink_home() {
   fi
 
   # Make a target symlink verbosely
+  mkdir -p "$(dirname "${target_file}")"
   ln -sfn "${source_file}" "${target_file}"
   echoerr "${target_file} -> ${source_file}"
   return 0
 }
+export -f symlink_interactive
 
 # Array of common dotfiles
 dotfiles_common=(
@@ -69,25 +72,32 @@ dotfiles_common=(
 
 echoerr "Make symbolic links of common dotfiles..."
 for dotfile in "${dotfiles_common[@]}"; do
-  symlink_home "${dotfile}" || true
+  symlink_interactive "${dotfile}" "${HOME}/$(basename "${dotfile}")"
 done
-unset dotfile
 echoerr "Done."
 
-for i in ${basedir}/setup.d/*; do
-  echoerr "Run $i"
-  $i
+for file in "${basedir}"/setup.d/*.bash; do
+  echoerr "Run $file"
+  bash "$file"
 done
 
 mkdir -p "${XDG_CONFIG_HOME}"
-for i in ${basedir}/xdg_config_home/*; do
-  echoerr "$i -> ${XDG_CONFIG_HOME}/$(basename $i)"
-  ln -sfn "$i" "${XDG_CONFIG_HOME}/$(basename $i)"
+for source_file in "${basedir}"/xdg_config_home/**/*; do
+  target_file="${XDG_CONFIG_HOME}/${source_file#"${basedir}"/xdg_config_home/}"
+  symlink_interactive "${source_file}" "${target_file}"
 done
-unset i
 
-echoerr "Set configurations for ${os}."
 os_setup="${basedir}/setup.os/setup##os.${os}"
-[[ -e "${os_setup}" ]] && "${os_setup}"
+if [[ -e "${os_setup}" ]]; then
+  read -r -p "Do you want to set configurations for ${os}? [Y/n] " yn
+  case $yn in
+    [Yy] | "" )
+      echoerr "Run ${os_setup}"
+      "${os_setup}"
+    ;;
+    [Nn] ) ;;
+    * ) exit 1;;
+  esac
+fi
 
 echo "Restart your login shell with \`exec \"\${SHELL}\" --login\`"
