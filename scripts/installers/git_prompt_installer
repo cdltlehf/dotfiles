@@ -1,7 +1,8 @@
 #!/bin/sh
-(
+set nounset
+set errexit
+
 mkdir -p "${HOME}/.local/share"
 curl -H "Accept: application/vnd.github.v3+json" \
   "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh" \
   -s -o "${HOME}/.local/share/git-prompt.sh"
-)
