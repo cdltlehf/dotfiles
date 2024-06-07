@@ -1,15 +1,13 @@
 #!/bin/bash
-(
-NVM_DIR="${NVM_DIR:-"$HOME/.local/share/nvim"}"
+set nounset
+set errexit
+
+NVM_DIR="${NVM_DIR:-"$HOME/.local/share/nvm"}"
 mkdir -p "$NVM_DIR"
-(
 export PROFILE=/dev/null
 curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh" \
   | bash
-)
 
-(
+# shellcheck source=/dev/null
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install node
-)
-)
