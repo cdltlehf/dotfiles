@@ -82,7 +82,7 @@ for file in "${basedir}"/setup.d/*.bash; do
 done
 
 mkdir -p "${XDG_CONFIG_HOME}"
-for source_file in "${basedir}"/xdg_config_home/**/*; do
+for source_file in "${basedir}"/xdg_config_home/*/*; do
   target_file="${XDG_CONFIG_HOME}/${source_file#"${basedir}"/xdg_config_home/}"
   symlink_interactive "${source_file}" "${target_file}"
 done
