@@ -87,6 +87,11 @@ for source_file in "${basedir}"/xdg_config_home/**/*; do
   symlink_interactive "${source_file}" "${target_file}"
 done
 
+for executable in "${basedir}"/bin/*; do
+  symlink_interactive "${executable}" \
+    "${XDG_BIN_HOME:-$HOME/.local/bin}/$(basename "${executable}")"
+done
+
 os_setup="${basedir}/setup.os/setup##os.${os}"
 if [[ -e "${os_setup}" ]]; then
   read -r -p "Do you want to set configurations for ${os}? [Y/n] " yn
