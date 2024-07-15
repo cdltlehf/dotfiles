@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+# Zsh startup file for a login shell
+
+[[ -e "${HOME}/.profile" ]] && source "${HOME}/.profile"

@@ -13,8 +13,8 @@
 	alias = !git config --get-regexp 'alias.*' \
 		| sed 's/^alias\\.//' | sed 's/ / = /' | sed 's/ \\+/ /g' \
 		| sort
-	config-private = !mkdir -p "~/.gitconfig.d" \
-		&& git config --file "~/.gitconfig.d/private.inc"
+	config-local = !mkdir -p "~/.gitconfig.d" \
+		&& git config --file "~/.gitconfig.local"
 
 [color]
 	ui = auto
@@ -32,7 +32,7 @@
 	rebase = false
 
 [commit]
-	template = ~/.config/git/message.txt
+	template = "~/.gitmessage.txt"
 
 [init]
 	defaultBranch = main
@@ -41,4 +41,4 @@
 	useConfigOnly = true
 
 [include]
-	path = ~/.gitconfig.d/private.inc
+	path = "~/.gitconfig.local"

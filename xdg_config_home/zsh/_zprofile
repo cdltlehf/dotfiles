@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+: ${ZDOTDIR:=${HOME}}
+ZPROFILE="${ZDOTDIR}/zprofile"
+[[ -e "${ZPROFILE}" ]] && source "${ZPROFILE}"

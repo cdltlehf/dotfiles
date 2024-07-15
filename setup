@@ -4,17 +4,12 @@ set nounset
 set errexit
 shopt -s nullglob
 
-# Print a trace of commands
-# set -o xtrace # (= `set -x`)
-
-XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
 # Get base directory (e.g., `$HOME/dotfiles`)
 basedir="$(realpath "$(dirname "$0")")"
 # Get OS name (e.g., Darwin)
 os="$(uname -s)"
 
-# Update dotfiles
-# command -v git > /dev/null && (cd "$basedir" && git pull origin main);
+source "$basedir/env"
 
 echoerr() { echo "$@" 1>&2; }
 export -f echoerr
@@ -56,45 +51,31 @@ symlink_interactive() {
 }
 export -f symlink_interactive
 
-# Array of common dotfiles
-dotfiles_common=(
-  "${basedir}/bash/.bash_profile"
-  "${basedir}/bash/.bashrc"
-  "${basedir}/bash/.bashrc.d/"
-  "${basedir}/etc/.inputrc"
-  "${basedir}/sh/.profile"
-  "${basedir}/sh/.shrc"
-  "${basedir}/sh/.shrc.d/"
-  "${basedir}/vim/.vim/"
-  "${basedir}/zsh/.zshrc"
-  "${basedir}/zsh/.zshrc.d/"
-)
+symlink_interactive "${basedir}/env" "${HOME}/.shenv"
 
-echoerr "Make symbolic links of common dotfiles..."
-for dotfile in "${dotfiles_common[@]}"; do
-  symlink_interactive "${dotfile}" "${HOME}/$(basename "${dotfile}")"
-done
-echoerr "Done."
-
-for file in "${basedir}"/setup.d/*.bash; do
-  echoerr "Run $file"
-  bash "$file"
+for file in "${basedir}"/home/*; do
+  basename="$(basename "${file}" | sed 's/^_/./')"
+  target="${HOME}/${basename}"
+  symlink_interactive "${file}" "${target}"
 done
 
-for source_file in "${basedir}"/home/*; do
-  target_file="$HOME/.$(basename "${source_file}")"
-  symlink_interactive "${source_file}" "${target_file}"
-done
 
+: ${XDG_CONFIG_HOME:="${HOME}/.config"}
 mkdir -p "${XDG_CONFIG_HOME}"
-for source_file in "${basedir}"/xdg_config_home/*/*; do
-  target_file="${XDG_CONFIG_HOME}/${source_file#"${basedir}"/xdg_config_home/}"
-  symlink_interactive "${source_file}" "${target_file}"
+for file in "${basedir}"/xdg_config_home/*/*; do
+  basename="$(basename "${file}" | sed 's/^_/./')"
+  dirname="$(dirname "${file}")"
+  dirname="${XDG_CONFIG_HOME}/${dirname#"${basedir}"/xdg_config_home/}"
+  target="${dirname}/${basename}"
+  symlink_interactive "${file}" "${target}"
 done
 
-for executable in "${basedir}"/bin/*; do
-  symlink_interactive "${executable}" \
-    "${XDG_BIN_HOME:-$HOME/.local/bin}/$(basename "${executable}")"
+: ${XDG_BIN_HOME:="${HOME}/.local/bin"}
+mkdir -p "${XDG_BIN_HOME}"
+for executable in "${basedir}"/xdg_bin_home/*; do
+  basename="$(basename "${executable}")"
+  target="${XDG_BIN_HOME}/${basename}"
+  symlink_interactive "${executable}" "${target}"
 done
 
 os_setup="${basedir}/setup.os/setup##os.${os}"

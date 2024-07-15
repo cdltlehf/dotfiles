@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Bash startup file for an interactive shell
+# ~/.bash_profile sources this file
+
+: ${XDG_CONFIG_HOME:="${HOME}/.config"}
+SHRC="${XDG_CONFIG_HOME}/sh/shrc"
+[[ -e "${SHRC}" ]] && source "${SHRC}"
+
+shopt -s globstar 2> /dev/null || true
+[ $(uname -s) == 'Darwin' ] && export BASH_SILENCE_DEPRECATION_WARNING=1
+
+: ${XDG_STATE_HOME:="${HOME}/.local/state"}
+mkdir -p "${XDG_STATE_HOME}"/bash
+export HISTFILE="${XDG_STATE_HOME}/bash/history"
+
+BASHRCDIR="${XDG_CONFIG_HOME}/bash/bashrc.d"
+if [[ -d "${BASHRCDIR}" ]]; then
+  for sh in "${BASHRCDIR}"/*.bash; do
+    # shellcheck source=/dev/null
+    source "${sh}"
+  done
+  unset -v sh
+fi

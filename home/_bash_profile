@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Bash startup file for an interactive login shell
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html
+
+# shellcheck source=/dev/null
+[ -f "${HOME}/.profile" ] && . "${HOME}/.profile"
+
+# shellcheck source=/dev/null
+[ -f "${HOME}/.bashrc" ] && . "${HOME}/.bashrc"

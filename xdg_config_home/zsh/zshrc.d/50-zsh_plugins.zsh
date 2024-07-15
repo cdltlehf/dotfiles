@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+# FIXME
 
 __install_zsh_plugin() {
   local dependencies="git"
