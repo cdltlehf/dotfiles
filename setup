@@ -29,7 +29,7 @@ symlink_interactive() {
 
   # If the existing target is a symlink to the source file, return
   if [[ -L "${target_file}" ]] &&
-    [[ $(readlink "${target_file}") == "${source_file}" ]]; then
+    [ $(readlink "${target_file}") = "${source_file}" ]; then
       return 0;
   fi
 
@@ -79,6 +79,11 @@ echoerr "Done."
 for file in "${basedir}"/setup.d/*.bash; do
   echoerr "Run $file"
   bash "$file"
+done
+
+for source_file in "${basedir}"/home/*; do
+  target_file="$HOME/.$(basename "${source_file}")"
+  symlink_interactive "${source_file}" "${target_file}"
 done
 
 mkdir -p "${XDG_CONFIG_HOME}"

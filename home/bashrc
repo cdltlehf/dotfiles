@@ -18,7 +18,7 @@ shopt -s globstar 2> /dev/null || true
 CDPATH=:$HOME
 
 # shellcheck source=/dev/null
-[[ -f "${HOME}/.bashrc.host" ]] && source "${HOME}/.bashrc.host"
+[[ -f "${HOME}/.bashrc.local" ]] && source "${HOME}/.bashrc.local"
 
 if [[ -d "${HOME}/.bashrc.d" ]]; then
   for file in "${HOME}"/.bashrc.d/*.bash; do

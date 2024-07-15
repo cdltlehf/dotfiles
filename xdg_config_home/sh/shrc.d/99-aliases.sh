@@ -64,12 +64,14 @@ jpt() {
 
 # Print PATH entries
 # FIXME
-case $0 in
-  *zsh)
+case $SHELL in
+  */zsh)
     alias path='printf \"${PATH:gs/:/\\n}\\n\"'
     ;;
-  *bash)
+  */bash)
     alias path='printf \"${PATH//:/\\n}\\n\"'
     ;;
-  *) ;;
+  *)
+    alias path='echo "$SHELL has no alias named path"'
+    ;;
 esac
