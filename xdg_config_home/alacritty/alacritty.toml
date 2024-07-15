@@ -1,0 +1,13 @@
+import = [ "~/.cache/wal/colors-alacritty.toml" ]
+
+[window]
+padding =  { x = 0, y = 20 }
+dimensions = { columns = 80, lines = 24 }
+decorations = "Buttonless"
+opacity = 0.95
+blur = true
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font" , style = "Regular" }
+size = 13
+offset = { x = 0, y = 2 }
