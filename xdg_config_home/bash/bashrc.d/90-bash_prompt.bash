@@ -1,9 +1,8 @@
 #!/bin/bash
 
-export VIRTUAL_ENV_DISABLE_PROMPT
+VIRTUAL_ENV_DISABLE_PROMPT=1
 
 if ! declare -F __git_ps1 > /dev/null 2>&1; then
-  echo "placeholder __git_ps1"
   __git_ps1() {
     echo ""
   }

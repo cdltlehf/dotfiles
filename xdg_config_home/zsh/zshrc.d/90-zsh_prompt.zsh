@@ -44,7 +44,7 @@ if command -v __git_ps1 > /dev/null 2>&1; then
   # GIT_PS1_COMPRESSSPARSESTATE
   # GIT_PS1_OMITSPARSESTATE
   # GIT_PS1_DESCRIBE_STYLE
-  GIT_PS1_SHOWCOLORHINTS=1 
+  GIT_PS1_SHOWCOLORHINTS=1
 
   #}}}
   eval "precmd () { __git_ps1 '$_PS1_1' '$_PS1_2' ' on %s' }"

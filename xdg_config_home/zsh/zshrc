@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+# Zsh startup file for an interactive shell
+
+: ${XDG_CONFIG_HOME:="${HOME}/.config"}
+SHRC="${XDG_CONFIG_HOME}/sh/shrc"
+[[ -e "${SHRC}" ]] && source "${SHRC}"
+
+: ${ZDOTDIR:=${XDG_CONFIG_HOME}/zsh}
+ZSHRCDIR="${ZDOTDIR}/zshrc.d"
+if [[ -d "${ZSHRCDIR}" ]]; then
+  for sh in "${ZSHRCDIR}"/*.zsh; do
+    [[ -e "${sh}" ]] && source "${sh}"
+  done
+  unset -v sh
+fi
