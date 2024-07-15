@@ -1,0 +1,17 @@
+#!/bin/sh
+# Shell-independent startup file (for any kind of shells)
+
+# Source files in .shrc.d
+SHRCDIR="${XDG_CONFIG_HOME:-"${HOME}/.config"}/sh/.shrc.d"
+if [ -d "${XDG_CONFIG_HOME:-}/sh/.shrc.d" ]; then
+  for file in "${HOME}"/.shrc.d/*.sh; do
+    # shellcheck source=/dev/null
+    . "${file}"
+  done
+fi
+unset SHRCDIR
+
+# TODO: Find related link
+if tty >/dev/null 2>&1; then
+  stty stop ''; stty start ''
+fi
