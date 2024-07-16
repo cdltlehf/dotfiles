@@ -13,8 +13,6 @@
 	alias = !git config --get-regexp 'alias.*' \
 		| sed 's/^alias\\.//' | sed 's/ / = /' | sed 's/ \\+/ /g' \
 		| sort
-	config-local = !mkdir -p "~/.gitconfig.d" \
-		&& git config --file "~/.gitconfig.local"
 
 [color]
 	ui = auto
