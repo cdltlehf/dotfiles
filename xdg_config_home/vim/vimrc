@@ -7,6 +7,27 @@ if &g:compatible
   set nocompatible
 endif
 
+" :help xdg-base-dir
+if empty("$XDG_CACHE_HOME")
+  let $XDG_CACHE_HOME="$HOME/.cache"
+  !mkdir -p $XDG_CACHE_HOME
+endif
+
+if empty("$XDG_CONFIG_HOME")
+  let $XDG_CONFIG_HOME="$HOME/.config"
+  !mkdir -p $XDG_CONFIG_HOME
+endif
+
+if empty("$XDG_DATA_HOME")
+  let $XDG_DATA_HOME="$HOME/.local/share"
+  !mkdir -p $XDG_DATA_HOME
+endif
+
+if empty("$XDG_STATE_HOME")
+  let $XDG_STATE_HOME="$HOME/.local/state"
+  !mkdir -p $XDG_STATE_HOME
+endif
+
 " custom wrapper function for minpac#add with opt type
 " https://github.com/k-takata/minpac/issues/113
 function! s:pac_add(url, ...) abort
@@ -52,37 +73,37 @@ if exists('g:loaded_minpac')
 endif
 
 " Source files in vimrc.d/preload
-for s:f in split(glob('~/.vim/vimrc.d/preload/*.vim'), '\n')
-  execute 'source' s:f
+for s:f in split(glob('$XDG_CONFIG_HOME/.vim/vimrc.d/preload/*.vim'), '\n')
+  execute 'source ' . s:f
 endfor
 
 silent! colorscheme dracula16
 
 " Source files in vimrc.d
-for s:f in split(glob('~/.vim/vimrc.d/*.vim'), '\n')
-  execute 'source' s:f
+for s:f in split(glob('$XDG_CONFIG_HOME/.vim/vimrc.d/*.vim'), '\n')
+  execute 'source ' . s:f
 endfor
 
 " :help 'termguicolors'
 " if has('termguicolors') | set termguicolors | endif
 
 " :help xterm-true-color
-" let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
-" let &t_8b="\<esc>[48;2;%lu;%lu;%lum"
+let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<esc>[48;2;%lu;%lu;%lum"
 
 " :help termcap-cursor-shape
 if &term =~ "xterm"
   let &t_SI="\<esc>[5 q" " blinking bar
   let &t_SR="\<esc>[3 q" " blinking underline
-  let &t_EI="\<esc>[0 q" " block
+  let &t_EI="\<esc>[2 q" " steady block
 endif
 
 augroup termcap_cursor_shape
   autocmd!
-  autocmd VimEnter * silent !echo -ne "\e[0 q"
+  execute 'autocmd VimEnter * silent !echo -ne ' . &t_EI
   " :help exists
   if exists('##VimResume')
-    autocmd VimResume * silent !echo -ne "\e[0 q"
+    execute 'autocmd VimResume * silent !echo -ne ' . &t_EI
   endif
 augroup END
 
@@ -92,30 +113,38 @@ set ttimeoutlen=100
 
 " :help section
 map [[ ?{<cr>w99[{
-  map ][ /{<cr>b99[{
-  map ]] j0[[%/{<cr>
+map ][ /{<cr>b99[{
+map ]] j0[[%/{<cr>
 map [] k$][%?}<cr>
 
 " :help 'colorcolumn'
 if exists('&colorcolumn') | set colorcolumn=81 | endif
 
 " :help :helptags
-silent! helptags ALL
+" XXX: Long startup time
+" silent! helptags ALL
 
 set number
 set relativenumber
 set ignorecase
 set smartcase
-if has('persistent_undo') | set undofile | endif
 set list
 set visualbell
-if has('syntax') | set spell | endif
 set nowrap
 set foldlevel=99
 
-let &spellfile = expand('$HOME/.local/share/vim/spell/en.utf-8.add')
+" :help xdg-base-dir
+set backupdir=$XDG_STATE_HOME/vim/backup
+set directory=$XDG_STATE_HOME/vim/swap
+if has('persistent_undo') | set undodir=$XDG_STATE_HOME/vim/undo | endif
+if has('viminfo') | set viminfo+=n$XDG_STATE_HOME/vim/viminfo | endif
+" set runtimepath+=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after
+" set runtimepath+=$VIM,$VIMRUNTIME
+let &spellfile = expand('$XDG_DATA_HOME/vim/spell/en.utf-8.add')
 let s:spelldir = fnamemodify(&spellfile, ':p:h')
 if !isdirectory(s:spelldir) | call mkdir(s:spelldir, 'p') | endif
+if has('persistent_undo') | set undofile | endif
+if has('syntax') | set spell | endif
 
 " :help g:netrw_home
 " :help .netrwhist
@@ -160,13 +189,13 @@ nnoremap <leader>vr :<c-u>Reload<cr>
 " :help last-pattern
 let @/ = ""
 
-" if exists(':PackUpdate') != 0 && exists(':PackClean') != 0
-"   augroup pack_update
-"     autocmd!
-"     autocmd VimEnter * PackUpdate
-"     autocmd VimEnter * PackClean
-"   augroup END
-" endif
+if exists(':PackUpdate') != 0 && exists(':PackClean') != 0
+  augroup pack_update
+    autocmd!
+    autocmd VimEnter * silent! PackUpdate
+    autocmd VimEnter * silent! PackClean
+  augroup END
+endif
 
 autocmd BufWinEnter *
       \ if line2byte(line("$") + 1) > 1000000 | syntax clear | endif
