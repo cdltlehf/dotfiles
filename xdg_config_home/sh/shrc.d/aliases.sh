@@ -15,7 +15,12 @@ alias ln='command ln -i'
 # Colorize `ls`
 alias ls='ls --color=auto'
 alias la='ls -a'
-alias lla='ls -la'
+alias ll='ls -l'
+alias lla='ls -lha'
+
+if command -v git > /dev/null 2>&1; then
+  alias g='git'
+fi
 
 # Replace `cat` with `bat`
 if command -v bat > /dev/null 2>&1; then

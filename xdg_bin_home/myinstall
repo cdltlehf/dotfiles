@@ -1,2 +1,0 @@
-#!/bin/bash
-command -v "install-$1" && "install-$1" || echo "No installer for $1"
