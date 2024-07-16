@@ -5,12 +5,10 @@ set autoindent
 set autoread
 set background=dark
 set backspace=indent,eol,start
-" $XDG_STATE_HOME/vim/backup
 set backupdir=~/.local/state/vim/backup
 set belloff=all
 set nocompatible
 set complete-=i
-" $XDG_STATE_HOME/vim/swap
 set directory=~/.local/state/vim/swap
 set display=lastline
 set encoding=utf-8
@@ -51,7 +49,7 @@ if has('nvim') | set switchbuf=uselast | endif
 set tabpagemax=50
 set tags=./tags;,tags " :help file-searching
 set ttimeoutlen=50
-if has('persistent_undo') | set undodir=~/.local/state/nvim/undo | endif
+if has('persistent_undo') | set undodir=~/.local/state/vim/undo | endif
 if has('mksession') | set viewoptions+=unix,slash viewoptions-=options | endif
 if has('wildmenu') | set wildmenu | endif
 set viminfo+=!
