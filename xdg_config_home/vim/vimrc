@@ -7,27 +7,6 @@ if &g:compatible
   set nocompatible
 endif
 
-" :help xdg-base-dir
-if empty("$XDG_CACHE_HOME")
-  let $XDG_CACHE_HOME="$HOME/.cache"
-  !mkdir -p $XDG_CACHE_HOME
-endif
-
-if empty("$XDG_CONFIG_HOME")
-  let $XDG_CONFIG_HOME="$HOME/.config"
-  !mkdir -p $XDG_CONFIG_HOME
-endif
-
-if empty("$XDG_DATA_HOME")
-  let $XDG_DATA_HOME="$HOME/.local/share"
-  !mkdir -p $XDG_DATA_HOME
-endif
-
-if empty("$XDG_STATE_HOME")
-  let $XDG_STATE_HOME="$HOME/.local/state"
-  !mkdir -p $XDG_STATE_HOME
-endif
-
 " custom wrapper function for minpac#add with opt type
 " https://github.com/k-takata/minpac/issues/113
 function! s:pac_add(url, ...) abort
