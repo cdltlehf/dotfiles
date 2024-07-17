@@ -2,9 +2,9 @@
 
 # POSIX shell startup file for an interactive login shell
 
-[[ -e "${HOME}/.shenv" ]] && ENV="${HOME}/.shenv"
+[ -e "${HOME}/.shenv" ] && ENV="${HOME}/.shenv"
 export ENV
-[[ -n $ENV ]] && source "$ENV"
+[ -n $ENV ] && source "$ENV"
 
 : ${XDG_BIN_HOME:="${HOME}/.local/bin"}
 : ${XDG_CONFIG_HOME:="${HOME}/.config"}
@@ -18,7 +18,8 @@ export LC_ALL=en_US.UTF-8
 export VISUAL='vim'
 export EDITOR='vim -E'
 export PAGER='less'
-export MANPAGER='less -R --use-color -Dd+r -Du+g'
+# export MANPAGER='less -R --use-color -Dd+r -Du+g'
+export MANPAGER='less'
 
 export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 
