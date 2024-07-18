@@ -1,4 +1,4 @@
-#!/bin/sh
-# https://github.com/Schniz/fnm
+#!/bin/bash
 
-curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
+: ${XDG_DATA_HOME:="${HOME}/.local/share/fnm"}
+curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir --skip-shell
