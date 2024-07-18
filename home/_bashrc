@@ -2,8 +2,10 @@
 
 [[ -e "${HOME}/.shenv" ]] && ENV="${HOME}/.shenv"
 export ENV
+# shellcheck source=/dev/null
 [[ -n $ENV ]] && source "$ENV"
 
-: ${XDG_CONFIG_HOME:=${HOME}/.config}
+: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
 BASHRC="${XDG_CONFIG_HOME}/bash/bashrc"
+# shellcheck source=/dev/null
 [[ -e "${BASHRC}" ]] && source "${BASHRC}"

@@ -2,7 +2,7 @@
 
 # Shell-independent startup file for an interactive shell
 
-: ${XDG_CONFIG_HOME:="${HOME}/.config"}
+: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
 SHRCDIR="${XDG_CONFIG_HOME}/sh/shrc.d"
 
 if [ -d "${SHRCDIR}" ]; then

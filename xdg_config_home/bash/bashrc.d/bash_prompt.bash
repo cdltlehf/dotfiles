@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VIRTUAL_ENV_DISABLE_PROMPT=1
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 if ! declare -F __git_ps1 > /dev/null 2>&1; then
   __git_ps1() {
