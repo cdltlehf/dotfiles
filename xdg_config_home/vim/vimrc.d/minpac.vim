@@ -1,7 +1,7 @@
 " https://github.com/k-takata/minpac
 
 " let s:data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-let s:data_dir = '~/.vim'
+let s:data_dir = '$XDG_DATA_HOME/vim'
 
 if empty(glob(s:data_dir . '/pack/minpac/opt/minpac'))
   function! s:InstallMinpack() abort
