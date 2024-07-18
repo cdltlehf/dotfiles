@@ -1,6 +1,4 @@
 #!/bin/bash
-set nounset
-set errexit
 
 tempdir=$(mktemp -d)
 trap 'rm -rf -- "${tempdir}"' EXIT

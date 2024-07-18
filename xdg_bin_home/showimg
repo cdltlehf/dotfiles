@@ -23,7 +23,7 @@ done
 
 case "$*" in
   "")
-    echo "Usage: `basename $0` [-w WIDTH] [-h HEIGHT] [-par] IMAGE [...]" >&2
+    echo "Usage: $(basename "$0") [-w WIDTH] [-h HEIGHT] [-par] IMAGE [...]" >&2
     echo >&2
     echo "This script outputs images to the terminal for display." >&2
     echo "Parameters:" >&2
@@ -34,8 +34,8 @@ case "$*" in
 esac
 
 case "$BASH" in
-  ?*) echo=echo;;
-  *)  echo=/bin/echo;;
+  ?*) echo="echo";;
+  *)  echo="/bin/echo";;
 esac
 
 for img in "$@"
