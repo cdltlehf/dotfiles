@@ -4,10 +4,11 @@
 
 [ -e "${HOME}/.shenv" ] && ENV="${HOME}/.shenv"
 export ENV
-[ -n $ENV ] && source "$ENV"
+# shellcheck source=/dev/null
+[ -n "$ENV" ] && . "$ENV"
 
-: ${XDG_BIN_HOME:="${HOME}/.local/bin"}
-: ${XDG_CONFIG_HOME:="${HOME}/.config"}
+: "${XDG_BIN_HOME:="${HOME}/.local/bin"}"
+: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
 PATH=${XDG_BIN_HOME}:$PATH
 
 # Set locale

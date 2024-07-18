@@ -54,29 +54,3 @@ fi
 # Python virtual environment
 alias ve='python3 -m venv ./.venv'
 alias va='source ./.venv/bin/activate'
-
-# Tmux alias
-alias tm='tmux'
-alias ta='tmux a'
-
-jpt() {
-  # shellcheck disable=SC2046
-  jupyter notebook \
-    --no-browser \
-    --ip=0.0.0.0 \
-    --port="$1" $(printf '%s' "$@" | cut -d ' ' -f 2- || true)
-}
-
-# Print PATH entries
-# FIXME
-case $SHELL in
-  */zsh)
-    alias path='printf \"${PATH:gs/:/\\n}\\n\"'
-    ;;
-  */bash)
-    alias path='printf \"${PATH//:/\\n}\\n\"'
-    ;;
-  *)
-    alias path='echo "$SHELL has no alias named path"'
-    ;;
-esac
