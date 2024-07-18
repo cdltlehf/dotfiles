@@ -7,7 +7,8 @@ if &g:compatible
   set nocompatible
 endif
 
-let s:minpac_dir = expand('$XDG_DATA_HOME/vim/pack/minpac/opt/minpac')
+set packpath+=$XDG_DATA_HOME/vim
+let s:minpac_dir = expand('$XDG_DATA_HOME/vim')
 let s:minpac_config = {'dir': s:minpac_dir, 'progress_open': 'none'}
 
 silent! packadd minpac
@@ -67,7 +68,7 @@ let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<esc>[48;2;%lu;%lu;%lum"
 
 " :help termcap-cursor-shape
-if &term =~ "xterm"
+if &term =~ 'xterm\|screen'
   let &t_SI="\<esc>[5 q" " blinking bar
   let &t_SR="\<esc>[3 q" " blinking underline
   let &t_EI="\<esc>[2 q" " steady block
