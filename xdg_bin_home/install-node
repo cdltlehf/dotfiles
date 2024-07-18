@@ -7,6 +7,6 @@ case "$(uname -s)" in
     ;;
   *)
     command -v nvm >/dev/null 2>&1 || install-nvm
-    nvm install node
+    bash --login -c 'nvm install node'
     ;;
 esac
