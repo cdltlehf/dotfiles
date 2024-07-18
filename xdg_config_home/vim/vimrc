@@ -7,17 +7,13 @@ if &g:compatible
   set nocompatible
 endif
 
-" custom wrapper function for minpac#add with opt type
-" https://github.com/k-takata/minpac/issues/113
-function! s:pac_add(url, ...) abort
-  let l:options = get(a:000, 0, {})
-  call minpac#add(a:url, extend({'type': 'opt'}, l:options, 'force'))
-endfunction
+let s:minpac_dir = expand('$XDG_DATA_HOME/vim/pack/minpac/opt/minpac')
+let s:minpac_config = {'dir': s:minpac_dir, 'progress_open': 'none'}
 
 silent! packadd minpac
 if exists('g:loaded_minpac')
   function! s:PackInit() abort
-    call minpac#init({'progress_open': 'none'})
+    call minpac#init(s:minpac_config)
     call minpac#add('k-takata/minpac')
 
     call minpac#add('airblade/vim-gitgutter')
