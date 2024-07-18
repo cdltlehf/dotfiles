@@ -16,13 +16,9 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 # Export editors
-export VISUAL='vim'
 export EDITOR='vim -E'
 export PAGER='less'
-# export MANPAGER='less -R --use-color -Dd+r -Du+g'
-export MANPAGER='less'
-
-export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
+export VISUAL='vim'
 
 # Cygwin environment variables
 # https://cygwin.com/cygwin-ug-net/using-cygwinenv.html
