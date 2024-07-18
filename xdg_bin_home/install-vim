@@ -1,18 +1,5 @@
 #!/bin/bash
-set nounset
-set errexit
 
-# install ncurses
-(
-tmpdir=$(mktemp -d)
-trap 'rm -rf -- "${tmpdir}"' EXIT
-git clone --depth=1 https://github.com/mirror/ncurses.git "${tmpdir}"
-cd "${tmpdir}" || exit 1
-./configure --prefix="$HOME/.local"
-make install
-)
-
-# install vim
 (
 tmpdir=$(mktemp -d)
 trap 'rm -rf -- "${tmpdir}"' EXIT

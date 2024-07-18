@@ -24,7 +24,7 @@ symlink_interactive() {
 
   # If the existing target is a symlink to the source file, return
   if [[ -L "${target_file}" ]] &&
-    [ $(readlink "${target_file}") = "${source_file}" ]; then
+    [ "$(readlink "${target_file}")" = "${source_file}" ]; then
       return 0;
   fi
 
@@ -60,7 +60,7 @@ for file in "${basedir}"/home/*; do
 done
 
 
-: ${XDG_CONFIG_HOME:="${HOME}/.config"}
+: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
 mkdir -p "${XDG_CONFIG_HOME}"
 for file in "${basedir}"/xdg_config_home/*/*; do
   basename="$(basename "${file}" | sed 's/^_/./')"
@@ -70,7 +70,7 @@ for file in "${basedir}"/xdg_config_home/*/*; do
   symlink_interactive "${file}" "${target}"
 done
 
-: ${XDG_BIN_HOME:="${HOME}/.local/bin"}
+: "${XDG_BIN_HOME:="${HOME}/.local/bin"}"
 mkdir -p "${XDG_BIN_HOME}"
 for executable in "${basedir}"/xdg_bin_home/*; do
   basename="$(basename "${executable}")"

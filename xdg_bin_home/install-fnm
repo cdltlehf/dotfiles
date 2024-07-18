@@ -1,4 +1,4 @@
 #!/bin/bash
 
-: ${XDG_DATA_HOME:="${HOME}/.local/share/fnm"}
+: "${XDG_DATA_HOME:="${HOME}/.local/share/fnm"}"
 curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir --skip-shell

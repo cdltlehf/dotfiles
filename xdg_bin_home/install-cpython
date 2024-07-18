@@ -1,10 +1,8 @@
 #!/bin/bash
-set nounset
-set errexit
 
 tmpdir=$(mktemp -d)
 trap 'rm -rf -- "${tmpdir}"' EXIT
 git clone --depth=1 https://github.com/python/cpython.git "${tmpdir}"
-cd "${tmpdir}"
+cd "${tmpdir}" || exit 1
 ./configure --prefix="$HOME/.local"
 make install

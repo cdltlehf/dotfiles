@@ -1,6 +1,4 @@
 #!/bin/sh
-set nounset
-set errexit
 
 XDG_DATA_HOME="${XDG_DATA_HOME:-"$HOME/.local/share"}"
 mkdir -p "${XDG_DATA_HOME}"

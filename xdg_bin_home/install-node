@@ -1,5 +1,12 @@
 #!/bin/bash
 
-command -v install-nvm >/dev/null 2>&1 || install-nvm
-(command -v nvm >/dev/null 2>&1 && nvm install node)
-
+case "$(uname -s)" in
+  *Darwin|Linux)
+    command -v volta >/dev/null 2>&1 || install-volta
+    volta install node
+    ;;
+  *)
+    command -v nvm >/dev/null 2>&1 || install-nvm
+    nvm install node
+    ;;
+esac
