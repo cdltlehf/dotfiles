@@ -5,9 +5,9 @@ set errexit
 shopt -s nullglob
 
 # Get base directory (e.g., `$HOME/dotfiles`)
-basedir="$(realpath "$(dirname "$0")")"
+export basedir="$(realpath "$(dirname "$0")")"
 # Get OS name (e.g., Darwin)
-os="$(uname -s)"
+export os="$(uname -s)"
 
 source "$basedir/env"
 
