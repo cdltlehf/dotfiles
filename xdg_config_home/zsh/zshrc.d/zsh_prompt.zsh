@@ -36,7 +36,6 @@ _PS1_2+='%(?.%f$ %f.%B%F{1}?%? %f%b)'
 PS2="%F{103}> %f"
 
 if command -v __git_ps1 > /dev/null 2>&1; then
-  # GIT_PS1 environment variables {{{
   GIT_PS1_SHOWDIRTYSTATE=1
   GIT_PS1_SHOWSTASHSTATE=1
   GIT_PS1_SHOWUPSTREAM="auto"
@@ -45,8 +44,6 @@ if command -v __git_ps1 > /dev/null 2>&1; then
   # GIT_PS1_OMITSPARSESTATE
   # GIT_PS1_DESCRIBE_STYLE
   GIT_PS1_SHOWCOLORHINTS=1
-
-  #}}}
   eval "precmd () { __git_ps1 '$_PS1_1' '$_PS1_2' ' on %s' }"
 else
   PS1="$_PS1_1$_PS1_2"
@@ -77,3 +74,5 @@ zle -N zle-line-finish hide_vi_mode_indicator
 zle -N zle-keymap-select update_vi_mode_indicator
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+
+export KEYTIMEOUT=1
