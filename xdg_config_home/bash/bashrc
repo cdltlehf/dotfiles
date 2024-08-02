@@ -19,7 +19,7 @@ BASHRCDIR="${XDG_CONFIG_HOME}/bash/bashrc.d"
 if [[ -d "${BASHRCDIR}" ]]; then
   for sh in "${BASHRCDIR}"/*.bash; do
     # shellcheck source=/dev/null
-    source "${sh}"
+    . "${sh}"
   done
   unset -v sh
 fi

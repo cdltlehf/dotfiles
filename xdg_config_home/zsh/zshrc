@@ -4,7 +4,7 @@
 
 : ${XDG_CONFIG_HOME:="${HOME}/.config"}
 SHRC="${XDG_CONFIG_HOME}/sh/shrc"
-[[ -e "${SHRC}" ]] && source "${SHRC}"
+[[ -e "${SHRC}" ]] && . "${SHRC}"
 
 : ${ZDOTDIR:=${XDG_CONFIG_HOME}/zsh}
 ZSHRCDIR="${ZDOTDIR}/zshrc.d"

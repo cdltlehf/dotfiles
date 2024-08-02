@@ -39,6 +39,6 @@ __main() {
   done
 }
 
-__main
-unset -f __main
-unset -f __install_zsh_plugin
+# __main
+# unset -f __main
+# unset -f __install_zsh_plugin

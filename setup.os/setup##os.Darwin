@@ -3,14 +3,15 @@
 
 # TODO: Be sudoer for some commands
 macos_defaults=(
-  "${basedir}/macos/defaults/.macos"
-  "${basedir}/macos/defaults/.macos.application"
-  "${basedir}/macos/defaults/.macos.dock"
-  "${basedir}/macos/defaults/.macos.finder"
-  "${basedir}/macos/defaults/.macos.keyboard"
-  "${basedir}/macos/defaults/.macos.menubar"
-  "${basedir}/macos/defaults/.macos.screencapture"
-  "${basedir}/macos/defaults/.macos.screensaver"
+  "${basedir}/macos/defaults/macos"
+  "${basedir}/macos/defaults/macos.application"
+  "${basedir}/macos/defaults/macos.dock"
+  "${basedir}/macos/defaults/macos.finder"
+  "${basedir}/macos/defaults/macos.keyboard"
+  "${basedir}/macos/defaults/macos.menubar"
+  "${basedir}/macos/defaults/macos.screencapture"
+  "${basedir}/macos/defaults/macos.screensaver
+  "${basedir}/macos/defaults/macos.desktopservices
 )
 
 # Array of dotfiles for Darwin (macos)
