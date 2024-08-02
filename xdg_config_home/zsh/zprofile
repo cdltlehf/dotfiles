@@ -2,4 +2,7 @@
 
 # Zsh startup file for a login shell
 
+if [[ $(uname -s) == "Darwin" ]]; then
+  [[ -e /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 [[ -e "${HOME}/.profile" ]] && source "${HOME}/.profile"

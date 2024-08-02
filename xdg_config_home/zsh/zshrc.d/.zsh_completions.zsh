@@ -35,6 +35,6 @@ __main() {
   fi
 }
 
-__main
-unset -f __main
-unset -f __install_zsh_completions
+# __main
+# unset -f __main
+# unset -f __install_zsh_completions
