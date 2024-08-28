@@ -52,5 +52,7 @@ if ! command -v open > /dev/null 2>&1; then
 fi
 
 # Python virtual environment
-alias ve='python3 -m venv ./.venv'
-alias va='source ./.venv/bin/activate'
+alias ve='echo "ve alias is moved to pyenv" 1>&2'
+alias va='echo "va alias is moved to pyact" 1>&2'
+alias pyenv='python3 -m venv ./.venv'
+alias pyact='source ./.venv/bin/activate'
