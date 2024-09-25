@@ -1,27 +1,48 @@
 " https://github.com/prabirshrestha/vim-lsp
 
+" Also see: https://neovim.io/doc/user/lsp.html
 function! s:on_lsp_buffer_enabled() abort
-  setlocal omnifunc=lsp#complete
   setlocal signcolumn=yes
+
+  setlocal omnifunc=lsp#complete
+
   if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 
-  nmap <buffer> gd <plug>(lsp-definition)
-  nmap <buffer> gs <plug>(lsp-document-symbol-search)
-  nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-  nmap <buffer> gr <plug>(lsp-references)
-  nmap <buffer> gI <plug>(lsp-implementation)
-  nmap <buffer> gt <plug>(lsp-type-definition)
-  nmap <buffer> <leader>rn <plug>(lsp-rename)<C-u>
-  nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-  nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-  nmap <buffer> K <plug>(lsp-hover)
+  nnoremap <buffer> <c-]> <plug>(lsp-definition)
+  nnoremap <buffer> <c-w>] :rightbelow LspDefinition<CR>
+  nnoremap <buffer> <c-w><c-]> :rightbelow LspDefinition<CR>
+  nnoremap <buffer> <c-w>} <plug>(lsp-peek-definition)
+  nnoremap <buffer> <c-w><c-}> <plug>(lsp-peek-definition)
 
-  " nnoremap <buffer> <leader>g <plug>(lsp-document-diagnostics)
-  nnoremap <buffer> <leader>ca <plug>(lsp-code-action)
-  " nnoremap <buffer> <leader>cl <plug>(lsp-code-lens)
-  nnoremap <buffer> <leader>fm <plug>(lsp-document-format)
+  nnoremap <buffer> gq <plug>(lsp-document-range-format)
+  nnoremap <buffer> gqq V<plug>(lsp-document-range-format)
+  vnoremap <buffer> gq <plug>(lsp-document-range-format)
   " NOTE: https://clang.llvm.org/docs/ClangFormat.html#vim-integration
   nnoremap <buffer> <c-k> <plug>(lsp-document-format)
+
+  nnoremap <buffer> K <plug>(lsp-hover)
+
+  nnoremap <buffer> grn <plug>(lsp-rename)<C-u>
+  nnoremap <buffer> gra <plug>(lsp-code-action)
+  nnoremap <buffer> grr <plug>(lsp-references)
+  inoremap <buffer> <c-s> <c-o>:LspSignatureHelp<CR>
+
+  " :help vim-lsp-folding
+  set foldmethod=expr
+  set foldexpr=lsp#ui#vim#folding#foldexpr()
+  set foldtext=lsp#ui#vim#folding#foldtext()
+
+  " nmap <buffer> gd <plug>(lsp-definition)
+  " nmap <buffer> gs <plug>(lsp-document-symbol-search)
+  " nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+  " nmap <buffer> gr <plug>(lsp-references)
+  " nmap <buffer> gI <plug>(lsp-implementation)
+  " nmap <buffer> gt <plug>(lsp-type-definition)
+  nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+  nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+
+  " nnoremap <buffer> <leader>g <plug>(lsp-document-diagnostics)
+  " nnoremap <buffer> <leader>cl <plug>(lsp-code-lens)
 endfunction
 
 augroup lsp_install
@@ -47,11 +68,6 @@ let g:lsp_diagnostics_signs_priority_map = {
         \'clangd_LspWarning': 11,
         \'clangd_LspInformation': 11
         \}
-
-" :help vim-lsp-folding
-set foldmethod=expr
-set foldexpr=lsp#ui#vim#folding#foldexpr()
-set foldtext=lsp#ui#vim#folding#foldtext()
 
 " :help vim-lsp-semantic
 if has('textprop') || has('nvim')
