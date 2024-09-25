@@ -24,7 +24,7 @@ fi
 
 # Replace `cat` with `bat`
 if command -v bat > /dev/null 2>&1; then
-  alias cat='command bat --plain --paging never --wrap character'
+  alias cat='command bat -pp'
   export MANPAGER="command sh -c 'col -bx | bat -l man -p'"
 fi
 
