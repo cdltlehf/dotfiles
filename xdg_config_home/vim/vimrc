@@ -24,21 +24,20 @@ if exists('g:loaded_minpac')
     call minpac#add('junegunn/fzf', {'do': { -> fzf#install() } })
     call minpac#add('junegunn/fzf.vim')
 
-    call minpac#add('mattn/vim-lsp-settings')
-
-    call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
-    call minpac#add('prabirshrestha/asyncomplete.vim')
+    " call minpac#add('mattn/vim-lsp-settings')
+    " call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
+    " call minpac#add('prabirshrestha/asyncomplete.vim')
     call minpac#add('prabirshrestha/vim-lsp')
 
-    call minpac#add('takac/vim-hardtime')
+    " call minpac#add('takac/vim-hardtime')
 
-    call minpac#add('tpope/vim-abolish')
+    " call minpac#add('tpope/vim-abolish')
     call minpac#add('tpope/vim-commentary')
     call minpac#add('tpope/vim-fugitive')
     call minpac#add('tpope/vim-repeat')
     call minpac#add('tpope/vim-surround')
     call minpac#add('tpope/vim-vinegar')
-    call minpac#add('tpope/vim-dispatch')
+    " call minpac#add('tpope/vim-dispatch')
   endfunction
 
   command! PackUpdate
@@ -74,10 +73,16 @@ let &t_EI="\<esc>[2 q" " steady block
 
 augroup termcap_cursor_shape
   autocmd!
-  execute 'autocmd VimEnter * silent !echo -ne ' . &t_EI
-  " :help exists
+  autocmd VimEnter * silent execute 'silent !echo -ne "\e[2 q"' | redraw!
   if exists('##VimResume')
-    execute 'autocmd VimResume * silent !echo -ne ' . &t_EI
+    autocmd VimResume * silent execute 'silent !echo -ne "\e[2 q"' | redraw!
+  endif
+augroup END
+
+augroup checktime
+  autocmd!
+  if exists('##VimResume')
+    autocmd VimResume * checktime
   endif
 augroup END
 

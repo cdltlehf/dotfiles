@@ -73,3 +73,30 @@ let g:lsp_diagnostics_signs_priority_map = {
 if has('textprop') || has('nvim')
   let g:lsp_semantic_enabled = 1
 endif
+
+" npm install -g vim-language-server
+if executable('vim-language-server')
+  augroup LspVim
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'vim-language-server',
+          \ 'cmd': {server_info->['vim-language-server', '--stdio']},
+          \ 'whitelist': ['vim'],
+          \ 'initialization_options': {
+          \   'vimruntime': $VIMRUNTIME,
+          \   'runtimepath': &runtimepath,
+          \ }})
+  augroup END
+endif
+
+" npm install -g pyright
+if executable('pyright-langserver')
+  augroup LspPyright
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'pyright',
+          \ 'cmd': {server_info->['pyright-langserver', '--stdio']},
+          \ 'whitelist': ['python'],
+          \ })
+  augroup END
+endif
