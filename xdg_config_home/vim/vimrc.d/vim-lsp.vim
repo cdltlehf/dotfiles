@@ -53,21 +53,18 @@ augroup END
 let g:lsp_diagnostics_echo_cursor = 1
 
 " :help g:lsp_diagnostics_signs_enabled
-" let g:lsp_diagnostics_signs_error = {'text': 'X'}
-" let g:lsp_diagnostics_signs_warning = {'text': '!'}
+" nf-cod-error nf-cod-warning nf-cod-info nf-cod-question
 let g:lsp_diagnostics_signs_error = {'text': "\uEA87"}
-let g:lsp_diagnostics_signs_warning = {'text': "\uF071"}
+let g:lsp_diagnostics_signs_warning = {'text': "\uea6c"}
+let g:lsp_diagnostics_signs_information = {'text': "\uea74"}
+let g:lsp_diagnostics_signs_hint = {'text': "\ueb32"}
+" nf-cod-lightbulb
+let g:lsp_document_code_action_sign = {'text': "\ueb13"}
 
-let g:lsp_diagnostics_virtual_text_prefix = "    \u258C"
+let g:lsp_diagnostics_virtual_text_prefix = "\u258C"
 let g:lsp_diagnostics_virtual_text_align = "after"
+let g:lsp_diagnostics_virtual_text_padding_left = 5
 let g:lsp_diagnostics_virtual_text_wrap = "truncate"
-
-let g:lsp_diagnostics_signs_priority_map = {
-        \'LspError': 11,
-        \'LspWarning': 7,
-        \'clangd_LspWarning': 11,
-        \'clangd_LspInformation': 11
-        \}
 
 " :help vim-lsp-semantic
 if has('textprop') || has('nvim')
@@ -81,7 +78,7 @@ if executable('vim-language-server')
     autocmd User lsp_setup call lsp#register_server({
           \ 'name': 'vim-language-server',
           \ 'cmd': {server_info->['vim-language-server', '--stdio']},
-          \ 'whitelist': ['vim'],
+          \ 'allowlist': ['vim'],
           \ 'initialization_options': {
           \   'vimruntime': $VIMRUNTIME,
           \   'runtimepath': &runtimepath,
@@ -89,14 +86,80 @@ if executable('vim-language-server')
   augroup END
 endif
 
-" npm install -g pyright
-if executable('pyright-langserver')
-  augroup LspPyright
+" pip install 'python-lsp-server[all]'
+" pip install python-lsp-isort
+" pip install pylsp-mypy
+" pip install python-lsp-black
+if executable('pylsp')
+  augroup LspPylsp
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'pyright',
-          \ 'cmd': {server_info->['pyright-langserver', '--stdio']},
-          \ 'whitelist': ['python'],
+          \ 'name': 'pylsp',
+          \ 'cmd': {server_info->['pylsp']},
+          \ 'allowlist': ['python'],
+          \ 'workspace_config': {
+          \   'pylsp': {
+          \     'plugins': {
+          \       'black': {'enabled': v:true},
+          \       'autopep8': {'enabled': v:false},
+          \       'yapf': {'enabled': v:false},
+          \       'pylint': {'enabled': v:true},
+          \       'pyflakes': {'enabled': v:false},
+          \       'pycodestyle': {'enabled': v:false},
+          \       'pylsp_mypy': {'enabled': v:true, 'strict': v:true},
+          \       'pyls_isort': {'enabled': v:true},
+          \     },
+          \   },
+          \ },
+          \ })
+  augroup END
+endif
+
+" npm install --global vscode-html-languageserver-bin
+if executable('html-languageserver')
+  augroup LspHtml
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'html-languageserver',
+          \ 'cmd': {
+          \   server_info->[
+          \     &shell,
+          \     &shellcmdflag,
+          \     'html-language-server',
+          \     '--stdio'
+          \   ]
+          \ },
+          \ 'allowlist': ['html'],
+          \ })
+  augroup END
+endif
+
+" macOS: brew install llvm
+" TODO: Linux
+if executable('clangd')
+  augroup LspClangd
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'clangd',
+          \ 'cmd': {server_info->[
+          \   'clangd',
+          \   '--background-index',
+          \   '--fallback-style=google',
+          \ ]},
+          \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp', 'cuda'],
+          \ })
+  augroup END
+endif
+
+" macOS: brew instal shellcheck
+" TODO: Linux
+if executable('shellcheck')
+  augroup LspShellcheck
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'shellcheck',
+          \ 'cmd': {server_info->['shellcheck', '--stdio']},
+          \ 'allowlist': ['sh', 'bash', 'zsh'],
           \ })
   augroup END
 endif

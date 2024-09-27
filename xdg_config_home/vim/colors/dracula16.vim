@@ -141,9 +141,9 @@ highlight WildMenu ctermfg=darkblue ctermbg=none cterm=bold,inverse
 " highlight Tooltip
 
 " vim-gitgutter
-highlight GitGuttterAdd ctermfg=darkgreen ctermbg=none cterm=none
-highlight GitGuttterChange ctermfg=darkyellow ctermbg=none cterm=none
-highlight GitGuttterDelete ctermfg=darkred ctermbg=none cterm=none
+highlight GitGutterAdd ctermfg=darkgreen ctermbg=none cterm=none
+highlight GitGutterChange ctermfg=darkyellow ctermbg=none cterm=none
+highlight GitGutterDelete ctermfg=darkred ctermbg=none cterm=none
 
 " vim-polyglot
 highlight helpHyperTextJump ctermfg=darkcyan ctermbg=none cterm=none

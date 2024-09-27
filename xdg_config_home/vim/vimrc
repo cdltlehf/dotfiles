@@ -47,11 +47,6 @@ if exists('g:loaded_minpac')
   command! PackStatus call minpac#status()
 endif
 
-" Source files in vimrc.d/preload
-for s:f in split(glob('$XDG_CONFIG_HOME/vim/vimrc.d/preload/*.vim'), '\n')
-  execute 'source ' . s:f
-endfor
-
 silent! colorscheme dracula16
 
 " Source files in vimrc.d
