@@ -76,13 +76,14 @@ if executable('vim-language-server')
   augroup LspVim
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'vim-language-server',
-          \ 'cmd': {server_info->['vim-language-server', '--stdio']},
-          \ 'allowlist': ['vim'],
-          \ 'initialization_options': {
-          \   'vimruntime': $VIMRUNTIME,
-          \   'runtimepath': &runtimepath,
-          \ }})
+          \   'name': 'vim-language-server',
+          \   'cmd': {server_info->['vim-language-server', '--stdio']},
+          \   'allowlist': ['vim'],
+          \   'initialization_options': {
+          \     'vimruntime': $VIMRUNTIME,
+          \     'runtimepath': &runtimepath,
+          \   }
+          \ })
   augroup END
 endif
 
@@ -94,23 +95,31 @@ if executable('pylsp')
   augroup LspPylsp
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'pylsp',
-          \ 'cmd': {server_info->['pylsp']},
-          \ 'allowlist': ['python'],
-          \ 'workspace_config': {
-          \   'pylsp': {
-          \     'plugins': {
-          \       'black': {'enabled': v:true},
-          \       'autopep8': {'enabled': v:false},
-          \       'yapf': {'enabled': v:false},
-          \       'pylint': {'enabled': v:true},
-          \       'pyflakes': {'enabled': v:false},
-          \       'pycodestyle': {'enabled': v:false},
-          \       'pylsp_mypy': {'enabled': v:true, 'strict': v:true},
-          \       'pyls_isort': {'enabled': v:true},
+          \   'name': 'pylsp',
+          \   'cmd': {server_info->['pylsp']},
+          \   'allowlist': ['python'],
+          \   'workspace_config': {
+          \     'pylsp': {
+          \       'plugins': {
+          \         'black': {'enabled': v:true},
+          \         'autopep8': {'enabled': v:false},
+          \         'yapf': {'enabled': v:false},
+          \         'pylint': {'enabled': v:true},
+          \         'pyflakes': {'enabled': v:false},
+          \         'pycodestyle': {'enabled': v:false},
+          \         'pylsp_mypy': {
+          \           'enabled': v:true,
+          \           'strict': v:true,
+          \           'overrides': [
+          \             "--python-executable",
+          \             trim(system('which python3')),
+          \             v:true,
+          \           ],
+          \         },
+          \         'pyls_isort': {'enabled': v:true},
+          \       },
           \     },
           \   },
-          \ },
           \ })
   augroup END
 endif
@@ -120,15 +129,15 @@ if executable('html-languageserver')
   augroup LspHtml
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'html-languageserver',
-          \ 'cmd': {
-          \   server_info->[
-          \     &shell,
-          \     &shellcmdflag,
-          \     'html-language-server',
-          \     '--stdio'
-          \   ]
-          \ },
+          \   'name': 'html-languageserver',
+          \   'cmd': {
+          \     server_info->[
+          \       &shell,
+          \       &shellcmdflag,
+          \       'html-language-server',
+          \       '--stdio'
+          \     ]
+          \   },
           \ 'allowlist': ['html'],
           \ })
   augroup END
@@ -140,13 +149,13 @@ if executable('clangd')
   augroup LspClangd
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'clangd',
-          \ 'cmd': {server_info->[
-          \   'clangd',
-          \   '--background-index',
-          \   '--fallback-style=google',
-          \ ]},
-          \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp', 'cuda'],
+          \   'name': 'clangd',
+          \   'cmd': {server_info->[
+          \     'clangd',
+          \     '--background-index',
+          \     '--fallback-style=google',
+          \   ]},
+          \   'allowlist': ['c', 'cpp', 'objc', 'objcpp', 'cuda'],
           \ })
   augroup END
 endif
@@ -157,9 +166,9 @@ if executable('shellcheck')
   augroup LspShellcheck
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'shellcheck',
-          \ 'cmd': {server_info->['shellcheck', '--stdio']},
-          \ 'allowlist': ['sh', 'bash', 'zsh'],
+          \   'name': 'shellcheck',
+          \   'cmd': {server_info->['shellcheck', '--stdio']},
+          \   'allowlist': ['sh', 'bash', 'zsh'],
           \ })
   augroup END
 endif
