@@ -27,10 +27,16 @@ if exists('g:loaded_minpac')
     " call minpac#add('mattn/vim-lsp-settings')
     " call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
     " call minpac#add('prabirshrestha/asyncomplete.vim')
+    "
+    " call minpac#add('honza/vim-snippets')
+
+    " call minpac#add('prabirshrestha/async.vim')
+    call minpac#add('SirVer/ultisnips')
     call minpac#add('prabirshrestha/vim-lsp')
+    call minpac#add('thomasfaingnaert/vim-lsp-snippets')
+    call minpac#add('thomasfaingnaert/vim-lsp-ultisnips')
 
     " call minpac#add('takac/vim-hardtime')
-
     " call minpac#add('tpope/vim-abolish')
     call minpac#add('tpope/vim-commentary')
     call minpac#add('tpope/vim-fugitive')
@@ -163,6 +169,35 @@ nnoremap <leader>vv :<c-u>edit $MYVIMRC<cr>
 nnoremap <leader>vd :<c-u>edit $MYVIMRC.d<cr>
 nnoremap <leader>vp :<c-u>edit ~/.vim/pack<cr>
 nnoremap <leader>vr :<c-u>Reload<cr>
+
+" :help ins-completion
+function! CleverTab()
+  if strpart(getline('.'), 0, col('.')-1) =~ '^\s*$'
+    return "\<tab>"
+  elseif pumvisible()
+    return "\<c-n>"
+  else
+    return "\<c-x>\<c-o>"
+  endif
+endfunction
+
+function! CleverShiftTab()
+  if strpart(getline('.'), 0, col('.')-1) =~ '^\s*$'
+    return "\<s-tab>"
+  elseif pumvisible()
+    return "\<c-p>"
+  else
+    return "\<s-tab>"
+  endif
+endfunction
+
+imap <tab> <c-r>=CleverTab()<cr>
+imap <s-tab> <c-r>=CleverShiftTab()<cr>
+
+
+" :help 'completeopt'
+set completeopt+=menuone,noinsert
+set completepopup=height:10,width:60
 
 " :help last-pattern
 let @/ = ""
