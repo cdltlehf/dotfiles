@@ -59,7 +59,7 @@ let g:lsp_diagnostics_signs_warning = {'text': "\uea6c"}
 let g:lsp_diagnostics_signs_information = {'text': "\uea74"}
 let g:lsp_diagnostics_signs_hint = {'text': "\ueb32"}
 " nf-cod-lightbulb
-let g:lsp_document_code_action_sign = {'text': "\ueb13"}
+let g:lsp_document_code_action_signs_hint = {'text': "\uea61"}
 
 let g:lsp_diagnostics_virtual_text_prefix = "\u258C"
 let g:lsp_diagnostics_virtual_text_align = "after"
@@ -169,6 +169,24 @@ if executable('shellcheck')
           \   'name': 'shellcheck',
           \   'cmd': {server_info->['shellcheck', '--stdio']},
           \   'allowlist': ['sh', 'bash', 'zsh'],
+          \ })
+  augroup END
+endif
+
+if executable('deno')
+  augroup LspDeno
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'deno',
+          \   'cmd': {server_info->['deno', 'lsp']},
+          \   'allowlist': ['typescript', 'javascript'],
+          \   'workspace_config': {
+          \     'deno': {
+          \       'enable': v:true,
+          \       'lint': v:true,
+          \       'unstable': v:true,
+          \     },
+          \   },
           \ })
   augroup END
 endif
