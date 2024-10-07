@@ -15,7 +15,7 @@ function! StatusLineMode() abort
   elseif l:mode ==# 'niI'
     "Normal in Insert-mode
     highlight link StatusLineMode StatusLineNormal
-    return 'NORMAL(I)'
+    return 'INSERT NORMAL'
   elseif l:mode ==# 'niR'
     "Normal in Replace-mode
   elseif l:mode ==# 'niV'
@@ -42,12 +42,18 @@ function! StatusLineMode() abort
   " Select mode
   elseif l:mode ==# 's'
     " Select by character
+    highlight link StatusLineMode StatusLineSelect
+    return 'SELECT'
   elseif l:mode ==# 'S'
     " Select by line
+    highlight link StatusLineMode StatusLineSelect
+    return 'SELECT LINE'
   " elseif l:mode ==# 'CTRL-S'
     " Select blockwise
   elseif l:mode ==# '\<C-S>'
     " Select blockwise
+    highlight link StatusLineMode StatusLineSelect
+    return 'SELECT BLOCK'
 
   " Insert mode
   elseif l:mode ==# 'i'
@@ -119,6 +125,8 @@ augroup statusline_highlight
         \   ctermfg=black ctermbg=darkyellow cterm=none
         \|highlight StatusLineVisual
         \   ctermfg=black ctermbg=darkblue cterm=none
+        \|highlight StatusLineSelect
+        \   ctermfg=black ctermbg=darkmagenta cterm=none
         \|highlight StatusLineCommand
         \   ctermfg=black ctermbg=darkcyan cterm=none
         \|highlight StatusLineUnknown
