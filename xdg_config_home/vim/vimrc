@@ -43,7 +43,10 @@ if exists('g:loaded_minpac')
     call minpac#add('tpope/vim-repeat')
     call minpac#add('tpope/vim-surround')
     call minpac#add('tpope/vim-vinegar')
+    call minpac#add('tpope/vim-obsession')
     " call minpac#add('tpope/vim-dispatch')
+
+    call minpac#add('rhysd/vim-healthcheck')
   endfunction
 
   command! PackUpdate
@@ -54,6 +57,9 @@ if exists('g:loaded_minpac')
 endif
 
 silent! colorscheme dracula16
+
+" :help mapleader
+let mapleader = "\<space>"
 
 " Source files in vimrc.d
 for s:f in split(glob('$XDG_CONFIG_HOME/vim/vimrc.d/*.vim'), '\n')
@@ -74,12 +80,13 @@ let &t_EI="\<esc>[2 q" " steady block
 
 augroup termcap_cursor_shape
   autocmd!
-  autocmd VimEnter * silent execute 'silent !echo -ne "\e[2 q"' | redraw!
+  autocmd VimEnter * silent execute 'silent !echo -ne "\e[2 q"'
   if exists('##VimResume')
     autocmd VimResume * silent execute 'silent !echo -ne "\e[2 q"' | redraw!
   endif
 augroup END
 
+" :help checktime
 augroup checktime
   autocmd!
   if exists('##VimResume')
@@ -93,8 +100,8 @@ set ttimeoutlen=100
 
 " :help section
 map [[ ?{<cr>w99[{
-map ][ /{<cr>b99[{
-map ]] j0[[%/{<cr>
+  map ][ /{<cr>b99[{
+  map ]] j0[[%/{<cr>
 map [] k$][%?}<cr>
 
 " :help 'colorcolumn'
@@ -128,7 +135,7 @@ if has('syntax') | set spell | endif
 
 " :help g:netrw_home
 " :help .netrwhist
-let g:netrw_home = expand('$HOME/.cache')
+let g:netrw_home = expand('$XDG_STATE_HOME/vim/netrw')
 
 cabbr <expr> %% expand('%:p:h')
 
@@ -152,11 +159,11 @@ if filereadable(s:vimrc_local) | execute "source " . s:vimrc_local | endif
 " :help wildmode
 set wildmode=longest,full
 
+
 " :help <leader>
 " See more
 " ~/.vim/vimrc.d/recommendations.vim
 " ~/.vim/vimrc.d/fzf.vim
-let mapleader = "\<Space>"
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 nnoremap <leader>mm :<c-u>make!<cr>
 nnoremap <leader>mc :<c-u>make! clean<cr>
@@ -164,11 +171,14 @@ nnoremap <leader>mr :<c-u>make! run<cr>
 nnoremap <leader>mi :<c-u>make! install<cr>
 
 nnoremap <leader>cc :<c-u>cclose<cr>
+nnoremap <leader>hc :<c-u>helpclose<cr>
+nnoremap <leader>hh :<c-u>help<space>
 
 nnoremap <leader>vv :<c-u>edit $MYVIMRC<cr>
 nnoremap <leader>vd :<c-u>edit $MYVIMRC.d<cr>
 nnoremap <leader>vp :<c-u>edit ~/.vim/pack<cr>
 nnoremap <leader>vr :<c-u>Reload<cr>
+
 
 " :help ins-completion
 function! CleverTab()
@@ -202,13 +212,13 @@ set completepopup=height:10,width:60
 " :help last-pattern
 let @/ = ""
 
-if exists(':PackUpdate') != 0 && exists(':PackClean') != 0
-  augroup pack_update
-    autocmd!
-    autocmd VimEnter * silent! PackUpdate
-    autocmd VimEnter * silent! PackClean
-  augroup END
-endif
+" if exists(':PackUpdate') != 0 && exists(':PackClean') != 0
+"   augroup pack_update
+"     autocmd!
+"     autocmd VimEnter * silent! PackUpdate
+"     autocmd VimEnter * silent! PackClean
+"   augroup END
+" endif
 
 autocmd BufWinEnter *
       \ if line2byte(line("$") + 1) > 1000000 | syntax clear | endif

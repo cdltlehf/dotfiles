@@ -1,6 +1,11 @@
 " https://github.com/prabirshrestha/vim-lsp
 
-" Also see: https://neovim.io/doc/user/lsp.html
+" help vim-lsp-performance
+if !has('nvim')
+  let g:lsp_use_native_client = 1
+endif
+
+" Also see: https://neovim.io/doc/user/lsp.html#lsp-defaults
 function! s:on_lsp_buffer_enabled() abort
   setlocal signcolumn=yes
 
@@ -40,9 +45,6 @@ function! s:on_lsp_buffer_enabled() abort
   " nmap <buffer> gt <plug>(lsp-type-definition)
   nmap <buffer> [g <plug>(lsp-previous-diagnostic)
   nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-
-  " nnoremap <buffer> <leader>g <plug>(lsp-document-diagnostics)
-  " nnoremap <buffer> <leader>cl <plug>(lsp-code-lens)
 endfunction
 
 augroup lsp_install
@@ -101,7 +103,12 @@ if executable('pylsp')
           \   'workspace_config': {
           \     'pylsp': {
           \       'plugins': {
-          \         'black': {'enabled': v:true},
+          \         'black': {
+          \           'enabled': v:true,
+          \           'cache_config': v:true,
+          \           'line_length': 80,
+          \           'preview': v:true,
+          \         },
           \         'autopep8': {'enabled': v:false},
           \         'yapf': {'enabled': v:false},
           \         'pylint': {'enabled': v:true},
@@ -116,7 +123,7 @@ if executable('pylsp')
           \             v:true,
           \           ],
           \         },
-          \         'pyls_isort': {'enabled': v:true},
+          \         'isort': {'enabled': v:true, 'profile': 'google'},
           \       },
           \     },
           \   },
@@ -179,7 +186,7 @@ if executable('deno')
     autocmd User lsp_setup call lsp#register_server({
           \   'name': 'deno',
           \   'cmd': {server_info->['deno', 'lsp']},
-          \   'allowlist': ['typescript', 'javascript'],
+          \   'allowlist': ['typescript', 'javascript', 'javascriptreact'],
           \   'workspace_config': {
           \     'deno': {
           \       'enable': v:true,
