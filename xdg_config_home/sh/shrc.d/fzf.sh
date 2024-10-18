@@ -1,4 +1,8 @@
-#!/bin/sh
+# https://github.com/junegunn/fzf
+# shellcheck shell=sh
 
-export FZF_DEFAULT_OPTS="
-  --color=16,border:grey --border=sharp --preview-window=border-sharp"
+export FZF_DEFAULT_OPTS="\
+  --height=8 \
+  --color=16,border:grey \
+  --border=none \
+  --preview-window=border-none"

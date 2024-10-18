@@ -1,6 +1,4 @@
-#!/bin/bash
 # https://github.com/junegunn/fzf
 
-# shellcheck source=/dev/null
-[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] \
-  && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
+# shellcheck disable=SC2015
+command -v fzf > /dev/null && eval "$(fzf --bash)" || true

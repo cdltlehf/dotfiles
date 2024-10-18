@@ -1,5 +1,5 @@
-#!/bin/sh
 # https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+# shellcheck shell=sh
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWSTASHSTATE=1
@@ -10,5 +10,8 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 # export GIT_PS1_DESCRIBE_STYLE
 export GIT_PS1_SHOWCOLORHINTS=1
 # shellcheck source=/dev/null
-[ -f "$HOME/.local/share/git-prompt.sh" ] \
-  && . "$HOME/.local/share/git-prompt.sh"
+
+git_prompt="$HOME/.local/share/git-prompt.sh"
+# shellcheck source=/dev/null
+[ -f "$git_prompt" ] && . "$git_prompt"
+unset git_prompt
