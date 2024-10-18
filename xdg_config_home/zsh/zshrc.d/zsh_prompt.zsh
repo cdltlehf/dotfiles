@@ -1,5 +1,3 @@
-#!/bin/zsh
-
 setopt PROMPT_SUBST
 ZLE_RPROMPT_INDENT=0
 

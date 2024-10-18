@@ -1,4 +1,4 @@
-#!/bin/sh
+# shellcheck shell=sh
 
 # Easier navigation
 alias ..='command cd ..'
@@ -14,7 +14,7 @@ alias ln='command ln -i'
 
 # Colorize `ls`
 alias ls='ls --color=auto'
-alias la='ls -a'
+alias la='ls -A'
 alias ll='ls -l'
 alias lla='ls -lha'
 
@@ -38,9 +38,6 @@ alias grep='command grep --color=auto'
 alias egrep='command egrep --color=auto'
 alias fgrep='command fgrep --color=auto'
 
-# Reload the shell as login shell
-alias reload='exec ${SHELL} --login'
-
 # open command
 if ! command -v open > /dev/null 2>&1; then
   case $(uname) in
@@ -52,7 +49,8 @@ if ! command -v open > /dev/null 2>&1; then
 fi
 
 # Python virtual environment
-alias ve='echo "ve alias is moved to pyenv" 1>&2'
-alias va='echo "va alias is moved to pyact" 1>&2'
-alias pyenv='python3 -m venv ./.venv'
+alias pyvenv='python3 -m venv ./.venv'
 alias pyact='source ./.venv/bin/activate'
+
+# Reload the shell as login shell
+alias reload='exec ${SHELL} --login'
