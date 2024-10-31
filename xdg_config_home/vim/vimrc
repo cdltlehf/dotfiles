@@ -166,17 +166,19 @@ set wildmode=longest,full
 " ~/.vim/vimrc.d/fzf.vim
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 nnoremap <leader>mm :<c-u>make!<cr>
+nnoremap <leader>ma :<c-u>make! all<cr>
 nnoremap <leader>mc :<c-u>make! clean<cr>
 nnoremap <leader>mr :<c-u>make! run<cr>
 nnoremap <leader>mi :<c-u>make! install<cr>
+nnoremap <leader>m<space> :<c-u>make!<space>
 
 nnoremap <leader>cc :<c-u>cclose<cr>
+
 nnoremap <leader>hc :<c-u>helpclose<cr>
-nnoremap <leader>hh :<c-u>help<space>
 
 nnoremap <leader>vv :<c-u>edit $MYVIMRC<cr>
+nnoremap <leader>vV :<c-u>execute 'edit ' . fnamemodify($MYVIMRC, ':h')<cr>
 nnoremap <leader>vd :<c-u>edit $MYVIMRC.d<cr>
-nnoremap <leader>vp :<c-u>edit ~/.vim/pack<cr>
 nnoremap <leader>vr :<c-u>Reload<cr>
 
 

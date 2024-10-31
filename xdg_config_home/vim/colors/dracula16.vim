@@ -140,21 +140,15 @@ highlight WildMenu ctermfg=darkblue ctermbg=none cterm=bold,inverse
 " highlight Scrollbar
 " highlight Tooltip
 
-" vim-gitgutter
+" airblade/vim-gitgutter
 highlight GitGutterAdd ctermfg=darkgreen ctermbg=none cterm=none
 highlight GitGutterChange ctermfg=darkyellow ctermbg=none cterm=none
 highlight GitGutterDelete ctermfg=darkred ctermbg=none cterm=none
 
-" vim-polyglot
-highlight helpHyperTextJump ctermfg=darkcyan ctermbg=none cterm=none
-highlight! link helpExample String
-highlight! link helpVim Error
-highlight! link helpCommand Error
+" github/copilot
+highlight CopilotSuggestion ctermfg=darkgrey cterm=italic
 
-" vim-copilot
-highlight CopilotSuggestion ctermfg=darkgrey
-
-" vim-lsp
+" prabirshrestha/vim-lsp
 highlight! link LspErrorHighlight Error
 highlight! link LspWarningHighlight Todo
 highlight LspInformationHighlight ctermfg=darkblue ctermbg=none cterm=none
