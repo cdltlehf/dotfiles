@@ -92,5 +92,9 @@ echo 'Preference > General > Prefer tabs when opening documents (manual?)'
 defaults write com.apple.dock windowtabbing -string "manual"
 defaults write com.apple.dock windowtabbing-immutable -bool true
 
+# There is no documentation for these keys
+defaults write com.apple.dock "autohide-delay" -float "0" && killall Dock
+
+
 # Restart dock
 killall Dock;
