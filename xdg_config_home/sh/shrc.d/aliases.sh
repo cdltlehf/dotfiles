@@ -25,7 +25,7 @@ fi
 # Replace `cat` with `bat`
 if command -v bat > /dev/null 2>&1; then
   alias cat='command bat -pp'
-  export MANPAGER="command sh -c 'col -bx | bat -l man -p'"
+  export MANPAGER="command sh -c 'col -bx | bat -l=man --paging=always -p'"
 fi
 
 # Replace `ls` with `lsd`
