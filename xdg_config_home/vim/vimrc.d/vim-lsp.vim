@@ -53,6 +53,9 @@ augroup lsp_install
 augroup END
 
 let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_diagnostics_float_insert_mode_enabled = 0
+let g:lsp_diagnostics_highlights_insert_mode_enabled = 0
+let g:lsp_diagnostics_signs_insert_mode_enabled = 0
 
 " :help g:lsp_diagnostics_signs_enabled
 " nf-cod-error nf-cod-warning nf-cod-info nf-cod-question
@@ -70,8 +73,11 @@ let g:lsp_diagnostics_virtual_text_wrap = "truncate"
 
 " :help vim-lsp-semantic
 if has('textprop') || has('nvim')
-  let g:lsp_semantic_enabled = 1
+  " let g:lsp_semantic_enabled = 1
+  let g:lsp_semantic_enabled = 0
 endif
+
+" Refer: https://microsoft.github.io/language-server-protocol/implementors/servers/
 
 " npm install -g vim-language-server
 if executable('vim-language-server')
@@ -103,17 +109,18 @@ if executable('pylsp')
           \   'workspace_config': {
           \     'pylsp': {
           \       'plugins': {
+          \         'autopep8': {'enabled': v:false},
+          \         'yapf': {'enabled': v:false},
+          \         'pyflakes': {'enabled': v:false},
+          \         'pycodestyle': {'enabled': v:false},
+          \         'rope_autoimport': {'enabled': v:true},
+          \         'pylint': {'enabled': v:true},
           \         'black': {
           \           'enabled': v:true,
           \           'cache_config': v:true,
           \           'line_length': 80,
           \           'preview': v:true,
           \         },
-          \         'autopep8': {'enabled': v:false},
-          \         'yapf': {'enabled': v:false},
-          \         'pylint': {'enabled': v:true},
-          \         'pyflakes': {'enabled': v:false},
-          \         'pycodestyle': {'enabled': v:false},
           \         'pylsp_mypy': {
           \           'enabled': v:true,
           \           'strict': v:true,
@@ -167,19 +174,6 @@ if executable('clangd')
   augroup END
 endif
 
-" macOS: brew instal shellcheck
-" TODO: Linux
-if executable('shellcheck')
-  augroup LspShellcheck
-    autocmd!
-    autocmd User lsp_setup call lsp#register_server({
-          \   'name': 'shellcheck',
-          \   'cmd': {server_info->['shellcheck', '--stdio']},
-          \   'allowlist': ['sh', 'bash', 'zsh'],
-          \ })
-  augroup END
-endif
-
 if executable('deno')
   augroup LspDeno
     autocmd!
@@ -191,9 +185,19 @@ if executable('deno')
           \     'deno': {
           \       'enable': v:true,
           \       'lint': v:true,
-          \       'unstable': v:true,
           \     },
           \   },
+          \ })
+  augroup END
+endif
+
+if executable('glasgow')
+  augroup LspGlasgow
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'glasgow',
+          \   'cmd': {server_info->['glasgow']},
+          \   'allowlist': ['wgsl'],
           \ })
   augroup END
 endif
