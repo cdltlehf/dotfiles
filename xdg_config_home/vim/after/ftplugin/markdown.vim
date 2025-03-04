@@ -10,13 +10,13 @@ setlocal comments=b:*,b:-,b:+,b:1.,b:2.,b:3.,b:4.,b:5.,b:6.,b:7.,b:8.,b:9.,n:>
 let &formatlistpat = '^\s*\d\+\.\s\+\|^\s*[*-+]\s\+'
 setlocal formatoptions=tcroqnl
 
-inoremap <buffer> <expr> <tab> TabFunc()
+" inoremap <buffer> <expr> <tab> TabFunc()
 " XXX: Why the below mapping works?
-inoremap <buffer> <expr> <s-tab> ShiftedTabFunc()
+" inoremap <buffer> <expr> <s-tab> ShiftedTabFunc()
 
-inoremap <buffer> <expr> <space> SpaceFunc()
-inoremap <buffer> <expr> <bs> BSFunc()
-inoremap <buffer> <expr> <cr> CRFunc()
+" inoremap <buffer> <expr> <space> SpaceFunc()
+" inoremap <buffer> <expr> <bs> BSFunc()
+" inoremap <buffer> <expr> <cr> CRFunc()
 
 function TabFunc() "{{{
   if col(".") != col("$") | return "\<tab>" | endif

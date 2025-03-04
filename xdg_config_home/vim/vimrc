@@ -3,58 +3,37 @@
 " https://learnvimscriptthehardway.stevelosh.com
 " https://learnvim.irian.to
 
-if &g:compatible
-  set nocompatible
-endif
+packadd! bufferline
+packadd! sensible
+packadd! statusline
+packadd! unimpaired
+packadd! vim-scriptease
+packadd! vim-templates
 
-set packpath+=$XDG_DATA_HOME/vim
-let s:minpac_dir = expand('$XDG_DATA_HOME/vim')
-let s:minpac_config = {'dir': s:minpac_dir, 'progress_open': 'none'}
+call plug#begin('$XDG_DATA_HOME/vim/plugged')
+Plug 'junegunn/vim-plug'
 
-silent! packadd minpac
-if exists('g:loaded_minpac')
-  function! s:PackInit() abort
-    call minpac#init(s:minpac_config)
-    call minpac#add('k-takata/minpac', {'type': 'opt'})
+Plug 'junegunn/fzf', {'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
-    call minpac#add('airblade/vim-gitgutter')
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
-    call minpac#add('github/copilot.vim')
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-vinegar'
 
-    call minpac#add('junegunn/fzf', {'do': { -> fzf#install() } })
-    call minpac#add('junegunn/fzf.vim')
+Plug 'rhysd/vim-healthcheck'
+Plug 'airblade/vim-gitgutter'
+Plug 'github/copilot.vim'
 
-    " call minpac#add('mattn/vim-lsp-settings')
-    " call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
-    " call minpac#add('prabirshrestha/asyncomplete.vim')
-    "
-    " call minpac#add('honza/vim-snippets')
-
-    " call minpac#add('prabirshrestha/async.vim')
-    call minpac#add('SirVer/ultisnips')
-    call minpac#add('prabirshrestha/vim-lsp')
-    call minpac#add('thomasfaingnaert/vim-lsp-snippets')
-    call minpac#add('thomasfaingnaert/vim-lsp-ultisnips')
-
-    " call minpac#add('takac/vim-hardtime')
-    " call minpac#add('tpope/vim-abolish')
-    call minpac#add('tpope/vim-commentary')
-    call minpac#add('tpope/vim-fugitive')
-    call minpac#add('tpope/vim-repeat')
-    call minpac#add('tpope/vim-surround')
-    call minpac#add('tpope/vim-vinegar')
-    call minpac#add('tpope/vim-obsession')
-    " call minpac#add('tpope/vim-dispatch')
-
-    call minpac#add('rhysd/vim-healthcheck')
-  endfunction
-
-  command! PackUpdate
-        \ source $MYVIMRC | call s:PackInit() | call minpac#update()
-  command! PackClean
-        \ source $MYVIMRC | call s:PackInit() | call minpac#clean()
-  command! PackStatus call minpac#status()
-endif
+Plug 'DingDean/wgsl.vim'
+call plug#end()
 
 silent! colorscheme dracula16
 
@@ -105,7 +84,7 @@ map [[ ?{<cr>w99[{
 map [] k$][%?}<cr>
 
 " :help 'colorcolumn'
-if exists('&colorcolumn') | set colorcolumn=81 | endif
+if exists('&colorcolumn') | set colorcolumn=+2 | endif
 
 " :help :helptags
 " XXX: Long startup time
@@ -183,28 +162,15 @@ nnoremap <leader>vr :<c-u>Reload<cr>
 
 
 " :help ins-completion
-function! CleverTab()
-  if strpart(getline('.'), 0, col('.')-1) =~ '^\s*$'
-    return "\<tab>"
-  elseif pumvisible()
+function! SmartInsertCompletion()
+  if pumvisible()
     return "\<c-n>"
-  else
-    return "\<c-x>\<c-o>"
+  elseif !empty(&omnifunc)
+    return "\<c-x>\<c-u>"
   endif
+  return "\<c-n>"
 endfunction
-
-function! CleverShiftTab()
-  if strpart(getline('.'), 0, col('.')-1) =~ '^\s*$'
-    return "\<s-tab>"
-  elseif pumvisible()
-    return "\<c-p>"
-  else
-    return "\<s-tab>"
-  endif
-endfunction
-
-imap <tab> <c-r>=CleverTab()<cr>
-imap <s-tab> <c-r>=CleverShiftTab()<cr>
+" inoremap <silent> <c-n> <c-r>=SmartInsertCompletion()<cr>
 
 
 " :help 'completeopt'
@@ -214,15 +180,11 @@ set completepopup=height:10,width:60
 " :help last-pattern
 let @/ = ""
 
-" if exists(':PackUpdate') != 0 && exists(':PackClean') != 0
-"   augroup pack_update
-"     autocmd!
-"     autocmd VimEnter * silent! PackUpdate
-"     autocmd VimEnter * silent! PackClean
-"   augroup END
-" endif
-
 autocmd BufWinEnter *
       \ if line2byte(line("$") + 1) > 1000000 | syntax clear | endif
 
-command! Reload source $MYVIMRC
+set showtabline=1
+set lazyredraw
+command! Reload source $MYVIMRC | echo "Reloaded"
+
+autocmd BufWritePre "." echo "Filename is ."

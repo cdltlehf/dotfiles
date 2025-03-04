@@ -1,6 +1,6 @@
 " ~/.vim/after/syntax/markdown.vim
 
-hi! link markdownCodeBlock         DraculaGreen
+hi! link markdownCodeBlock DraculaGreen
 
 " Overwrite a Tim Pope's markdownCodeBlock syntax
 syntax clear markdownCodeBlock

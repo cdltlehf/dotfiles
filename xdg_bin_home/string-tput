@@ -1,0 +1,13 @@
+#!/bin/bash
+# infocmp
+
+tput sgr0; echo "normal (sgr0)"; tput sgr0
+tput bold; echo "bold (bold)"; tput sgr0
+tput dim; echo "dim (dim)"; tput sgr0
+tput sitm; echo "italics (stim)"; tput sgr0
+tput smul; echo "underline (smul)"; tput sgr0
+tput standout; echo "standout (standout)"; tput sgr0
+tput smso; echo "standout (smso)"; tput sgr0
+tput rev; echo "reverse (rev)"; tput sgr0
+tput blink; echo "blink (blink)"; tput sgr0
+tput invis; echo "invisible (invis)"; tput sgr0; echo "^ invisible (invis)"

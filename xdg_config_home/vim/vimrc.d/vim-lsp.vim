@@ -3,13 +3,15 @@
 " help vim-lsp-performance
 if !has('nvim')
   let g:lsp_use_native_client = 1
+  " NOTE: If vim is slow, suspect the following line.
+  let g:lsp_semantic_enabled = 1
+  let g:lsp_format_sync_timeout = 1000
 endif
 
 " Also see: https://neovim.io/doc/user/lsp.html#lsp-defaults
 function! s:on_lsp_buffer_enabled() abort
-  setlocal signcolumn=yes
-
   setlocal omnifunc=lsp#complete
+  setlocal signcolumn=yes
 
   if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 
@@ -32,9 +34,10 @@ function! s:on_lsp_buffer_enabled() abort
   nnoremap <buffer> grr <plug>(lsp-references)
   inoremap <buffer> <c-s> <c-o>:LspSignatureHelp<CR>
 
-  " :help vim-lsp-folding
+  " " :help vim-lsp-folding
   set foldmethod=expr
-  set foldexpr=lsp#ui#vim#folding#foldexpr()
+  " XXX: The following code makes vim very slow
+  " set foldexpr=lsp#ui#vim#folding#foldexpr()
   set foldtext=lsp#ui#vim#folding#foldtext()
 
   " nmap <buffer> gd <plug>(lsp-definition)
@@ -43,8 +46,8 @@ function! s:on_lsp_buffer_enabled() abort
   " nmap <buffer> gr <plug>(lsp-references)
   " nmap <buffer> gI <plug>(lsp-implementation)
   " nmap <buffer> gt <plug>(lsp-type-definition)
-  nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-  nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+  nnoremap <buffer> [g <plug>(lsp-previous-diagnostic)
+  nnoremap <buffer> ]g <plug>(lsp-next-diagnostic)
 endfunction
 
 augroup lsp_install
@@ -70,12 +73,6 @@ let g:lsp_diagnostics_virtual_text_prefix = "\u258C"
 let g:lsp_diagnostics_virtual_text_align = "after"
 let g:lsp_diagnostics_virtual_text_padding_left = 5
 let g:lsp_diagnostics_virtual_text_wrap = "truncate"
-
-" :help vim-lsp-semantic
-if has('textprop') || has('nvim')
-  " let g:lsp_semantic_enabled = 1
-  let g:lsp_semantic_enabled = 0
-endif
 
 " Refer: https://microsoft.github.io/language-server-protocol/implementors/servers/
 
@@ -113,7 +110,7 @@ if executable('pylsp')
           \         'yapf': {'enabled': v:false},
           \         'pyflakes': {'enabled': v:false},
           \         'pycodestyle': {'enabled': v:false},
-          \         'rope_autoimport': {'enabled': v:true},
+          \         'rope_autoimport': {'enabled': v:false},
           \         'pylint': {'enabled': v:true},
           \         'black': {
           \           'enabled': v:true,
@@ -180,13 +177,31 @@ if executable('deno')
     autocmd User lsp_setup call lsp#register_server({
           \   'name': 'deno',
           \   'cmd': {server_info->['deno', 'lsp']},
-          \   'allowlist': ['typescript', 'javascript', 'javascriptreact'],
           \   'workspace_config': {
           \     'deno': {
           \       'enable': v:true,
           \       'lint': v:true,
+          \       'unstable': v:true,
+          \       'compilerOptions': {
+          \         'lib': ['deno.ns', 'dom', 'esnext'],
+          \       },
           \     },
           \   },
+          \   'allowlist': [
+          \     'javascript', 'typescript',
+          \     'javascriptreact', 'typescriptreact',
+          \   ],
+          \ })
+  augroup END
+endif
+
+if executable('rust-analyzer')
+  augroup LspRust
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'rust-analyzer',
+          \   'cmd': {server_info->['rust-analyzer']},
+          \   'allowlist': ['rust'],
           \ })
   augroup END
 endif
@@ -201,3 +216,17 @@ if executable('glasgow')
           \ })
   augroup END
 endif
+
+if executable('taplo')
+  augroup LspTaplo
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'taplo',
+          \   'cmd': {server_info->['taplo', 'lsp', 'stdio']},
+          \   'allowlist': ['toml'],
+          \ })
+  augroup END
+endif
+
+command LspDisableDiagnostics call lsp#disable_diagnostics_for_buffer()
+command LspEnableDiagnostics call lsp#enable_diagnostics_for_buffer()
