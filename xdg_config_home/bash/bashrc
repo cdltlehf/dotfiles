@@ -23,3 +23,14 @@ if [[ -d "${BASHRCDIR}" ]]; then
   done
   unset -v sh
 fi
+
+# shellcheck source=/dev/null
+
+# https://github.com/nvm-sh/nvm?tab=readme-ov-file#bash-completion
+. "$NVM_DIR/bash_completion" 2> /dev/null || true
+
+# https://github.com/junegunn/fzf
+eval "$(fzf --bash)" 2> /dev/null || true
+
+# https://github.com/ajeetdsouza/zoxide
+eval "$(zoxide init bash)" 2> /dev/null || true

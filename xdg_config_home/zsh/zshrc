@@ -14,3 +14,9 @@ if [[ -d "${ZSHRCDIR}" ]]; then
   done
   unset -v sh
 fi
+
+# https://github.com/junegunn/fzf
+command -v fzf > /dev/null && source <(fzf --zsh) || true
+
+# https://github.com/ajeetdsouza/zoxide
+command -v zoxide > /dev/null && source <(zoxide init zsh) || true

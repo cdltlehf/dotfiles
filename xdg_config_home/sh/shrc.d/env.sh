@@ -3,7 +3,7 @@
 
 # https://volta.sh
 export VOLTA_HOME="${XDG_DATA_HOME}/volta"
-PATH="${VOLTA_HOME}/bin:${PATH}"
+export PATH="${VOLTA_HOME}/bin:${PATH}"
 
 # https://github.com/nvm-sh/nvm
 export NVM_DIR="$XDG_DATA_HOME/nvm"
@@ -11,17 +11,17 @@ export NVM_DIR="$XDG_DATA_HOME/nvm"
 # shellcheck source=/dev/null
 NODE_PATH=$(find "$XDG_DATA_HOME/nvm/versions/node" \
   -maxdepth 2 -name bin -print -quit 2> /dev/null)
-[ -n "$NODE_PATH" ] && PATH="${NODE_PATH}:${PATH}"
+[ -n "$NODE_PATH" ] && export PATH="${NODE_PATH}:${PATH}"
 
 # https://deno.com
-PATH="${HOME}/.deno/bin:${PATH}"
+export PATH="${HOME}/.deno/bin:${PATH}"
 
 # https://github.com/pyenv/pyenv
 PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
-command -v pyenv > /dev/null || export PATH="${PYENV_ROOT}/bin:${PATH}"
-eval "$(pyenv init --path)"
-
-export PATH
+if command -v pyenv > /dev/null; then
+  export PATH="${PYENV_ROOT}/bin:${PATH}"
+  eval "$(pyenv init --path)"
+fi
 
 # https://github.com/rust-lang/rustup
 # shellcheck source=/dev/null
@@ -40,3 +40,6 @@ export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 
 export LESSHIST="$XDG_DATA_HOME/less/history"
 export NODE_REPL_HISTORY="${XDG_DATA_HOME}"/node_repl_history
+
+# https://github.com/eth-p/bat-extras
+command -v batman > /dev/null && eval "$(batman --export-env)"

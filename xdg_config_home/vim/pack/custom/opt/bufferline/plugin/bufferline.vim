@@ -1,12 +1,8 @@
 " tab (buffer) line
 
-set showtabline=2
-set tabline=%!TabLine()
-
 augroup bufferline_highligh
   autocmd!
-  autocmd ColorScheme,VimEnter *
-        \ highlight link TabLineSelNr TabLineSel
+  autocmd ColorScheme,VimEnter * highlight link TabLineSelNr TabLineSel
 augroup end
 
 function! TabLine() abort
@@ -74,5 +70,7 @@ function! BufferLine() abort
   let l:s .= '%#TabLineFill#'
   return l:s
 endfunction
+
+set tabline=%!TabLine()
 
 " vim: set ft=vim fdm=marker ts=2 sts=2 sw=2 fdl=0:

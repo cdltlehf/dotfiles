@@ -139,34 +139,35 @@ augroup statusline_highlight
         \   ctermfg=black ctermbg=darkyellow cterm=none
 augroup end
 
-function! s:activate_statusline() abort
-  let &l:statusline = '%#StatusLineMode# %{StatusLineMode()} '
-  if exists('g:loaded_fugitive')
-    let &l:statusline .= ''
-          \.'%#FugitiveStatusline#'
-          \.'%{substitute('
-          \.  'substitute(FugitiveStatusline(),"\\[Git(",'
-          \.    '" \uea68 ", ""),'
-          \.  '")]",'
-          \.  '" \u2502", ""'
-          \.')}'
-  endif
-  let &l:statusline .= '%* %<%f %m%r%h%w '
-  let &l:statusline .= '%='
-  let &l:statusline .= ''
-        \.' %y '
-        \.'%#StatusLineRight1# %{&fileencoding}[%{&fileformat}] '
-        \.'%#StatusLineRight2# %3.p%% :%5.l/%L:%2.c '
+let g:statusline_active = '%#StatusLineMode# %{StatusLineMode()} '
+if exists('g:loaded_fugitive')
+  highlight FugitiveStatusline ctermfg=white ctermbg=black cterm=none
+  let g:statusline_active .= '%#FugitiveStatusline#'
+        \.'%{substitute('
+        \.  'FugitiveStatusline(),'
+        \.  '"\\[Git(\\(.\\+\\))\\]",'
+        \.  '" \uea68 \\1 \u2502",'
+        \.  '""'
+        \.')}'
+endif
+let g:statusline_active .= '%* %<%f %m%r%h%w '
+      \.'%='
+      \.' %y '
+      \.'%#StatusLineRight1# %{&fileencoding}[%{&fileformat}] '
+      \.'%#StatusLineRight2# %3.p%% :%5.l/%L:%2.c '
+
+let g:statusline_inactive = '%#StatusLineInactive# INACTIVE '
+      \.'%* %<%f %m%r%h%w '
+      \. '%='
+      \.' %y '
+      \.'%{&fileencoding}[%{&fileformat}] '
+
+function s:activate_statusline() abort
+  let &l:statusline = g:statusline_active
 endfunction
 
-function! s:deactivate_statusline() abort
-  let &l:statusline = ''
-        \.'%#StatusLineInactive# INACTIVE '
-        \.'%* %<%f %m%r%h%w '
-  let &l:statusline .= '%='
-  let &l:statusline .= ''
-        \.' %y '
-        \.'%* %{&fileencoding}[%{&fileformat}] '
+function s:deactivate_statusline() abort
+  let &l:statusline = g:statusline_inactive
 endfunction
 
 augroup statusline_string
@@ -174,14 +175,5 @@ augroup statusline_string
   autocmd WinEnter,BufEnter * call s:activate_statusline()
   autocmd WinLeave,BufLeave * call s:deactivate_statusline()
 augroup end
-
-if exists('g:loaded_fugitive')
-  augroup fugitive_statusline_highlight
-    autocmd!
-    autocmd ColorScheme,VimEnter *
-          \ highlight FugitiveStatusline
-          \   ctermfg=white ctermbg=black cterm=none
-  augroup end
-endif
 
 " vim: set ft=vim fdm=marker ts=2 sts=2 sw=2 fdl=0:

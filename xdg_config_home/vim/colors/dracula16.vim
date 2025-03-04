@@ -5,18 +5,67 @@ let g:colors_name = 'dracula16'
 
 let &t_Co=16
 
+" spec.draculatheme.com {{{
+highlight! Dracula16Invalid ctermfg=none ctermbg=darkred cterm=none
+highlight! Dracula16Deprecated ctermfg=none ctermbg=darkred cterm=none
+highlight! Dracula16Error ctermfg=darkred ctermbg=none cterm=none
+
+highlight! Dracula16DiffText ctermfg=darkgrey ctermbg=none cterm=none
+highlight! Dracula16DiffHeader ctermfg=darkgrey ctermbg=none cterm=none
+highlight! Dracula16Inserted ctermfg=darkgreen ctermbg=none cterm=underline
+highlight! Dracula16Deleted ctermfg=darkred ctermbg=none cterm=underline
+highlight! Dracula16Changed ctermfg=darkyellow ctermbg=none cterm=underline
+
+" TODO: Markup
+
+highlight! Dracula16ClassName ctermfg=darkblue ctermbg=none cterm=none
+highlight! Dracula16InstanceReservedWords ctermfg=darkmagenta ctermbg=none cterm=italic
+highlight! Dracula16InheritedClassName ctermfg=darkcyan ctermbg=none cterm=italic
+
+highlight! Dracula16Comment ctermfg=darkgrey ctermbg=none cterm=none
+highlight! Dracula16DocCommentKeywords ctermfg=darkmagenta ctermbg=none cterm=none
+highlight! Dracula16DocCommentTypes ctermfg=darkcyan ctermbg=none cterm=italic
+highlight! Dracula16DocParameters ctermfg=darkyellow ctermbg=none cterm=italic
+
+highlight! Dracula16Constant ctermfg=darkmagenta ctermbg=none cterm=none
+highlight! Dracula16ConstantEscapeSequences ctermfg=darkmagenta ctermbg=none cterm=none
+
+" TODO: Entities
+
+highlight! Dracula16FunctionNames ctermfg=darkgreen ctermbg=none cterm=none
+highlight! Dracula16FunctionParameters ctermfg=darkyellow ctermbg=none cterm=italic
+highlight! Dracula16Decorators ctermfg=darkgreen ctermbg=none cterm=italic
+
+highlight! Dracula16Keyword ctermfg=darkmagenta ctermbg=none cterm=none
+highlight! Dracula16KeyworkNew ctermfg=darkmagenta ctermbg=none cterm=bold
+highlight! Dracula16KeywordGenericCssSelector ctermfg=darkmagenta ctermbg=none cterm=none
+
+" TODO: Language Built-ins
+" TODO: Punctuation
+" TODO: Serializable / Configuration Languages
+" TODO: Storage
+
+highlight! Dracula16String ctermfg=darkyellow ctermbg=none cterm=none
+highlight! Dracula16StringRegExp ctermfg=darkred ctermbg=none cterm=none
+
+highlight! Dracula16Variable ctermfg=white ctermbg=none cterm=none
+highlight! Dracula16ObjectKeys ctermfg=white ctermbg=none cterm=none
+highlight! Dracula16DestructuringAliasLHS ctermfg=darkyellow ctermbg=none cterm=italic
+highlight! Dracula16DestructuringAliasRHS ctermfg=white ctermbg=none
+" }}}
+
 " :help group-name
-highlight Comment ctermfg=darkgrey ctermbg=none cterm=none
+highlight! link Comment Dracula16Comment
 
 highlight Constant ctermfg=darkblue ctermbg=none cterm=none
-highlight String ctermfg=darkyellow ctermbg=none cterm=none
+highlight! link String Dracula16String
 highlight Character ctermfg=darkmagenta ctermbg=none cterm=none
 highlight! link Number Constant
 highlight! link Boolean Constant
 highlight! link Float Constant
 
 highlight Identifier ctermfg=none ctermbg=none cterm=none
-highlight Function ctermfg=darkgreen ctermbg=none cterm=none
+highlight! link Function Dracula16FunctionNames
 
 highlight Statement ctermfg=darkmagenta ctermbg=none cterm=none
 highlight! link Conditional Statement
@@ -114,8 +163,8 @@ highlight Search ctermfg=darkgreen ctermbg=none cterm=inverse
 highlight CurSearch ctermfg=darkyellow ctermbg=none cterm=inverse
 
 highlight SpecialKey ctermfg=darkmagenta ctermbg=none cterm=none
-highlight SpellBad ctermfg=darkred ctermbg=none cterm=underline
-highlight SpellCap ctermfg=darkyellow ctermbg=none cterm=underline
+highlight SpellBad ctermfg=none ctermbg=none cterm=underline
+highlight SpellCap ctermfg=none ctermbg=none cterm=underline
 highlight! link SpellLocal SpellCap
 highlight! link SpellRare SpellCap
 
@@ -140,15 +189,17 @@ highlight WildMenu ctermfg=darkblue ctermbg=none cterm=bold,inverse
 " highlight Scrollbar
 " highlight Tooltip
 
-" airblade/vim-gitgutter
+" airblade/vim-gitgutter {{{
 highlight GitGutterAdd ctermfg=darkgreen ctermbg=none cterm=none
 highlight GitGutterChange ctermfg=darkyellow ctermbg=none cterm=none
 highlight GitGutterDelete ctermfg=darkred ctermbg=none cterm=none
+" }}}
 
-" github/copilot
+" github/copilot {{{
 highlight CopilotSuggestion ctermfg=darkgrey cterm=italic
+" }}}
 
-" prabirshrestha/vim-lsp
+" prabirshrestha/vim-lsp {{{
 highlight! link LspErrorHighlight Error
 highlight! link LspWarningHighlight Todo
 highlight LspInformationHighlight ctermfg=darkblue ctermbg=none cterm=none
@@ -163,3 +214,28 @@ highlight! link LspErrorVirtualText LspErrorText
 highlight! link LspWarningVirtualText LspWarningText
 highlight! link LspInformationVirtualText LspInformationText
 highlight! link LspHintVirtualText LspHintText
+" }}}
+
+" Typescript: {{{
+highlight! link typescriptArrowFuncArg Identifier
+highlight! link typescriptFuncCallArg Identifier
+
+highlight! link typescriptArrowFunction Operator
+highlight! link typescriptOperator Operator
+highlight! link typescriptUnaryOp Operator
+highlight! link typescriptBinaryOp Operator
+highlight! link typescriptTernaryOp Operator
+highlight! link typescriptAssign Operator
+
+highlight! link typescriptGlobal Type
+highlight! link typescriptTypeReference Type
+
+highlight! link typescriptVariable Keyword
+highlight! link typescriptKeywordOp Keyword
+
+highlight! link typescriptDestructureLabel Dracula16DestructuringAliasLHS
+highlight! link typescriptDestructureVariable Dracula16DestructuringAliasRHS
+highlight! link typescriptObjectLabel Dracula16ObjectKeys
+
+highlight! link typescriptRegexpString Dracula16StringRegExp
+" }}}
