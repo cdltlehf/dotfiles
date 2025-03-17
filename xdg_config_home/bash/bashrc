@@ -3,7 +3,6 @@
 # Bash startup file for an interactive shell
 # ~/.bash_profile sources this file
 
-: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
 SHRC="${XDG_CONFIG_HOME}/sh/shrc"
 # shellcheck source=/dev/null
 [[ -e "${SHRC}" ]] && source "${SHRC}"
@@ -11,7 +10,6 @@ SHRC="${XDG_CONFIG_HOME}/sh/shrc"
 shopt -s globstar 2> /dev/null || true
 [ "$(uname -s)" == 'Darwin' ] && export BASH_SILENCE_DEPRECATION_WARNING=1
 
-: "${XDG_STATE_HOME:="${HOME}/.local/state"}"
 mkdir -p "${XDG_STATE_HOME}"/bash
 export HISTFILE="${XDG_STATE_HOME}/bash/history"
 

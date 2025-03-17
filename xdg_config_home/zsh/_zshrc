@@ -1,5 +1,0 @@
-#!/bin/zsh
-
-: ${ZDOTDIR:=${HOME}}
-ZSHRC="${ZDOTDIR}/zshrc"
-[[ -e "${ZSHRC}" ]] && source "${ZSHRC}"

@@ -10,6 +10,7 @@
 	; misc
 	cim = commit -m
 	root = rev-parse --show-toplevel
+	ls-untracked = ls-files --others --exclude-standard
 	alias = !git config --get-regexp 'alias.*' \
 		| sed 's/^alias\\.//' | sed 's/ / = /' | sed 's/ \\+/ /g' \
 		| sort
@@ -30,7 +31,7 @@
 	rebase = false
 
 [commit]
-	template = "~/.gitmessage.txt"
+	template = "~/.gitmessage"
 
 [init]
 	defaultBranch = main

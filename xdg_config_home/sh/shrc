@@ -2,6 +2,22 @@
 # Shell-independent startup file for an interactive shell
 
 export MANPAGER="less"
+NOW_PLAYING_WIDGET_HOOK='nowplaying-cli get artworkData \
+  | base64 -d \
+  | colorgen --stdin \
+  | flavours apply --stdin \
+'
+
+if [ -n "${WEZTERM_EXECUTABLE}" ]; then
+  export WEZTERM_SHELL="${SHELL}"
+else
+  if [ -f "${XDG_STATE_HOME}"/sh/colors.sh ]; then
+    # shellcheck source=/dev/null
+    case $- in
+      *i*) . "${XDG_STATE_HOME}"/sh/colors.sh ;;
+    esac
+  fi
+fi
 
 SHRCDIR="${XDG_CONFIG_HOME}/sh/shrc.d"
 if [ -d "${SHRCDIR}" ]; then

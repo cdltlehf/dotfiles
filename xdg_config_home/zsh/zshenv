@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+# Zsh startup file for every shell
+# https://zsh.sourceforge.io/Intro/intro_3.html
+
+: ${XDG_CONFIG_HOME:="${HOME}/.config"}
+
+[[ -e "${HOME}/.shenv" ]] && export ENV="${HOME}/.shenv"
+[[ -n $ENV ]] && source "$ENV"
+
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"

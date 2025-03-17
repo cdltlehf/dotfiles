@@ -1,4 +1,5 @@
 set background=dark
+set notermguicolors
 
 highlight clear
 let g:colors_name = 'dracula16'

@@ -1,0 +1,9 @@
+[[items]]
+file = "${XDG_STATE_HOME:-~/.local/state}/sh/colors.sh"
+template = "shell"
+rewrite = true
+
+[[items]]
+file = "${XDG_STATE_HOME:-~/.local/state}/wezterm/colorschemes/colors.toml"
+template = "wezterm"
+rewrite = true
