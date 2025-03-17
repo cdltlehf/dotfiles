@@ -2,17 +2,17 @@
 
 # POSIX shell startup file for an interactive login shell
 
-[ -e "${HOME}/.shenv" ] && ENV="${HOME}/.shenv"
-export ENV
+: "${XDG_BIN_HOME:="${HOME}/.local/bin"}"
+: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
+
+[ -e "${HOME}/.shenv" ] && export ENV="${HOME}/.shenv"
 # shellcheck source=/dev/null
 [ -n "$ENV" ] && . "$ENV"
 
-if [[ $(uname -s) == "Darwin" ]]; then
-  [[ -e /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+if [ "$(uname -s)" = "Darwin" ]; then
+  [ -e /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-: "${XDG_BIN_HOME:="${HOME}/.local/bin"}"
-: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
 PATH=${XDG_BIN_HOME}:$PATH
 
 PKG_CONFIG_PATH=${HOME}/.local/lib/pkgconfig:$PKG_CONFIG_PATH

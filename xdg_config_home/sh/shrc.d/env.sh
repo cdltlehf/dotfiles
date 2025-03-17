@@ -43,3 +43,6 @@ export NODE_REPL_HISTORY="${XDG_DATA_HOME}"/node_repl_history
 
 # https://github.com/eth-p/bat-extras
 command -v batman > /dev/null && eval "$(batman --export-env)"
+
+# https://github.com/Misterio77/flavours
+export FLAVOURS_CONFIG_FILE="${XDG_CONFIG_HOME}/flavours/config.toml"

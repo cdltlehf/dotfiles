@@ -16,7 +16,7 @@ syn match markdownOrderedListMarkerWithoutContents
 hi def link markdownListMarkerWithoutContents Comment
 hi def link markdownOrderedListMarkerWithoutContents Comment
 
-" Overwrite a Tim Pope's markdown(Ordered)ListMarker syntax
+" Overwrite a Tim Pope's markdown{,Ordered}ListMarker syntax
 if hlexists("markdownListMarker")
   syntax clear markdownListMarker
 endif

@@ -13,7 +13,7 @@ set-option -g status-left "#[bg=#{?client_prefix,yellow,green},fg=black]"
 set-option -ag status-left " #{session_name} "
 
 # Set window-status
-set-option -g window-status-current-style bg=default,fg=blue,reverse
+set-option -g window-status-current-style bg=blue,fg=black
 set-option -g window-status-current-format " #I #W#F "
 set-option -g window-status-style bg=black,fg=default
 set-option -g window-status-format " #I #W#F "
