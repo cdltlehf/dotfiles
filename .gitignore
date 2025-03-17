@@ -1,5 +1,5 @@
 .DS_Store
-xdg_config_home/cava/shaders/*
+xdg_config_home/cava/shaders
 xdg_config_home/fzf/fzf.bash
 xdg_config_home/fzf/fzf.zsh
 xdg_config_home/github-copilot/apps.json
