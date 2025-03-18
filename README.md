@@ -3,9 +3,18 @@
 ## Installation
 
 ```bash
-git clone https://github.com/cdltlehf/dotfiles.git --recurse-submodules &&
-cd dotfiles && ./setup
+git clone https://github.com/cdltlehf/dotfiles.git --depth 1 && cd dotfiles &&
+./setup
 ```
+
+## Software versions
+
+The dotfiles are tested with the following software versions:
+
+- `git >= 2.39.3`
+- `bash >= 4.4`
+- `vim >= 9.0`
+- `tmux >= 2.7`
 
 ## TODO
 
