@@ -10,32 +10,32 @@ export -f echoerr
 interactive_link() {
   local file=$1
   local target=$2
-  if [[ -L ${target} ]] && [[ $(readlink ${target}) == ${file} ]]; then
+  if [[ -L ${target} ]] && [[ $(readlink "${target}") == "${file}" ]]; then
     echoerr "${target} is already linked to ${file}"
     return
   fi
   if [[ -e ${target} ]]; then
     read -r -p "Do you want to overwrite ${target}? [Y/n] " yn
     case $yn in
-      [Yy] | "" )
-        ln -fs ${file} ${target}
-        echoerr "Linking ${target} -> ${file}"
-      ;;
+      [Yy] | "" ) rm -rf "${target}" ;;
       [Nn] ) ;;
       * ) exit 1;;
     esac
-  else
-    ln -fs ${file} ${target}
-    echoerr "Linking ${target} -> ${file}"
   fi
+  ln -fs "${file}" "${target}"
+  echoerr "Linking ${target} -> ${file}"
 }
 
 # Get base directory (e.g., `$HOME/dotfiles`)
-export basedir="$(realpath "$(dirname "$0")")"
+basedir="$(realpath "$(dirname "$0")")"
 # Get OS name (e.g., Darwin)
-export os="$(uname -s)"
+os="$(uname -s)"
 
-source "$basedir/env"
+export basedir
+export os
+
+# shellcheck source=/dev/null
+source "${basedir}/env"
 interactive_link "${basedir}/env" "${HOME}/.shenv"
 
 interactive_link "${basedir}/xdg_config_home" "${HOME}/.config"
