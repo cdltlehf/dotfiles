@@ -28,7 +28,7 @@ fi
 . "$NVM_DIR/bash_completion" 2> /dev/null
 
 # https://github.com/junegunn/fzf
-[ command -v fzf > /dev/null 2>&1 ] && eval "$(fzf --bash)"
+if [ command -v fzf > /dev/null 2>&1 ]; then eval "$(fzf --bash)"; fi
 
 # https://github.com/ajeetdsouza/zoxide
-[ command -v zoxide > /dev/null 2>&1 ] && eval "$(zoxide init bash)"
+if [ command -v zoxide > /dev/null 2>&1 ]; then eval "$(zoxide init bash)"; fi
