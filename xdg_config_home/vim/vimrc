@@ -193,22 +193,13 @@ nnoremap <leader>vV :<c-u>execute 'edit ' . fnamemodify($MYVIMRC, ':h')<cr>
 nnoremap <leader>vd :<c-u>edit $MYVIMRC.d<cr>
 nnoremap <leader>vr :<c-u>Reload<cr>
 
-
-" :help ins-completion
-function! SmartInsertCompletion()
-  if pumvisible()
-    return "\<c-n>"
-  elseif !empty(&omnifunc)
-    return "\<c-x>\<c-u>"
-  endif
-  return "\<c-n>"
-endfunction
-" inoremap <silent> <c-n> <c-r>=SmartInsertCompletion()<cr>
-
-
 " :help 'completeopt'
 set completeopt+=menuone,noinsert
-set completepopup=height:10,width:60
+
+" :help listchars
+" https://en.wikipedia.org/wiki/Non-printing_character_in_word_processors
+set listchars+=tab:→\ ,trail:·,extends:»,precedes:«,nbsp:°
+" set listchars+=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:~
 
 " :help last-pattern
 let @/ = ""
@@ -219,5 +210,3 @@ autocmd BufWinEnter *
 set showtabline=1
 set lazyredraw
 command! Reload source $MYVIMRC | echo "Reloaded"
-
-autocmd BufWritePre "." echo "Filename is ."
