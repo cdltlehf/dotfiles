@@ -62,14 +62,22 @@ let g:lsp_diagnostics_signs_insert_mode_enabled = 0
 
 " :help g:lsp_diagnostics_signs_enabled
 " nf-cod-error nf-cod-warning nf-cod-info nf-cod-question
-let g:lsp_diagnostics_signs_error = {'text': "\uEA87"}
-let g:lsp_diagnostics_signs_warning = {'text': "\uea6c"}
-let g:lsp_diagnostics_signs_information = {'text': "\uea74"}
-let g:lsp_diagnostics_signs_hint = {'text': "\ueb32"}
-" nf-cod-lightbulb
-let g:lsp_document_code_action_signs_hint = {'text': "\uea61"}
+if $NERD_FONT == 1
+  let g:lsp_diagnostics_signs_error = {'text': ""}
+  let g:lsp_diagnostics_signs_warning = {'text': ""}
+  let g:lsp_diagnostics_signs_information = {'text': ""}
+  let g:lsp_diagnostics_signs_hint = {'text': ""}
+  let g:lsp_document_code_action_signs_hint = {'text': ""}
+  let g:lsp_diagnostics_virtual_text_prefix = "▌"
+else
+  let g:lsp_diagnostics_signs_error = {'text': "E>"}
+  let g:lsp_diagnostics_signs_warning = {'text': "W>"}
+  let g:lsp_diagnostics_signs_information = {'text': "I>"}
+  let g:lsp_diagnostics_signs_hint = {'text': "H>"}
+  let g:lsp_document_code_action_signs_hint = {'text': "A>"}
+  let g:lsp_diagnostics_virtual_text_prefix = "|"
+endif
 
-let g:lsp_diagnostics_virtual_text_prefix = "\u258C"
 let g:lsp_diagnostics_virtual_text_align = "after"
 let g:lsp_diagnostics_virtual_text_padding_left = 5
 let g:lsp_diagnostics_virtual_text_wrap = "truncate"

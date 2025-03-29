@@ -26,7 +26,9 @@ alias fgrep='command fgrep --color=auto'
 # third-party commands
 command -v git > /dev/null 2>&1 && alias g='command git'
 command -v bat > /dev/null 2>&1 && alias cat='command bat -pp'
-command -v lsd > /dev/null 2>&1 && alias ls='command lsd'
+if [ "$NERD_FONT" -eq 1 ]; then
+  command -v lsd > /dev/null 2>&1 && alias ls='command lsd'
+fi
 
 # open command
 if ! command -v open > /dev/null 2>&1; then
@@ -42,5 +44,5 @@ fi
 alias pyvenv='python3 -m venv ./.venv'
 alias pyact='source ./.venv/bin/activate'
 
-# Reload the shell as login shell
+# Reload shell
 alias reload='exec ${SHELL} --login'

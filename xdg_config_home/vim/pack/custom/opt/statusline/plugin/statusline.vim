@@ -142,13 +142,23 @@ augroup end
 let g:statusline_active = '%#StatusLineMode# %{StatusLineMode()} '
 if exists('g:loaded_fugitive')
   highlight FugitiveStatusline ctermfg=white ctermbg=black cterm=none
-  let g:statusline_active .= '%#FugitiveStatusline#'
+  if $NERD_FONT == 1
+    let g:statusline_active .= '%#FugitiveStatusline#'
         \.'%{substitute('
         \.  'FugitiveStatusline(),'
         \.  '"\\[Git(\\(.\\+\\))\\]",'
-        \.  '" \uea68 \\1 \u2502",'
+        \.  '"  \\1 │",'
         \.  '""'
         \.')}'
+  else
+    let g:statusline_active .= '%#FugitiveStatusline#'
+        \.'%{substitute('
+        \.  'FugitiveStatusline(),'
+        \.  '"\\[Git(\\(.\\+\\))\\]",'
+        \.  '" [\\1] ",'
+        \.  '""'
+        \.')}'
+  endif
 endif
 let g:statusline_active .= '%* %<%f %m%r%h%w '
       \.'%='
