@@ -26,7 +26,7 @@ alias fgrep='command fgrep --color=auto'
 # third-party commands
 command -v git > /dev/null 2>&1 && alias g='command git'
 command -v bat > /dev/null 2>&1 && alias cat='command bat -pp'
-if [ "$NERD_FONT" -eq 1 ]; then
+if [ "${NERD_FONT:=0}" -eq 1 ]; then
   command -v lsd > /dev/null 2>&1 && alias ls='command lsd'
 fi
 
