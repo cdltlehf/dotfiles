@@ -142,19 +142,35 @@ augroup end
 let g:statusline_active = '%#StatusLineMode# %{StatusLineMode()} '
 if exists('g:loaded_fugitive')
   highlight FugitiveStatusline ctermfg=white ctermbg=black cterm=none
-  let g:statusline_active .= '%#FugitiveStatusline#'
+  if $NERD_FONT == 1
+    let g:statusline_active .= '%#FugitiveStatusline#'
         \.'%{substitute('
         \.  'FugitiveStatusline(),'
         \.  '"\\[Git(\\(.\\+\\))\\]",'
-        \.  '" \uea68 \\1 \u2502",'
+        \.  '"  \\1 ▏",'
         \.  '""'
         \.')}'
+  else
+    let g:statusline_active .= '%#FugitiveStatusline#'
+        \.'%{substitute('
+        \.  'FugitiveStatusline(),'
+        \.  '"\\[Git(\\(.\\+\\))\\]",'
+        \.  '" \\1 ▏",'
+        \.  '""'
+        \.')}'
+  endif
 endif
+
 let g:statusline_active .= '%* %<%f %m%r%h%w '
-      \.'%='
-      \.' %y '
-      \.'%#StatusLineRight1# %{&fileencoding}[%{&fileformat}] '
-      \.'%#StatusLineRight2# %3.p%% :%5.l/%L:%2.c '
+let g:statusline_active .= '%= %y '
+let g:statusline_active .=
+      \ '%#StatusLineRight1# %{&fileencoding}[%{&fileformat}] '
+
+if $NERD_FONT == 1
+  let g:statusline_active .= '%#StatusLineRight2# %3.p%% ▏ %2.l/%L:%3.c '
+else
+  let g:statusline_active .= '%#StatusLineRight2# %3.p%% ▏%3.l/%L:%3.c '
+endif
 
 let g:statusline_inactive = '%#StatusLineInactive# INACTIVE '
       \.'%* %<%f %m%r%h%w '
