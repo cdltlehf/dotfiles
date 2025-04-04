@@ -11,3 +11,5 @@ Transparency=off
 OpaqueWhenFocused=no
 LigaturesSupport=2
 Ligatures=2
+Locale=ko_KR
+Charset=UTF-8
