@@ -2,9 +2,9 @@
 # Shell-independent startup file for an interactive shell
 
 export MANPAGER="less"
-NOW_PLAYING_WIDGET_HOOK='nowplaying-cli get artworkData \
+export NOW_PLAYING_WIDGET_HOOK='nowplaying-cli get artworkData \
   | base64 -d \
-  | colorgen --stdin \
+  | colorgen - \
   | flavours apply --stdin \
 '
 
