@@ -61,7 +61,7 @@ function! BufferLine() abort
       let l:s .= '%#TabLine# ' . l:i . " "
       let l:s .= '%#TabLine#' . l:bufname
     else
-      let l:s .= '%#TabLineSelNr# ' . l:i . " \u258f"
+      let l:s .= '%#TabLineSelNr# ' . l:i . " ▏"
       let l:s .= '%#TabLineSel#' . l:bufname
     endif
     let l:s .= l:flags . " "

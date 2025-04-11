@@ -7,6 +7,10 @@ config.line_height = 1.2
 config.hide_tab_bar_if_only_one_tab = true
 config.window_decorations = "RESIZE"
 
+config.set_environment_variables = {
+  NERD_FONT = "1",
+}
+
 config.color_scheme_dirs = {
   os.getenv('HOME') .. '/.local/state/wezterm/colorschemes',
 }
