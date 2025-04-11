@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ESC=$(printf '\033')
+payload=$(cat | sed "s/${ESC}/${ESC}${ESC}/g")
+printf "${ESC}Ptmux;%s${ESC}\\${ESC}\\" "$payload"

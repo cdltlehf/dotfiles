@@ -23,3 +23,5 @@ The dotfiles are tested with the following software versions:
 - [ ] Remove configuration files that are not used, or not manually edited
 - [ ] Fix an issue that vim showing escape characters related to cursor shap
       when starting up
+- [ ] Remove lsp flags in vimrc.d/vim-lsp.vim and use configuration files
+      instead
