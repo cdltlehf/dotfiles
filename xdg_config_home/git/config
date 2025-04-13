@@ -1,4 +1,6 @@
-; See more: https://github.com/tj/git-extras
+; See more:
+; https://github.com/tj/git-extras
+; https://blog.gitbutler.com/how-git-core-devs-configure-git/
 [alias]
 	; https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
 	co = checkout
@@ -9,6 +11,7 @@
 	last = log -1 HEAD
 	; misc
 	cim = commit -m
+	sts = status -s
 	root = rev-parse --show-toplevel
 	ls-untracked = ls-files --others --exclude-standard
 	alias = !git config --get-regexp 'alias.*' \
@@ -23,12 +26,49 @@
 	interactive = auto
 	grep = auto
 
-[core]
-	editor = vim
-	pager = less -F
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[init]
+	defaultBranch = main
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[push]
+	default = simple
+	autoSetupRemote = true
+	followTags = true
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
 
+[help]
+	autocorrect = prompt
+[commit]
+	verbose = true
+[rerere]
+	autoupdate = true
+	enable = true
+[core]
+	excludesfile = "~/.gitignore"
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
+
+[core]
+	fsmonitor = true
+	untrackedCache = true
+[merge]
+	; conflictstyle = zdiff3
 [pull]
-	rebase = false
+	; rebase = true
 
 [commit]
 	template = "~/.gitmessage"
@@ -40,4 +80,4 @@
 	useConfigOnly = true
 
 [include]
-	path = "~/.gitconfig"
+	path = "~/.gitconfig.local"
