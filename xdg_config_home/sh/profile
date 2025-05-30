@@ -5,9 +5,13 @@
 : "${XDG_BIN_HOME:="${HOME}/.local/bin"}"
 : "${XDG_CONFIG_HOME:="${HOME}/.config"}"
 
-[ -e "${HOME}/.shenv" ] && export ENV="${HOME}/.shenv"
+[ -e "${HOME}/.shenv" ] && ENV="${HOME}/.shenv"
 # shellcheck source=/dev/null
 [ -n "$ENV" ] && . "$ENV"
+
+set -o allexport
+[ -e "${HOME}/.env" ] && . "${HOME}/.env"
+set +o allexport
 
 if [ "$(uname -s)" = "Darwin" ]; then
   [ -e /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
