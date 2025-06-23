@@ -149,6 +149,8 @@ if has('syntax') | set spell | endif
 " :help .netrwhist
 let g:netrw_home = expand('$XDG_STATE_HOME/vim/netrw')
 
+let g:template_dir = expand('$XDG_CONFIG_HOME/vim/templates')
+
 cabbr <expr> %% expand('%:p:h')
 
 xnoremap < <gv

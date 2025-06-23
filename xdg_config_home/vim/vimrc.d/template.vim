@@ -13,7 +13,7 @@ function! s:set_guard() abort
   echo s:guard
 endfunction
 
-augroup vim_template
-  autocmd!
-  autocmd BufNewFile *.h call s:set_guard()
-augroup END
+" augroup vim_template
+"   autocmd!
+"   autocmd BufNewFile *.h call s:set_guard()
+" augroup END
