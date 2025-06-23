@@ -172,6 +172,7 @@ if executable('clangd')
           \     'clangd',
           \     '--background-index',
           \     '--fallback-style=google',
+          \     '--compile-commands-dir'
           \   ]},
           \   'allowlist': ['c', 'cpp', 'objc', 'objcpp', 'cuda'],
           \ })
