@@ -1,7 +1,11 @@
 #!/bin/bash
 
 # Bash startup file for an interactive shell
-# ~/.bash_profile sources this file
+# For interactive login shell, ~/.bash_profile sources this file
+# For remote shell daemon like ssh, ~/.bashrc is sourced directly
+
+# shellcheck source=/dev/null
+[ -f "${HOME}/.profile" ] && source "${HOME}/.profile"
 
 SHRC="${XDG_CONFIG_HOME}/sh/shrc"
 # shellcheck source=/dev/null
