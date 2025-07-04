@@ -28,13 +28,21 @@ function! s:on_lsp_buffer_enabled() abort
   nnoremap <buffer> <c-k> <plug>(lsp-document-format)
 
   nnoremap <buffer> K <plug>(lsp-hover)
+  nnoremap <buffer> <expr><c-e>
+        \ lsp#document_hover_preview_winid() isnot v:null
+        \ ? lsp#scroll(+1)
+        \ : "\<c-e>"
+  nnoremap <buffer> <expr><c-y>
+        \ lsp#document_hover_preview_winid() isnot v:null
+        \ ? lsp#scroll(-1)
+        \ : "\<c-y>"
 
   nnoremap <buffer> grn <plug>(lsp-rename)<C-u>
   nnoremap <buffer> gra <plug>(lsp-code-action)
   nnoremap <buffer> grr <plug>(lsp-references)
   inoremap <buffer> <c-s> <c-o>:LspSignatureHelp<CR>
 
-  " " :help vim-lsp-folding
+  " :help vim-lsp-folding
   set foldmethod=expr
   " XXX: The following code makes vim very slow
   " set foldexpr=lsp#ui#vim#folding#foldexpr()
