@@ -1,2 +1,1 @@
-compiler! pyunit
-set colorcolumn=81
+setlocal colorcolumn=81
