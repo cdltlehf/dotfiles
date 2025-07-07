@@ -32,9 +32,12 @@ done
 echoerr() { echo "$@" 1>&2; }
 export -f echoerr
 
-LNFLAGS="-svi"
 if [[ $FORCE -eq 1 ]]; then
   LNFLAGS="-svf"
+  RMFLAGS="-rvf"
+else
+  LNFLAGS="-svi"
+  RMFLAGS="-rvi"
 fi
 
 # Get base directory (e.g., `$HOME/dotfiles`)
@@ -49,9 +52,9 @@ export os
 source "${basedir}/env"
 
 ln $LNFLAGS "${basedir}/env" "${HOME}/.shenv"
-if [ ! -L "${HOME}/.config" ]; then
-  ln $LNFLAGS "${basedir}/xdg_config_home" "${HOME}/.config"
-fi
+
+rm $RMFLAGS "${HOME}/.config"
+ln $LNFLAGS "${basedir}/xdg_config_home" "${HOME}/.config"
 
 ln $LNFLAGS "${basedir}/xdg_config_home/bash/bash_profile" "${HOME}/.bash_profile"
 ln $LNFLAGS "${basedir}/xdg_config_home/bash/bashrc" "${HOME}/.bashrc"
