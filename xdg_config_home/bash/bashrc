@@ -36,3 +36,6 @@ if command -v fzf > /dev/null 2>&1; then eval "$(fzf --bash)"; fi
 
 # https://github.com/ajeetdsouza/zoxide
 if command -v zoxide > /dev/null 2>&1; then eval "$(zoxide init bash)"; fi
+
+# https://github.com/pyenv/pyenv
+if command -v pyenv > /dev/null 2>&1; then eval "$(pyenv init - bash)"; fi
