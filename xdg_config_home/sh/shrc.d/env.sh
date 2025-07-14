@@ -46,3 +46,10 @@ command -v batman > /dev/null && eval "$(batman --export-env)"
 
 # https://github.com/Misterio77/flavours
 export FLAVOURS_CONFIG_FILE="${XDG_CONFIG_HOME}/flavours/config.toml"
+
+# https://github.com/pyenv/pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d "${PYENV_ROOT}/bin" ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+
+# https://github.com/conda-forge/miniforge
+[[ -d "${HOME}/.conda/bin" ]] && export PATH="${HOME}/.conda/bin:${PATH}"
