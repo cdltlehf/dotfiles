@@ -1,9 +1,0 @@
-#!/bin/bash
-
-tempdir=$(mktemp -d)
-trap 'rm -rf -- "${tempdir}"' EXIT
-wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz \
-  -O "${tempdir}/install-tl-unx.tar.gz"
-tar -xzf "${tempdir}/install-tl-unx.tar.gz" -C "${tempdir}"
-cd "${tempdir}/install-tl-*" || exit 1
-./install-tl -custom-bin "$HOME/.local/bin"
