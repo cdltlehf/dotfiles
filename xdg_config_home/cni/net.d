@@ -1,1 +1,0 @@
-/home/cdltlehf/dotfiles/xdg_config_home/cni/net.d
