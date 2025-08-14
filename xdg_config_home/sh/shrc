@@ -27,4 +27,8 @@ if [ -d "${SHRCDIR}" ]; then
   done
 fi
 unset sh
+
+if [ -f "${HOME}/.env" ]; then
+  . "${HOME}/.env"
+fi
 unset SHRCDIR
