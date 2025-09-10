@@ -14,6 +14,6 @@ rm -f "$(basename "${URL}")"
 
 cd apache-maven-*
 
-ln -sf "$(pwd)/bin/mvn" "{$PREFIX}/bin/mvn"
-ln -sf "$(pwd)/bin/mvnDebug" "{$PREFIX}/bin/mvnDebug"
-ln -sf "$(pwd)/bin/mvnyjp" "{$PREFIX}/bin/mvnyjp"
+ln -sf "$(pwd)/bin/mvn" "${PREFIX}/bin/mvn"
+ln -sf "$(pwd)/bin/mvnDebug" "${PREFIX}/bin/mvnDebug"
+ln -sf "$(pwd)/bin/mvnyjp" "${PREFIX}/bin/mvnyjp"
