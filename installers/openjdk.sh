@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# TODO: JAVA_HOME
 PREFIX="${HOME}/.local/opt/jvm"
 
 URL="https://download.java.net/java/GA/jdk24.0.2/fdc5d0102fe0414db21410ad5834341f/12/GPL/openjdk-24.0.2_linux-x64_bin.tar.gz"
