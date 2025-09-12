@@ -1,4 +1,8 @@
 #!/bin/bash
 
-curl https://get.volta.sh | bash -s -- --skip-setup
-volta install node
+: ${URL:="https://get.volta.sh"}
+: ${VOLTA_HOME:="${HOME}/.volta"}
+
+curl "${URL}" | bash -s -- --skip-setup
+
+echo "Run \`${VOLTA_HOME}/bin/volta install node\` to install node"
