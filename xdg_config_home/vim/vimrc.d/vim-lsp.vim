@@ -178,9 +178,7 @@ if executable('clangd')
           \   'name': 'clangd',
           \   'cmd': {server_info->[
           \     'clangd',
-          \     '--background-index',
-          \     '--fallback-style=google',
-          \     '--compile-commands-dir'
+          \     '--fallback-style=google'
           \   ]},
           \   'allowlist': ['c', 'cpp', 'objc', 'objcpp', 'cuda'],
           \ })
