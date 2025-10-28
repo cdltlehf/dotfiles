@@ -11,23 +11,61 @@
 # https://github.com/rust-lang/rustup
 # https://www.haskell.org/ghcup
 
-export PYLINTRC="${XDG_CONFIG_HOME}/pylint/pylintrc"
-export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
-
-export JAVA_HOME="${HOME}/.local/opt/jvm/current"
-export MINIFORGE_HOME="${HOME}/.local/opt/miniforge3"
-export TEXDIR="$HOME/.local/opt/texlive/2024"
-
-export CARGO_HOME="${XDG_DATA_HOME}/cargo"
-export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
+# XDG_DATA_HOME
+# export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
+export LESSHIST="${XDG_DATA_HOME}/less/history"
+export NODE_REPL_HISTORY="${XDG_DATA_HOME}/node_repl_history"
 export TEXMFHOME="${XDG_DATA_HOME}/texmf"
 export TEXMFLOCAL="${XDG_DATA_HOME}/texlive/texmf-local"
 export TEXMFSYSCONFIG="${XDG_DATA_HOME}/texlive/texmf-config"
 export TEXMFSYSVAR="${XDG_DATA_HOME}/texlive/texmf-var"
 export TEXMFVAR="${XDG_DATA_HOME}/texlive/texmf-var"
-export VOLTA_HOME="${XDG_DATA_HOME}/volta"
 
+# XDG_CONFIG_HOME
+export FLAVOURS_CONFIG_FILE="${XDG_CONFIG_HOME}/flavours/config.toml"
+export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
+export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
+export PYLINTRC="${XDG_CONFIG_HOME}/pylint/pylintrc"
 export TEXMFCONFIG="${XDG_CONFIG_HOME}/texlive/texmf-config"
+
+# ~/.local/opt
+export CARGO_HOME="${HOME}/.local/opt/cargo"
+export JAVA_HOME="${HOME}/.local/opt/jvm/current"
+export MINIFORGE_HOME="${HOME}/.local/opt/miniforge3"
+export RUSTUP_HOME="${HOME}/.local/opt/rustup"
+export TEXDIR="${HOME}/.local/opt/texlive/2024"
+export VOLTA_HOME="${HOME}/.local/opt/volta"
+
+BIN_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name bin 2> /dev/null || true)"
+for bin_dir in ${BIN_DIRS}; do
+  PATH="${bin_dir}:${PATH}"
+done
+unset BIN_DIRS bin_dir
+
+PKG_CONFIG_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name pkgconfig 2> /dev/null || true)"
+for pkg_config_dir in ${PKG_CONFIG_DIRS}; do
+  PKG_CONFIG_PATH="${pkg_config_dir}:${PKG_CONFIG_PATH}"
+done
+unset PKG_CONFIG_DIRS pkg_config_dir
+
+LD_LIBRARY_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name lib 2> /dev/null || true)"
+LD_LIBRARY_DIRS="${LD_LIBRARY_DIRS} $(find ${HOME}/.local/opt -maxdepth 2 -type d -name lib64 2> /dev/null || true)"
+for ld_library_dir in ${LD_LIBRARY_DIRS}; do
+  LD_LIBRARY_PATH="${ld_library_dir}:${LD_LIBRARY_PATH}"
+done
+unset LD_LIBRARY_DIRS ld_library_dir
+
+if command -v tr > /dev/null && command -v awk > /dev/null && command -v paste > /dev/null; then
+  PATH="$(echo "$PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
+  LD_LIBRARY_PATH="$(echo "$LD_LIBRARY_PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
+  PKG_CONFIG_PATH="$(echo "$PKG_CONFIG_PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
+fi
+export PATH
+export PKG_CONFIG_PATH
+export LD_LIBRARY_PATH
+
+# Start up scripts for various tools
+command -v batman > /dev/null && eval "$(batman --export-env)"
 
 # export NVM_DIR="$XDG_DATA_HOME/nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && bash "$NVM_DIR/nvm.sh" --no-use
@@ -36,32 +74,9 @@ export TEXMFCONFIG="${XDG_CONFIG_HOME}/texlive/texmf-config"
 #   -maxdepth 2 -name bin -print -quit 2> /dev/null)
 
 # https://github.com/pyenv/pyenv
-PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
-if command -v pyenv > /dev/null; then
-  eval "$(pyenv init --path)"
-fi
+# if command -v pyenv > /dev/null; then
+#   eval "$(pyenv init --path)"
+# fi
 
 # shellcheck source=/dev/null
-[ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
-
-export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
-export NODE_REPL_HISTORY="${XDG_DATA_HOME}"/node_repl_history
-
-export LESSHIST="$XDG_DATA_HOME/less/history"
-export NODE_REPL_HISTORY="${XDG_DATA_HOME}"/node_repl_history
-
-command -v batman > /dev/null && eval "$(batman --export-env)"
-export FLAVOURS_CONFIG_FILE="${XDG_CONFIG_HOME}/flavours/config.toml"
-export PYENV_ROOT="$HOME/.pyenv"
-
-# PATH="${NODE_PATH}:${PATH}"
-# PATH="${PYENV_ROOT}/bin:${PATH}"
-# PATH="${XDG_DATA_HOME}/fnm/bin:${PATH}"
-PATH="${HOME}/.deno/bin:${PATH}"
-PATH="${JAVA_HOME}/bin:${PATH}"
-PATH="${MINIFORGE_HOME}/bin:${PATH}"
-PATH="${VOLTA_HOME}/bin:${PATH}"
-PATH="${CARGO_HOME}/bin:${PATH}"
-
-PATH=$(echo "$PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)
-export PATH
+# [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
