@@ -1,6 +1,2 @@
-CompileFlags:
-  CompliationDatabase: build
-  Add: [-std=c++20, -stdlib=libc++, -Wall, -Wextra, -Werror
-
 Format:
   Style: Google
