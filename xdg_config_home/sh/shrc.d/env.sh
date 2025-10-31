@@ -1,5 +1,4 @@
-# environment variable
-# shellcheck shell=sh
+#!/bin/sh
 
 # https://volta.sh
 # https://github.com/nvm-sh/nvm
@@ -11,7 +10,9 @@
 # https://github.com/rust-lang/rustup
 # https://www.haskell.org/ghcup
 
+###############################################################################
 # XDG_DATA_HOME
+###############################################################################
 # export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
 export LESSHIST="${XDG_DATA_HOME}/less/history"
 export NODE_REPL_HISTORY="${XDG_DATA_HOME}/node_repl_history"
@@ -21,14 +22,18 @@ export TEXMFSYSCONFIG="${XDG_DATA_HOME}/texlive/texmf-config"
 export TEXMFSYSVAR="${XDG_DATA_HOME}/texlive/texmf-var"
 export TEXMFVAR="${XDG_DATA_HOME}/texlive/texmf-var"
 
+###############################################################################
 # XDG_CONFIG_HOME
+###############################################################################
 export FLAVOURS_CONFIG_FILE="${XDG_CONFIG_HOME}/flavours/config.toml"
 export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
 export PYLINTRC="${XDG_CONFIG_HOME}/pylint/pylintrc"
 export TEXMFCONFIG="${XDG_CONFIG_HOME}/texlive/texmf-config"
 
+###############################################################################
 # ~/.local/opt
+###############################################################################
 export CARGO_HOME="${HOME}/.local/opt/cargo"
 export JAVA_HOME="${HOME}/.local/opt/jvm/current"
 export MINIFORGE_HOME="${HOME}/.local/opt/miniforge3"
@@ -36,6 +41,9 @@ export RUSTUP_HOME="${HOME}/.local/opt/rustup"
 export TEXDIR="${HOME}/.local/opt/texlive/2024"
 export VOLTA_HOME="${HOME}/.local/opt/volta"
 
+###############################################################################
+# Update PATH, PKG_CONFIG_PATH, LD_LIBRARY_PATH
+###############################################################################
 BIN_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name bin 2> /dev/null || true)"
 for bin_dir in ${BIN_DIRS}; do
   PATH="${bin_dir}:${PATH}"
@@ -64,19 +72,11 @@ export PATH
 export PKG_CONFIG_PATH
 export LD_LIBRARY_PATH
 
-# Start up scripts for various tools
+###############################################################################
+# Shell integrations
+# For shell-specific scripts, see `${XDG_CONFIG_HOME}/${SHELL}/${SHELL}rc.d/`
+###############################################################################
+# . "$HOME/.ghcup/env" 2> /dev/null || true
+# command -v pyenv > eval "$(pyenv init --path)" > /dev/null 2>&1 || true
 command -v batman > /dev/null && eval "$(batman --export-env)"
-
-# export NVM_DIR="$XDG_DATA_HOME/nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && bash "$NVM_DIR/nvm.sh" --no-use
-# # shellcheck source=/dev/null
-# NODE_PATH=$(find "$XDG_DATA_HOME/nvm/versions/node" \
-#   -maxdepth 2 -name bin -print -quit 2> /dev/null)
-
-# https://github.com/pyenv/pyenv
-# if command -v pyenv > /dev/null; then
-#   eval "$(pyenv init --path)"
-# fi
-
-# shellcheck source=/dev/null
-# [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
+source "${MINIFORGE_HOME}/etc/profile.d/conda.sh" > /dev/null 2>&1 || true
