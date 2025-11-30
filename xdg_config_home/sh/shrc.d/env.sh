@@ -59,7 +59,7 @@ unset PKG_CONFIG_DIRS pkg_config_dir
 LD_LIBRARY_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name lib 2> /dev/null || true)"
 LD_LIBRARY_DIRS="${LD_LIBRARY_DIRS} $(find ${HOME}/.local/opt -maxdepth 2 -type d -name lib64 2> /dev/null || true)"
 for ld_library_dir in ${LD_LIBRARY_DIRS}; do
-  LD_LIBRARY_PATH="${ld_library_dir}:${LD_LIBRARY_PATH}"
+  LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ld_library_dir}"
 done
 unset LD_LIBRARY_DIRS ld_library_dir
 
