@@ -1,10 +1,13 @@
 #!/bin/bash
 # shellcheck source=/dev/null
 
-# https://github.com/nvm-sh/nvm?tab=readme-ov-file#bash-completion
 # https://github.com/junegunn/fzf
+# https://github.com/nvm-sh/nvm?tab=readme-ov-file#bash-completion
 
-. "$NVM_DIR/bash_completion" 2> /dev/null
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+[ "$(uname -s)" == 'Darwin' ] && export BASH_SILENCE_DEPRECATION_WARNING=1
+
+source "$NVM_DIR/bash_completion" 2> /dev/null
 command -v fzf > /dev/null && eval "$(fzf --bash)"
 # https://github.com/ajeetdsouza/zoxide
 # if command -v zoxide > /dev/null 2>&1; then eval "$(zoxide init bash)"; fi

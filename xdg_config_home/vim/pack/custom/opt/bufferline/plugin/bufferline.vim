@@ -1,6 +1,6 @@
 " tab (buffer) line
 
-augroup bufferline_highligh
+augroup bufferline_highlight
   autocmd!
   autocmd ColorScheme,VimEnter * highlight link TabLineSelNr TabLineSel
 augroup end

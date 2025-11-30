@@ -12,11 +12,8 @@ SHRC="${XDG_CONFIG_HOME}/sh/shrc"
 [[ -e "${SHRC}" ]] && source "${SHRC}"
 
 shopt -s globstar 2> /dev/null || true
-[ "$(uname -s)" == 'Darwin' ] && export BASH_SILENCE_DEPRECATION_WARNING=1
 
-mkdir -p "${XDG_STATE_HOME}"/bash
-export HISTFILE="${XDG_STATE_HOME}/bash/history"
-
+unset PROMPT_COMMAND
 BASHRCDIR="${XDG_CONFIG_HOME}/bash/bashrc.d"
 if [[ -d "${BASHRCDIR}" ]]; then
   for sh in "${BASHRCDIR}"/*.bash; do

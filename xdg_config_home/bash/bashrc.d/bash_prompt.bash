@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-
 if ! declare -F __git_ps1 > /dev/null 2>&1; then
   __git_ps1() {
     echo ""
@@ -51,4 +49,9 @@ __prompt_command() {
   PS2=$"\[\e[38;5;103m\]> \[\e[0m\]"
 }
 
-PROMPT_COMMAND=__prompt_command
+if [[ -z "${PROMPT_COMMAND}" ]]; then
+  PROMPT_COMMAND="__prompt_command"
+else
+  PROMPT_COMMAND="${PROMPT_COMMAND}; __prompt_command"
+fi
+export PROMPT_COMMAND

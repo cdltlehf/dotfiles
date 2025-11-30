@@ -188,8 +188,8 @@ endfunction
 
 augroup statusline_string
   autocmd!
-  autocmd WinEnter,BufEnter * call s:activate_statusline()
-  autocmd WinLeave,BufLeave * call s:deactivate_statusline()
+  autocmd BufEnter,FocusGained,WinEnter * call s:activate_statusline()
+  autocmd BufLeave,FocusGained,WinEnter * call s:deactivate_statusline()
 augroup end
 
 " vim: set ft=vim fdm=marker ts=2 sts=2 sw=2 fdl=0:

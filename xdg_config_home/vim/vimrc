@@ -68,6 +68,7 @@ packadd! statusline
 packadd! unimpaired
 packadd! vim-scriptease
 packadd! vim-templates
+packadd! vim-numbertoggle
 
 silent! colorscheme dracula16
 
