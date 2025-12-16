@@ -137,6 +137,7 @@ augroup statusline_highlight
         \   ctermfg=black ctermbg=darkcyan cterm=none
         \|highlight StatusLineRight2
         \   ctermfg=black ctermbg=darkyellow cterm=none
+        \|highlight link StatusLineMode StatusLineNormal
 augroup end
 
 let g:statusline_active = '%#StatusLineMode# %{StatusLineMode()} '
@@ -189,7 +190,7 @@ endfunction
 augroup statusline_string
   autocmd!
   autocmd BufEnter,FocusGained,WinEnter * call s:activate_statusline()
-  autocmd BufLeave,FocusGained,WinEnter * call s:deactivate_statusline()
+  autocmd BufLeave,FocusLost,WinLeave * call s:deactivate_statusline()
 augroup end
 
 " vim: set ft=vim fdm=marker ts=2 sts=2 sw=2 fdl=0:
