@@ -9,12 +9,14 @@
 # https://github.com/pyenv/pyenv
 # https://github.com/rust-lang/rustup
 # https://www.haskell.org/ghcup
+# https://mamba.readthedocs.io/
 
 ###############################################################################
 # XDG_DATA_HOME
 ###############################################################################
 # export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
 export LESSHIST="${XDG_DATA_HOME}/less/history"
+export MAMBA_ROOT_PREFIX="${XDG_DATA_HOME}/mamba"
 export NODE_REPL_HISTORY="${XDG_DATA_HOME}/node_repl_history"
 export TEXMFHOME="${XDG_DATA_HOME}/texmf"
 export TEXMFLOCAL="${XDG_DATA_HOME}/texlive/texmf-local"
@@ -42,6 +44,11 @@ export TEXDIR="${HOME}/.local/opt/texlive/2024"
 export VOLTA_HOME="${HOME}/.local/opt/volta"
 
 ###############################################################################
+# ~/.local/bin
+###############################################################################
+export MAMBA_EXE="${HOME}/.local/bin/micromamba";
+
+###############################################################################
 # Update PATH, PKG_CONFIG_PATH, LD_LIBRARY_PATH
 ###############################################################################
 BIN_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name bin 2> /dev/null || true)"
@@ -64,7 +71,7 @@ done
 unset LD_LIBRARY_DIRS ld_library_dir
 
 if command -v tr > /dev/null && command -v awk > /dev/null && command -v paste > /dev/null; then
-  PATH="$(echo "$PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
+  PATH="$(echo "$PATH" | tr ':' '\n' | awk '!seen[$1]++' | paste -sd:)"
   LD_LIBRARY_PATH="$(echo "$LD_LIBRARY_PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
   PKG_CONFIG_PATH="$(echo "$PKG_CONFIG_PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
 fi

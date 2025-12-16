@@ -60,6 +60,8 @@ Plug 'airblade/vim-rooter'
 Plug 'github/copilot.vim'
 
 Plug 'DingDean/wgsl.vim'
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 call plug#end()
 
 packadd! bufferline
