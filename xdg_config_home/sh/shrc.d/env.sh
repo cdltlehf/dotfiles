@@ -9,7 +9,8 @@
 # https://github.com/pyenv/pyenv
 # https://github.com/rust-lang/rustup
 # https://www.haskell.org/ghcup
-# https://mamba.readthedocs.io/
+# https://mamba.readthedocs.io
+# https://brew.sh
 
 ###############################################################################
 # XDG_DATA_HOME
@@ -70,11 +71,11 @@ for ld_library_dir in ${LD_LIBRARY_DIRS}; do
 done
 unset LD_LIBRARY_DIRS ld_library_dir
 
-if command -v tr > /dev/null && command -v awk > /dev/null && command -v paste > /dev/null; then
-  PATH="$(echo "$PATH" | tr ':' '\n' | awk '!seen[$1]++' | paste -sd:)"
-  LD_LIBRARY_PATH="$(echo "$LD_LIBRARY_PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
-  PKG_CONFIG_PATH="$(echo "$PKG_CONFIG_PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
-fi
+# if command -v tr > /dev/null && command -v awk > /dev/null && command -v paste > /dev/null; then
+#   PATH="$(echo "$PATH" | tr ':' '\n' | awk '!seen[$1]++' | paste -sd:)"
+#   LD_LIBRARY_PATH="$(echo "$LD_LIBRARY_PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
+#   PKG_CONFIG_PATH="$(echo "$PKG_CONFIG_PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
+# fi
 export PATH
 export PKG_CONFIG_PATH
 export LD_LIBRARY_PATH
@@ -87,3 +88,4 @@ export LD_LIBRARY_PATH
 # command -v pyenv > eval "$(pyenv init --path)" > /dev/null 2>&1 || true
 command -v batman > /dev/null && eval "$(batman --export-env)"
 source "${MINIFORGE_HOME}/etc/profile.d/conda.sh" > /dev/null 2>&1 || true
+[ -e /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
