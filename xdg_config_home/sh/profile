@@ -13,10 +13,6 @@ set -o allexport
 [ -e "${HOME}/.env" ] && . "${HOME}/.env"
 set +o allexport
 
-if [ "$(uname -s)" = "Darwin" ]; then
-  [ -e /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
 PATH=${XDG_BIN_HOME}:$PATH
 export PATH
 
