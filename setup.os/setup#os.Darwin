@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# TODO: Run this in order to use git
+xcode-select --install &> /dev/null || true
+
+ln "${LNFLAGS}" "${basedir}/macos/hammerspoon" "${HOME}/.hammerspoon"
+ln "${LNFLAGS}" "${basedir}/macos/ubersichtrc" "${HOME}/.ubersichtrc"
+
+SPOON_INSTALL_URL="https://github.com/Hammerspoon/Spoons/raw/master/Spoons/SpoonInstall.spoon.zip"
+if [ ! -d "${HOME}/.hammerspoon/Spoons/SpoonInstall.spoon" ]; then
+  mkdir -p "${HOME}/.hammerspoon/Spoons/"
+  tmpzip=$(mktemp /tmp/SpoonInstall.XXXXXX.zip)
+  curl -L "${SPOON_INSTALL_URL}" -o "${tmpzip}"
+  unzip "${tmpzip}" -d "${HOME}/.hammerspoon/Spoons/"
+  rm "${tmpzip}"
+  unset tmpzip
+fi
+
+# TODO: Check and run `softwareupdate --all --install --force`
+read -rp "Install rosetta? [Y/n] " yn
+case $yn in
+  [Yy]* | "" ) sudo softwareupdate --install-rosetta ;;
+esac
+
+# Array of default configuration files for Darwin
+# TODO: Be sudoer for some commands
+# TODO: use
+# macos_defaults=(
+#   "${basedir}/macos/defaults/macos"
+#   "${basedir}/macos/defaults/macos.application"
+#   "${basedir}/macos/defaults/macos.dock"
+#   "${basedir}/macos/defaults/macos.finder"
+#   "${basedir}/macos/defaults/macos.keyboard"
+#   "${basedir}/macos/defaults/macos.menubar"
+#   "${basedir}/macos/defaults/macos.screencapture"
+#   "${basedir}/macos/defaults/macos.screensaver"
+#   "${basedir}/macos/defaults/macos.desktopservices"
+# )
+# for defaults in "${macos_defaults[@]}"; do
+#   command zsh "${defaults}"
+# done
+
+HOMEBREW_INSTALLER="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+if ! command -v brew &> /dev/null; then
+  /bin/bash -c "$(curl -fsSL "${HOMEBREW_INSTALLER}")";
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+brewfile="${basedir}/macos/Brewfile"
+command -v brew &> /dev/null && brew bundle --file "${brewfile}"
