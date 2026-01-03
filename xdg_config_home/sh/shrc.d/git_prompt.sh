@@ -11,7 +11,7 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 export GIT_PS1_SHOWCOLORHINTS=1
 # shellcheck source=/dev/null
 
-git_prompt="$HOME/.local/share/git-prompt.sh"
+git_prompt="${XDG_DATA_HOME:-$HOME/.local/share}/git/git-prompt.sh"
 # shellcheck source=/dev/null
-[ -f "$git_prompt" ] && . "$git_prompt"
+[ -f "${git_prompt}" ] && . "${git_prompt}"
 unset git_prompt
