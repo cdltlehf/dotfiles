@@ -39,13 +39,6 @@ endif
 call plug#begin($XDG_DATA_HOME . '/vim/plugged')
 Plug 'junegunn/vim-plug'
 
-Plug 'junegunn/fzf', {'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
@@ -54,14 +47,24 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-vinegar'
 
-Plug 'rhysd/vim-healthcheck'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+
+Plug 'junegunn/fzf', {'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
 Plug 'airblade/vim-gitgutter'
 Plug 'airblade/vim-rooter'
-Plug 'github/copilot.vim'
 
 Plug 'DingDean/wgsl.vim'
+Plug 'github/copilot.vim'
+Plug 'rhysd/vim-healthcheck'
+Plug 'lervag/vimtex'
 
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+if has('nvim')
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+endif
 call plug#end()
 
 packadd! bufferline
@@ -137,15 +140,17 @@ set nowrap
 set foldlevel=99
 
 " :help xdg-base-dir
-set backupdir=$XDG_STATE_HOME/vim/backup
-set directory=$XDG_STATE_HOME/vim/swap
-if has('persistent_undo') | set undodir=$XDG_STATE_HOME/vim/undo | endif
-if has('viminfo') | set viminfo+=n$XDG_STATE_HOME/vim/viminfo | endif
-" set runtimepath+=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after
-" set runtimepath+=$VIM,$VIMRUNTIME
-let &spellfile = expand('$XDG_DATA_HOME/vim/spell/en.utf-8.add')
-let s:spelldir = fnamemodify(&spellfile, ':p:h')
-if !isdirectory(s:spelldir) | call mkdir(s:spelldir, 'p') | endif
+if !has('nvim')
+  set backupdir=$XDG_STATE_HOME/vim/backup
+  set directory=$XDG_STATE_HOME/vim/swap
+
+  if has('persistent_undo') | set undodir=$XDG_STATE_HOME/vim/undo | endif
+  if has('viminfo') | set viminfo+=n$XDG_STATE_HOME/vim/viminfo | endif
+
+  let &spellfile = expand('$XDG_DATA_HOME/vim/spell/en.utf-8.add')
+  let s:spelldir = fnamemodify(&spellfile, ':p:h')
+  if !isdirectory(s:spelldir) | call mkdir(s:spelldir, 'p') | endif
+endif
 if has('persistent_undo') | set undofile | endif
 if has('syntax') | set spell | endif
 

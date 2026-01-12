@@ -1,54 +1,6 @@
-#!/usr/bin/env zsh
+#!/usr/bin/zsh
 ## Custom defaults for keyboard
 ## https://developer.apple.com/documentation/foundation/nsglobaldomain
 ## ~/Library/Preferences/.GlobalPreferences.plist
 
-echo 'System Preferences > Keyboard'
-
-# XXX: WIP
-if false; then
-  echo '... > Keyboard > Modifier keys > Caps Lock Key (Control)'
-  # https://amasuda.xyz/post/2016-10-23-mastering-mac-defaults-command/
-  # https://developer.apple.com/library/archive/technotes/tn2450/_index.html#//apple_ref/doc/uid/DTS40017618-CH1-KEY_TABLE_USAGES
-  # XXX: ioreg -c AppleEmbeddedKeyboard -r
-  keyboardID='1452-630-0'
-  defaults -currentHost write -g \
-    'com.apple.keyboard.modifiermapping.$keyboardID' -array '( {
-    HIDKeyboardModifierMappingSrc = 0x700000039;
-    HIDKeyboardModifierMappingDst = 0x7000000E0;
-  } )'
-  unset keyboardID
-
-  # NOTE: Here is an another option
-  # https://developer.apple.com/library/archive/technotes/tn2450/_index.html
-  # hidutil property --set '{}'
-
-else
-  echo 'Set the following manually'
-  echo '... > Keyboard > Modifier keys > Caps Lock Key (Control)'
-  echo 'replace ~/Library/Preferences/com.apple.symbolichotkeys.plist'
-fi
-
-# https://qnibus.com/blog/m1-맥에서-shiftspace-한영-전환-사용하기/
-
-echo '... > Text > Correct spelling automatically (disable)'
-defaults write NSGlobalDomain \
-  NSAutomaticSpellingCorrectionEnabled -bool false
-
-echo '... > Text > Capitalize words automatically (disable)'
-defaults write NSGlobalDomain \
-  NSAutomaticCapitalizationEnabled -bool false
-
-echo '... > Text > Add period with double-space (disable)'
-defaults write NSGlobalDomain \
-  NSAutomaticPeriodSubstitutionEnabled -bool false
-
-echo '... > Text > Use smart quotes and dashes (disable)'
-defaults write NSGlobalDomain \
-  NSAutomaticQuoteSubstitutionEnabled -bool false
-defaults write NSGlobalDomain \
-  NSAutomaticDashSubstitutionEnabled -bool false
-
-echo '... > Text > Replacement (remove all)'
-defaults write NSGlobalDomain \
-  NSUserDictionaryReplacementItems -array '()'
+# ... > Keyboard > Modifier keys > Caps Lock Key (Control)
