@@ -30,6 +30,9 @@ if [ "${NERD_FONT:=0}" -eq 1 ]; then
   command -v lsd > /dev/null 2>&1 && alias ls='command lsd'
 fi
 
+command -v darwin-rebuild > /dev/null && alias darwin-rebuild switch --flake ${XDG_CONFIG_HOME}/nix#"aarch64-darwin"
+command -v nix > /dev/null && alias dr='sudo nix run nix-darwin -- switch --flake "${XDG_CONFIG_HOME}/nix#aarch64-darwin"'
+
 # open command
 if ! command -v open > /dev/null 2>&1; then
   case $(uname) in
