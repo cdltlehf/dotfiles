@@ -5,7 +5,7 @@ config.font_size = 13.0
 config.line_height = 1.2
 
 config.hide_tab_bar_if_only_one_tab = true
-config.window_decorations = "RESIZE"
+-- config.window_decorations = "RESIZE"
 
 config.set_environment_variables = {
   NERD_FONT = "1",

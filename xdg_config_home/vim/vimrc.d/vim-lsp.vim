@@ -107,6 +107,28 @@ if executable('vim-language-server')
   augroup END
 endif
 
+if executable('ty')
+  augroup LspTy
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'ty',
+          \   'cmd': {server_info->['ty', 'server']},
+          \   'allowlist': ['python'],
+          \ })
+  augroup END
+endif
+
+if executable('ruff')
+  augroup LspRuff
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'ruff',
+          \   'cmd': {server_info->['ruff', 'server']},
+          \   'allowlist': ['python'],
+          \ })
+  augroup END
+endif
+
 " pip install 'python-lsp-server[all]'
 " pip install python-lsp-isort
 " pip install pylsp-mypy

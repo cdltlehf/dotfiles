@@ -4,4 +4,4 @@
 URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
 
 mkdir -p "${XDG_DATA_HOME}"
-wget -O "${XDG_DATA_HOME}/get-prompt.sh" "${URL}"
+curl "${URL}" -o "${XDG_DATA_HOME}/git-prompt.sh" 

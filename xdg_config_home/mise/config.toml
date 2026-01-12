@@ -1,0 +1,11 @@
+[tools]
+bat = "latest"
+fzf = "latest"
+gh = "latest"
+lsd = "latest"
+node = "latest"
+"npm:@google/gemini-cli" = "latest"
+ruff = "latest"
+tmux = "latest"
+ty = "latest"
+uv = "latest"
