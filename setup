@@ -106,7 +106,7 @@ os_setup="${basedir}/setup.os/setup#os.${os}"
 if [[ -f "${os_setup}" ]]; then
   read -r -p "Do you want to set configurations for ${os}? [Y/n] " yn
   case ${yn} in
-    [Yy] | "" ) . "${os_setup}" ;;
+    [Yy] | "" ) "${os_setup}" ;;
   esac
 fi
 

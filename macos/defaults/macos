@@ -1,18 +1,6 @@
-#!/bin/bash
+#!/bin/zsh
 # ${HOME}/Library/Preferences/
-
-sudo -v
-
-################################################################################
-# System Settings
-################################################################################
-sudo scutil --set HostName
-# ... > General > About > Name
-sudo scutil --set ComputerName
-# ... > General > Sharing > Local hostname
-sudo scutil --set LocalHostName
-################################################################################
-
+# TODO: Move more settings from System Settings to this script
 
 ################################################################################
 # Finder
@@ -49,7 +37,7 @@ defaults write com.apple.TextEdit RichText -int 0
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock persistent-apps -array ''
 # ... > Hot Corners... > Top Left Corner > No Action
-defaults write com.apple.dock wvous-bl-corner -int 0
+# defaults write com.apple.dock wvous-bl-corner -int 0
 killall Dock
 ################################################################################
 
