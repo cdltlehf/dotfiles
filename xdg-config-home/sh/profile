@@ -25,8 +25,8 @@ LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/.local/lib64"
 export LD_LIBRARY_PATH
 
 # Set locale
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+# export LANG=en_US.UTF-8
+# export LC_ALL=en_US.UTF-8
 
 # Export editors
 export EDITOR='vim -E'

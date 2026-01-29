@@ -7,6 +7,9 @@
 # shellcheck source=/dev/null
 [ -f "${HOME}/.profile" ] && source "${HOME}/.profile"
 
+# https://mise.jdx.dev/getting-started.html
+if command -v mise > /dev/null 2>&1; then eval "$(mise activate bash)";fi
+
 SHRC="${XDG_CONFIG_HOME}/sh/shrc"
 # shellcheck source=/dev/null
 [[ -e "${SHRC}" ]] && source "${SHRC}"

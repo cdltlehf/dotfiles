@@ -1,4 +1,6 @@
 #!/bin/sh
+# This is an environment variable settings file for the setup script
+# Note that this file won't be copied to the home directory
 
 # https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 export XDG_DATA_HOME="${HOME}/.local/share"
