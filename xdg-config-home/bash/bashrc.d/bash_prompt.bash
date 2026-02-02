@@ -32,9 +32,11 @@ __prompt_command() {
 
   # Environment
   if [[ -n "${VIRTUAL_ENV}" ]]; then
-    PS1+=" via \[\e[34m\]$(basename "$VIRTUAL_ENV")\[\e[0m\]"
+    PS1+=" via \[\e[34m\]$(basename "${VIRTUAL_ENV}")\[\e[0m\]"
   fi;
 
+  # Timestamp
+  PS1+='  \[\e[1;30m\]# \t\[\e[0m\]'
   PS1+="\n"
 
   # Return
