@@ -26,6 +26,11 @@ _PS1_1+=' in %F{3}%~%f'
 # Environment
 _PS1_2='$([ -z $VIRTUAL_ENV ] && echo ""'
 _PS1_2+='|| echo " via %F{4}"$VIRTUAL_ENV:t"%f")'
+
+# Timestamp
+_PS1_2+='  %F{8}# %*%f'
+
+# Exit status
 _PS1_2+=$'\n'
 _PS1_2+='%(?.%f$ %f.%B%F{1}?%? %f%b)'
 
@@ -46,6 +51,7 @@ if command -v __git_ps1 > /dev/null 2>&1; then
 else
   PS1="$_PS1_1$_PS1_2"
 fi
+
 unset _PS1_1
 unset _PS1_2
 
