@@ -4,7 +4,7 @@
 if !has('nvim')
   let g:lsp_use_native_client = 1
   " NOTE: If vim is slow, suspect the following line.
-  let g:lsp_semantic_enabled = 1
+  " let g:lsp_semantic_enabled = 1
   let g:lsp_format_sync_timeout = 1000
 endif
 
