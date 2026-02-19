@@ -8,7 +8,9 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 [ "$(uname -s)" == 'Darwin' ] && export BASH_SILENCE_DEPRECATION_WARNING=1
 
 source "$NVM_DIR/bash_completion" 2> /dev/null
-command -v fzf > /dev/null && eval "$(fzf --bash)"
+command -v fzf > /dev/null 2>&1 && eval "$(fzf --bash)"
+command -v wezterm > /dev/null 2>&1 && eval "$(wezterm shell-completion --shell bash)"
+
 # https://github.com/ajeetdsouza/zoxide
 # if command -v zoxide > /dev/null 2>&1; then eval "$(zoxide init bash)"; fi
 # https://github.com/pyenv/pyenv

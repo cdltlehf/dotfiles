@@ -89,11 +89,19 @@ XDG_BIN_HOME="${HOME}/.local/bin"
 mkdir -p "${XDG_BIN_HOME}"
 ln ${LNFLAGS} "${basedir}/scripts"/* ${XDG_BIN_HOME}
 
-if [ ! -d "${XDG_DATA_HOME}/git" ]; then
-  mkdir -p "${XDG_DATA_HOME}/git"
-  GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
-  curl -L "${GIT_PROMPT_URL}" -o "${XDG_DATA_HOME}/git/git-prompt.sh"
-fi
+GIT_COMPLETION_DIR="${XDG_DATA_HOME}/git/completion"
+GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
+mkdir -p "${GIT_COMPLETION_DIR}"
+curl -L "${GIT_PROMPT_URL}" -o "${GIT_COMPLETION_DIR}/git-prompt.sh"
+unset GIT_PROMPT_URL
+unset GIT_COMPLETION_DIR
+
+WEZTERM_SHELL_INTEGRATION_URL="https://raw.githubusercontent.com/wezterm/wezterm/main/assets/shell-integration/wezterm.sh"
+WEZTERM_SHELL_INTEGRATION_DIR="${XDG_DATA_HOME}/wezterm/shell-integration"
+mkdir -p "${WEZTERM_SHELL_INTEGRATION_DIR}"
+curl -L "${WEZTERM_SHELL_INTEGRATION_URL}" -o "${WEZTERM_SHELL_INTEGRATION_DIR}/wezterm.sh"
+unset WEZTERM_SHELL_INTEGRATION_URL
+unset WEZTERM_SHELL_INTEGRATION_DIR
 
 if ! command mise -v 2> /dev/null; then
   curl "https://mise.run" | sh

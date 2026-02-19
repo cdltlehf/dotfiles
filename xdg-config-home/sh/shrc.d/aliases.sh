@@ -47,6 +47,10 @@ if ! command -v open > /dev/null 2>&1; then
   esac
 fi
 
+if [ $TERM_PROGRAM = "WezTerm" ]; then
+  alias imgcat='wezterm imgcat'
+fi
+
 # Python virtual environment
 alias pyvenv='python3 -m venv ./.venv'
 alias pyact='source ./.venv/bin/activate'
