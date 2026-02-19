@@ -96,7 +96,7 @@ if [ ! -d "${XDG_DATA_HOME}/git" ]; then
 fi
 
 if ! command mise -v 2> /dev/null; then
-  curl https://mise.run | sh
+  curl "https://mise.run" | sh
   eval "$("${HOME}/.local/bin/mise" activate bash)"
 fi
 

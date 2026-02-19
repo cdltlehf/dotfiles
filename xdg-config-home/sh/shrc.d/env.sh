@@ -47,45 +47,46 @@ export VOLTA_HOME="${HOME}/.local/opt/volta"
 ###############################################################################
 # ~/.local/bin
 ###############################################################################
-export MAMBA_EXE="${HOME}/.local/bin/micromamba";
+export MISE_SHIMS_DIR="${HOME}/.local/share/mise/shims"
+export PATH="${MISE_SHIMS_DIR}:${HOME}/.local/bin:${PATH}"
+
+###############################################################################
+# ~/.local/opt
+###############################################################################
+[ -e /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
+###############################################################################
+# Deprecated
+###############################################################################
 
 ###############################################################################
 # Update PATH, PKG_CONFIG_PATH, LD_LIBRARY_PATH
 ###############################################################################
-BIN_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name bin 2> /dev/null || true)"
-for bin_dir in ${BIN_DIRS}; do
-  PATH="${bin_dir}:${PATH}"
-done
-unset BIN_DIRS bin_dir
+# BIN_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name bin 2> /dev/null || true)"
+# for bin_dir in ${BIN_DIRS}; do
+#   PATH="${bin_dir}:${PATH}"
+# done
+# unset BIN_DIRS bin_dir
 
-PKG_CONFIG_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name pkgconfig 2> /dev/null || true)"
-for pkg_config_dir in ${PKG_CONFIG_DIRS}; do
-  PKG_CONFIG_PATH="${pkg_config_dir}:${PKG_CONFIG_PATH}"
-done
-unset PKG_CONFIG_DIRS pkg_config_dir
+# PKG_CONFIG_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name pkgconfig 2> /dev/null || true)"
+# for pkg_config_dir in ${PKG_CONFIG_DIRS}; do
+#   PKG_CONFIG_PATH="${pkg_config_dir}:${PKG_CONFIG_PATH}"
+# done
+# unset PKG_CONFIG_DIRS pkg_config_dir
 
-LD_LIBRARY_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name lib 2> /dev/null || true)"
-LD_LIBRARY_DIRS="${LD_LIBRARY_DIRS} $(find ${HOME}/.local/opt -maxdepth 2 -type d -name lib64 2> /dev/null || true)"
-for ld_library_dir in ${LD_LIBRARY_DIRS}; do
-  LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ld_library_dir}"
-done
-unset LD_LIBRARY_DIRS ld_library_dir
+# LD_LIBRARY_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name lib 2> /dev/null || true)"
+# LD_LIBRARY_DIRS="${LD_LIBRARY_DIRS} $(find ${HOME}/.local/opt -maxdepth 2 -type d -name lib64 2> /dev/null || true)"
+# for ld_library_dir in ${LD_LIBRARY_DIRS}; do
+#   LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ld_library_dir}"
+# done
+# unset LD_LIBRARY_DIRS ld_library_dir
+###############################################################################
 
-# if command -v tr > /dev/null && command -v awk > /dev/null && command -v paste > /dev/null; then
-#   PATH="$(echo "$PATH" | tr ':' '\n' | awk '!seen[$1]++' | paste -sd:)"
-#   LD_LIBRARY_PATH="$(echo "$LD_LIBRARY_PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
-#   PKG_CONFIG_PATH="$(echo "$PKG_CONFIG_PATH" | tr ':' '\n' | awk '!seen[$0]++' | paste -sd:)"
-# fi
-export PATH
-export PKG_CONFIG_PATH
-export LD_LIBRARY_PATH
+# export PATH
+# export PKG_CONFIG_PATH
+# export LD_LIBRARY_PATH
 
 ###############################################################################
 # Shell integrations
 # For shell-specific scripts, see `${XDG_CONFIG_HOME}/${SHELL}/${SHELL}rc.d/`
 ###############################################################################
-# . "$HOME/.ghcup/env" 2> /dev/null || true
-# command -v pyenv > eval "$(pyenv init --path)" > /dev/null 2>&1 || true
-command -v batman > /dev/null && eval "$(batman --export-env)"
-source "${MINIFORGE_HOME}/etc/profile.d/conda.sh" > /dev/null 2>&1 || true
-[ -e /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
