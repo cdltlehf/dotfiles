@@ -10,22 +10,27 @@ __prompt_command() {
   local exit_code=$?
   PS1=$'\n'
 
-  # Username
-  if [[ "${USER}" == "root" ]]; then
-    PS1+="\[\e[31m\]\u\[\e[0m\]"
-  else
-    PS1+="\[\e[35m\]\u\[\e[0m\]"
-  fi;
+  if [[ ${COLUMNS} -ge 80 ]]; then
+    # Username
+    if [[ "${USER}" == "root" ]]; then
+      PS1+="\[\e[31m\]\u\[\e[0m\]"
+    else
+      PS1+="\[\e[35m\]\u\[\e[0m\]"
+    fi
 
-  # Hostname
-  if [[ -n "${SSH_TTY}" ]]; then
-    PS1+=" at \[\e[31m\]\h\[\e[0m\]"
-  else
-    PS1+=" at \[\e[36m\]\h\[\e[0m\]"
-  fi;
+    if [[ ${COLUMNS} -ge 120 ]]; then
+      # Hostname
+      if [[ -n "${SSH_TTY}" ]]; then
+        PS1+=" at \[\e[31m\]\h\[\e[0m\]"
+      else
+        PS1+=" at \[\e[36m\]\h\[\e[0m\]"
+      fi
+    fi
+    PS1+=$" in "
+  fi
 
   # Current working directory
-  PS1+=$" in \[\e[33m\]\w\[\e[0m\]"
+  PS1+=$"\[\e[33m\]\w\[\e[0m\]"
 
   # Git prompt
   PS1+="$(__git_ps1 " on %s")"
@@ -33,7 +38,7 @@ __prompt_command() {
   # Environment
   if [[ -n "${VIRTUAL_ENV}" ]]; then
     PS1+=" via \[\e[34m\]$(basename "${VIRTUAL_ENV}")\[\e[0m\]"
-  fi;
+  fi
 
   # Timestamp
   PS1+='  \[\e[1;30m\]# \t\[\e[0m\]'
@@ -44,7 +49,7 @@ __prompt_command() {
     PS1+="\$ "
   else
     PS1+="\[\e[31m\](${exit_code})$\[\e[0m\] "
-  fi;
+  fi
 
   # Continued prompt
   # XXX: It uses 256-color

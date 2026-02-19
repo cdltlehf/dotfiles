@@ -16,15 +16,4 @@ if [[ -d "${ZSHRCDIR}" ]]; then
 fi
 
 autoload -U compinit compinit
-
-# https://github.com/junegunn/fzf
-if command -v fzf > /dev/null 2>&1; then eval "$(fzf --zsh)"; fi
-
-# https://mise.jdx.dev/getting-started.html
-if command -v mise > /dev/null 2>&1; then eval "$(mise activate zsh)";fi
-
-# https://github.com/ajeetdsouza/zoxide
-# if command -v zoxide > /dev/null 2>&1; then eval "$(zoxide init zsh)"; fi
-
-# https://github.com/pyenv/pyenv
-# if command -v pyenv > /dev/null 2>&1; then eval "$(pyenv init - zsh)"; fi
+source "${HOME}/.zshrc.local" 2> /dev/null || true
