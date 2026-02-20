@@ -1,4 +1,5 @@
 " https://github.com/tpope/vim-obsession
+" :help obsession.txt
 
 let g:session_dir = expand('$XDG_STATE_HOME/vim/session')
 call mkdir(g:session_dir, 'p')

@@ -1,4 +1,5 @@
 " https://github.com/prabirshrestha/vim-lsp
+" :help vim-lsp.txt
 
 " help vim-lsp-performance
 if !has('nvim')
