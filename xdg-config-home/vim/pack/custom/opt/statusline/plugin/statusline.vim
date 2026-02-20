@@ -162,6 +162,10 @@ if exists('g:loaded_fugitive')
   endif
 endif
 
+if exists('g:loaded_fugitive')
+  " TODO: obesession
+endif
+
 let g:statusline_active .= '%* %<%f %m%r%h%w '
 let g:statusline_active .= '%= %y '
 let g:statusline_active .=
