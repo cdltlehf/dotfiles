@@ -1,8 +1,10 @@
-"""`v:expand('%')`"""
+import argparse
+import logging
 
+logger = logging.getLogger(__name__)
 
 def main() -> None:
-    pass
+    parser = argparse.ArgumentParser(desc="`v:expand('%')`")
 
 
 if __name__ == "__main__":
