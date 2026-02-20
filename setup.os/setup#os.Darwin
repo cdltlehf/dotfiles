@@ -22,6 +22,7 @@ ${basedir}/macos/defaults/macos
 
 ln "${LNFLAGS}" "${basedir}/macos/hammerspoon" "${HOME}/.hammerspoon"
 ln "${LNFLAGS}" "${basedir}/macos/ubersichtrc" "${HOME}/.ubersichtrc"
+ln "${LNFLAGS}" "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/iCloud"
 
 SPOON_INSTALL_URL="https://github.com/Hammerspoon/Spoons/raw/master/Spoons/SpoonInstall.spoon.zip"
 if [ ! -d "${HOME}/.hammerspoon/Spoons/SpoonInstall.spoon" ]; then
