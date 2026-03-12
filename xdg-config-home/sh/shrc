@@ -1,13 +1,6 @@
 #!/bin/sh
 # Shell-independent startup file for an interactive shell
 
-export MANPAGER="less"
-export NOW_PLAYING_WIDGET_HOOK='nowplaying-cli get artworkData \
-  | base64 -d \
-  | colorgen - \
-  | flavours apply --stdin \
-'
-
 if [ -n "${WEZTERM_EXECUTABLE}" ]; then
   export WEZTERM_SHELL="${SHELL}"
 else
