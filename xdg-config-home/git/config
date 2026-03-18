@@ -10,8 +10,8 @@
 	unstage = reset HEAD --
 	last = log -1 HEAD
 	; misc
-	cim = commit -m
-	sts = status -s
+	cim = commit --message
+	sts = status --short
 	root = rev-parse --show-toplevel
 	ls-untracked = ls-files --others --exclude-standard
 	lg = log --color --graph --oneline --abbrev-commit --decorate
@@ -49,8 +49,6 @@
 	pruneTags = true
 	all = true
 
-[help]
-	autocorrect = prompt
 [commit]
 	verbose = true
 [rerere]
@@ -63,11 +61,6 @@
 	autoStash = true
 	updateRefs = true
 
-[core]
-	fsmonitor = true
-	untrackedCache = true
-[merge]
-	; conflictstyle = zdiff3
 [pull]
 	rebase = true
 
