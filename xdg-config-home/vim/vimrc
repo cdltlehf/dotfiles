@@ -184,11 +184,11 @@ if filereadable(s:vimrc_local) | execute "source " . s:vimrc_local | endif
 set wildmode=longest,full
 
 " :help 'pastetoggle'
-set pastetoggle=<f11>
-map <f10> :set paste<cr>
-map <f11> :set nopaste<cr>
-imap <f10> <c-o>:set paste<cr>
-imap <f11> <nop>
+" set pastetoggle=<f11>
+" map <f10> :set paste<cr>
+" map <f11> :set nopaste<cr>
+" imap <f10> <c-o>:set paste<cr>
+" imap <f11> <nop>
 
 " :help <leader>
 " See more
