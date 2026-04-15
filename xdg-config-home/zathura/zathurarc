@@ -1,0 +1,2 @@
+set synctex true
+set synctex-editor-command "vim --servername VIM --remote-silent +%l %f"
