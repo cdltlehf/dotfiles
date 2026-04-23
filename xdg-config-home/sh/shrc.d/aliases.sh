@@ -42,7 +42,7 @@ if ! command -v open > /dev/null 2>&1; then
   esac
 fi
 
-if [ $TERM_PROGRAM = "WezTerm" ]; then
+if [ "${TERM_PROGRAM}" = "WezTerm" ]; then
   alias imgcat='wezterm imgcat'
 fi
 

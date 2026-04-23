@@ -54,39 +54,3 @@ export PATH="${MISE_SHIMS_DIR}:${HOME}/.local/bin:${PATH}"
 # ~/.local/opt
 ###############################################################################
 [ -e /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
-
-###############################################################################
-# Deprecated
-###############################################################################
-
-###############################################################################
-# Update PATH, PKG_CONFIG_PATH, LD_LIBRARY_PATH
-###############################################################################
-# BIN_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name bin 2> /dev/null || true)"
-# for bin_dir in ${BIN_DIRS}; do
-#   PATH="${bin_dir}:${PATH}"
-# done
-# unset BIN_DIRS bin_dir
-
-# PKG_CONFIG_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name pkgconfig 2> /dev/null || true)"
-# for pkg_config_dir in ${PKG_CONFIG_DIRS}; do
-#   PKG_CONFIG_PATH="${pkg_config_dir}:${PKG_CONFIG_PATH}"
-# done
-# unset PKG_CONFIG_DIRS pkg_config_dir
-
-# LD_LIBRARY_DIRS="$(find ${HOME}/.local/opt -maxdepth 3 -type d -name lib 2> /dev/null || true)"
-# LD_LIBRARY_DIRS="${LD_LIBRARY_DIRS} $(find ${HOME}/.local/opt -maxdepth 2 -type d -name lib64 2> /dev/null || true)"
-# for ld_library_dir in ${LD_LIBRARY_DIRS}; do
-#   LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${ld_library_dir}"
-# done
-# unset LD_LIBRARY_DIRS ld_library_dir
-###############################################################################
-
-# export PATH
-# export PKG_CONFIG_PATH
-# export LD_LIBRARY_PATH
-
-###############################################################################
-# Shell integrations
-# For shell-specific scripts, see `${XDG_CONFIG_HOME}/${SHELL}/${SHELL}rc.d/`
-###############################################################################

@@ -1,12 +1,11 @@
 import argparse
 import logging
 
-logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 
 def main() -> None:
+    logger.setLevel(logging.DEBUG)
     parser = argparse.ArgumentParser()
 
     args = parser.parse_args()

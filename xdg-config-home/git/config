@@ -18,6 +18,7 @@
 	alias = !git config --get-regexp 'alias.*' \
 		| sed 's/^alias\\.//' | sed 's/ / = /' | sed 's/ \\+/ /g' \
 		| sort
+	bclean = "!f() { git checkout main && git fetch --prune && git branch --merged | grep -v * | xargs -n 1 git branch -d; }; f"
 
 [color]
 	ui = auto

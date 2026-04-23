@@ -84,7 +84,6 @@ let g:lsp_diagnostics_virtual_text_wrap = "truncate"
 
 " Refer: https://microsoft.github.io/language-server-protocol/implementors/servers/
 
-" npm install -g vim-language-server
 if executable('vim-language-server')
   augroup LspVim
     autocmd!
@@ -122,50 +121,6 @@ if executable('ruff')
   augroup END
 endif
 
-" pip install 'python-lsp-server[all]'
-" pip install python-lsp-isort
-" pip install pylsp-mypy
-" pip install python-lsp-black
-if executable('pylsp')
-  augroup LspPylsp
-    autocmd!
-    autocmd User lsp_setup call lsp#register_server({
-          \   'name': 'pylsp',
-          \   'cmd': {server_info->['pylsp']},
-          \   'allowlist': ['python'],
-          \   'workspace_config': {
-          \     'pylsp': {
-          \       'plugins': {
-          \         'autopep8': {'enabled': v:false},
-          \         'yapf': {'enabled': v:false},
-          \         'pyflakes': {'enabled': v:false},
-          \         'pycodestyle': {'enabled': v:false},
-          \         'rope_autoimport': {'enabled': v:false},
-          \         'pylint': {'enabled': v:true},
-          \         'black': {
-          \           'enabled': v:true,
-          \           'cache_config': v:true,
-          \           'line_length': 80,
-          \           'preview': v:true,
-          \         },
-          \         'pylsp_mypy': {
-          \           'enabled': v:true,
-          \           'strict': v:true,
-          \           'overrides': [
-          \             "--python-executable",
-          \             trim(system('which python3')),
-          \             v:true,
-          \           ],
-          \         },
-          \         'isort': {'enabled': v:true, 'profile': 'google'},
-          \       },
-          \     },
-          \   },
-          \ })
-  augroup END
-endif
-
-" npm install --global vscode-html-languageserver-bin
 if executable('html-languageserver')
   augroup LspHtml
     autocmd!
@@ -184,8 +139,6 @@ if executable('html-languageserver')
   augroup END
 endif
 
-" macOS: brew install llvm
-" TODO: Linux
 if executable('clangd')
   augroup LspClangd
     autocmd!
@@ -253,6 +206,17 @@ if executable('taplo')
           \   'name': 'taplo',
           \   'cmd': {server_info->['taplo', 'lsp', 'stdio']},
           \   'allowlist': ['toml'],
+          \ })
+  augroup END
+endif
+
+if executable('marksman')
+  augroup LspMarksman
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'marksman',
+          \   'cmd': {server_info->['marksman', 'server']},
+          \   'allowlist': ['markdown'],
           \ })
   augroup END
 endif

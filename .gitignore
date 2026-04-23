@@ -16,3 +16,10 @@ xdg-config-home/zsh/.zsh_history
 xdg-config-home/zsh/.zsh_sessions
 xdg-config-home/zsh/.zshenv
 xdg-config-home/zsh/.zshrc
+xdg-config-home/dconf/
+xdg-config-home/ibus/
+xdg-config-home/evolution/
+xdg-config-home/pulse/
+xdg-config-home/user-dirs.dirs
+xdg-config-home/user-dirs.locale
+xdg-config-home/gtk-3.0/

@@ -7,7 +7,7 @@
 
 [ -e "${HOME}/.shenv" ] && ENV="${HOME}/.shenv"
 # shellcheck source=/dev/null
-[ -n "$ENV" ] && . "$ENV"
+[ -n "${ENV}" ] && . "${ENV}"
 
 set -o allexport
 [ -e "${HOME}/.env" ] && . "${HOME}/.env"
