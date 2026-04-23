@@ -1,4 +1,4 @@
-" https://github.com/tpope/vim-scriptease
+" Reference: https://github.com/tpope/vim-scriptease
 
 function! s:EchoSynNames()
   let [l:line, l:col] = [line('.'), col('.')]
