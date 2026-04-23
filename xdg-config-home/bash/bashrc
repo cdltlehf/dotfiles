@@ -5,7 +5,7 @@
 # For remote shell daemon like ssh, ~/.bashrc is sourced directly
 
 # shellcheck source=/dev/null
-[ -f "${HOME}/.profile" ] && source "${HOME}/.profile"
+[[ -f "${HOME}/.profile" ]] && source "${HOME}/.profile"
 
 SHRC="${XDG_CONFIG_HOME}/sh/shrc"
 # shellcheck source=/dev/null
