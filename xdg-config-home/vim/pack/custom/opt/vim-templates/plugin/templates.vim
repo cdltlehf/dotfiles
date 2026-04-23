@@ -1,3 +1,5 @@
+" Reference: https://github.com/nvimdev/template.nvim
+
 if !exists('g:template_dir')
   let g:template_dir = expand('~/.vim/templates')
 endif

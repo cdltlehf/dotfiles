@@ -1,5 +1,3 @@
-" tab (buffer) line
-
 augroup bufferline_highlight
   autocmd!
   autocmd ColorScheme,VimEnter * highlight link TabLineSelNr TabLineSel

@@ -1,3 +1,5 @@
+" Reference: https://github.com/jeffkreeftmeijer/vim-numbertoggle
+
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave,WinEnter *

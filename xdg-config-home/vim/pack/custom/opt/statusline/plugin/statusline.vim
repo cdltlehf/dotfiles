@@ -1,5 +1,3 @@
-" status line
-
 function! StatusLineMode() abort
   let l:mode = mode(1)
 

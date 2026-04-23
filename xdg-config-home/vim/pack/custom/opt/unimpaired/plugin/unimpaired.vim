@@ -1,4 +1,4 @@
-"" See tpope/vim-unimpaired
+" Reference: https://github.com/tpope/vim-unimpaired
 
 if exists('g:loaded_unimpaired') || &compatible
   finish
