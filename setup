@@ -53,8 +53,6 @@ export os
 # shellcheck source=/dev/null
 source "${basedir}/env"
 
-ln "${LNFLAGS}" "${basedir}/env" "${HOME}/.shenv"
-
 # XXX: Is it necessary?
 [ -e "${HOME}/.config" ] && rm ${RMFLAGS} "${HOME}/.config"
 ln ${LNFLAGS} "${basedir}/xdg-config-home" "${HOME}/.config"
