@@ -2,8 +2,17 @@
 
 # POSIX shell startup file for an interactive login shell
 
-: "${XDG_BIN_HOME:="${HOME}/.local/bin"}"
-: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
+# : "${XDG_BIN_HOME:="${HOME}/.local/bin"}"
+# : "${XDG_CONFIG_HOME:="${HOME}/.config"}"
+# : "${XDG_STATE_HOME:="${HOME}/.local/state"}"
+# : "${XDG_CACHE_HOME:="${HOME}/.cache"}"
+
+export XDG_DATA_HOME="${HOME}/.local/share"
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_STATE_HOME="${HOME}/.local/state"
+export XDG_DATA_DIRS="/usr/local/share:/usr/share"
+export XDG_CONFIG_DIRS="/etc/xdg"
+export XDG_CACHE_HOME="${HOME}/.cache"
 
 [ -e "${HOME}/.shenv" ] && ENV="${HOME}/.shenv"
 # shellcheck source=/dev/null
