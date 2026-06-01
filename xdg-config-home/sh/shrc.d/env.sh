@@ -45,12 +45,16 @@ export TEXDIR="${HOME}/.local/opt/texlive/2024"
 export VOLTA_HOME="${HOME}/.local/opt/volta"
 
 ###############################################################################
-# ~/.local/bin
+# Miscellaneous
 ###############################################################################
+export ZEROBREW_DIR="${HOME}/.zerobrew"
+export ZEROBREW_BIN="${ZEROBREW_DIR}/bin"
+export ZEROBREW_ROOT="/opt/zerobrew"
+export ZEROBREW_PREFIX="/opt/zerobrew"
 export MISE_SHIMS_DIR="${HOME}/.local/share/mise/shims"
+
+export PATH="${ZEROBREW_BIN}:${PATH}"
+export PATH="${ZEROBREW_PREFIX}/bin:${PATH}"
 export PATH="${MISE_SHIMS_DIR}:${HOME}/.local/bin:${PATH}"
 
-###############################################################################
-# ~/.local/opt
-###############################################################################
-[ -e /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+export PKG_CONFIG_PATH="${ZEROBREW_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH:-}"

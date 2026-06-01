@@ -40,11 +40,18 @@ case ${yn} in
   [Yy]* | "" ) sudo softwareupdate --install-rosetta ;;
 esac
 
+# Install homebrew
+# https://brew.sh
 HOMEBREW_INSTALLER="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
 if ! command -v brew &> /dev/null; then
   /bin/bash -c "$(curl -fsSL "${HOMEBREW_INSTALLER}")";
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-brewfile="${basedir}/macos/Brewfile"
-command -v brew &> /dev/null && brew bundle --file "${brewfile}"
+# Install zerobrew
+# https://lucasgelfond-zerobrew.mintlify.app/installation
+curl -fsSL https://zerobrew.rs/install | bash -s -- --no-modify-path
+
+brewfile="${basedir}/Brewfile"
+brew bundle --file "${brewfile}"
+zb bundle --file "${brewfile}"
