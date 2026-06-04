@@ -15,6 +15,7 @@ xdg-config-home/*
 !xdg-config-home/readline
 !xdg-config-home/sh
 !xdg-config-home/tmux
+!xdg-config-home/tmuxinator
 !xdg-config-home/vim
 !xdg-config-home/wezterm
 !xdg-config-home/yt-dlp
