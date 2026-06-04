@@ -1,0 +1,12 @@
+# /Users/cdltlehf/.config/tmuxinator/brain.yml
+
+name: brain
+root: ~/
+attach: false
+
+windows:
+  - odysseus:7860:  ~/projects/odysseus/start-macos.sh
+  - llama-server:8080: llama serve
+  - mcp:
+      panes:
+        - duckduckgo-mcp-server(8000): uvx duckduckgo-mcp-server --transport streamable-http
