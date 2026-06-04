@@ -9,6 +9,7 @@ xdg-config-home/*
 !xdg-config-home/cava
 !xdg-config-home/flavours
 !xdg-config-home/git
+!xdg-config-home/llama
 !xdg-config-home/mintty
 !xdg-config-home/mise
 !xdg-config-home/nvim
