@@ -18,11 +18,30 @@ sudo scutil --set HostName
 sudo scutil --set ComputerName  # ... > General > About > Name
 sudo scutil --set LocalHostName # ... > General > Sharing > Local hostname
 
+symlink() {
+	local src="$1"
+	local dest="$2"
+	if [ -L "$dest" ] || [ -e "$dest" ]; then
+		if [[ $FORCE -eq 1 ]]; then
+			rm ${RMFLAGS} "$dest"
+			ln ${LNFLAGS} "$src" "$dest"
+		fi
+	else
+		ln ${LNFLAGS} "$src" "$dest"
+	fi
+}
+
 ${basedir}/macos/defaults/macos
 
-ln "${LNFLAGS}" "${basedir}/macos/hammerspoon" "${HOME}/.hammerspoon"
-ln "${LNFLAGS}" "${basedir}/macos/ubersichtrc" "${HOME}/.ubersichtrc"
-ln "${LNFLAGS}" "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/iCloud"
+mkdir -p "${HOME}/.hammerspoon"
+for item in "${basedir}/macos/hammerspoon"/*; do
+	if [ "$(basename "$item")" = "Spoons" ]; then
+		continue
+	fi
+	symlink "$item" "${HOME}/.hammerspoon/$(basename "$item")"
+done
+symlink "${basedir}/macos/ubersichtrc" "${HOME}/.ubersichtrc"
+symlink "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/iCloud"
 
 SPOON_INSTALL_URL="https://github.com/Hammerspoon/Spoons/raw/master/Spoons/SpoonInstall.spoon.zip"
 if [ ! -d "${HOME}/.hammerspoon/Spoons/SpoonInstall.spoon" ]; then
