@@ -1,22 +1,22 @@
 #!/bin/zsh
 
 if [ -z "${basedir}" ]; then
-  echo "It should be run from the main setup script." >&2
-  exit 1
+	echo "It should be run from the main setup script." >&2
+	exit 1
 fi
 
 if [ "$(uname)" != "Darwin" ]; then
-  echo "This script is only for macOS (Darwin)." >&2
-  exit 1
+	echo "This script is only for macOS (Darwin)." >&2
+	exit 1
 fi
 
 # TODO: Run this in order to use git
-xcode-select --install &> /dev/null || true
+xcode-select --install &>/dev/null || true
 
 sudo -v
 sudo scutil --set HostName
 sudo scutil --set ComputerName  # ... > General > About > Name
-sudo scutil --set LocalHostName  # ... > General > Sharing > Local hostname
+sudo scutil --set LocalHostName # ... > General > Sharing > Local hostname
 
 ${basedir}/macos/defaults/macos
 
@@ -26,26 +26,26 @@ ln "${LNFLAGS}" "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/
 
 SPOON_INSTALL_URL="https://github.com/Hammerspoon/Spoons/raw/master/Spoons/SpoonInstall.spoon.zip"
 if [ ! -d "${HOME}/.hammerspoon/Spoons/SpoonInstall.spoon" ]; then
-  mkdir -p "${HOME}/.hammerspoon/Spoons/"
-  tmpzip=$(mktemp /tmp/SpoonInstall.XXXXXX.zip)
-  curl -L "${SPOON_INSTALL_URL}" -o "${tmpzip}"
-  unzip "${tmpzip}" -d "${HOME}/.hammerspoon/Spoons/"
-  rm "${tmpzip}"
-  unset tmpzip
+	mkdir -p "${HOME}/.hammerspoon/Spoons/"
+	tmpzip=$(mktemp /tmp/SpoonInstall.XXXXXX)
+	curl -L "${SPOON_INSTALL_URL}" -o "${tmpzip}"
+	unzip "${tmpzip}" -d "${HOME}/.hammerspoon/Spoons/"
+	rm "${tmpzip}"
+	unset tmpzip
 fi
 
 # TODO: Check and run `softwareupdate --all --install --force`
 read "yn?Install rosetta? [Y/n] "
 case ${yn} in
-  [Yy]* | "" ) sudo softwareupdate --install-rosetta ;;
+[Yy]* | "") sudo softwareupdate --install-rosetta ;;
 esac
 
 # Install homebrew
 # https://brew.sh
 HOMEBREW_INSTALLER="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-if ! command -v brew &> /dev/null; then
-  /bin/bash -c "$(curl -fsSL "${HOMEBREW_INSTALLER}")";
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+if ! command -v brew &>/dev/null; then
+	/bin/bash -c "$(curl -fsSL "${HOMEBREW_INSTALLER}")"
+	eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # Install zerobrew

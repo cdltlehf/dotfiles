@@ -1,11 +1,6 @@
-#!/bin/sh
+# shellcheck shell=sh
 
 # POSIX shell startup file for an interactive login shell
-
-# : "${XDG_BIN_HOME:="${HOME}/.local/bin"}"
-# : "${XDG_CONFIG_HOME:="${HOME}/.config"}"
-# : "${XDG_STATE_HOME:="${HOME}/.local/state"}"
-# : "${XDG_CACHE_HOME:="${HOME}/.cache"}"
 
 export XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_CONFIG_HOME="${HOME}/.config"
@@ -22,19 +17,23 @@ set -o allexport
 [ -e "${HOME}/.env" ] && . "${HOME}/.env"
 set +o allexport
 
-PATH=${XDG_BIN_HOME}:$PATH
+XDG_BIN_HOME="${HOME}/.local/bin"
+mkdir -p "${XDG_BIN_HOME}"
+PATH="${XDG_BIN_HOME}:${PATH}"
 export PATH
 
-PKG_CONFIG_PATH="${HOME}/.local/lib/pkgconfig:${PKG_CONFIG_PATH}"
+mkdir -p "${HOME}/.local/lib/pkgconfig"
+mkdir -p "${HOME}/.local/lib64/pkgconfig"
+PKG_CONFIG_PATH="${HOME}/.local/lib/pkgconfig${PKG_CONFIG_PATH:+:${PKG_CONFIG_PATH}}"
 PKG_CONFIG_PATH="${HOME}/.local/lib64/pkgconfig:${PKG_CONFIG_PATH}"
 export PKG_CONFIG_PATH
 
-LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/.local/lib"
-LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/.local/lib64"
+LD_LIBRARY_PATH="${HOME}/.local/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+LD_LIBRARY_PATH="${HOME}/.local/lib64:${LD_LIBRARY_PATH}"
 export LD_LIBRARY_PATH
 
 # Export editors
-export EDITOR='vim -E'
+export EDITOR='vim'
 export PAGER='less'
 export VISUAL='vim'
 

@@ -6,7 +6,6 @@ xdg-config-home/*
 !xdg-config-home/alacritty
 !xdg-config-home/bash
 !xdg-config-home/bat
-!xdg-config-home/cava
 !xdg-config-home/flavours
 !xdg-config-home/git
 !xdg-config-home/llama
