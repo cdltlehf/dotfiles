@@ -7,37 +7,37 @@ shopt -s nullglob
 FORCE=0
 
 while [[ $# -gt 0 ]]; do
-  case "$1" in
-    -h|--help)
-      echo "Usage: $(basename $0) [options]"
-      echo "Options:"
-      echo "  -h, --help    Show this help message and exit"
-      echo "  -f, --force   Force overwrite existing files"
-      exit 0
-      ;;
-    --)
-      break
-      ;;
-    -f|--force)
-      FORCE=1
-      ;;
-    *)
-      echo "Unknown option: $1"
-      exit 1
-      ;;
-  esac
-  shift
+	case "$1" in
+	-h | --help)
+		echo "Usage: $(basename $0) [options]"
+		echo "Options:"
+		echo "  -h, --help    Show this help message and exit"
+		echo "  -f, --force   Force overwrite existing files"
+		exit 0
+		;;
+	--)
+		break
+		;;
+	-f | --force)
+		FORCE=1
+		;;
+	*)
+		echo "Unknown option: $1"
+		exit 1
+		;;
+	esac
+	shift
 done
 
 echoerr() { echo "$@" 1>&2; }
 export -f echoerr
 
 if [[ $FORCE -eq 1 ]]; then
-  LNFLAGS="-svnf"
-  RMFLAGS="-rvf"
+	LNFLAGS="-svnf"
+	RMFLAGS="-rvf"
 else
-  LNFLAGS="-svni"
-  RMFLAGS="-rvi"
+	LNFLAGS="-svni"
+	RMFLAGS="-rvi"
 fi
 
 # Get base directory (e.g., `$HOME/dotfiles`)
@@ -53,9 +53,10 @@ export os
 # shellcheck source=/dev/null
 source "${basedir}/env"
 
-# XXX: Is it necessary?
-[ -e "${HOME}/.config" ] && rm ${RMFLAGS} "${HOME}/.config"
-ln ${LNFLAGS} "${basedir}/xdg-config-home" "${HOME}/.config"
+mkdir -p "${XDG_CONFIG_HOME}"
+for item in "${basedir}/xdg-config-home"/*; do
+	ln ${LNFLAGS} "$item" "${XDG_CONFIG_HOME}/$(basename "$item")"
+done
 
 ln ${LNFLAGS} "${basedir}/xdg-config-home/bash/bash_profile" "${HOME}/.bash_profile"
 ln ${LNFLAGS} "${basedir}/xdg-config-home/bash/bashrc" "${HOME}/.bashrc"
@@ -69,18 +70,18 @@ ln ${LNFLAGS} "${basedir}/xdg-config-home/zsh/zshrc" "${XDG_CONFIG_HOME}/zsh/.zs
 
 LOCAL_GITCONFIG="${HOME}/.gitconfig.local"
 if [ ! -f "${LOCAL_GITCONFIG}" ]; then
-  read -r -p "Do you want to create a local gitconfig file at ${LOCAL_GITCONFIG}? [Y/n] " yn
-  case ${yn} in
-    [Yy] | "" )
-      read -r -p "Enter your git user name: " git_username
-      read -r -p "Enter your git user email: " git_useremail
-      cat <<EOF > "${LOCAL_GITCONFIG}"
+	read -r -p "Do you want to create a local gitconfig file at ${LOCAL_GITCONFIG}? [Y/n] " yn
+	case ${yn} in
+	[Yy] | "")
+		read -r -p "Enter your git user name: " git_username
+		read -r -p "Enter your git user email: " git_useremail
+		cat <<EOF >"${LOCAL_GITCONFIG}"
 [user]
   name = ${git_username}
   email = ${git_useremail}
 EOF
-  ;;
-  esac
+		;;
+	esac
 fi
 
 XDG_BIN_HOME="${HOME}/.local/bin"
@@ -103,19 +104,19 @@ curl -sS -L "${WEZTERM_SHELL_INTEGRATION_URL}" -o "${WEZTERM_SHELL_INTEGRATION_D
 unset WEZTERM_SHELL_INTEGRATION_URL
 unset WEZTERM_SHELL_INTEGRATION_DIR
 
-if ! command mise -v 2> /dev/null; then
-  curl "https://mise.run" | sh
-  eval "$("${HOME}/.local/bin/mise" activate bash)"
+if ! command mise -v 2>/dev/null; then
+	curl "https://mise.run" | sh
+	eval "$("${HOME}/.local/bin/mise" activate bash)"
 fi
 
 echoerr "Run \`mise install\` to install tools"
 
 os_setup="${basedir}/setup.os/setup#os.${os}"
 if [[ -f "${os_setup}" ]]; then
-  read -r -p "Do you want to set configurations for ${os}? [Y/n] " yn
-  case ${yn} in
-    [Yy] | "" ) "${os_setup}" ;;
-  esac
+	read -r -p "Do you want to set configurations for ${os}? [Y/n] " yn
+	case ${yn} in
+	[Yy] | "") "${os_setup}" ;;
+	esac
 fi
 
 echo "Restart your login shell with \`exec \"\${SHELL}\" --login\`"
