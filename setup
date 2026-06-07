@@ -4,7 +4,7 @@ set -o nounset
 set -o errexit
 shopt -s nullglob
 
-FORCE=0
+force=0
 
 while [[ $# -gt 0 ]]; do
 	case "$1" in
@@ -19,7 +19,7 @@ while [[ $# -gt 0 ]]; do
 		break
 		;;
 	-f | --force)
-		FORCE=1
+		force=1
 		;;
 	*)
 		echo "Unknown option: $1"
@@ -32,7 +32,7 @@ done
 echoerr() { echo "$@" 1>&2; }
 export -f echoerr
 
-if [[ $FORCE -eq 1 ]]; then
+if [[ $force -eq 1 ]]; then
 	LNFLAGS="-svnf"
 	RMFLAGS="-rvf"
 else
@@ -49,7 +49,7 @@ export LNFLAGS
 export RMFLAGS
 export basedir
 export os
-export FORCE
+export force
 
 # shellcheck source=/dev/null
 source "${basedir}/env"
@@ -67,7 +67,7 @@ symlink() {
 	fi
 
 	if [ -d "$dest" ] || [ -h "$dest" ]; then
-		if [[ $FORCE -eq 1 ]]; then
+		if [[ $force -eq 1 ]]; then
 			rm ${RMFLAGS} "$dest"
 			ln ${LNFLAGS} "$src" "$dest"
 		else
