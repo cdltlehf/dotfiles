@@ -31,7 +31,7 @@ symlink() {
 	fi
 
 	if [ -d "$dest" ] || [ -h "$dest" ]; then
-		if [[ $FORCE -eq 1 ]]; then
+		if [[ $force -eq 1 ]]; then
 			rm ${RMFLAGS} "$dest"
 			ln ${LNFLAGS} "$src" "$dest"
 		else
@@ -74,13 +74,34 @@ esac
 # https://brew.sh
 HOMEBREW_INSTALLER="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
 if ! command -v brew &>/dev/null; then
+	if [ -x "/opt/homebrew/bin/brew" ]; then
+		eval "$(/opt/homebrew/bin/brew shellenv)"
+	elif [ -x "/usr/local/bin/brew" ]; then
+		eval "$(/usr/local/bin/brew shellenv)"
+	fi
+fi
+
+if ! command -v brew &>/dev/null; then
 	/bin/bash -c "$(curl -fsSL "${HOMEBREW_INSTALLER}")"
-	eval "$(/opt/homebrew/bin/brew shellenv)"
+	if [ -x "/opt/homebrew/bin/brew" ]; then
+		eval "$(/opt/homebrew/bin/brew shellenv)"
+	elif [ -x "/usr/local/bin/brew" ]; then
+		eval "$(/usr/local/bin/brew shellenv)"
+	fi
 fi
 
 # Install zerobrew
 # https://lucasgelfond-zerobrew.mintlify.app/installation
-curl -fsSL https://zerobrew.rs/install | bash -s -- --no-modify-path
+if ! command -v zb &>/dev/null; then
+	if [ -x "${HOME}/.local/bin/zb" ]; then
+		export PATH="${HOME}/.local/bin:${PATH}"
+	fi
+fi
+
+if ! command -v zb &>/dev/null; then
+	curl -fsSL https://zerobrew.rs/install | bash -s -- --no-modify-path
+	export PATH="${HOME}/.local/bin:${PATH}"
+fi
 
 brewfile="${basedir}/Brewfile"
 brew bundle --file "${brewfile}"
