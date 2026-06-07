@@ -1,26 +1,6 @@
 .DS_Store
 
 macos/hammerspoon/Spoons
-xdg-config-home/*
-
-!xdg-config-home/alacritty
-!xdg-config-home/bash
-!xdg-config-home/bat
-!xdg-config-home/flavours
-!xdg-config-home/git
-!xdg-config-home/llama
-!xdg-config-home/mintty
-!xdg-config-home/mise
-!xdg-config-home/nvim
-!xdg-config-home/readline
-!xdg-config-home/sh
-!xdg-config-home/tmux
-!xdg-config-home/tmuxinator
-!xdg-config-home/vim
-!xdg-config-home/wezterm
-!xdg-config-home/yt-dlp
-!xdg-config-home/zathura
-!xdg-config-home/zsh
 
 xdg-config-home/zsh/.zcompdump
 xdg-config-home/zsh/.zprofile

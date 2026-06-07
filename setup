@@ -49,6 +49,7 @@ export LNFLAGS
 export RMFLAGS
 export basedir
 export os
+export FORCE
 
 # shellcheck source=/dev/null
 source "${basedir}/env"
