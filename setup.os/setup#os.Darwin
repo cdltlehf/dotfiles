@@ -21,10 +21,21 @@ sudo scutil --set LocalHostName # ... > General > Sharing > Local hostname
 symlink() {
 	local src="$1"
 	local dest="$2"
-	if [ -L "$dest" ] || [ -e "$dest" ]; then
+
+	if [ -L "$dest" ]; then
+		local link_target
+		link_target=$(readlink "$dest")
+		if [ "$link_target" = "$src" ]; then
+			return 0
+		fi
+	fi
+
+	if [ -d "$dest" ] || [ -h "$dest" ]; then
 		if [[ $FORCE -eq 1 ]]; then
 			rm ${RMFLAGS} "$dest"
 			ln ${LNFLAGS} "$src" "$dest"
+		else
+			echo "Warning: Target directory '$dest' already exists. Use -f to overwrite."
 		fi
 	else
 		ln ${LNFLAGS} "$src" "$dest"

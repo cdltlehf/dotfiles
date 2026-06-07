@@ -54,20 +54,44 @@ export FORCE
 # shellcheck source=/dev/null
 source "${basedir}/env"
 
+symlink() {
+	local src="$1"
+	local dest="$2"
+
+	if [ -L "$dest" ]; then
+		local link_target
+		link_target=$(readlink "$dest")
+		if [ "$link_target" = "$src" ]; then
+			return 0
+		fi
+	fi
+
+	if [ -d "$dest" ] || [ -h "$dest" ]; then
+		if [[ $FORCE -eq 1 ]]; then
+			rm ${RMFLAGS} "$dest"
+			ln ${LNFLAGS} "$src" "$dest"
+		else
+			echo "Warning: Target directory '$dest' already exists. Use -f to overwrite."
+		fi
+	else
+		ln ${LNFLAGS} "$src" "$dest"
+	fi
+}
+
 mkdir -p "${XDG_CONFIG_HOME}"
 for item in "${basedir}/xdg-config-home"/*; do
-	ln ${LNFLAGS} "$item" "${XDG_CONFIG_HOME}/$(basename "$item")"
+	symlink "$item" "${XDG_CONFIG_HOME}/$(basename "$item")"
 done
 
-ln ${LNFLAGS} "${basedir}/xdg-config-home/bash/bash_profile" "${HOME}/.bash_profile"
-ln ${LNFLAGS} "${basedir}/xdg-config-home/bash/bashrc" "${HOME}/.bashrc"
-ln ${LNFLAGS} "${basedir}/xdg-config-home/git/gitmessage" "${HOME}/.gitmessage"
-ln ${LNFLAGS} "${basedir}/xdg-config-home/sh/profile" "${HOME}/.profile"
-ln ${LNFLAGS} "${basedir}/xdg-config-home/tmux/tmux.conf" "${HOME}/.tmux.conf"
-ln ${LNFLAGS} "${basedir}/xdg-config-home/vim/vimrc" "${HOME}/.vimrc"
-ln ${LNFLAGS} "${basedir}/xdg-config-home/zsh/zprofile" "${XDG_CONFIG_HOME}/zsh/.zprofile"
-ln ${LNFLAGS} "${basedir}/xdg-config-home/zsh/zshenv" "${HOME}/.zshenv"
-ln ${LNFLAGS} "${basedir}/xdg-config-home/zsh/zshrc" "${XDG_CONFIG_HOME}/zsh/.zshrc"
+symlink "${basedir}/xdg-config-home/bash/bash_profile" "${HOME}/.bash_profile"
+symlink "${basedir}/xdg-config-home/bash/bashrc" "${HOME}/.bashrc"
+symlink "${basedir}/xdg-config-home/git/gitmessage" "${HOME}/.gitmessage"
+symlink "${basedir}/xdg-config-home/sh/profile" "${HOME}/.profile"
+symlink "${basedir}/xdg-config-home/tmux/tmux.conf" "${HOME}/.tmux.conf"
+symlink "${basedir}/xdg-config-home/vim/vimrc" "${HOME}/.vimrc"
+symlink "${basedir}/xdg-config-home/zsh/zprofile" "${XDG_CONFIG_HOME}/zsh/.zprofile"
+symlink "${basedir}/xdg-config-home/zsh/zshenv" "${HOME}/.zshenv"
+symlink "${basedir}/xdg-config-home/zsh/zshrc" "${XDG_CONFIG_HOME}/zsh/.zshrc"
 
 LOCAL_GITCONFIG="${HOME}/.gitconfig.local"
 if [ ! -f "${LOCAL_GITCONFIG}" ]; then
