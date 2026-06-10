@@ -1,0 +1,33 @@
+default_install_hook_types: [pre-commit, pre-push, commit-msg]
+
+repos:
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.15.12
+  hooks:
+    - id: ruff-check
+    - id: ruff-format
+- repo: https://github.com/astral-sh/uv-pre-commit
+  rev: 0.11.8
+  hooks:
+    - id: uv-lock
+    - id: uv-export
+- repo: local
+  hooks:
+    - id: uv run ty
+      name: uv run ty check
+      entry: uv run ty check .
+      language: system
+      pass_filenames: false
+- repo: https://github.com/commitizen-tools/commitizen
+  rev: v4.13.10
+  hooks:
+    - id: commitizen
+    - id: commitizen-branch
+      stages: [pre-push]
+- repo: https://github.com/biomejs/pre-commit
+  rev: v2.4.16
+  hooks:
+    - id: biome-ci
+    - id: biome-check
+    - id: biome-format
+    - id: biome-lint
