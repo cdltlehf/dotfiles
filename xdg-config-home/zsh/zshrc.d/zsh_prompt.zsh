@@ -3,8 +3,8 @@ ZLE_RPROMPT_INDENT=0
 
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git:*' formats ' on %F{2}(%b)%f'
-zstyle ':vcs_info:git:*' actionformats ' on %F{2}(%b|%a)%f'
+zstyle ':vcs_info:git:*' formats ' on %F{2}%b%f'
+zstyle ':vcs_info:git:*' actionformats ' on %F{2}%b|%a%f'
 
 precmd() {
 	vcs_info
