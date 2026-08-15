@@ -1,28 +1,41 @@
 # Set border style
-set-option -g pane-active-border-style fg=blue
+set-option -g pane-border-indicators off
+set-option -g pane-active-border-style fg=default
 set-option -g pane-border-style fg=brightblack
+set-option -g pane-border-status bottom
+set-option -g pane-border-format ""
+
+# Set window pane style
+set-option -g window-style default
+set-option -g window-active-style default
 
 # Set message, status style
-set-option -g message-style bg=black,fg=blue
-set-option -g status-style bg=black,fg=default
-set-option -g status-interval 6
+set-option -g message-style bg=default,fg=default
+set-option -g message-command-style bg=default,fg=default
+set-option -g status-style bg=default,fg=default
+set-option -g status on
+set-option -g status-interval 5
+set-option -g status-justify absolute-centre
+set-option -gu status-format
 
 # Set status-left
-set-option -g status-left-length 100
-set-option -g status-left "#[bg=#{?client_prefix,yellow,green},fg=black]"
-set-option -ag status-left " #{session_name} "
+set-option -g  status-left-length 50
+set-option -g  status-left "#[fg=default]#{session_id}:#{session_name}"
+set-option -ag status-left "#{?client_prefix, #[fg=yellow]· prefix#[default],}"
+set-option -ag status-left "#{?pane_in_mode, #[fg=cyan]· copy#[default],}"
+set-option -ag status-left "#{?pane_synchronized, #[fg=brightred]· synchronizing#[default],}"
 
 # Set window-status
-set-option -g window-status-current-style bg=blue,fg=black
-set-option -g window-status-current-format " #I #W#F "
-set-option -g window-status-style bg=black,fg=default
-set-option -g window-status-format " #I #W#F "
-set-option -g window-status-separator ''
+set-option -g window-status-current-style "bg=default,fg=default,bold"
+set-option -g window-status-style "bg=default,fg=brightblack,none"
+set-option -g window-status-current-format "#I:#W#{?window_zoomed_flag,+,}"
+set-option -g window-status-format "#I:#W"
+set-option -g window-status-separator " #[fg=brightblack]· "
 
-set-option -g window-status-activity-style "bold"
-set-option -g window-status-bell-style "bold"
+set-option -g window-status-activity-style "fg=yellow,none"
+set-option -g window-status-bell-style "fg=brightred,bold"
 
 # Set status-right
-set-option -g status-right-length 100
-set-option -g status-right "#[bg=cyan,fg=black] #{pane_title} "
-set-option -ag status-right "#[bg=yellow,fg=black] %H:%M %Y-%m-%d "
+set-option -g  status-right-length 30
+set-option -g  status-right "#[fg=default]%a %b %d"
+set-option -ag status-right " #[fg=brightblack]· #[fg=default]%H:%M"
