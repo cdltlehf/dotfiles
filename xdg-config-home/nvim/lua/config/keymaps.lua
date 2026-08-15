@@ -10,6 +10,12 @@ map("n", "<leader>m<space>", ":<c-u>make! ", { desc = "make! ..." })
 
 -- Config commands
 map("n", "<leader>vv", ":<c-u>edit $MYVIMRC<cr>", { desc = "Edit config" })
+map("n", "<leader>vr", ":<c-u>Reload<cr>", { desc = "Reload config" })
+
+vim.api.nvim_create_user_command("Reload", function()
+	vim.cmd("source $MYVIMRC")
+	vim.notify("Neovim configuration reloaded!", vim.log.levels.INFO)
+end, { desc = "Reload Neovim configuration" })
 
 -- Visual mode indent retention
 map("x", "<", "<gv", { desc = "Indent left and re-select" })
