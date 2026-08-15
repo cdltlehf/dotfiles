@@ -1,52 +1,20 @@
--- https://github.com/lewis6991/gitsigns.nvim
 require("gitsigns").setup({
-	signs = {
-		add = { text = "▎" },
-		change = { text = "▎" },
-		delete = { text = "" },
-		topdelete = { text = "" },
-		changedelete = { text = "▎" },
-		untracked = { text = "┆" },
-	},
 	on_attach = function(bufnr)
 		local gs = require("gitsigns")
-		local function map(mode, l, r, opts)
-			opts = opts or {}
-			opts.buffer = bufnr
-			vim.keymap.set(mode, l, r, opts)
+		local function map(lhs, rhs, desc)
+			vim.keymap.set("n", lhs, rhs, { buffer = bufnr, desc = desc })
 		end
 
-		-- Hunk Navigation
-		map("n", "]c", function()
-			if vim.wo.diff then
-				return "]c"
-			end
-			vim.schedule(function()
-				gs.next_hunk()
-			end)
-			return "<Ignore>"
-		end, { expr = true, desc = "Next Git Hunk" })
-
-		map("n", "[c", function()
-			if vim.wo.diff then
-				return "[c"
-			end
-			vim.schedule(function()
-				gs.prev_hunk()
-			end)
-			return "<Ignore>"
-		end, { expr = true, desc = "Prev Git Hunk" })
-
-		-- Actions (gitgutter 단축키 완벽 유지)
-		map("n", "ghs", gs.stage_hunk, { desc = "Stage Hunk" })
-		map("n", "ghu", gs.undo_stage_hunk, { desc = "Undo Stage Hunk" })
-		map("n", "ghp", gs.preview_hunk, { desc = "Preview Hunk" })
-		map("n", "ghr", gs.reset_hunk, { desc = "Reset Hunk" })
+		map("]c", gs.next_hunk, "Next Hunk")
+		map("[c", gs.prev_hunk, "Prev Hunk")
+		map("ghp", gs.preview_hunk, "Preview Hunk")
+		map("ghs", gs.stage_hunk, "Stage Hunk")
+		map("ghu", gs.undo_stage_hunk, "Undo Stage Hunk")
+		map("ghr", gs.reset_hunk, "Reset Hunk")
 	end,
 })
 
--- https://github.com/tpope/vim-fugitive
 local map = vim.keymap.set
-map("n", "<leader>gs", ":Git<cr>", { silent = true, desc = "Git Status (Fugitive)" })
-map("n", "<leader>gd", ":Gdiffsplit<cr>", { silent = true, desc = "Git Diff Split" })
-map("n", "<leader>gb", ":Git blame<cr>", { silent = true, desc = "Git Blame" })
+map("n", "<leader>gs", ":Git<cr>", { silent = true })
+map("n", "<leader>gd", ":Gdiffsplit<cr>", { silent = true })
+map("n", "<leader>gb", ":Git blame<cr>", { silent = true })
