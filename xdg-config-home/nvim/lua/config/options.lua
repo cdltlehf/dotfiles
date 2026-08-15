@@ -26,6 +26,7 @@ opt.clipboard = "unnamedplus"
 
 -- :help 'laststatus'
 opt.laststatus = 3
+opt.showmode = false
 
 opt.list = true
 -- :help listchars
