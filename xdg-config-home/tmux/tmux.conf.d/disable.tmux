@@ -23,10 +23,6 @@ bind-key -T enable_pending Escape \
   set-option key-table disabled
 
 bind-key -T enable_pending C-b \
-  send-keys C-b\; \
-  set-option key-table disabled\;
-
-bind-key -T enable_pending C-b \
   set-option -u key-table\; \
   set-option -u prefix\; \
   set-option -u status-left\; \

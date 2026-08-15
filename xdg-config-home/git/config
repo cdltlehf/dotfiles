@@ -41,6 +41,14 @@
 	colorMoved = plain
 	mnemonicPrefix = true
 	renames = true
+	tool = nvimdiff
+[difftool]
+	prompt = false
+[merge]
+	tool = nvimdiff
+[mergetool]
+	prompt = false
+	keepBackup = false
 [push]
 	default = simple
 	autoSetupRemote = true
@@ -50,13 +58,27 @@
 	pruneTags = true
 	all = true
 
+[status]
+	showStash = true
+
+[help]
+	autocorrect = prompt
+
 [commit]
 	verbose = true
+	template = "~/.config/git/gitmessage"
 [rerere]
 	autoupdate = true
-	enable = true
+	enabled = true
 [core]
-	excludesfile = "~/.gitignore"
+	pager = delta
+	excludesfile = "~/.config/git/ignore"
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	light = false
+	line-numbers = true
 [rebase]
 	autoSquash = true
 	autoStash = true
@@ -64,12 +86,6 @@
 
 [pull]
 	rebase = true
-
-[commit]
-	template = "~/.gitmessage"
-
-[init]
-	defaultBranch = main
 
 [user]
 	useConfigOnly = true

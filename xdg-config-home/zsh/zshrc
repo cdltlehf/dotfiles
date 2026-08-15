@@ -15,5 +15,31 @@ if [[ -d "${ZSHRCDIR}" ]]; then
   unset -v sh
 fi
 
-autoload -U compinit compinit
+: ${XDG_STATE_HOME:="${HOME}/.local/state"}
+: ${XDG_CACHE_HOME:="${HOME}/.cache"}
+
+# History configuration
+[[ -d "${XDG_STATE_HOME}/zsh" ]] || mkdir -p "${XDG_STATE_HOME}/zsh"
+export HISTFILE="${XDG_STATE_HOME}/zsh/history"
+export HISTSIZE=10000
+export SAVEHIST=10000
+setopt APPEND_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_REDUCE_BLANKS
+setopt HIST_VERIFY
+setopt SHARE_HISTORY
+
+# Disable macOS session saving in ZDOTDIR
+export SHELL_SESSIONS_DISABLE=1
+
+# Completion cache
+[[ -d "${XDG_CACHE_HOME}/zsh" ]] || mkdir -p "${XDG_CACHE_HOME}/zsh"
+autoload -Uz compinit
+compinit -d "${XDG_CACHE_HOME}/zsh/zcompdump-${ZSH_VERSION}"
+
+# Zoxide (smart directory jump)
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
+
 source "${HOME}/.zshrc.local" 2> /dev/null || true

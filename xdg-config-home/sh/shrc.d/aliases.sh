@@ -27,6 +27,15 @@ alias fgrep='command fgrep --color=auto'
 alias freeze='chmod a-w'
 alias unfreeze='chmod a+w'
 
+# cd
+mkcd () {
+  mkdir -p "$1" && cd "$1"
+}
+
+cdls () {
+  cd "$1" && ls -lA
+}
+
 # third-party commands
 command -v git > /dev/null 2>&1 && alias g='command git'
 command -v bat > /dev/null 2>&1 && alias cat='command bat -pp'

@@ -33,9 +33,9 @@ LD_LIBRARY_PATH="${HOME}/.local/lib64:${LD_LIBRARY_PATH}"
 export LD_LIBRARY_PATH
 
 # Export editors
-export EDITOR='vim'
+export EDITOR='nvim'
 export PAGER='less'
-export VISUAL='vim'
+export VISUAL='nvim'
 
 # Cygwin environment variables
 # https://cygwin.com/cygwin-ug-net/using-cygwinenv.html
