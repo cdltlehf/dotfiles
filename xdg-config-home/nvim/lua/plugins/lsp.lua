@@ -22,6 +22,7 @@ vim.diagnostic.config({
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
+		vim.lsp.completion.enable(true, args.data.client_id, args.buf, { autotrigger = true })
 		vim.keymap.set("n", "<c-k>", function()
 			vim.lsp.buf.format({ async = true })
 		end, { buffer = args.buf })

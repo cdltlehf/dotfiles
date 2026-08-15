@@ -1,6 +1,15 @@
 setopt PROMPT_SUBST
 ZLE_RPROMPT_INDENT=0
 
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' formats ' on %F{2}(%b)%f'
+zstyle ':vcs_info:git:*' actionformats ' on %F{2}(%b|%a)%f'
+
+precmd() {
+	vcs_info
+}
+
 _PS1_1=$'\n'
 
 # Username
@@ -20,9 +29,6 @@ fi
 # Current working directory
 _PS1_1+=' in %F{3}%~%f'
 
-# Git prompt
-# _PS1_1+='$(__git_ps1 " on (%s)")'
-
 # Environment
 _PS1_2='$([ -z $VIRTUAL_ENV ] && echo ""'
 _PS1_2+='|| echo " via %F{4}"$VIRTUAL_ENV:t"%f")'
@@ -34,30 +40,10 @@ _PS1_2+='  %F{8}# %*%f'
 _PS1_2+=$'\n'
 _PS1_2+='%(?.%f$ %f.%B%F{1}?%? %f%b)'
 
+PS1='${_PS1_1}${vcs_info_msg_0_}${_PS1_2}'
+
 # Continued prompt
-# NOTE: It uses 256-color
 PS2="%F{103}> %f"
-
-if [ -f "${XDG_DATA_HOME}/git/completion/git-prompt.sh" ]; then
-	source "${XDG_DATA_HOME}/git/completion/git-prompt.sh"
-fi
-
-if command -v __git_ps1 >/dev/null 2>&1; then
-	GIT_PS1_SHOWDIRTYSTATE=1
-	GIT_PS1_SHOWSTASHSTATE=1
-	GIT_PS1_SHOWUPSTREAM="auto"
-	# GIT_PS1_STATESEPARATOR
-	# GIT_PS1_COMPRESSSPARSESTATE
-	# GIT_PS1_OMITSPARSESTATE
-	# GIT_PS1_DESCRIBE_STYLE
-	GIT_PS1_SHOWCOLORHINTS=1
-	eval "precmd () { __git_ps1 '$_PS1_1' '$_PS1_2' ' on %s' }"
-else
-	PS1="$_PS1_1$_PS1_2"
-fi
-
-unset _PS1_1
-unset _PS1_2
 
 RPS1="%F{0}%K{3} INSERT %k%f"
 update_vi_mode_indicator() {
@@ -70,7 +56,7 @@ update_vi_mode_indicator() {
 		RPS1="%F{0}%K{3} INSERT %k%f"
 		echo -ne '\e[5 q'
 		;;
-	isearch) RPS1="%F{7}[/]%k%f" ;; # Not working
+	isearch) RPS1="%F{7}[/]%k%f" ;;
 	*) RPS1="%B%F{1}[UNK]%k%f%b" ;;
 	esac
 	RPS2=$RPS1
@@ -86,7 +72,7 @@ hide_vi_mode_indicator() {
 zle -N zle-line-init update_vi_mode_indicator
 zle -N zle-line-finish hide_vi_mode_indicator
 zle -N zle-keymap-select update_vi_mode_indicator
-echo -ne '\e[5 q'                # Use beam shape cursor on startup.
-preexec() { echo -ne '\e[5 q'; } # Use beam shape cursor for each new prompt.
+echo -ne '\e[5 q'
+preexec() { echo -ne '\e[5 q'; }
 
 export KEYTIMEOUT=1

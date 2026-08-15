@@ -4,9 +4,13 @@
 [alias]
 	; https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
 	co = checkout
+	sw = switch
+	swc = switch -c
 	br = branch
 	ci = commit
 	st = status
+	rs = restore
+	rss = restore --staged
 	unstage = reset HEAD --
 	last = log -1 HEAD
 	; misc
