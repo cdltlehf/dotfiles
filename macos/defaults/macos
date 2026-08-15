@@ -18,7 +18,6 @@ defaults write com.apple.finder ShowPathbar -bool true
 killall Finder
 ################################################################################
 
-
 ################################################################################
 # TextEdit
 ################################################################################
@@ -27,7 +26,6 @@ defaults write com.apple.TextEdit RichText -int 0
 # defaults write com.apple.TextEdit PlainTextEncoding -int 4
 # defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 ################################################################################
-
 
 ################################################################################
 # Dock
@@ -41,15 +39,12 @@ defaults write com.apple.dock persistent-apps -array ''
 killall Dock
 ################################################################################
 
-
 ################################################################################
 # Screen Capture
 ################################################################################
 # Disable shadow in screenshots
 defaults write com.apple.screencapture disable-shadow -bool true
 ################################################################################
-
-
 
 ################################################################################
 # Global Preferences

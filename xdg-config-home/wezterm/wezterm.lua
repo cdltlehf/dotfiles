@@ -1,6 +1,6 @@
-local wezterm = require 'wezterm'
+local wezterm = require("wezterm")
 local config = wezterm.config_builder()
-config.font = wezterm.font_with_fallback({ 'JetBrains Mono', 'D2Coding' })
+config.font = wezterm.font_with_fallback({ "JetBrains Mono", "D2Coding" })
 config.font_size = 13.0
 config.line_height = 1.2
 
@@ -13,21 +13,19 @@ config.window_padding = { top = 50 }
 config.native_macos_fullscreen_mode = true
 
 config.keys = {
-  {
-    key = 'f',
-    mods = 'CTRL|CMD',
-    action = wezterm.action.ToggleFullScreen
-  },
+	{
+		key = "f",
+		mods = "CTRL|CMD",
+		action = wezterm.action.ToggleFullScreen,
+	},
 }
 
 config.color_scheme_dirs = {
-  os.getenv('HOME') .. '/.local/state/wezterm/colorschemes',
+	os.getenv("HOME") .. "/.local/state/wezterm/colorschemes",
 }
 
 config.automatically_reload_config = true
-wezterm.add_to_config_reload_watch_list(
-  os.getenv('HOME') .. '/.local/state/wezterm/colorschemes/colors.toml'
-)
+wezterm.add_to_config_reload_watch_list(os.getenv("HOME") .. "/.local/state/wezterm/colorschemes/colors.toml")
 config.color_scheme = "colors"
 
 return config
