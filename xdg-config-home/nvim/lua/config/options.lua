@@ -4,6 +4,7 @@ local opt = vim.opt
 vim.g.mapleader = " "
 
 opt.number = true
+opt.signcolumn = "yes"
 
 opt.ignorecase = true
 opt.smartcase = true
