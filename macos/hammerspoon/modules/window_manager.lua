@@ -1,9 +1,9 @@
-local window = require('hs.window')
-local timer = require('hs.timer')
-local hotkey = require('hs.hotkey')
-local spaces = require('hs.spaces')
-local canvas = require('hs.canvas')
-local eventtap = require('hs.eventtap')
+local window = require("hs.window")
+local timer = require("hs.timer")
+local hotkey = require("hs.hotkey")
+local spaces = require("hs.spaces")
+local canvas = require("hs.canvas")
+local eventtap = require("hs.eventtap")
 
 local checkMods = eventtap.checkKeyboardModifiers
 
@@ -18,417 +18,463 @@ local SHOW_BOX_DELAY = 0.2
 local MISSION_CONTROL_DELAY = 0.3 -- Mission Control animation delay
 
 local function modsPressed()
-  local mods = checkMods(true)._raw
-  return mods > 0
+	local mods = checkMods(true)._raw
+	return mods > 0
 end
 
 local function getFrameWithRatio(screen, x, y, w, h, padding)
-  local padding = padding or 0
+	local padding = padding or 0
 
-  local screen_frame = screen:frame()
+	local screen_frame = screen:frame()
 
-  local inner_screen_frame = {
-    x = screen_frame.x + padding/2,
-    y = screen_frame.y + padding/2,
-    w = screen_frame.w - padding,
-    h = screen_frame.h - padding
-  }
+	local inner_screen_frame = {
+		x = screen_frame.x + padding / 2,
+		y = screen_frame.y + padding / 2,
+		w = screen_frame.w - padding,
+		h = screen_frame.h - padding,
+	}
 
-  local frame = {
-    x = inner_screen_frame.x + x*inner_screen_frame.w + padding,
-    y = inner_screen_frame.y + y*inner_screen_frame.h + padding,
-    w = w * (inner_screen_frame.w-padding) - padding,
-    h = h * (inner_screen_frame.h-padding) - padding
-  }
+	local frame = {
+		x = inner_screen_frame.x + x * inner_screen_frame.w + padding,
+		y = inner_screen_frame.y + y * inner_screen_frame.h + padding,
+		w = w * (inner_screen_frame.w - padding) - padding,
+		h = h * (inner_screen_frame.h - padding) - padding,
+	}
 
-  return frame
+	return frame
 end
 
 local function modsPressed()
-  return checkMods(true)._raw > 0
+	return checkMods(true)._raw > 0
 end
 
 local function getNextSpace()
-  local focused_space = spaces.focusedSpace()
-  local screen_spaces = spaces.spacesForScreen()
-  local previous_space = nil
-  for _, space in ipairs(screen_spaces) do
-    if previous_space == focused_space then
-      return space
-    end
-    previous_space = space
-  end
+	local focused_space = spaces.focusedSpace()
+	local screen_spaces = spaces.spacesForScreen()
+	local previous_space = nil
+	for _, space in ipairs(screen_spaces) do
+		if previous_space == focused_space then
+			return space
+		end
+		previous_space = space
+	end
 end
 
 local function getPrevSpace()
-  local focused_space = spaces.focusedSpace()
-  local screen_spaces = spaces.spacesForScreen()
-  local previous_space = nil
-  for _, space in ipairs(screen_spaces) do
-    if space == focused_space then
-      return previous_space
-    end
-    previous_space = space
-  end
+	local focused_space = spaces.focusedSpace()
+	local screen_spaces = spaces.spacesForScreen()
+	local previous_space = nil
+	for _, space in ipairs(screen_spaces) do
+		if space == focused_space then
+			return previous_space
+		end
+		previous_space = space
+	end
 end
 
 local WindowManager = { keymap = {} }
-WindowManager.keymap[''] = { -- Default
-  { 0.25, 0.25, 0.5, 0.5 },
-  ['h']='h', ['l']='l'
+WindowManager.keymap[""] = { -- Default
+	{ 0.25, 0.25, 0.5, 0.5 },
+	["h"] = "h",
+	["l"] = "l",
 }
 
-WindowManager.keymap['h'] = { -- Left Half
-  { 0, 0, 0.5, 1 },
-  ['k']='hk', ['j']='hj', ['l']='hl', ['h']='hh'
+WindowManager.keymap["h"] = { -- Left Half
+	{ 0, 0, 0.5, 1 },
+	["k"] = "hk",
+	["j"] = "hj",
+	["l"] = "hl",
+	["h"] = "hh",
 }
-WindowManager.keymap['hh'] = { -- Left Third
-  { 0, 0, 0.3, 1 },
-  ['k']='hk', ['j']='hj', ['l']='l'
+WindowManager.keymap["hh"] = { -- Left Third
+	{ 0, 0, 0.3, 1 },
+	["k"] = "hk",
+	["j"] = "hj",
+	["l"] = "l",
 }
-WindowManager.keymap['hl'] = { -- Left Two Thirds
-  { 0, 0, 0.7, 1 },
-  ['k']='hk', ['j']='hj', ['l']='l'
-}
-
-WindowManager.keymap['j'] = { -- Bottom Half
-  { 0, 0.5, 1, 0.5 },
-  ['k']='kk', ['h']='hj', ['l']='lj'
-}
-WindowManager.keymap['k'] = { -- Full
-  { 0, 0, 1, 1 },
-  ['k']='kk', ['j']='j'
+WindowManager.keymap["hl"] = { -- Left Two Thirds
+	{ 0, 0, 0.7, 1 },
+	["k"] = "hk",
+	["j"] = "hj",
+	["l"] = "l",
 }
 
-WindowManager.keymap['l'] = { -- Right Half
-  { 0.5, 0, 0.5, 1 },
-  ['k']='lk', ['j']='lj', ['h']='lh', ['l']='ll'
+WindowManager.keymap["j"] = { -- Bottom Half
+	{ 0, 0.5, 1, 0.5 },
+	["k"] = "kk",
+	["h"] = "hj",
+	["l"] = "lj",
 }
-WindowManager.keymap['ll'] = { -- Right Third
-  { 0.7, 0, 0.3, 1 },
-  ['k']='hk', ['j']='hj', ['l']='l'
-}
-WindowManager.keymap['lh'] = { -- Right Two Thirds
-  { 0.3, 0, 0.7, 1 },
-  ['k']='hk', ['j']='hj', ['l']='l'
+WindowManager.keymap["k"] = { -- Full
+	{ 0, 0, 1, 1 },
+	["k"] = "kk",
+	["j"] = "j",
 }
 
-WindowManager.keymap['hj'] = { -- Left-down
-  { 0, 0.5, 0.5, 0.5 },
-  ['k']='hk', ['l']='lj',
+WindowManager.keymap["l"] = { -- Right Half
+	{ 0.5, 0, 0.5, 1 },
+	["k"] = "lk",
+	["j"] = "lj",
+	["h"] = "lh",
+	["l"] = "ll",
 }
-WindowManager.keymap['hk'] = { -- Left-up
-  { 0, 0, 0.5, 0.5 },
-  ['j']='hj', ['l']='lk',
+WindowManager.keymap["ll"] = { -- Right Third
+	{ 0.7, 0, 0.3, 1 },
+	["k"] = "hk",
+	["j"] = "hj",
+	["l"] = "l",
 }
-WindowManager.keymap['lj'] = { -- Right-down
-  { 0.5, 0.5, 0.5, 0.5 },
-  ['h']='hj', ['k']='lk',
+WindowManager.keymap["lh"] = { -- Right Two Thirds
+	{ 0.3, 0, 0.7, 1 },
+	["k"] = "hk",
+	["j"] = "hj",
+	["l"] = "l",
 }
-WindowManager.keymap['lk'] = { -- Right-up
-  { 0.5, 0, 0.5, 0.5 },
-  ['h']='hk', ['j']='lj',
+
+WindowManager.keymap["hj"] = { -- Left-down
+	{ 0, 0.5, 0.5, 0.5 },
+	["k"] = "hk",
+	["l"] = "lj",
 }
-WindowManager.keymap['kk'] = { -- Up
-  { 0, 0, 1, 0.5 },
-  ['h']='hk', ['l']='lk', ['j']='j'
+WindowManager.keymap["hk"] = { -- Left-up
+	{ 0, 0, 0.5, 0.5 },
+	["j"] = "hj",
+	["l"] = "lk",
+}
+WindowManager.keymap["lj"] = { -- Right-down
+	{ 0.5, 0.5, 0.5, 0.5 },
+	["h"] = "hj",
+	["k"] = "lk",
+}
+WindowManager.keymap["lk"] = { -- Right-up
+	{ 0.5, 0, 0.5, 0.5 },
+	["h"] = "hk",
+	["j"] = "lj",
+}
+WindowManager.keymap["kk"] = { -- Up
+	{ 0, 0, 1, 0.5 },
+	["h"] = "hk",
+	["l"] = "lk",
+	["j"] = "j",
 }
 WindowManager.__index = WindowManager
 
 function WindowManager.new(leader)
-  local self = setmetatable({}, WindowManager)
+	local self = setmetatable({}, WindowManager)
 
-  self.leader = leader
-  self.padding = PADDING
+	self.leader = leader
+	self.padding = PADDING
 
-  self.target_window = nil
-  self.state = nil
-  self.show_indicator = false
-  self.boxes = {}
+	self.target_window = nil
+	self.state = nil
+	self.show_indicator = false
+	self.boxes = {}
 
-  self.border = nil
-  self.border_width = 0
-  local allwindows = hs.window.filter.new(nil)
-  local events = {
-    hs.window.filter.windowFocused,
-    hs.window.filter.windowMoved,
-    hs.window.filter.windowFocused,
-    hs.window.filter.windowUnfocused,
-  }
-  for _, event in ipairs(events) do
-    allwindows:subscribe(event, function() self:redrawBorder() end)
-  end
-  self:redrawBorder()
+	self.border = nil
+	self.border_width = 0
+	local allwindows = hs.window.filter.new(nil)
+	local events = {
+		hs.window.filter.windowFocused,
+		hs.window.filter.windowMoved,
+		hs.window.filter.windowFocused,
+		hs.window.filter.windowUnfocused,
+	}
+	for _, event in ipairs(events) do
+		allwindows:subscribe(event, function()
+			self:redrawBorder()
+		end)
+	end
+	self:redrawBorder()
 
-  self.dragging_eventtap = eventtap.new({
-    eventtap.event.types.leftMouseDragged,
-    eventtap.event.types.leftMouseDown }, function(event)
-      local original_frame = self.target_window:frame()
-      local delta_x = event:getProperty(
-        eventtap.event.properties.mouseEventDeltaX)
-      local delta_y = event:getProperty(
-        eventtap.event.properties.mouseEventDeltaY)
-      local new_frame = {
-        x = original_frame.x + delta_x,
-        y = original_frame.y + delta_y,
-        w = original_frame.w,
-        h = original_frame.h
-      }
-      self.draw_timer:stop()
-      self.target_window:setFrame(new_frame, 0)
-      self:redrawBorder()
-      return true, {}
-    end)
+	self.dragging_eventtap = eventtap.new({
+		eventtap.event.types.leftMouseDragged,
+		eventtap.event.types.leftMouseDown,
+	}, function(event)
+		local original_frame = self.target_window:frame()
+		local delta_x = event:getProperty(eventtap.event.properties.mouseEventDeltaX)
+		local delta_y = event:getProperty(eventtap.event.properties.mouseEventDeltaY)
+		local new_frame = {
+			x = original_frame.x + delta_x,
+			y = original_frame.y + delta_y,
+			w = original_frame.w,
+			h = original_frame.h,
+		}
+		self.draw_timer:stop()
+		self.target_window:setFrame(new_frame, 0)
+		self:redrawBorder()
+		return true, {}
+	end)
 
-  self.activate_eventtap = eventtap.new(
-    { eventtap.event.types.flagsChanged }, function(event)
-      local which_flags = event:getFlags()
-      local leader_pressed = true
-      for _, flag in ipairs(self.leader) do
-        if not which_flags[flag] then leader_pressed = false end
-      end
-      if leader_pressed then self:activate()
-      else self:deactivate() end
-    end)
+	self.activate_eventtap = eventtap.new({ eventtap.event.types.flagsChanged }, function(event)
+		local which_flags = event:getFlags()
+		local leader_pressed = true
+		for _, flag in ipairs(self.leader) do
+			if not which_flags[flag] then
+				leader_pressed = false
+			end
+		end
+		if leader_pressed then
+			self:activate()
+		else
+			self:deactivate()
+		end
+	end)
 
-  self.draw_timer = timer.delayed.new(INDICATOR_DELAY, function()
-    self.show_indicator = true
-    self:hideBoxes(HIDE_BOXES_DELAY)
-    if not self.target_window then return end
+	self.draw_timer = timer.delayed.new(INDICATOR_DELAY, function()
+		self.show_indicator = true
+		self:hideBoxes(HIDE_BOXES_DELAY)
+		if not self.target_window then
+			return
+		end
 
-    local focused_space = spaces.focusedSpace()
-    if spaces.windowSpaces(self.target_window)[1] ~= focused_space then
-      local f = getFrameWithRatio(
-        self.target_window:screen(), 0, 0, 1, 1, self.padding)
-      self:showBox(f, "No Available Windows", SHOW_BOX_DELAY, 30)
-      return
-    end
+		local focused_space = spaces.focusedSpace()
+		if spaces.windowSpaces(self.target_window)[1] ~= focused_space then
+			local f = getFrameWithRatio(self.target_window:screen(), 0, 0, 1, 1, self.padding)
+			self:showBox(f, "No Available Windows", SHOW_BOX_DELAY, 30)
+			return
+		end
 
-    for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
-      local next_state = WindowManager.keymap[self.state or ''][key]
-      if next_state then
-        local ratio = WindowManager.keymap[next_state][1]
-        local f = getFrameWithRatio(
-          self.target_window:screen(),
-          ratio[1], ratio[2], ratio[3], ratio[4],
-          self.padding)
-        self:showBox(f, string.upper(key), SHOW_BOX_DELAY)
-      end
-    end
-  end)
+		for _, key in ipairs({ "h", "j", "k", "l" }) do
+			local next_state = WindowManager.keymap[self.state or ""][key]
+			if next_state then
+				local ratio = WindowManager.keymap[next_state][1]
+				local f =
+					getFrameWithRatio(self.target_window:screen(), ratio[1], ratio[2], ratio[3], ratio[4], self.padding)
+				self:showBox(f, string.upper(key), SHOW_BOX_DELAY)
+			end
+		end
+	end)
 
-  self:_initialize_modal(self.leader)
+	self:_initialize_modal(self.leader)
 
-  return self
+	return self
 end
 
 function WindowManager:_initialize_modal(leader)
-  self.modal = hotkey.modal.new()
-  for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
-    self.modal:bind(leader, key, function()
-      self:hideBoxes(HIDE_BOXES_DELAY)
-      if self.show_indicator then self.draw_timer:start(0)
-      else self.draw_timer:start() end
+	self.modal = hotkey.modal.new()
+	for _, key in ipairs({ "h", "j", "k", "l" }) do
+		self.modal:bind(leader, key, function()
+			self:hideBoxes(HIDE_BOXES_DELAY)
+			if self.show_indicator then
+				self.draw_timer:start(0)
+			else
+				self.draw_timer:start()
+			end
 
-      -- Do nothing if there is no target window
-      if not self.target_window then return end
+			-- Do nothing if there is no target window
+			if not self.target_window then
+				return
+			end
 
-      -- Do nothing if the target window is not in focused space
-      local focused_space = spaces.focusedSpace()
-      if spaces.windowSpaces(self.target_window)[1] ~= focused_space then
-        return
-      end
+			-- Do nothing if the target window is not in focused space
+			local focused_space = spaces.focusedSpace()
+			if spaces.windowSpaces(self.target_window)[1] ~= focused_space then
+				return
+			end
 
-      -- Exceptional cases, which change space of the window
-      local is_space_changed = false
-      if self.state == 'll' and key == 'l' then
-        local next_space = getNextSpace()
-        if next_space then
-          spaces.gotoSpace(next_space)
-          self.state = 'k'
-          spaces.moveWindowToSpace(self.target_window, next_space)
-          is_space_changed = true
-        end
-      elseif self.state == 'hh' and key == 'h' then
-        local prev_space = getPrevSpace()
-        if prev_space then
-          self.state = 'k'
-          spaces.gotoSpace(prev_space)
-          spaces.moveWindowToSpace(self.target_window, prev_space)
-          is_space_changed = true
-        end
-      end
+			-- Exceptional cases, which change space of the window
+			local is_space_changed = false
+			if self.state == "ll" and key == "l" then
+				local next_space = getNextSpace()
+				if next_space then
+					spaces.gotoSpace(next_space)
+					self.state = "k"
+					spaces.moveWindowToSpace(self.target_window, next_space)
+					is_space_changed = true
+				end
+			elseif self.state == "hh" and key == "h" then
+				local prev_space = getPrevSpace()
+				if prev_space then
+					self.state = "k"
+					spaces.gotoSpace(prev_space)
+					spaces.moveWindowToSpace(self.target_window, prev_space)
+					is_space_changed = true
+				end
+			end
 
-      -- Update state
-      -- If the next state is not explicitly defined, key is the next state
-      if not is_space_changed then
-        self.state = WindowManager.keymap[self.state or ''][key] or key
-      end
+			-- Update state
+			-- If the next state is not explicitly defined, key is the next state
+			if not is_space_changed then
+				self.state = WindowManager.keymap[self.state or ""][key] or key
+			end
 
-      -- Update window based on the state
-      local ratio = WindowManager.keymap[self.state][1]
-      local f = getFrameWithRatio(
-        self.target_window:screen(),
-        ratio[1], ratio[2], ratio[3], ratio[4],
-        self.padding)
-      self.target_window:setFrame(f, DURATION)
-      self:redrawBorder()
-    end)
-  end
+			-- Update window based on the state
+			local ratio = WindowManager.keymap[self.state][1]
+			local f =
+				getFrameWithRatio(self.target_window:screen(), ratio[1], ratio[2], ratio[3], ratio[4], self.padding)
+			self.target_window:setFrame(f, DURATION)
+			self:redrawBorder()
+		end)
+	end
 
-  self.modal:bind(leader, 'n', function()
-    local next_space = getNextSpace()
-    if not next_space then return end
+	self.modal:bind(leader, "n", function()
+		local next_space = getNextSpace()
+		if not next_space then
+			return
+		end
 
-    spaces.gotoSpace(next_space)
-    self.draw_timer:start()
-    timer.doAfter(MISSION_CONTROL_DELAY, function()
-      self.target_window = window.focusedWindow()
-      self.state = nil
-    end)
-  end)
+		spaces.gotoSpace(next_space)
+		self.draw_timer:start()
+		timer.doAfter(MISSION_CONTROL_DELAY, function()
+			self.target_window = window.focusedWindow()
+			self.state = nil
+		end)
+	end)
 
-  self.modal:bind(leader, 'p', function()
-    local prev_space = getPrevSpace()
-    if not prev_space then return end
+	self.modal:bind(leader, "p", function()
+		local prev_space = getPrevSpace()
+		if not prev_space then
+			return
+		end
 
-    spaces.gotoSpace(prev_space)
-    self.draw_timer:start()
-    timer.doAfter(MISSION_CONTROL_DELAY, function()
-      self.target_window = window.focusedWindow()
-      self.state = nil
-    end)
-  end)
+		spaces.gotoSpace(prev_space)
+		self.draw_timer:start()
+		timer.doAfter(MISSION_CONTROL_DELAY, function()
+			self.target_window = window.focusedWindow()
+			self.state = nil
+		end)
+	end)
 
-  self.modal:bind(leader, 'c', function()
-    spaces.addSpaceToScreen()
-    self.draw_timer:start()
-    timer.doAfter(MISSION_CONTROL_DELAY, function()
-      local next_space = getNextSpace()
-      if not next_space then return end
-      spaces.gotoSpace(next_space)
-    end)
-  end)
+	self.modal:bind(leader, "c", function()
+		spaces.addSpaceToScreen()
+		self.draw_timer:start()
+		timer.doAfter(MISSION_CONTROL_DELAY, function()
+			local next_space = getNextSpace()
+			if not next_space then
+				return
+			end
+			spaces.gotoSpace(next_space)
+		end)
+	end)
 
-  self.modal:bind(leader, 'x', function()
-    local focused_space = spaces.focusedSpace()
-    local next_space = getNextSpace()
-    -- If there is an next space, go to the space
-    if next_space then
-      spaces.gotoSpace(next_space)
-    else
-      -- Else if there is an previous space, go to the space
-      local prev_space = getPrevSpace()
-      if prev_space then
-        spaces.gotoSpace(prev_space)
-      end
-    end
-    -- If there is no space to go, the following function fails
-    self.draw_timer:start()
-    timer.doAfter(MISSION_CONTROL_DELAY, function()
-      spaces.removeSpace(focused_space)
-    end)
-  end)
+	self.modal:bind(leader, "x", function()
+		local focused_space = spaces.focusedSpace()
+		local next_space = getNextSpace()
+		-- If there is an next space, go to the space
+		if next_space then
+			spaces.gotoSpace(next_space)
+		else
+			-- Else if there is an previous space, go to the space
+			local prev_space = getPrevSpace()
+			if prev_space then
+				spaces.gotoSpace(prev_space)
+			end
+		end
+		-- If there is no space to go, the following function fails
+		self.draw_timer:start()
+		timer.doAfter(MISSION_CONTROL_DELAY, function()
+			spaces.removeSpace(focused_space)
+		end)
+	end)
 end
 
 function WindowManager:activate()
-  self.target_window = window.focusedWindow()
-  self.state = nil
-  self.show_indicator = false
+	self.target_window = window.focusedWindow()
+	self.state = nil
+	self.show_indicator = false
 
-  self.draw_timer:start()
-  self.dragging_eventtap:start()
+	self.draw_timer:start()
+	self.dragging_eventtap:start()
 
-  self.modal:enter()
+	self.modal:enter()
 end
 
 function WindowManager:deactivate()
-  self.show_indicator = false
+	self.show_indicator = false
 
-  self.draw_timer:stop()
-  self.dragging_eventtap:stop()
+	self.draw_timer:stop()
+	self.dragging_eventtap:stop()
 
-  self:hideBoxes(HIDE_BOXES_DELAY)
+	self:hideBoxes(HIDE_BOXES_DELAY)
 
-  self.modal:exit()
+	self.modal:exit()
 end
 
 function WindowManager:showBox(f, text, delay, textSize)
-  text = text or ''
-  delay = delay or 0
-  textSize = textSize or 150
+	text = text or ""
+	delay = delay or 0
+	textSize = textSize or 150
 
-  padding = padding or 0
-  local f = {
-    x = f.x + padding,
-    y = f.y + padding,
-    w = f.w - padding*2,
-    h = f.h - padding*2,
-  }
-  self.boxes[#self.boxes+1] = canvas.new(f):appendElements(
-    {
-      type = "rectangle",
-      fillColor = { black = 0.3, alpha = 0.5 },
-      action = "fill",
-      roundedRectRadii = { xRadius = 10, yRadius = 10 },
-    },
-    {
-      type = "text",
-      text = text,
-      frame = {
-        x = "0%", y = f.h / 2 - textSize * 0.6,
-        h = "100%", w = "100%"
-      },
-      textAlignment = "center",
-      textSize = textSize,
-    }
-  ):level('floating'):show(delay)
+	padding = padding or 0
+	local f = {
+		x = f.x + padding,
+		y = f.y + padding,
+		w = f.w - padding * 2,
+		h = f.h - padding * 2,
+	}
+	self.boxes[#self.boxes + 1] = canvas
+		.new(f)
+		:appendElements({
+			type = "rectangle",
+			fillColor = { black = 0.3, alpha = 0.5 },
+			action = "fill",
+			roundedRectRadii = { xRadius = 10, yRadius = 10 },
+		}, {
+			type = "text",
+			text = text,
+			frame = {
+				x = "0%",
+				y = f.h / 2 - textSize * 0.6,
+				h = "100%",
+				w = "100%",
+			},
+			textAlignment = "center",
+			textSize = textSize,
+		})
+		:level("floating")
+		:show(delay)
 end
 
 function WindowManager:hideBoxes(delay)
-  local delay = delay or 0
-  for i = 1, #self.boxes do
-    self.boxes[i]:hide(delay)
-    self.boxes[i] = nil
-  end
+	local delay = delay or 0
+	for i = 1, #self.boxes do
+		self.boxes[i]:hide(delay)
+		self.boxes[i] = nil
+	end
 end
 
 function WindowManager:start()
-  self.activate_eventtap:start()
+	self.activate_eventtap:start()
 end
 
 function WindowManager:stop()
-  self.activate_eventtap:stop()
+	self.activate_eventtap:stop()
 end
 
 function WindowManager:redrawBorder()
-  if true then return end
+	if true then
+		return
+	end
 
-  if self.border ~= nil then
-    self.border = nil
-  end
+	if self.border ~= nil then
+		self.border = nil
+	end
 
-  local win = hs.window.focusedWindow()
-  if win == nil then return end
+	local win = hs.window.focusedWindow()
+	if win == nil then
+		return
+	end
 
-  local top_left = win:topLeft()
-  if top_left['x'] == 0 and top_left['y'] == 0 then return end
+	local top_left = win:topLeft()
+	if top_left["x"] == 0 and top_left["y"] == 0 then
+		return
+	end
 
-  local size = win:size()
-  self.border = hs.drawing.rectangle(
-    hs.geometry.rect(
-      top_left['x'] - self.border_width/4,
-      top_left['y'] - self.border_width/4,
-      size['w'] + self.border_width/2,
-      size['h'] + self.border_width/2
-    )
-  )
-  self.border:sendToBack()
-  self.border:setRoundedRectRadii(10, 10)
-  self.border:setStrokeColor({ hex="#bd93f9", alpha=1.0 })
-  self.border:setFill(false)
-  self.border:setStrokeWidth(self.border_width)
-  self.border:show()
+	local size = win:size()
+	self.border = hs.drawing.rectangle(
+		hs.geometry.rect(
+			top_left["x"] - self.border_width / 4,
+			top_left["y"] - self.border_width / 4,
+			size["w"] + self.border_width / 2,
+			size["h"] + self.border_width / 2
+		)
+	)
+	self.border:sendToBack()
+	self.border:setRoundedRectRadii(10, 10)
+	self.border:setStrokeColor({ hex = "#bd93f9", alpha = 1.0 })
+	self.border:setFill(false)
+	self.border:setStrokeWidth(self.border_width)
+	self.border:show()
 end
 
 return WindowManager
