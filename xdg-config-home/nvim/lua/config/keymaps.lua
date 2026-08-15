@@ -1,52 +1,25 @@
 local map = vim.keymap.set
 
--- :help <cmd>
-map('n', '<c-l>', '<cmd>nohlsearch<bar>diffupdate<bar>normal! <c-l><cr>')
+-- Make commands
+map("n", "<leader>mm", ":<c-u>make!<cr>", { desc = "make!" })
+map("n", "<leader>ma", ":<c-u>make! all<cr>", { desc = "make! all" })
+map("n", "<leader>mc", ":<c-u>make! clean<cr>", { desc = "make! clean" })
+map("n", "<leader>mr", ":<c-u>make! run<cr>", { desc = "make! run" })
+map("n", "<leader>mi", ":<c-u>make! install<cr>", { desc = "make! install" })
+map("n", "<leader>m<space>", ":<c-u>make! ", { desc = "make! ..." })
 
-map('i', '<c-u>', '<c-g>u<c-u>')
-map('i', '<c-w>', '<c-g>u<c-w>')
+-- Config commands
+map("n", "<leader>vv", ":<c-u>edit $MYVIMRC<cr>", { desc = "Edit config" })
 
--- :help /\V
-map('x', '*', 'y/\\V<c-r>"<cr>')
-map('x', '#', 'y?\\V<c-r>"<cr>')
+-- Visual mode indent retention
+map("x", "<", "<gv", { desc = "Indent left and re-select" })
+map("x", ">", ">gv", { desc = "Indent right and re-select" })
 
-map('n', '&', ':&&<cr>')
+-- Section jump mappings
+map("n", "[[", "?{<cr>w99[{", { desc = "Jump to previous section" })
+map("n", "][", "/{<cr>b99[{", { desc = "Jump to next section start" })
+map("n", "]]", "j0[[%/{<cr>", { desc = "Jump to next section" })
+map("n", "[]", "k$][%?}<cr>", { desc = "Jump to previous section end" })
 
--- :help section
-map('', '[[', '?{<cr>w99[{')
-map('', '][', '/{<cr>b99[{')
-map('', ']]', 'j0[[%/{<cr>')
-map('', '[]', 'k$][%?}<cr>')
-
--- :help <leader>
-map('n', '<leader>=', "mzHmygg=G'yz`z", { silent = true })
-
-map('n', '<leader>mm', ':<c-u>make!<cr>')
-map('n', '<leader>ma', ':<c-u>make! all<cr>')
-map('n', '<leader>mc', ':<c-u>make! clean<cr>')
-map('n', '<leader>mr', ':<c-u>make! run<cr>')
-map('n', '<leader>mi', ':<c-u>make! install<cr>')
-map('n', '<leader>m<space>', ':<c-u>make! ')
-
-local config_dir = vim.fn.stdpath('config')
-map('n', '<leader>vv', ':<c-u>edit ' .. config_dir .. '/init.lua<cr>')
-map('n', '<leader>vV', ':<c-u>edit ' .. config_dir .. '<cr>')
-map('n', '<leader>vr', ':<c-u>Reload<cr>')
-
--- :help :command
-vim.api.nvim_create_user_command('Reload', function()
-  vim.cmd('source ' .. config_dir .. '/init.lua')
-  print('Reloaded')
-end, { desc = 'Reload Neovim configuration' })
-
-map('x', '<', '<gv')
-map('x', '>', '>gv')
-
--- :help g:netrw_home
-map('ca', '%%', function()
-  if vim.fn.getcmdtype() == ':' then
-    return vim.fn.expand('%:p:h')
-  else
-    return '%%'
-  end
-end, { expr = true })
+-- Command-line abbreviation for current buffer directory
+vim.cmd([[cabbr <expr> %% expand('%:p:h')]])
