@@ -93,8 +93,7 @@ defaults write com.apple.dock windowtabbing -string "manual"
 defaults write com.apple.dock windowtabbing-immutable -bool true
 
 # There is no documentation for these keys
-defaults write com.apple.dock "autohide-delay" -float "0" && killall Dock
-
+defaults write com.apple.dock "autohide-delay" -float "0"
 
 # Restart dock
-killall Dock;
+killall Dock

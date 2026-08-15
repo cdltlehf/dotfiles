@@ -10,31 +10,23 @@ windows:
         - hermes: >
             hermes gateway run --replace
         - hermes-dashboard:9119: >
-            hermes dashboard --host 0.0.0.0 --no-open --insecure
-        - hermes-webui:8787: >
-            ${HOME}/projects/hermes-webui/start.sh \
-              --host 0.0.0.0 \
-              --foreground
+            hermes dashboard --no-open --insecure
   - odysseus:7860: >
-      ODYSSEUS_HOST=0.0.0.0
       ODYSSEUS_NO_OPEN=1
       ${HOME}/projects/odysseus/start-macos.sh
   - llama-server:8080: >
       llama serve \
         --ui-mcp-proxy \
         --ui-config-file "${HOME}/.config/llama/ui_config.json" \
-        --host 0.0.0.0 \
-        --models-dir "${HOME}/models" \
-        --reasoning off \
         --cache-type-k "q4_0" \
         --cache-type-v "q4_0" \
         --lookup-cache-dynamic \
           "${HOME}/.cache/llama/lookup_cache_dynamic.bin" \
         --lookup-cache-static \
-          "${HOME}/.cache/llama/lookup_cache_static.bin"
-  - mcp:
-      panes:
-        - ddg-search:8000: >
-            DDG_SAFE_SEARCH="OFF"
-            uvx duckduckgo-mcp-server \
-              --transport streamable-http
+          "${HOME}/.cache/llama/lookup_cache_static.bin" \
+        --tools all
+  - mcp:8000: >
+      uvx mcp-proxy \
+        --named-server-config "${XDG_CONFIG_HOME:-$HOME/.config}/mcp/config.json" \
+        --port 8000 \
+        --stateless

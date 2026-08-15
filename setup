@@ -117,7 +117,7 @@ GIT_COMPLETION_DIR="${XDG_DATA_HOME}/git/completion"
 GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
 mkdir -p "${GIT_COMPLETION_DIR}"
 echoerr "'${GIT_PROMPT_URL}' -> '${GIT_COMPLETION_DIR}/git-prompt.sh'"
-curl -sS -L "${GIT_PROMPT_URL}" -o "${GIT_COMPLETION_DIR}/git-prompt.sh"
+curl -fsSL "${GIT_PROMPT_URL}" -o "${GIT_COMPLETION_DIR}/git-prompt.sh"
 unset GIT_PROMPT_URL
 unset GIT_COMPLETION_DIR
 
@@ -125,7 +125,7 @@ WEZTERM_SHELL_INTEGRATION_URL="https://raw.githubusercontent.com/wezterm/wezterm
 WEZTERM_SHELL_INTEGRATION_DIR="${XDG_DATA_HOME}/wezterm/shell-integration"
 mkdir -p "${WEZTERM_SHELL_INTEGRATION_DIR}"
 echoerr "'${WEZTERM_SHELL_INTEGRATION_URL}' -> '${WEZTERM_SHELL_INTEGRATION_DIR}/wezterm.sh'"
-curl -sS -L "${WEZTERM_SHELL_INTEGRATION_URL}" -o "${WEZTERM_SHELL_INTEGRATION_DIR}/wezterm.sh"
+curl -fsSL "${WEZTERM_SHELL_INTEGRATION_URL}" -o "${WEZTERM_SHELL_INTEGRATION_DIR}/wezterm.sh"
 unset WEZTERM_SHELL_INTEGRATION_URL
 unset WEZTERM_SHELL_INTEGRATION_DIR
 
