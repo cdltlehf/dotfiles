@@ -10,39 +10,29 @@ precmd() {
 	vcs_info
 }
 
-_PS1_1=$'\n'
+_prompt_user() {
+	if [[ "${USER}" == "root" ]]; then
+		print -n "%F{1}%n%f"
+	else
+		print -n "%F{5}%n%f"
+	fi
+}
 
-# Username
-if [[ "${USER}" == "root" ]]; then
-	_PS1_1+='%F{1}%n%f'
-else
-	_PS1_1+='%F{5}%n%f'
-fi
+_prompt_host() {
+	if [[ -n "${SSH_TTY}" ]]; then
+		print -n " at %F{1}%m%f"
+	else
+		print -n " at %F{6}%m%f"
+	fi
+}
 
-# Hostname
-if [[ -n "${SSH_TTY}" ]]; then
-	_PS1_1+=' at %F{1}%m%f'
-else
-	_PS1_1+=' at %F{6}%m%f'
-fi
+_prompt_virtualenv() {
+	[[ -z "${VIRTUAL_ENV}" ]] && return
+	print -n " via %F{4}${VIRTUAL_ENV:t}%f"
+}
 
-# Current working directory
-_PS1_1+=' in %F{3}%~%f'
+PS1=$'\n$(_prompt_user)$(_prompt_host) in %F{3}%~%f${vcs_info_msg_0_}$(_prompt_virtualenv)  %F{8}# %*%f\n%(?.%f$ %f.%B%F{1}?%? %f%b)'
 
-# Environment
-_PS1_2='$([ -z $VIRTUAL_ENV ] && echo ""'
-_PS1_2+='|| echo " via %F{4}"$VIRTUAL_ENV:t"%f")'
-
-# Timestamp
-_PS1_2+='  %F{8}# %*%f'
-
-# Exit status
-_PS1_2+=$'\n'
-_PS1_2+='%(?.%f$ %f.%B%F{1}?%? %f%b)'
-
-PS1='${_PS1_1}${vcs_info_msg_0_}${_PS1_2}'
-
-# Continued prompt
 PS2="%F{103}> %f"
 
 RPS1="%F{0}%K{3} INSERT %k%f"
