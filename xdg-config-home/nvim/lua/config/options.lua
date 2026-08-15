@@ -4,7 +4,6 @@ local opt = vim.opt
 vim.g.mapleader = " "
 
 opt.number = true
-opt.relativenumber = true
 
 opt.ignorecase = true
 opt.smartcase = true

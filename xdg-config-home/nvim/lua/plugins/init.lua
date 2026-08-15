@@ -10,9 +10,7 @@ vim.pack.add({
 	"https://github.com/tpope/vim-unimpaired",
 	"https://github.com/nvim-tree/nvim-web-devicons",
 	"https://github.com/stevearc/oil.nvim",
-	"https://github.com/tpope/vim-scriptease",
 	"https://github.com/tpope/vim-projectionist",
-	"https://github.com/jeffkreeftmeijer/vim-numbertoggle",
 	"https://github.com/github/copilot.vim",
 	"https://github.com/lervag/vimtex",
 })
