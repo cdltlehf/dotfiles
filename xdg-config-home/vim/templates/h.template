@@ -1,6 +1,0 @@
-`v:'#ifndef ' . substitute(toupper(fnamemodify(getcwd(), ':t') . '/' . substitute(expand('%'), '^src/', '', '')), '\W', '_', 'g'). '_'`
-`v:'#define ' . substitute(toupper(fnamemodify(getcwd(), ':t') . '/' . substitute(expand('%'), '^src/', '', '')), '\W', '_', 'g'). '_'`
-
-
-
-`v:'#endif  // ' . substitute(toupper(fnamemodify(getcwd(), ':t') . '/' . substitute(expand('%'), '^src/', '', '')), '\W', '_', 'g'). '_'`

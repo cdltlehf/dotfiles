@@ -1,1 +1,0 @@
-`v:"#include \"" . expand("%:t:r") . ".h" . "\""`

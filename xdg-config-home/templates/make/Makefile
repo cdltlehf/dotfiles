@@ -1,0 +1,47 @@
+MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules
+SHELL := bash
+.SHELLFLAGS := -eu -o pipefail -c
+.DEFAULT_GOAL := all
+.DELETE_ON_ERROR:
+.SUFFIXES:
+
+TARGET := {dirname}
+BUILD_DIR := build
+SRC_DIR := src
+
+CXX ?= g++
+CXXFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic
+CPPFLAGS ?= -MMD -MP
+LDFLAGS ?=
+LDLIBS ?=
+
+SRCS := $(wildcard $(SRC_DIR)/*.cc $(SRC_DIR)/*.c)
+OBJS := $(SRCS:$(SRC_DIR)/%=$(BUILD_DIR)/%.o)
+DEPS := $(OBJS:.o=.d)
+
+.PRECIOUS: $(BUILD_DIR)/%.o
+
+all: $(BUILD_DIR)/$(TARGET)
+
+$(BUILD_DIR)/$(TARGET): $(OBJS)
+	@mkdir -p $(dir $@)
+	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(BUILD_DIR)/%.cc.o: $(SRC_DIR)/%.cc
+	@mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/%.c.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+-include $(DEPS)
+
+.PHONY: all run clean
+
+run: all
+	./$(BUILD_DIR)/$(TARGET)
+
+clean:
+	rm -rf $(BUILD_DIR)

@@ -1,0 +1,29 @@
+"""{basename} - Web Application Server."""
+
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+import logging
+from fastapi import FastAPI
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """Handle application startup and shutdown events."""
+    logger.info("Application starting up...")
+    yield
+    logger.info("Application shutting down...")
+
+
+app = FastAPI(title="{basename}", lifespan=lifespan)
+
+
+@app.get("/health")
+async def health_check() -> dict[str, str]:
+    """Health check probe endpoint."""
+    return {"status": "ok"}
+
+
+{cursor}
