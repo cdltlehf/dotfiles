@@ -14,6 +14,7 @@ vim.pack.add({
 	"https://github.com/github/copilot.vim",
 	"https://github.com/lervag/vimtex",
 	"https://github.com/folke/which-key.nvim",
+	"https://github.com/sphamba/smear-cursor.nvim",
 })
 
 require("plugins.lsp")
@@ -25,3 +26,4 @@ require("plugins.vimtex")
 require("plugins.oil")
 require("plugins.projectionist")
 require("plugins.which-key")
+require("plugins.smear-cursor")
