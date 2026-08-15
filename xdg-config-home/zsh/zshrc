@@ -39,7 +39,7 @@ export SHELL_SESSIONS_DISABLE=1
 autoload -Uz compinit
 compinit -d "${XDG_CACHE_HOME}/zsh/zcompdump-${ZSH_VERSION}"
 
-# Zoxide (smart directory jump)
-command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
+# Zoxide (smart directory jump - replaces cd)
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh --cmd cd)"
 
 source "${HOME}/.zshrc.local" 2> /dev/null || true
