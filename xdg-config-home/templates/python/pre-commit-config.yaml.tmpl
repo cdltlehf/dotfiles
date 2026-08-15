@@ -1,41 +1,28 @@
-default_install_hook_types:
-  - pre-commit
-  - commit-msg
+default_install_hook_types: [pre-commit, pre-merge-commit, pre-push, prepare-commit-msg, commit-msg, post-commit, post-checkout, post-merge, post-rewrite, pre-rebase]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-      - id: check-added-large-files
-      - id: check-executables-have-shebangs
-      - id: check-json
-      - id: check-merge-conflict
-      - id: check-symlinks
       - id: check-toml
-      - id: check-yaml
-      - id: destroyed-symlinks
-      - id: detect-private-key
-      - id: end-of-file-fixer
-      - id: trailing-whitespace
-  - repo: https://github.com/scop/pre-commit-shfmt
-    rev: v3.13.1-1
-    hooks:
-      - id: shfmt
-        args: [-i, "2", -ci]
-  - repo: https://github.com/JohnnyMorganz/StyLua
-    rev: v2.0.2
-    hooks:
-      - id: stylua-github
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.16
     hooks:
       - id: ruff-check
         args: [--fix]
       - id: ruff-format
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.30.1
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.11.8
     hooks:
-      - id: gitleaks
+      - id: uv-lock
+      - id: uv-export
+  - repo: local
+    hooks:
+      - id: ty-check
+        name: ty check
+        entry: uv run ty check .
+        language: system
+        pass_filenames: false
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v4.16.3
     hooks:
