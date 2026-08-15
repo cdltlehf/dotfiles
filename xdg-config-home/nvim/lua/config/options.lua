@@ -30,9 +30,9 @@ opt.laststatus = 3
 opt.list = true
 -- :help listchars
 -- https://en.wikipedia.org/wiki/Non-printing_character_in_word_processors
-opt.listchars = { tab = "→ ", trail = "·", extends = "»", precedes = "«", nbsp = "°" }
+opt.listchars = { tab = "  ⇥", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
 
-opt.fillchars = { vert = "│", fold = "·", foldsep = "│" }
+opt.fillchars = { vert = " ", fold = " ", foldopen = "", foldclose = "", foldsep = " " }
 
 -- :help wildmode
 opt.wildmode = { "longest", "full" }
