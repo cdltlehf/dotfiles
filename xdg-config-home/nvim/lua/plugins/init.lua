@@ -13,6 +13,7 @@ vim.pack.add({
 	"https://github.com/tpope/vim-projectionist",
 	"https://github.com/github/copilot.vim",
 	"https://github.com/lervag/vimtex",
+	"https://github.com/folke/which-key.nvim",
 })
 
 require("plugins.lsp")
@@ -23,3 +24,4 @@ require("plugins.session")
 require("plugins.vimtex")
 require("plugins.oil")
 require("plugins.projectionist")
+require("plugins.which-key")
