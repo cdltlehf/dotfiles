@@ -17,39 +17,73 @@ _prompt_formatted_path() {
 		else
 			local -a parts=(${(s:/:)subpath})
 			if (( ${#parts} > 2 )); then
-				print -n "${repo_name}:…/${parts[-2]}/${parts[-1]}"
+				print -n "${repo_name}/…/${parts[-2]}/${parts[-1]}"
 			else
-				print -n "${repo_name}:${subpath}"
+				print -n "${repo_name}/${subpath}"
 			fi
 		fi
 	else
-		local full_path="${PWD/#${HOME}/~}"
-		local -a parts=(${(s:/:)full_path})
-		if (( ${#parts} > 3 )); then
-			print -n "…/${parts[-2]}/${parts[-1]}"
+		if [[ "${PWD}" == "${HOME}" ]]; then
+			print -n "${HOME}"
 		else
-			print -n "${full_path}"
+			local full_path="${PWD/#${HOME}/~}"
+			local -a parts=(${(s:/:)full_path})
+			if (( ${#parts} > 3 )); then
+				print -n "…/${parts[-2]}/${parts[-1]}"
+			else
+				print -n "${full_path}"
+			fi
 		fi
 	fi
 }
 
 if command -v __git_ps1 >/dev/null 2>&1; then
 	precmd() {
+		local exit_code=$?
 		local virtualenv_part=""
 		if [[ -n "${VIRTUAL_ENV}" ]]; then
-			virtualenv_part="%F{8} · %F{4}${VIRTUAL_ENV:t}%f"
+			virtualenv_part="%F{8} · ${VIRTUAL_ENV:t}%f"
 		fi
-		local prompt_prefix=$'\n'"%F{5}%n%f%F{8} · %f%F{6}%m%f%F{8} · %F{3}$(_prompt_formatted_path)%f"
-		local prompt_suffix="${virtualenv_part}%F{8} · %*%f"$'\n%(?.%f$ %f.%F{1}?%? %f)'
+		local host_part=""
+		if [[ -n "${SSH_TTY}" ]]; then
+			host_part="%F{8} · %m%f"
+		fi
+		local user_part=""
+		if [[ "${USER}" == "root" ]]; then
+			user_part="%F{1}%n%f%F{8} · %f"
+		fi
+		local prompt_char="\$ "
+		[[ "${USER}" == "root" ]] && prompt_char="# "
+		local return_part=""
+		if [[ ${exit_code} -ne 0 ]]; then
+			return_part="%F{1} ${exit_code} %f"
+		fi
+		local prompt_prefix=$'\n'"${user_part}%F{4}$(_prompt_formatted_path)%f"
+		local prompt_suffix="${virtualenv_part}${host_part}%F{8} · %*%f"$'\n'"${return_part}${prompt_char}"
 		__git_ps1 "${prompt_prefix}" "${prompt_suffix}" " \e[1;30m·\e[0m %s"
 	}
 else
 	precmd() {
+		local exit_code=$?
 		local virtualenv_part=""
 		if [[ -n "${VIRTUAL_ENV}" ]]; then
-			virtualenv_part="%F{8} · %F{4}${VIRTUAL_ENV:t}%f"
+			virtualenv_part="%F{8} · ${VIRTUAL_ENV:t}%f"
 		fi
-		PS1=$'\n'"%F{5}%n%f%F{8} · %f%F{6}%m%f%F{8} · %F{3}$(_prompt_formatted_path)%f${virtualenv_part}%F{8} · %*%f"$'\n%(?.%f$ %f.%F{1}?%? %f)'
+		local host_part=""
+		if [[ -n "${SSH_TTY}" ]]; then
+			host_part="%F{8} · %m%f"
+		fi
+		local user_part=""
+		if [[ "${USER}" == "root" ]]; then
+			user_part="%F{1}%n%f%F{8} · %f"
+		fi
+		local prompt_char="\$ "
+		[[ "${USER}" == "root" ]] && prompt_char="# "
+		local return_part=""
+		if [[ ${exit_code} -ne 0 ]]; then
+			return_part="%F{1} ${exit_code} %f"
+		fi
+		PS1=$'\n'"${user_part}%F{4}$(_prompt_formatted_path)%f${virtualenv_part}${host_part}%F{8} · %*%f"$'\n'"${return_part}${prompt_char}"
 	}
 fi
 

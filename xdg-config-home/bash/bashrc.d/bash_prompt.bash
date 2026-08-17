@@ -22,19 +22,23 @@ __prompt_formatted_path() {
       IFS='/' read -r -a parts <<<"${subpath}"
       local len=${#parts[@]}
       if [[ ${len} -gt 2 ]]; then
-        printf "%s:…/%s/%s" "${repo_name}" "${parts[len-2]}" "${parts[len-1]}"
+        printf "%s/…/%s/%s" "${repo_name}" "${parts[len-2]}" "${parts[len-1]}"
       else
-        printf "%s:%s" "${repo_name}" "${subpath}"
+        printf "%s/%s" "${repo_name}" "${subpath}"
       fi
     fi
   else
-    local full_path="${PWD/#${HOME}/~}"
-    IFS='/' read -r -a parts <<<"${full_path}"
-    local len=${#parts[@]}
-    if [[ ${len} -gt 3 ]]; then
-      printf "…/%s/%s" "${parts[len-2]}" "${parts[len-1]}"
+    if [[ "${PWD}" == "${HOME}" ]]; then
+      printf "%s" "${HOME}"
     else
-      printf "%s" "${full_path}"
+      local full_path="${PWD/#${HOME}/~}"
+      IFS='/' read -r -a parts <<<"${full_path}"
+      local len=${#parts[@]}
+      if [[ ${len} -gt 3 ]]; then
+        printf "…/%s/%s" "${parts[len-2]}" "${parts[len-1]}"
+      else
+        printf "%s" "${full_path}"
+      fi
     fi
   fi
 }
@@ -43,41 +47,38 @@ __prompt_command() {
   local exit_code=$?
   PS1=$'\n'
 
-  local user_part=""
+  # Username (only when root/sudo)
   if [[ "${USER}" == "root" ]]; then
-    user_part="\[\e[31m\]\u\[\e[0m\]"
-  else
-    user_part="\[\e[35m\]\u\[\e[0m\]"
+    PS1+="\[\e[31m\]\u\[\e[0m\]\[\e[1;30m\] · \[\e[0m\]"
   fi
-
-  local host_part=""
-  if [[ -n "${SSH_TTY}" ]]; then
-    host_part="\[\e[31m\]\h\[\e[0m\]"
-  else
-    host_part="\[\e[36m\]\h\[\e[0m\]"
-  fi
-
-  PS1+="${user_part}\[\e[1;30m\] · \[\e[0m\]${host_part}\[\e[1;30m\] · \[\e[0m\]"
 
   # Smart path
-  PS1+="\[\e[33m\]$(__prompt_formatted_path)\[\e[0m\]"
+  PS1+="\[\e[34m\]$(__prompt_formatted_path)\[\e[0m\]"
 
   # Git prompt
   PS1+="$(__git_ps1 "\[\e[1;30m\] · \[\e[0m\]%s")"
 
   # Environment
   if [[ -n "${VIRTUAL_ENV}" ]]; then
-    PS1+="\[\e[1;30m\] · \[\e[0m\]\[\e[34m\]$(basename "${VIRTUAL_ENV}")\[\e[0m\]"
+    PS1+="\[\e[1;30m\] · $(basename "${VIRTUAL_ENV}")\[\e[0m\]"
+  fi
+
+  # Remote host (only on SSH, before timestamp)
+  if [[ -n "${SSH_TTY}" ]]; then
+    PS1+="\[\e[1;30m\] · \h\[\e[0m\]"
   fi
 
   # Timestamp
-  PS1+="\[\e[1;30m\] · \[\e[0m\]\t\n"
+  PS1+="\[\e[1;30m\] · \t\[\e[0m\]\n"
 
-  # Return
-  if [ "${exit_code}" -eq 0 ]; then
-    PS1+="\$ "
+  # Return with error code on 2nd line if failed
+  if [[ "${exit_code}" -ne 0 ]]; then
+    PS1+="\[\e[31m\] ${exit_code} \[\e[0m\]"
+  fi
+  if [[ "${USER}" == "root" ]]; then
+    PS1+="# "
   else
-    PS1+="\[\e[31m\]?${exit_code}\[\e[0m\] "
+    PS1+="\$ "
   fi
 
   # Continued prompt
