@@ -21,18 +21,19 @@ set-option -gu status-format
 # Set status-left
 set-option -g  status-left-length 50
 set-option -g  status-left "#[fg=default]#{session_id}:#{session_name}"
-set-option -ag status-left "#{?client_prefix, #[fg=yellow]· prefix#[default],}"
-set-option -ag status-left "#{?pane_in_mode, #[fg=cyan]· copy#[default],}"
+set-option -ag status-left "#{?window_zoomed_flag, #[fg=brightblack]· zoom#[default],}"
+set-option -ag status-left "#{?pane_in_mode, #[fg=brightblack]· copy#[default],}"
 set-option -ag status-left "#{?pane_synchronized, #[fg=brightred]· synchronizing#[default],}"
+set-option -ag status-left "#{?client_prefix, #[fg=brightblack]· prefix#[default],}"
 
 # Set window-status
 set-option -g window-status-current-style "bg=default,fg=default,none"
 set-option -g window-status-style "bg=default,fg=brightblack,none"
-set-option -g window-status-current-format "#I:#W#{?window_zoomed_flag,+,}"
+set-option -g window-status-current-format "#I:#W"
 set-option -g window-status-format "#I:#W"
 set-option -g window-status-separator " #[fg=brightblack]· "
 
-set-option -g window-status-activity-style "fg=yellow,none"
+set-option -g window-status-activity-style "fg=brightblack,none"
 set-option -g window-status-bell-style "fg=brightred,none"
 
 # Set status-right

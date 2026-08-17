@@ -61,6 +61,38 @@ export TEXDIR="${HOME}/.local/opt/texlive/2024"
 export VOLTA_HOME="${HOME}/.local/opt/volta"
 
 ###############################################################################
+# Homebrew
+###############################################################################
+# https://brew.sh
+export HOMEBREW_NO_ENV_HINTS=1
+if [ -x "/opt/homebrew/bin/brew" ]; then
+	eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x "/usr/local/bin/brew" ]; then
+	eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+###############################################################################
+# FZF
+###############################################################################
+# https://github.com/junegunn/fzf
+export FZF_DEFAULT_OPTS="\
+  --height=8 \
+  --style=minimal \
+  --color=16
+"
+if command -v fd >/dev/null 2>&1; then
+	export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --exclude .git'
+	export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
+fi
+
+###############################################################################
+# WezTerm
+###############################################################################
+SHELL_INTEGRATION="${XDG_DATA_HOME:-$HOME/.local/share}/wezterm/shell-integration/wezterm.sh"
+[ -f "${SHELL_INTEGRATION}" ] && . "${SHELL_INTEGRATION}"
+unset SHELL_INTEGRATION
+
+###############################################################################
 # Miscellaneous
 ###############################################################################
 zerobrew_dir="${HOME}/.zerobrew"
