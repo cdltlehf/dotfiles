@@ -1,5 +1,4 @@
 require("gitsigns").setup({
-	numhl = true,
 	on_attach = function(bufnr)
 		local gs = require("gitsigns")
 		local function map(lhs, rhs, desc)

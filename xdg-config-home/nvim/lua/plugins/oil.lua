@@ -1,12 +1,4 @@
-pcall(function()
-	require("nvim-web-devicons").setup({
-		color_icons = false,
-		default = true,
-	})
-end)
-
 require("oil").setup({
-	columns = { "icon" },
 	view_options = { show_hidden = true },
 })
 
