@@ -1,4 +1,4 @@
-local M = {}
+local statusline = {}
 
 local modes = {
 	["!"] = "shell",
@@ -39,48 +39,47 @@ local modes = {
 }
 
 local function setup_highlights()
-	local set_hl = vim.api.nvim_set_hl
-	set_hl(0, "StatusLine", { bg = "NONE", fg = "NONE" })
-	set_hl(0, "StatusLineNC", { bg = "NONE", fg = "NONE" })
-	set_hl(0, "StatusLineDim", { fg = "#6272a4", ctermfg = 8 })
-	set_hl(0, "StatusLineText", { bg = "NONE", fg = "NONE" })
-	set_hl(0, "StatusLineBold", { bg = "NONE", fg = "NONE", bold = true })
-
-	set_hl(0, "StatusLineLspError", { fg = "#ff5555", ctermfg = 9, bold = true })
-	set_hl(0, "StatusLineLspWarn", { fg = "#f1fa8c", ctermfg = 11, bold = true })
+	local set_highlight = vim.api.nvim_set_hl
+	set_highlight(0, "StatusLine", { bg = "NONE", fg = "NONE" })
+	set_highlight(0, "StatusLineNC", { bg = "NONE", fg = "NONE" })
+	set_highlight(0, "StatusLineDim", { fg = "DarkGray", ctermfg = 8 })
+	set_highlight(0, "StatusLineText", { bg = "NONE", fg = "NONE" })
+	set_highlight(0, "StatusLineBold", { bg = "NONE", fg = "NONE" })
+	set_highlight(0, "StatusLineLspError", { fg = "Red", ctermfg = 9 })
+	set_highlight(0, "StatusLineLspWarn", { fg = "Yellow", ctermfg = 11 })
 end
 
 local function format_file_path()
-	local full = vim.fn.expand("%:~:.")
-	if full == "" then
+	local full_path = vim.fn.expand("%:~:.")
+	if full_path == "" then
 		return "[No Name]"
 	end
 
-	local parts = vim.split(full, "/", { plain = true })
-	if #parts <= 2 then
-		return full
+	local path_segments = vim.split(full_path, "/", { plain = true })
+	if #path_segments <= 2 then
+		return full_path
 	end
 
-	return string.format("…/%s/%s", parts[#parts - 1], parts[#parts])
+	return string.format("…/%s/%s", path_segments[#path_segments - 1], path_segments[#path_segments])
 end
 
-function M.render()
-	local sep = "%#StatusLineDim# · "
-	local ft = vim.bo.filetype
+function statusline.render()
+	local separator = "%#StatusLineDim# · "
+	local filetype = vim.bo.filetype
 	local git_status = vim.b.gitsigns_status_dict
-	local branch = git_status and git_status.head
+	local branch_name = git_status and git_status.head
 
-	if ft == "oil" then
+	if filetype == "oil" then
 		local oil = package.loaded["oil"]
-		local dir = (oil and oil.get_current_dir()) or vim.fn.expand("%")
-		dir = vim.fn.fnamemodify(dir, ":~:.")
-		if dir == "" then
-			dir = "./"
+		local directory = (oil and oil.get_current_dir()) or vim.fn.expand("%")
+		directory = vim.fn.fnamemodify(directory, ":~:.")
+		if directory == "" then
+			directory = "./"
 		end
 
-		local left = string.format("%%#StatusLineBold#oil%s%%#StatusLineText#%s", sep, dir)
-		if branch and branch ~= "" then
-			left = left .. sep .. string.format("%%#StatusLineText#%s", branch)
+		local left = string.format("%%#StatusLineBold#oil%s%%#StatusLineText#%s", separator, directory)
+		if branch_name and branch_name ~= "" then
+			left = left .. separator .. string.format("%%#StatusLineText#%s", branch_name)
 		end
 
 		local right = "%#StatusLineText#oil"
@@ -90,22 +89,22 @@ function M.render()
 	local left_parts = {}
 
 	local formatted_path = format_file_path()
-	local target_str = ""
-	if branch and branch ~= "" then
-		target_str = string.format("%%#StatusLineBold#%s:%%#StatusLineBold#%s", branch, formatted_path)
+	local target_string = ""
+	if branch_name and branch_name ~= "" then
+		target_string = string.format("%%#StatusLineBold#%s:%%#StatusLineBold#%s", branch_name, formatted_path)
 	else
-		target_str = string.format("%%#StatusLineBold#%s", formatted_path)
+		target_string = string.format("%%#StatusLineBold#%s", formatted_path)
 	end
 
 	if vim.bo.readonly then
-		target_str = target_str .. "%#StatusLineDim#:readonly"
+		target_string = target_string .. "%#StatusLineDim#:readonly"
 	end
-	table.insert(left_parts, target_str)
+	table.insert(left_parts, target_string)
 
 	local mode_code = vim.api.nvim_get_mode().mode
-	local mode_str = modes[mode_code]
-	if mode_str then
-		table.insert(left_parts, string.format("%%#StatusLineDim#%s", mode_str))
+	local mode_string = modes[mode_code]
+	if mode_string then
+		table.insert(left_parts, string.format("%%#StatusLineDim#%s", mode_string))
 	end
 
 	local center_parts = {}
@@ -113,47 +112,58 @@ function M.render()
 		table.insert(center_parts, "%#StatusLineDim#modified")
 	end
 
-	local is_input = mode_code:find("^[iR]") ~= nil
-	if not is_input then
-		local count_err = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
-		local count_warn = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN })
-		if count_err > 0 then
-			local label = count_err == 1 and "1 error" or string.format("%d errors", count_err)
+	local is_input_mode = mode_code:find("^[iR]") ~= nil
+	if not is_input_mode then
+		local error_count = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+		local warning_count = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN })
+		if error_count > 0 then
+			local label = error_count == 1 and "1 error" or string.format("%d errors", error_count)
 			table.insert(center_parts, string.format("%%#StatusLineLspError#%s", label))
 		end
-		if count_warn > 0 then
-			local label = count_warn == 1 and "1 warning" or string.format("%d warnings", count_warn)
+		if warning_count > 0 then
+			local label = warning_count == 1 and "1 warning" or string.format("%d warnings", warning_count)
 			table.insert(center_parts, string.format("%%#StatusLineLspWarn#%s", label))
 		end
 	end
 
 	local right_parts = {}
 
-	if ft ~= "" then
-		table.insert(right_parts, string.format("%%#StatusLineText#%s", ft))
+	if filetype ~= "" then
+		table.insert(right_parts, string.format("%%#StatusLineText#%s", filetype))
 	end
 
-	local enc = vim.bo.fileencoding
-	if enc == "" then
-		enc = vim.o.encoding
+	local file_encoding = vim.bo.fileencoding
+	if file_encoding == "" then
+		file_encoding = vim.o.encoding
 	end
-	local fmt = vim.bo.fileformat
-	if (enc ~= "utf-8" and enc ~= "") or fmt ~= "unix" then
-		local non_std = string.format("%s:%s", enc, fmt)
-		table.insert(right_parts, string.format("%%#StatusLineLspWarn#%s", non_std))
+	local file_format = vim.bo.fileformat
+	if (file_encoding ~= "utf-8" and file_encoding ~= "") or file_format ~= "unix" then
+		local non_standard_encoding = string.format("%s:%s", file_encoding, file_format)
+		table.insert(right_parts, string.format("%%#StatusLineLspWarn#%s", non_standard_encoding))
 	end
 
 	table.insert(right_parts, "%#StatusLineText#%l:%c")
 	table.insert(right_parts, "%#StatusLineText#%p%%")
 
-	local left_out = table.concat(left_parts, sep)
-	local center_out = table.concat(center_parts, sep)
-	local right_out = table.concat(right_parts, sep)
+	local left_output = table.concat(left_parts, separator)
+	local center_output = table.concat(center_parts, separator)
+	local right_output = table.concat(right_parts, separator)
 
-	return left_out .. "%=" .. center_out .. "%=" .. right_out
+	if center_output == "" then
+		return left_output .. "%=" .. right_output
+	end
+
+	local left_width = vim.api.nvim_eval_statusline(left_output, { winid = 0 }).width
+	local center_width = vim.api.nvim_eval_statusline(center_output, { winid = 0 }).width
+	local total_width = vim.o.laststatus == 3 and vim.o.columns or vim.api.nvim_win_get_width(0)
+
+	local padding_length = math.floor((total_width - center_width) / 2) - left_width
+	local padding = padding_length > 0 and string.rep(" ", padding_length) or " "
+
+	return left_output .. padding .. center_output .. "%=" .. right_output
 end
 
-function M.setup()
+function statusline.setup()
 	setup_highlights()
 	vim.opt.statusline = "%!v:lua.require('config.statusline').render()"
 
@@ -163,4 +173,4 @@ function M.setup()
 	})
 end
 
-return M
+return statusline
