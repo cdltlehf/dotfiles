@@ -26,14 +26,14 @@ set-option -ag status-left "#{?pane_in_mode, #[fg=cyan]· copy#[default],}"
 set-option -ag status-left "#{?pane_synchronized, #[fg=brightred]· synchronizing#[default],}"
 
 # Set window-status
-set-option -g window-status-current-style "bg=default,fg=default,bold"
+set-option -g window-status-current-style "bg=default,fg=default,none"
 set-option -g window-status-style "bg=default,fg=brightblack,none"
 set-option -g window-status-current-format "#I:#W#{?window_zoomed_flag,+,}"
 set-option -g window-status-format "#I:#W"
 set-option -g window-status-separator " #[fg=brightblack]· "
 
 set-option -g window-status-activity-style "fg=yellow,none"
-set-option -g window-status-bell-style "fg=brightred,bold"
+set-option -g window-status-bell-style "fg=brightred,none"
 
 # Set status-right
 set-option -g  status-right-length 30

@@ -1,6 +1,3 @@
-#!/bin/bash
-# shellcheck source=/dev/null
-
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 [[ "$(uname -s)" == "Darwin" ]] && export BASH_SILENCE_DEPRECATION_WARNING=1
 

@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # https://volta.sh
 # https://github.com/nvm-sh/nvm
 # https://deno.com
@@ -11,6 +9,24 @@
 # https://www.haskell.org/ghcup
 # https://mamba.readthedocs.io
 # https://brew.sh
+
+###############################################################################
+# XDG Base Directories
+###############################################################################
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS:-/etc/xdg}"
+
+###############################################################################
+# Git prompt
+###############################################################################
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWSTASHSTATE=1
+GIT_PS1_SHOWUPSTREAM="auto"
+GIT_PS1_SHOWCOLORHINTS=1
 
 ###############################################################################
 # XDG_DATA_HOME
@@ -47,14 +63,16 @@ export VOLTA_HOME="${HOME}/.local/opt/volta"
 ###############################################################################
 # Miscellaneous
 ###############################################################################
-export ZEROBREW_DIR="${HOME}/.zerobrew"
-export ZEROBREW_BIN="${ZEROBREW_DIR}/bin"
-export ZEROBREW_ROOT="/opt/zerobrew"
-export ZEROBREW_PREFIX="/opt/zerobrew"
-export MISE_SHIMS_DIR="${HOME}/.local/share/mise/shims"
+zerobrew_dir="${HOME}/.zerobrew"
+zerobrew_bin="${zerobrew_dir}/bin"
+zerobrew_root="/opt/zerobrew"
+zerobrew_prefix="/opt/zerobrew"
+mise_shims_dir="${HOME}/.local/share/mise/shims"
 
-export PATH="${ZEROBREW_BIN}:${PATH}"
-export PATH="${ZEROBREW_PREFIX}/bin:${PATH}"
-export PATH="${MISE_SHIMS_DIR}:${HOME}/.local/bin:${PATH}"
+export PATH="${zerobrew_bin}:${PATH}"
+export PATH="${zerobrew_prefix}/bin:${PATH}"
+export PATH="${mise_shims_dir}:${HOME}/.local/bin:${PATH}"
 
-export PKG_CONFIG_PATH="${ZEROBREW_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
+export PKG_CONFIG_PATH="${zerobrew_prefix}/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
+
+unset zerobrew_dir zerobrew_bin zerobrew_root zerobrew_prefix mise_shims_dir
