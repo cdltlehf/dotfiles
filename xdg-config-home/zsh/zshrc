@@ -1,10 +1,10 @@
 #!/bin/zsh
 
-: ${XDG_CONFIG_HOME:="${HOME}/.config"}
+: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
 SHRC="${XDG_CONFIG_HOME}/sh/shrc"
 [[ -e "${SHRC}" ]] && source "${SHRC}"
 
-: ${ZDOTDIR:=${XDG_CONFIG_HOME}/zsh}
+: "${ZDOTDIR:="${XDG_CONFIG_HOME}/zsh"}"
 ZSHRCDIR="${ZDOTDIR}/zshrc.d"
 if [[ -d "${ZSHRCDIR}" ]]; then
   for sh in "${ZSHRCDIR}"/*.zsh; do
@@ -13,23 +13,6 @@ if [[ -d "${ZSHRCDIR}" ]]; then
   unset -v sh
 fi
 
-: ${XDG_STATE_HOME:="${HOME}/.local/state"}
-: ${XDG_CACHE_HOME:="${HOME}/.cache"}
-
-[[ -d "${XDG_STATE_HOME}/zsh" ]] || mkdir -p "${XDG_STATE_HOME}/zsh"
-export HISTFILE="${XDG_STATE_HOME}/zsh/history"
-export HISTSIZE=10000
-export SAVEHIST=10000
-setopt APPEND_HISTORY
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_REDUCE_BLANKS
-setopt HIST_VERIFY
-setopt SHARE_HISTORY
-
-export SHELL_SESSIONS_DISABLE=1
-
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh --cmd cd)"
 
-source "${HOME}/.zshrc.local" 2> /dev/null || true
+[[ -f "${HOME}/.zshrc.local" ]] && source "${HOME}/.zshrc.local" 2> /dev/null || true

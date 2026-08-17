@@ -1,53 +1,73 @@
 setopt PROMPT_SUBST
 ZLE_RPROMPT_INDENT=0
 
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git:*' formats ' on %F{2}%b%f'
-zstyle ':vcs_info:git:*' actionformats ' on %F{2}%b|%a%f'
+if [[ -f "${XDG_DATA_HOME}/git/completion/git-prompt.sh" ]]; then
+	source "${XDG_DATA_HOME}/git/completion/git-prompt.sh"
+fi
 
-precmd() {
-	vcs_info
-}
-
-_prompt_user() {
-	if [[ "${USER}" == "root" ]]; then
-		print -n "%F{1}%n%f"
+_prompt_formatted_path() {
+	local git_root subpath
+	git_root=$(git rev-parse --show-toplevel 2>/dev/null)
+	if [[ -n "${git_root}" ]]; then
+		local repo_name="${git_root:t}"
+		subpath="${PWD#${git_root}}"
+		subpath="${subpath#/}"
+		if [[ -z "${subpath}" ]]; then
+			print -n "${repo_name}"
+		else
+			local -a parts=(${(s:/:)subpath})
+			if (( ${#parts} > 2 )); then
+				print -n "${repo_name}:…/${parts[-2]}/${parts[-1]}"
+			else
+				print -n "${repo_name}:${subpath}"
+			fi
+		fi
 	else
-		print -n "%F{5}%n%f"
+		local full_path="${PWD/#${HOME}/~}"
+		local -a parts=(${(s:/:)full_path})
+		if (( ${#parts} > 3 )); then
+			print -n "…/${parts[-2]}/${parts[-1]}"
+		else
+			print -n "${full_path}"
+		fi
 	fi
 }
 
-_prompt_host() {
-	if [[ -n "${SSH_TTY}" ]]; then
-		print -n " at %F{1}%m%f"
-	else
-		print -n " at %F{6}%m%f"
-	fi
-}
+if command -v __git_ps1 >/dev/null 2>&1; then
+	precmd() {
+		local virtualenv_part=""
+		if [[ -n "${VIRTUAL_ENV}" ]]; then
+			virtualenv_part="%F{8} · %F{4}${VIRTUAL_ENV:t}%f"
+		fi
+		local prompt_prefix=$'\n'"%F{5}%n%f%F{8} · %f%F{6}%m%f%F{8} · %F{3}$(_prompt_formatted_path)%f"
+		local prompt_suffix="${virtualenv_part}%F{8} · %*%f"$'\n%(?.%f$ %f.%F{1}?%? %f)'
+		__git_ps1 "${prompt_prefix}" "${prompt_suffix}" " \e[1;30m·\e[0m %s"
+	}
+else
+	precmd() {
+		local virtualenv_part=""
+		if [[ -n "${VIRTUAL_ENV}" ]]; then
+			virtualenv_part="%F{8} · %F{4}${VIRTUAL_ENV:t}%f"
+		fi
+		PS1=$'\n'"%F{5}%n%f%F{8} · %f%F{6}%m%f%F{8} · %F{3}$(_prompt_formatted_path)%f${virtualenv_part}%F{8} · %*%f"$'\n%(?.%f$ %f.%F{1}?%? %f)'
+	}
+fi
 
-_prompt_virtualenv() {
-	[[ -z "${VIRTUAL_ENV}" ]] && return
-	print -n " via %F{4}${VIRTUAL_ENV:t}%f"
-}
+PS2="%F{8}> %f"
 
-PS1=$'\n$(_prompt_user)$(_prompt_host) in %F{3}%~%f${vcs_info_msg_0_}$(_prompt_virtualenv)  %F{8}# %*%f\n%(?.%f$ %f.%B%F{1}?%? %f%b)'
-
-PS2="%F{103}> %f"
-
-RPS1="%F{0}%K{3} INSERT %k%f"
+RPS1=""
 update_vi_mode_indicator() {
 	case $KEYMAP in
 	vicmd | viopp)
-		RPS1="%F{0}%K{2} NORMAL %k%f"
+		RPS1="%F{8}normal%f"
 		echo -ne '\e[1 q'
 		;;
 	viins | main)
-		RPS1="%F{0}%K{3} INSERT %k%f"
+		RPS1=""
 		echo -ne '\e[5 q'
 		;;
-	isearch) RPS1="%F{7}[/]%k%f" ;;
-	*) RPS1="%B%F{1}[UNK]%k%f%b" ;;
+	isearch) RPS1="%F{7}[/]%f" ;;
+	*) RPS1="%F{1}[UNK]%f" ;;
 	esac
 	RPS2=$RPS1
 	zle reset-prompt

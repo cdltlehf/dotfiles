@@ -1,5 +1,3 @@
-# shellcheck shell=sh
-
 # POSIX shell startup file for an interactive login shell
 
 export XDG_DATA_HOME="${HOME}/.local/share"
