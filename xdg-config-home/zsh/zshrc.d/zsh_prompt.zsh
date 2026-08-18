@@ -60,7 +60,7 @@ if command -v __git_ps1 >/dev/null 2>&1; then
 		fi
 		local prompt_prefix=$'\n'"${user_part}%F{4}$(_prompt_formatted_path)%f"
 		local prompt_suffix="${virtualenv_part}${host_part}%F{8} · %*%f"$'\n'"${return_part}${prompt_char}"
-		__git_ps1 "${prompt_prefix}" "${prompt_suffix}" " \e[1;30m·\e[0m %s"
+		__git_ps1 "${prompt_prefix}" "${prompt_suffix}" "(%s)"
 	}
 else
 	precmd() {

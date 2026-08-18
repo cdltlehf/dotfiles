@@ -79,7 +79,7 @@ function statusline.render()
 
 		local left = string.format("%%#StatusLineBold#oil%s%%#StatusLineText#%s", separator, directory)
 		if branch_name and branch_name ~= "" then
-			left = left .. separator .. string.format("%%#StatusLineText#%s", branch_name)
+			left = left .. string.format("(%s)", branch_name)
 		end
 
 		local right = "%#StatusLineText#oil"
@@ -91,7 +91,7 @@ function statusline.render()
 	local formatted_path = format_file_path()
 	local target_string = ""
 	if branch_name and branch_name ~= "" then
-		target_string = string.format("%%#StatusLineBold#%s:%%#StatusLineBold#%s", branch_name, formatted_path)
+		target_string = string.format("%%#StatusLineBold#%s(%s)", formatted_path, branch_name)
 	else
 		target_string = string.format("%%#StatusLineBold#%s", formatted_path)
 	end
