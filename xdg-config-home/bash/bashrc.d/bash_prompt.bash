@@ -56,7 +56,7 @@ __prompt_command() {
   PS1+="\[\e[34m\]$(__prompt_formatted_path)\[\e[0m\]"
 
   # Git prompt
-  PS1+="$(__git_ps1 "\[\e[1;30m\] · \[\e[0m\]%s")"
+  PS1+="$(__git_ps1 "(%s)")"
 
   # Environment
   if [[ -n "${VIRTUAL_ENV}" ]]; then

@@ -138,23 +138,18 @@ augroup statusline_highlight
         \|highlight link StatusLineMode StatusLineNormal
 augroup end
 
+function! StatusLineBranch() abort
+  if exists('*FugitiveHead')
+    let l:head = FugitiveHead()
+    if !empty(l:head)
+      return '(' . l:head . ')'
+    endif
+  endif
+  return ''
+endfunction
+
 let g:statusline_active = '%#StatusLineMode# %{StatusLineMode()} '
-if exists('g:loaded_fugitive')
-  highlight FugitiveStatusline ctermfg=white ctermbg=black cterm=none
-  let g:statusline_active .= '%#FugitiveStatusline#'
-      \.'%{substitute('
-      \.  'FugitiveStatusline(),'
-      \.  '"\\[Git(\\(.\\+\\))\\]",'
-      \.  '"  \\1 ▏",'
-      \.  '""'
-      \.')}'
-endif
-
-if exists('g:loaded_fugitive')
-  " TODO: obesession
-endif
-
-let g:statusline_active .= '%* %<%f %m%r%h%w '
+      \. '%* %<%f%{StatusLineBranch()} %m%r%h%w '
 let g:statusline_active .= '%= %y '
 let g:statusline_active .=
       \ '%#StatusLineRight1# %{&fileencoding}[%{&fileformat}] '
@@ -162,10 +157,10 @@ let g:statusline_active .=
 let g:statusline_active .= '%#StatusLineRight2# %3.p%% ▏ %2.l/%L:%3.c '
 
 let g:statusline_inactive = '%#StatusLineInactive# INACTIVE '
-      \.'%* %<%f %m%r%h%w '
+      \. '%* %<%f%{StatusLineBranch()} %m%r%h%w '
       \. '%='
-      \.' %y '
-      \.'%{&fileencoding}[%{&fileformat}] '
+      \. ' %y '
+      \. '%{&fileencoding}[%{&fileformat}] '
 
 function s:activate_statusline() abort
   let &l:statusline = g:statusline_active
