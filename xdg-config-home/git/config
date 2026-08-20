@@ -38,8 +38,6 @@
 	sort = -committerdate
 [tag]
 	sort = version:refname
-[init]
-	defaultBranch = main
 [diff]
 	algorithm = histogram
 	colorMoved = plain
@@ -91,8 +89,20 @@
 [pull]
 	rebase = true
 
+[commit]
+	template = "~/.gitmessage"
+
 [user]
 	useConfigOnly = true
 
 [include]
 	path = "~/.gitconfig.local"
+
+[merge]
+	tool = fugitive
+
+[mergetool "fugitive"]
+	cmd = vim -f -c "Gdiffsplit!" "$MERGED"
+
+[mergetool]
+	keepBackup = false
