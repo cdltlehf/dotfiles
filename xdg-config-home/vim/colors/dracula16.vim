@@ -113,16 +113,25 @@ highlight! link CursorLine CursorColumn
 
 highlight Directory ctermfg=darkblue ctermbg=none cterm=none
 
-highlight DiffAdd ctermfg=darkgreen ctermbg=none cterm=none
-highlight DiffChange ctermfg=darkyellow ctermbg=none cterm=none
-highlight DiffDelete ctermfg=darkmagenta ctermbg=none cterm=underline
-highlight DiffText ctermfg=darkyellow ctermbg=none cterm=underline
+highlight DiffAdd ctermfg=0 ctermbg=10 cterm=none
+highlight DiffChange ctermfg=none ctermbg=darkgrey cterm=none
+highlight DiffDelete ctermfg=9 ctermbg=none cterm=bold
+highlight DiffText ctermfg=0 ctermbg=14 cterm=none
+highlight! link DiffTextAdd DiffText
+highlight! link Added DiffAdd
+highlight! link Changed DiffChange
+highlight! link Removed DiffDelete
 
 highlight! link EndOfBuffer NonText
 
 highlight! link ErrorMsg Error
 
 highlight VertSplit ctermfg=darkgrey ctermbg=none cterm=none
+highlight! link WinSeparator VertSplit
+highlight! link WinBar StatusLine
+highlight! link WinBarNC StatusLineNC
+highlight! link NormalNC Normal
+
 highlight Folded ctermfg=darkgrey ctermbg=black cterm=none
 highlight FoldColumn ctermfg=darkgrey ctermbg=none cterm=none
 highlight! link IncSearch CurSearch
@@ -145,15 +154,30 @@ highlight MoreMsg ctermfg=none ctermbg=none cterm=bold
 highlight NonText ctermfg=darkgrey ctermbg=none cterm=none
 
 highlight Normal ctermfg=none ctermbg=none cterm=none
+highlight! link NormalFloat Pmenu
+highlight! link FloatBorder VertSplit
+highlight! link FloatTitle Title
+highlight! link FloatFooter Title
+highlight! link FloatShadow Pmenu
+highlight! link FloatShadowThrough Pmenu
 
 highlight Pmenu ctermfg=none ctermbg=black cterm=none
 highlight PmenuSel ctermfg=darkblue ctermbg=none cterm=bold,inverse
 highlight! link PmenuKind Pmenu
 highlight! link PmenuKindSel PmenuSel
 highlight! link PmenuExtra Pmenu
-highlight! link PmenuExtraSel Pmenusel
+highlight! link PmenuExtraSel PmenuSel
+highlight! link PmenuBorder VertSplit
+highlight! link PmenuMatch CurSearch
+highlight! link PmenuMatchSel Search
+highlight! link PmenuShadow Pmenu
+highlight! link PmenuShadowThrough Pmenu
 highlight! link PmenuSbar Pmenu
 highlight PmenuThumb ctermfg=none ctermbg=white cterm=none
+highlight! link ComplHint Comment
+highlight! link ComplHintMore Comment
+highlight! link ComplMatchIns PmenuMatch
+highlight! link PreInsert Comment
 
 highlight! link PopupNotification WarningMsg
 
@@ -162,8 +186,10 @@ highlight! link QuickFixLine PmenuSel
 
 highlight Search ctermfg=darkgreen ctermbg=none cterm=inverse
 highlight CurSearch ctermfg=darkyellow ctermbg=none cterm=inverse
+highlight! link Substitute CurSearch
 
 highlight SpecialKey ctermfg=darkmagenta ctermbg=none cterm=none
+highlight! link Whitespace NonText
 highlight SpellBad ctermfg=none ctermbg=none cterm=underline
 highlight SpellCap ctermfg=none ctermbg=none cterm=underline
 highlight! link SpellLocal SpellCap
@@ -182,13 +208,34 @@ highlight TabLineSel ctermfg=darkblue ctermbg=black cterm=inverse
 highlight Title ctermfg=darkgreen ctermbg=none cterm=bold
 highlight Visual ctermfg=white ctermbg=none cterm=inverse
 highlight! link VisualNOS Visual
+highlight! link SnippetTabstop Visual
+highlight! link SnippetTabstopActive CurSearch
 
 highlight WarningMsg ctermfg=darkyellow ctermbg=none cterm=inverse
+highlight! link OkMsg Dracula16FunctionNames
+highlight! link StderrMsg ErrorMsg
+highlight! link StdoutMsg Normal
+highlight! link MsgArea Normal
+highlight! link MsgSeparator VertSplit
 highlight WildMenu ctermfg=darkblue ctermbg=none cterm=bold,inverse
 
 " highlight Menu
 " highlight Scrollbar
 " highlight Tooltip
+
+" TermCursor
+highlight! link TermCursor Cursor
+
+" Neovim Built-in LSP {{{
+highlight! link LspReferenceText Visual
+highlight! link LspReferenceRead Visual
+highlight! link LspReferenceWrite Visual
+highlight! link LspReferenceTarget Visual
+highlight! link LspInlayHint Comment
+highlight! link LspCodeLens Comment
+highlight! link LspCodeLensSeparator Comment
+highlight! link LspSignatureActiveParameter CurSearch
+" }}}
 
 " airblade/vim-gitgutter {{{
 highlight GitGutterAdd ctermfg=darkgreen ctermbg=none cterm=none
@@ -239,4 +286,12 @@ highlight! link typescriptDestructureVariable Dracula16DestructuringAliasRHS
 highlight! link typescriptObjectLabel Dracula16ObjectKeys
 
 highlight! link typescriptRegexpString Dracula16StringRegExp
+" }}}
+
+" Neovim Treesitter (spec.draculatheme.com) {{{
+highlight! link @variable.builtin Dracula16InstanceReservedWords
+highlight! link @variable.parameter Dracula16FunctionParameters
+highlight! link @function.builtin Dracula16InheritedClassName
+highlight! link @tag Dracula16Keyword
+highlight! link @tag.attribute Dracula16Decorators
 " }}}
