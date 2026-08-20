@@ -99,6 +99,7 @@
 	path = "~/.gitconfig.local"
 
 [merge]
+	conflictstyle = zdiff3
 	tool = fugitive
 
 [mergetool "fugitive"]
