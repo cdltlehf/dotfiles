@@ -21,9 +21,6 @@ opt.spell = true
 -- :help persistent-undo
 opt.undofile = true
 
--- :help 'clipboard'
-opt.clipboard = "unnamedplus"
-
 -- :help 'laststatus'
 opt.laststatus = 3
 opt.showmode = false
