@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 if [ -z "${basedir}" ]; then
 	echo "It should be run from the main setup script." >&2
@@ -10,37 +10,38 @@ if [ "$(uname)" != "Darwin" ]; then
 	exit 1
 fi
 
-# TODO: Run this in order to use git
 xcode-select --install &>/dev/null || true
 
 sudo -v
 sudo scutil --set HostName
-sudo scutil --set ComputerName  # ... > General > About > Name
-sudo scutil --set LocalHostName # ... > General > Sharing > Local hostname
+sudo scutil --set ComputerName
+sudo scutil --set LocalHostName
 
-symlink() {
-	local src="$1"
-	local dest="$2"
+read -r -p "Install rosetta? [Y/n] " yn
+case ${yn} in
+[Yy]* | "") sudo softwareupdate --install-rosetta ;;
+esac
 
-	if [ -L "$dest" ]; then
-		local link_target
-		link_target=$(readlink "$dest")
-		if [ "$link_target" = "$src" ]; then
-			return 0
-		fi
-	fi
+read -r -p "Check and install macOS software updates? [y/N] " yn
+case ${yn} in
+[Yy]*) sudo softwareupdate --all --install --force ;;
+esac
 
-	if [ -d "$dest" ] || [ -h "$dest" ]; then
-		if [[ $force -eq 1 ]]; then
-			rm ${RMFLAGS} "$dest"
-			ln ${LNFLAGS} "$src" "$dest"
-		else
-			echo "Warning: Target directory '$dest' already exists. Use -f to overwrite."
-		fi
-	else
-		ln ${LNFLAGS} "$src" "$dest"
-	fi
-}
+if ! command -v brew &>/dev/null; then
+	[ -x "/opt/homebrew/bin/brew" ] || [ -x "/usr/local/bin/brew" ] || \
+		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	[ -x "/opt/homebrew/bin/brew" ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+	[ -x "/usr/local/bin/brew" ] && eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+export PATH="${HOME}/.local/bin:${PATH}"
+if ! command -v zb &>/dev/null; then
+	curl -fsSL https://zerobrew.rs/install | bash -s -- --no-modify-path
+fi
+
+brewfile="${basedir}/Brewfile"
+command -v zb &>/dev/null && (zb bundle --file "${brewfile}" || true)
+brew bundle --file "${brewfile}"
 
 ${basedir}/macos/defaults/macos
 
@@ -59,50 +60,7 @@ if [ ! -d "${HOME}/.hammerspoon/Spoons/SpoonInstall.spoon" ]; then
 	mkdir -p "${HOME}/.hammerspoon/Spoons/"
 	tmpzip=$(mktemp /tmp/SpoonInstall.XXXXXX)
 	curl -L "${SPOON_INSTALL_URL}" -o "${tmpzip}"
-	unzip "${tmpzip}" -d "${HOME}/.hammerspoon/Spoons/"
+	unzip -q "${tmpzip}" -d "${HOME}/.hammerspoon/Spoons/"
 	rm "${tmpzip}"
 	unset tmpzip
 fi
-
-# TODO: Check and run `softwareupdate --all --install --force`
-read "yn?Install rosetta? [Y/n] "
-case ${yn} in
-[Yy]* | "") sudo softwareupdate --install-rosetta ;;
-esac
-
-# Install homebrew
-# https://brew.sh
-HOMEBREW_INSTALLER="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-if ! command -v brew &>/dev/null; then
-	if [ -x "/opt/homebrew/bin/brew" ]; then
-		eval "$(/opt/homebrew/bin/brew shellenv)"
-	elif [ -x "/usr/local/bin/brew" ]; then
-		eval "$(/usr/local/bin/brew shellenv)"
-	fi
-fi
-
-if ! command -v brew &>/dev/null; then
-	/bin/bash -c "$(curl -fsSL "${HOMEBREW_INSTALLER}")"
-	if [ -x "/opt/homebrew/bin/brew" ]; then
-		eval "$(/opt/homebrew/bin/brew shellenv)"
-	elif [ -x "/usr/local/bin/brew" ]; then
-		eval "$(/usr/local/bin/brew shellenv)"
-	fi
-fi
-
-# Install zerobrew
-# https://lucasgelfond-zerobrew.mintlify.app/installation
-if ! command -v zb &>/dev/null; then
-	if [ -x "${HOME}/.local/bin/zb" ]; then
-		export PATH="${HOME}/.local/bin:${PATH}"
-	fi
-fi
-
-if ! command -v zb &>/dev/null; then
-	curl -fsSL https://zerobrew.rs/install | bash -s -- --no-modify-path
-	export PATH="${HOME}/.local/bin:${PATH}"
-fi
-
-brewfile="${basedir}/Brewfile"
-command -v zb &>/dev/null && zb bundle --file "${brewfile}"
-brew bundle --file "${brewfile}"

@@ -32,56 +32,29 @@ done
 echoerr() { echo "$@" 1>&2; }
 export -f echoerr
 
-if [[ $force -eq 1 ]]; then
-	LNFLAGS="-svnf"
-	RMFLAGS="-rvf"
-else
-	LNFLAGS="-svni"
-	RMFLAGS="-rvi"
-fi
-
-# Get base directory (e.g., `$HOME/dotfiles`)
 basedir="$(realpath "$(dirname "$0")")"
-# Get OS name (e.g., Darwin)
 os="$(uname -s)"
 
-export LNFLAGS
-export RMFLAGS
 export basedir
 export os
 export force
 
-# shellcheck source=/dev/null
 source "${basedir}/env"
 
 symlink() {
-	local src="$1"
-	local dest="$2"
-
-	if [ -L "$dest" ]; then
-		local link_target
-		link_target=$(readlink "$dest")
-		if [ "$link_target" = "$src" ]; then
-			return 0
-		fi
-	fi
-
-	if [ -d "$dest" ] || [ -h "$dest" ]; then
-		if [[ $force -eq 1 ]]; then
-			rm ${RMFLAGS} "$dest"
-			ln ${LNFLAGS} "$src" "$dest"
-		else
-			echo "Warning: Target directory '$dest' already exists. Use -f to overwrite."
-		fi
-	else
-		ln ${LNFLAGS} "$src" "$dest"
-	fi
+	local src="$1" dest="$2"
+	[[ $(readlink "$dest" 2>/dev/null) == "$src" ]] && return 0
+	[[ -e "$dest" && ! -L "$dest" ]] && mv -f "$dest" "${dest}.bak"
+	ln -sfn "$src" "$dest"
 }
+export -f symlink
 
 mkdir -p "${XDG_CONFIG_HOME}"
 for item in "${basedir}/xdg-config-home"/*; do
 	symlink "$item" "${XDG_CONFIG_HOME}/$(basename "$item")"
 done
+
+symlink "${basedir}/Templates" "${HOME}/Templates"
 
 symlink "${basedir}/xdg-config-home/bash/bash_profile" "${HOME}/.bash_profile"
 symlink "${basedir}/xdg-config-home/bash/bashrc" "${HOME}/.bashrc"
@@ -111,7 +84,11 @@ fi
 
 XDG_BIN_HOME="${HOME}/.local/bin"
 mkdir -p "${XDG_BIN_HOME}"
-ln ${LNFLAGS} "${basedir}/scripts"/* ${XDG_BIN_HOME}
+find -L "${XDG_BIN_HOME}" -maxdepth 1 -type l -delete 2>/dev/null || true
+for script in "${basedir}/scripts"/*; do
+	[ -e "${script}" ] && symlink "${script}" "${XDG_BIN_HOME}/$(basename "${script}")"
+done
+export PATH="${XDG_BIN_HOME}:${PATH}"
 
 GIT_COMPLETION_DIR="${XDG_DATA_HOME}/git/completion"
 GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
@@ -129,19 +106,12 @@ curl -fsSL "${WEZTERM_SHELL_INTEGRATION_URL}" -o "${WEZTERM_SHELL_INTEGRATION_DI
 unset WEZTERM_SHELL_INTEGRATION_URL
 unset WEZTERM_SHELL_INTEGRATION_DIR
 
-if ! command mise -v 2>/dev/null; then
+if ! command -v mise &>/dev/null; then
 	curl "https://mise.run" | sh
-	eval "$("${HOME}/.local/bin/mise" activate bash)"
 fi
-
-echoerr "Run \`mise install\` to install tools"
+mise install --yes || echoerr "Warning: Some mise tools failed to install"
 
 os_setup="${basedir}/setup.os/setup#os.${os}"
-if [[ -f "${os_setup}" ]]; then
-	read -r -p "Do you want to set configurations for ${os}? [Y/n] " yn
-	case ${yn} in
-	[Yy] | "") "${os_setup}" ;;
-	esac
-fi
+[[ -f "${os_setup}" ]] && "${os_setup}"
 
 echo "Restart your login shell with \`exec \"\${SHELL}\" --login\`"
