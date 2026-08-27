@@ -13,7 +13,9 @@ set directory=~/.local/state/vim/swap
 set display=lastline
 set encoding=utf-8
 scriptencoding utf-8
-if has('nvim')
+if getenv('CHARSET') ==# 'ascii' || empty(getenv('CHARSET'))
+  set fillchars=vert:\|,foldopen:v,foldclose:>
+elseif has('nvim')
   set fillchars=vert:│,fold:·,foldsep:│
 elseif v:version >= 900
   set fillchars=vert:│,foldopen:-,foldclose:+

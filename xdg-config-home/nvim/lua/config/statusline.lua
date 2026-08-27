@@ -55,16 +55,40 @@ local function format_file_path()
 		return "[No Name]"
 	end
 
-	local path_segments = vim.split(full_path, "/", { plain = true })
-	if #path_segments <= 2 then
-		return full_path
-	end
+	local charset = vim.env.CHARSET or "ascii"
+	local ellipsis = (charset == "ascii") and "..." or "…"
 
-	return string.format("…/%s/%s", path_segments[#path_segments - 1], path_segments[#path_segments])
+	local git_status = vim.b.gitsigns_status_dict
+	local git_root = git_status and git_status.root or vim.fs.root(0, ".git")
+
+	if git_root then
+		local repo_name = vim.fs.basename(git_root)
+		local file_abs_path = vim.fn.expand("%:p")
+		local subpath = file_abs_path:sub(#git_root + 2)
+
+		if subpath == "" then
+			return repo_name
+		end
+
+		local parts = vim.split(subpath, "/", { plain = true })
+		if #parts > 2 then
+			return string.format("%s/%s/%s/%s", repo_name, ellipsis, parts[#parts - 1], parts[#parts])
+		else
+			return string.format("%s/%s", repo_name, subpath)
+		end
+	else
+		local parts = vim.split(full_path, "/", { plain = true })
+		if #parts > 3 then
+			return string.format("%s/%s/%s", ellipsis, parts[#parts - 1], parts[#parts])
+		else
+			return full_path
+		end
+	end
 end
 
 function statusline.render()
-	local separator = "%#StatusLineDim# · "
+	local charset = vim.env.CHARSET or "ascii"
+	local separator = (charset == "ascii") and "%#StatusLineDim# . " or "%#StatusLineDim# · "
 	local filetype = vim.bo.filetype
 	local git_status = vim.b.gitsigns_status_dict
 	local branch_name = git_status and git_status.head
@@ -79,7 +103,7 @@ function statusline.render()
 
 		local left = string.format("%%#StatusLineBold#oil%s%%#StatusLineText#%s", separator, directory)
 		if branch_name and branch_name ~= "" then
-			left = left .. string.format("(%s)", branch_name)
+			left = left .. separator .. string.format("%%#StatusLineBold#%s", branch_name)
 		end
 
 		local right = "%#StatusLineText#oil"
@@ -89,11 +113,9 @@ function statusline.render()
 	local left_parts = {}
 
 	local formatted_path = format_file_path()
-	local target_string = ""
+	local target_string = string.format("%%#StatusLineBold#%s", formatted_path)
 	if branch_name and branch_name ~= "" then
-		target_string = string.format("%%#StatusLineBold#%s(%s)", formatted_path, branch_name)
-	else
-		target_string = string.format("%%#StatusLineBold#%s", formatted_path)
+		target_string = target_string .. separator .. string.format("%%#StatusLineBold#%s", branch_name)
 	end
 
 	if vim.bo.readonly then

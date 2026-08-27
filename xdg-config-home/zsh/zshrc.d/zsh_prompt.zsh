@@ -5,7 +5,11 @@ if [[ -f "${XDG_DATA_HOME}/git/completion/git-prompt.sh" ]]; then
 	source "${XDG_DATA_HOME}/git/completion/git-prompt.sh"
 fi
 
-_prompt_formatted_path() {
+_prompt_pretty_path() {
+	local charset="${CHARSET:-ascii}"
+	local ellipsis="..."
+	[[ "${charset}" != "ascii" ]] && ellipsis="…"
+
 	local git_root subpath
 	git_root=$(git rev-parse --show-toplevel 2>/dev/null)
 	if [[ -n "${git_root}" ]]; then
@@ -17,7 +21,7 @@ _prompt_formatted_path() {
 		else
 			local -a parts=(${(s:/:)subpath})
 			if (( ${#parts} > 2 )); then
-				print -n "${repo_name}/…/${parts[-2]}/${parts[-1]}"
+				print -n "${repo_name}/${ellipsis}/${parts[-2]}/${parts[-1]}"
 			else
 				print -n "${repo_name}/${subpath}"
 			fi
@@ -29,7 +33,7 @@ _prompt_formatted_path() {
 			local full_path="${PWD/#${HOME}/~}"
 			local -a parts=(${(s:/:)full_path})
 			if (( ${#parts} > 3 )); then
-				print -n "…/${parts[-2]}/${parts[-1]}"
+				print -n "${ellipsis}/${parts[-2]}/${parts[-1]}"
 			else
 				print -n "${full_path}"
 			fi
@@ -37,55 +41,43 @@ _prompt_formatted_path() {
 	fi
 }
 
-if command -v __git_ps1 >/dev/null 2>&1; then
-	precmd() {
-		local exit_code=$?
-		local virtualenv_part=""
-		if [[ -n "${VIRTUAL_ENV}" ]]; then
-			virtualenv_part="%F{8} · ${VIRTUAL_ENV:t}%f"
-		fi
-		local host_part=""
-		if [[ -n "${SSH_TTY}" ]]; then
-			host_part="%F{8} · %m%f"
-		fi
-		local user_part=""
-		if [[ "${USER}" == "root" ]]; then
-			user_part="%F{1}%n%f%F{8} · %f"
-		fi
-		local prompt_char="\$ "
-		[[ "${USER}" == "root" ]] && prompt_char="# "
-		local return_part=""
-		if [[ ${exit_code} -ne 0 ]]; then
-			return_part="%F{1} ${exit_code} %f"
-		fi
-		local prompt_prefix=$'\n'"${user_part}%F{4}$(_prompt_formatted_path)%f"
-		local prompt_suffix="${virtualenv_part}${host_part}%F{8} · %*%f"$'\n'"${return_part}${prompt_char}"
-		__git_ps1 "${prompt_prefix}" "${prompt_suffix}" "(%s)"
-	}
-else
-	precmd() {
-		local exit_code=$?
-		local virtualenv_part=""
-		if [[ -n "${VIRTUAL_ENV}" ]]; then
-			virtualenv_part="%F{8} · ${VIRTUAL_ENV:t}%f"
-		fi
-		local host_part=""
-		if [[ -n "${SSH_TTY}" ]]; then
-			host_part="%F{8} · %m%f"
-		fi
-		local user_part=""
-		if [[ "${USER}" == "root" ]]; then
-			user_part="%F{1}%n%f%F{8} · %f"
-		fi
-		local prompt_char="\$ "
-		[[ "${USER}" == "root" ]] && prompt_char="# "
-		local return_part=""
-		if [[ ${exit_code} -ne 0 ]]; then
-			return_part="%F{1} ${exit_code} %f"
-		fi
-		PS1=$'\n'"${user_part}%F{4}$(_prompt_formatted_path)%f${virtualenv_part}${host_part}%F{8} · %*%f"$'\n'"${return_part}${prompt_char}"
-	}
-fi
+precmd() {
+	local exit_code=$?
+	local charset="${CHARSET:-ascii}"
+	local sep="%F{8} . %f"
+	local err_icon="!"
+	if [[ "${charset}" != "ascii" ]]; then
+		sep="%F{8} · %f"
+	fi
+	if [[ "${charset}" == "nerdfont" ]]; then
+		err_icon=""
+	fi
+
+	local virtualenv_part=""
+	if [[ -n "${VIRTUAL_ENV}" ]]; then
+		virtualenv_part="${sep}%F{8}${VIRTUAL_ENV:t}%f"
+	fi
+	local host_part=""
+	if [[ -n "${SSH_TTY}" ]]; then
+		host_part="${sep}%F{8}%m%f"
+	fi
+	local user_part=""
+	if [[ "${USER}" == "root" ]]; then
+		user_part="%F{1}%n%f${sep}"
+	fi
+	local prompt_char="\$ "
+	[[ "${USER}" == "root" ]] && prompt_char="# "
+	local return_part=""
+	if [[ ${exit_code} -ne 0 ]]; then
+		return_part="%F{1}${err_icon} ${exit_code} %f"
+	fi
+	local git_output="$(git-prompt-codicon 2>/dev/null)"
+	local git_part=""
+	if [[ -n "${git_output}" ]]; then
+		git_part="${sep}${git_output}"
+	fi
+	PS1=$'\n'"${user_part}%F{4}$(_prompt_pretty_path)%f${git_part}${virtualenv_part}${host_part}${sep}%F{8}%*%f"$'\n'"${return_part}${prompt_char}"
+}
 
 PS2="%F{8}> %f"
 

@@ -70,13 +70,28 @@ let g:lsp_diagnostics_highlights_insert_mode_enabled = 0
 let g:lsp_diagnostics_signs_insert_mode_enabled = 0
 
 " :help g:lsp_diagnostics_signs_enabled
-" nf-cod-error nf-cod-warning nf-cod-info nf-cod-question
-let g:lsp_diagnostics_signs_error = {'text': ""}
-let g:lsp_diagnostics_signs_warning = {'text': ""}
-let g:lsp_diagnostics_signs_information = {'text': ""}
-let g:lsp_diagnostics_signs_hint = {'text': ""}
-let g:lsp_document_code_action_signs_hint = {'text': ""}
-let g:lsp_diagnostics_virtual_text_prefix = "▌"
+if getenv('CHARSET') ==# 'nerdfont'
+  let g:lsp_diagnostics_signs_error = {'text': ""}
+  let g:lsp_diagnostics_signs_warning = {'text': ""}
+  let g:lsp_diagnostics_signs_information = {'text': ""}
+  let g:lsp_diagnostics_signs_hint = {'text': ""}
+  let g:lsp_document_code_action_signs_hint = {'text': ""}
+  let g:lsp_diagnostics_virtual_text_prefix = "▌"
+elseif getenv('CHARSET') ==# 'unicode'
+  let g:lsp_diagnostics_signs_error = {'text': "●"}
+  let g:lsp_diagnostics_signs_warning = {'text': "▲"}
+  let g:lsp_diagnostics_signs_information = {'text': "◆"}
+  let g:lsp_diagnostics_signs_hint = {'text': "○"}
+  let g:lsp_document_code_action_signs_hint = {'text': "»"}
+  let g:lsp_diagnostics_virtual_text_prefix = "■"
+else
+  let g:lsp_diagnostics_signs_error = {'text': "E"}
+  let g:lsp_diagnostics_signs_warning = {'text': "W"}
+  let g:lsp_diagnostics_signs_information = {'text': "I"}
+  let g:lsp_diagnostics_signs_hint = {'text': "H"}
+  let g:lsp_document_code_action_signs_hint = {'text': ">"}
+  let g:lsp_diagnostics_virtual_text_prefix = ". "
+endif
 
 let g:lsp_diagnostics_virtual_text_align = "after"
 let g:lsp_diagnostics_virtual_text_padding_left = 5

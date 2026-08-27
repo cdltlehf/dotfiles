@@ -2,13 +2,11 @@ if [[ -f "${XDG_DATA_HOME}/git/completion/git-prompt.sh" ]]; then
   source "${XDG_DATA_HOME}/git/completion/git-prompt.sh"
 fi
 
-if ! declare -F __git_ps1 >/dev/null 2>&1; then
-  __git_ps1() {
-    echo ""
-  }
-fi
+__prompt_pretty_path() {
+  local charset="${CHARSET:-ascii}"
+  local ellipsis="..."
+  [[ "${charset}" != "ascii" ]] && ellipsis="…"
 
-__prompt_formatted_path() {
   local git_root subpath
   git_root=$(git rev-parse --show-toplevel 2>/dev/null)
   if [[ -n "${git_root}" ]]; then
@@ -22,7 +20,7 @@ __prompt_formatted_path() {
       IFS='/' read -r -a parts <<<"${subpath}"
       local len=${#parts[@]}
       if [[ ${len} -gt 2 ]]; then
-        printf "%s/…/%s/%s" "${repo_name}" "${parts[len-2]}" "${parts[len-1]}"
+        printf "%s/%s/%s/%s" "${repo_name}" "${ellipsis}" "${parts[len-2]}" "${parts[len-1]}"
       else
         printf "%s/%s" "${repo_name}" "${subpath}"
       fi
@@ -35,7 +33,7 @@ __prompt_formatted_path() {
       IFS='/' read -r -a parts <<<"${full_path}"
       local len=${#parts[@]}
       if [[ ${len} -gt 3 ]]; then
-        printf "…/%s/%s" "${parts[len-2]}" "${parts[len-1]}"
+        printf "%s/%s/%s" "${ellipsis}" "${parts[len-2]}" "${parts[len-1]}"
       else
         printf "%s" "${full_path}"
       fi
@@ -45,35 +43,49 @@ __prompt_formatted_path() {
 
 __prompt_command() {
   local exit_code=$?
+  local charset="${CHARSET:-ascii}"
+  local sep="\[\e[1;30m\] . \[\e[0m\]"
+  local err_icon="!"
+  if [[ "${charset}" != "ascii" ]]; then
+    sep="\[\e[1;30m\] · \[\e[0m\]"
+  fi
+  if [[ "${charset}" == "nerdfont" ]]; then
+    err_icon=""
+  fi
+
   PS1=$'\n'
 
   # Username (only when root/sudo)
   if [[ "${USER}" == "root" ]]; then
-    PS1+="\[\e[31m\]\u\[\e[0m\]\[\e[1;30m\] · \[\e[0m\]"
+    PS1+="\[\e[31m\]\u\[\e[0m\]${sep}"
   fi
 
   # Smart path
-  PS1+="\[\e[34m\]$(__prompt_formatted_path)\[\e[0m\]"
+  PS1+="\[\e[34m\]$(__prompt_pretty_path)\[\e[0m\]"
 
   # Git prompt
-  PS1+="$(__git_ps1 "(%s)")"
+  local git_output
+  git_output="$(git-prompt-codicon 2>/dev/null)"
+  if [[ -n "${git_output}" ]]; then
+    PS1+="${sep}${git_output}"
+  fi
 
   # Environment
   if [[ -n "${VIRTUAL_ENV}" ]]; then
-    PS1+="\[\e[1;30m\] · $(basename "${VIRTUAL_ENV}")\[\e[0m\]"
+    PS1+="${sep}$(basename "${VIRTUAL_ENV}")"
   fi
 
   # Remote host (only on SSH, before timestamp)
   if [[ -n "${SSH_TTY}" ]]; then
-    PS1+="\[\e[1;30m\] · \h\[\e[0m\]"
+    PS1+="${sep}\h"
   fi
 
   # Timestamp
-  PS1+="\[\e[1;30m\] · \t\[\e[0m\]\n"
+  PS1+="${sep}\t\n"
 
   # Return with error code on 2nd line if failed
   if [[ "${exit_code}" -ne 0 ]]; then
-    PS1+="\[\e[31m\] ${exit_code} \[\e[0m\]"
+    PS1+="\[\e[31m\]${err_icon} ${exit_code} \[\e[0m\]"
   fi
   if [[ "${USER}" == "root" ]]; then
     PS1+="# "
