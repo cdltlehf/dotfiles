@@ -1,6 +1,6 @@
 #!/bin/zsh
-# ${HOME}/Library/Preferences/
-# TODO: Move more settings from System Settings to this script
+
+set +e
 
 ################################################################################
 # Finder
