@@ -13,7 +13,7 @@ set directory=~/.local/state/vim/swap
 set display=lastline
 set encoding=utf-8
 scriptencoding utf-8
-if getenv('CHARSET') ==# 'ascii' || empty(getenv('CHARSET'))
+if getenv('LC_TERMINAL_GLYPHS') ==# 'ascii' || empty(getenv('LC_TERMINAL_GLYPHS'))
   set fillchars=vert:\|,foldopen:v,foldclose:>
 elseif has('nvim')
   set fillchars=vert:│,fold:·,foldsep:│

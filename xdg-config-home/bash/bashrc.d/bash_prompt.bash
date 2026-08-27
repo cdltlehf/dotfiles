@@ -3,9 +3,9 @@ if [[ -f "${XDG_DATA_HOME}/git/completion/git-prompt.sh" ]]; then
 fi
 
 __prompt_pretty_path() {
-  local charset="${CHARSET:-ascii}"
+  local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
   local ellipsis="..."
-  [[ "${charset}" != "ascii" ]] && ellipsis="…"
+  [[ "${glyphs}" != "ascii" ]] && ellipsis="…"
 
   local git_root subpath
   git_root=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -43,14 +43,14 @@ __prompt_pretty_path() {
 
 __prompt_command() {
   local exit_code=$?
-  local charset="${CHARSET:-ascii}"
+  local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
   local sep="\[\e[1;30m\] . \[\e[0m\]"
   local err_icon="!"
-  if [[ "${charset}" != "ascii" ]]; then
+  if [[ "${glyphs}" != "ascii" ]]; then
     sep="\[\e[1;30m\] · \[\e[0m\]"
   fi
-  if [[ "${charset}" == "nerdfont" ]]; then
-    err_icon=""
+  if [[ "${glyphs}" == "nerdfont" ]]; then
+    err_icon=""
   fi
 
   PS1=$'\n'

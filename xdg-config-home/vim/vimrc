@@ -216,7 +216,7 @@ set completeopt+=menuone,noinsert
 
 " :help listchars
 " https://en.wikipedia.org/wiki/Non-printing_character_in_word_processors
-if getenv('CHARSET') ==# 'ascii' || empty(getenv('CHARSET'))
+if getenv('LC_TERMINAL_GLYPHS') ==# 'ascii' || empty(getenv('LC_TERMINAL_GLYPHS'))
   set listchars+=tab:>\ ,trail:.,extends:>,precedes:<,nbsp:_
 else
   set listchars+=tab:→\ ,trail:·,extends:»,precedes:«,nbsp:°

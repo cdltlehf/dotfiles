@@ -37,7 +37,13 @@ cdls() {
 # third-party commands
 command -v git >/dev/null 2>&1 && alias g='command git'
 command -v bat >/dev/null 2>&1 && alias cat='command bat -pp'
-command -v lsd >/dev/null 2>&1 && alias ls='command lsd'
+if command -v lsd >/dev/null 2>&1; then
+	if [ "${LC_TERMINAL_GLYPHS:-ascii}" = "ascii" ]; then
+		alias ls='command lsd --icon never'
+	else
+		alias ls='command lsd'
+	fi
+fi
 
 # open command
 if ! command -v open >/dev/null 2>&1; then

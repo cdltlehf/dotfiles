@@ -18,8 +18,8 @@ set-option -g status-interval 5
 set-option -g status-justify absolute-centre
 set-option -gu status-format
 
-# Set status-left, window-status, status-right based on CHARSET
-%if "#{==:$CHARSET,ascii}"
+# Set status-left, window-status, status-right based on LC_TERMINAL_GLYPHS
+%if "#{==:$LC_TERMINAL_GLYPHS,ascii}"
 set-option -g  status-left-length 50
 set-option -g  status-left "#[fg=default]#{session_id}:#{session_name}"
 set-option -ag status-left "#{?window_zoomed_flag, #[fg=brightblack]. zoom#[default],}"

@@ -1,5 +1,5 @@
 # C-a to disable outmost tmux, C-b C-a to enable it.
-%if "#{==:$CHARSET,ascii}"
+%if "#{==:$LC_TERMINAL_GLYPHS,ascii}"
 bind-key D \
   set-option key-table disabled\; \
   set-option prefix None\; \
