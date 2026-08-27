@@ -29,8 +29,8 @@ set-option -ag status-left "#{?client_prefix, #[fg=brightblack]. prefix#[default
 
 set-option -g window-status-current-style "bg=default,fg=default,none"
 set-option -g window-status-style "bg=default,fg=brightblack,none"
-set-option -g window-status-current-format "#I:#W"
-set-option -g window-status-format "#I:#W"
+set-option -g window-status-current-format "#I:#W*"
+set-option -g window-status-format "#I:#W#{?window_bell_flag,#[fg=brightred]!#[default],#{?window_activity_flag,#[fg=brightblack]##[default],}}"
 set-option -g window-status-separator " #[fg=brightblack]. "
 
 set-option -g window-status-activity-style "fg=brightblack,none"
@@ -49,8 +49,8 @@ set-option -ag status-left "#{?client_prefix, #[fg=brightblack]· prefix#[defaul
 
 set-option -g window-status-current-style "bg=default,fg=default,none"
 set-option -g window-status-style "bg=default,fg=brightblack,none"
-set-option -g window-status-current-format "#I:#W"
-set-option -g window-status-format "#I:#W"
+set-option -g window-status-current-format "#I:#W*"
+set-option -g window-status-format "#I:#W#{?window_bell_flag,#[fg=brightred]!#[default],#{?window_activity_flag,#[fg=brightblack]##[default],}}"
 set-option -g window-status-separator " #[fg=brightblack]· "
 
 set-option -g window-status-activity-style "fg=brightblack,none"
