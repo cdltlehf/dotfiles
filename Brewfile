@@ -1,3 +1,4 @@
+# Reference: https://github.com/Homebrew/homebrew-bundle
 tap "libkrun/krun", trusted: true
 
 brew "bash"
@@ -20,5 +21,4 @@ cask "karabiner-elements"
 cask "podman-desktop"
 cask "qlmarkdown"
 cask "syntax-highlight"
-cask "tailscale"
 cask "ubersicht"

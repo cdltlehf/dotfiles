@@ -141,15 +141,41 @@ if executable('html-languageserver')
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
           \   'name': 'html-languageserver',
-          \   'cmd': {
-          \     server_info->[
-          \       &shell,
-          \       &shellcmdflag,
-          \       'html-language-server',
-          \       '--stdio'
-          \     ]
-          \   },
-          \ 'allowlist': ['html'],
+          \   'cmd': {server_info->['html-languageserver', '--stdio']},
+          \   'allowlist': ['html'],
+          \ })
+  augroup END
+endif
+
+if executable('bash-language-server')
+  augroup LspBash
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'bash-language-server',
+          \   'cmd': {server_info->['bash-language-server', 'start']},
+          \   'allowlist': ['sh', 'bash', 'zsh'],
+          \ })
+  augroup END
+endif
+
+if executable('lua-language-server')
+  augroup LspLua
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'lua-language-server',
+          \   'cmd': {server_info->['lua-language-server']},
+          \   'allowlist': ['lua'],
+          \ })
+  augroup END
+endif
+
+if executable('yaml-language-server')
+  augroup LspYaml
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'yaml-language-server',
+          \   'cmd': {server_info->['yaml-language-server', '--stdio']},
+          \   'allowlist': ['yaml', 'yaml.docker-compose', 'yaml.gitlab'],
           \ })
   augroup END
 endif

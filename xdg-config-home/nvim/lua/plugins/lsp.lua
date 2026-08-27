@@ -97,9 +97,44 @@ vim.lsp.config["marksman"] = {
 }
 
 vim.lsp.config["html"] = {
-	cmd = { "vscode-html-language-server", "--stdio" },
+	cmd = { "html-languageserver", "--stdio" },
 	filetypes = { "html" },
 	root_markers = { "package.json", ".git" },
+}
+
+vim.lsp.config["bashls"] = {
+	cmd = { "bash-language-server", "start" },
+	filetypes = { "sh", "bash", "zsh" },
+	root_markers = { ".git" },
+}
+
+vim.lsp.config["lua_ls"] = {
+	cmd = { "lua-language-server" },
+	filetypes = { "lua" },
+	root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", ".git" },
+	settings = {
+		Lua = {
+			workspace = {
+				checkThirdParty = false,
+				library = {
+					vim.env.VIMRUNTIME,
+				},
+			},
+			telemetry = { enable = false },
+		},
+	},
+}
+
+vim.lsp.config["yamlls"] = {
+	cmd = { "yaml-language-server", "--stdio" },
+	filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab" },
+	root_markers = { ".git" },
+}
+
+vim.lsp.config["vimls"] = {
+	cmd = { "vim-language-server", "--stdio" },
+	filetypes = { "vim" },
+	root_markers = { ".git" },
 }
 
 local servers = {
@@ -111,6 +146,10 @@ local servers = {
 	"taplo",
 	"marksman",
 	"html",
+	"bashls",
+	"lua_ls",
+	"yamlls",
+	"vimls",
 }
 
 for _, server in ipairs(servers) do
