@@ -28,11 +28,11 @@ opt.showmode = false
 opt.list = true
 -- :help listchars
 -- https://en.wikipedia.org/wiki/Non-printing_character_in_word_processors
-local charset = vim.env.CHARSET or "ascii"
-if charset == "ascii" then
+local glyphs = vim.env.LC_TERMINAL_GLYPHS or "ascii"
+if glyphs == "ascii" then
 	opt.listchars = { tab = "  >", trail = ".", extends = ">", precedes = "<", nbsp = "_" }
 	opt.fillchars = { vert = " ", fold = " ", foldopen = "v", foldclose = ">", foldsep = " " }
-elseif charset == "unicode" then
+elseif glyphs == "unicode" then
 	opt.listchars = { tab = "  ⇥", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
 	opt.fillchars = { vert = " ", fold = " ", foldopen = "▾", foldclose = "▸", foldsep = " " }
 else -- nerdfont

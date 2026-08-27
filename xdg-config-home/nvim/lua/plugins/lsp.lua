@@ -3,7 +3,7 @@
 -- :help vim.diagnostic.config
 -- :help g:lsp_diagnostics_signs_enabled
 
-local charset = vim.env.CHARSET or "ascii"
+local glyphs = vim.env.LC_TERMINAL_GLYPHS or "ascii"
 local diagnostic_signs = {
 	[vim.diagnostic.severity.ERROR] = "E",
 	[vim.diagnostic.severity.WARN] = "W",
@@ -11,14 +11,14 @@ local diagnostic_signs = {
 	[vim.diagnostic.severity.HINT] = "H",
 }
 
-if charset == "nerdfont" then
+if glyphs == "nerdfont" then
 	diagnostic_signs = {
 		[vim.diagnostic.severity.ERROR] = "",
 		[vim.diagnostic.severity.WARN] = "",
 		[vim.diagnostic.severity.INFO] = "",
 		[vim.diagnostic.severity.HINT] = "",
 	}
-elseif charset == "unicode" then
+elseif glyphs == "unicode" then
 	diagnostic_signs = {
 		[vim.diagnostic.severity.ERROR] = "●",
 		[vim.diagnostic.severity.WARN] = "▲",

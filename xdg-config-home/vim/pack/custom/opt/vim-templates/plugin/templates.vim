@@ -1,7 +1,7 @@
 " Reference: https://github.com/nvimdev/template.nvim
 
 if !exists('g:template_dir')
-  let g:template_dir = expand('~/.vim/templates')
+  let g:template_dir = exists('$XDG_DATA_HOME') ? expand('$XDG_DATA_HOME/templates') : expand('~/.local/share/templates')
 endif
 
 augroup TemplateLoader

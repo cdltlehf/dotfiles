@@ -70,14 +70,14 @@ let g:lsp_diagnostics_highlights_insert_mode_enabled = 0
 let g:lsp_diagnostics_signs_insert_mode_enabled = 0
 
 " :help g:lsp_diagnostics_signs_enabled
-if getenv('CHARSET') ==# 'nerdfont'
+if getenv('LC_TERMINAL_GLYPHS') ==# 'nerdfont'
   let g:lsp_diagnostics_signs_error = {'text': ""}
   let g:lsp_diagnostics_signs_warning = {'text': ""}
   let g:lsp_diagnostics_signs_information = {'text': ""}
   let g:lsp_diagnostics_signs_hint = {'text': ""}
   let g:lsp_document_code_action_signs_hint = {'text': ""}
   let g:lsp_diagnostics_virtual_text_prefix = "▌"
-elseif getenv('CHARSET') ==# 'unicode'
+elseif getenv('LC_TERMINAL_GLYPHS') ==# 'unicode'
   let g:lsp_diagnostics_signs_error = {'text': "●"}
   let g:lsp_diagnostics_signs_warning = {'text': "▲"}
   let g:lsp_diagnostics_signs_information = {'text': "◆"}

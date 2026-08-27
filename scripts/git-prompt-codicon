@@ -16,7 +16,7 @@ fi
 awk_script="${script_dir}/git-prompt-codicon.awk"
 [ -f "${awk_script}" ] || exit 0
 
-charset="${CHARSET:-ascii}"
+glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
 
 # Execute git status and parse via awk module
-git status --porcelain=v2 --branch 2>/dev/null | awk -v charset="${charset}" -f "${awk_script}"
+git status --porcelain=v2 --branch 2>/dev/null | awk -v charset="${glyphs}" -f "${awk_script}"
