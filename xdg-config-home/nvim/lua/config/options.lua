@@ -28,9 +28,17 @@ opt.showmode = false
 opt.list = true
 -- :help listchars
 -- https://en.wikipedia.org/wiki/Non-printing_character_in_word_processors
-opt.listchars = { tab = "  ⇥", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
-
-opt.fillchars = { vert = " ", fold = " ", foldopen = "", foldclose = "", foldsep = " " }
+local charset = vim.env.CHARSET or "ascii"
+if charset == "ascii" then
+	opt.listchars = { tab = "  >", trail = ".", extends = ">", precedes = "<", nbsp = "_" }
+	opt.fillchars = { vert = " ", fold = " ", foldopen = "v", foldclose = ">", foldsep = " " }
+elseif charset == "unicode" then
+	opt.listchars = { tab = "  ⇥", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
+	opt.fillchars = { vert = " ", fold = " ", foldopen = "▾", foldclose = "▸", foldsep = " " }
+else -- nerdfont
+	opt.listchars = { tab = "  ⇥", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
+	opt.fillchars = { vert = " ", fold = " ", foldopen = "", foldclose = "", foldsep = " " }
+end
 
 -- :help wildmode
 opt.wildmode = { "longest", "full" }

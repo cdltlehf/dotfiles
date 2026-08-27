@@ -216,8 +216,11 @@ set completeopt+=menuone,noinsert
 
 " :help listchars
 " https://en.wikipedia.org/wiki/Non-printing_character_in_word_processors
-set listchars+=tab:→\ ,trail:·,extends:»,precedes:«,nbsp:°
-" set listchars+=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:~
+if getenv('CHARSET') ==# 'ascii' || empty(getenv('CHARSET'))
+  set listchars+=tab:>\ ,trail:.,extends:>,precedes:<,nbsp:_
+else
+  set listchars+=tab:→\ ,trail:·,extends:»,precedes:«,nbsp:°
+endif
 
 " :help last-pattern
 let @/ = ""

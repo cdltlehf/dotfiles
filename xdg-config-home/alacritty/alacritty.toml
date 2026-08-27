@@ -1,5 +1,8 @@
 import = [ "~/.cache/wal/colors-alacritty.toml" ]
 
+[env]
+CHARSET = "nerdfont"
+
 [window]
 padding =  { x = 0, y = 25 }
 dimensions = { columns = 80, lines = 24 }

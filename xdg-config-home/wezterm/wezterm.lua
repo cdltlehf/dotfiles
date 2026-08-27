@@ -1,8 +1,11 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
-config.font = wezterm.font_with_fallback({ "JetBrains Mono", "D2Coding" })
+config.font = wezterm.font_with_fallback({ "JetBrainsMono Nerd Font", "JetBrains Mono", "D2Coding" })
 config.font_size = 13.0
 config.line_height = 1.2
+config.set_environment_variables = {
+	CHARSET = "nerdfont",
+}
 
 -- OSX liquid glass material thick
 config.window_background_opacity = 0.9

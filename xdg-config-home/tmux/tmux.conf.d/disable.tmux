@@ -1,4 +1,15 @@
 # C-a to disable outmost tmux, C-b C-a to enable it.
+%if "#{==:$CHARSET,ascii}"
+bind-key D \
+  set-option key-table disabled\; \
+  set-option prefix None\; \
+  \
+  set-option status-style "bg=default,fg=brightblack,dim"\; \
+  set-option status-left "#[fg=brightblack]#{session_id}:#{session_name} . disabled"\; \
+  set-option status-right "#[fg=brightblack]Press C-b C-b to enable"\; \
+  set-option window-status-current-style "bg=default,fg=brightblack,none"\; \
+  set-option window-status-style "bg=default,fg=brightblack,dim"
+%else
 bind-key D \
   set-option key-table disabled\; \
   set-option prefix None\; \
@@ -8,6 +19,7 @@ bind-key D \
   set-option status-right "#[fg=brightblack]Press C-b C-b to enable"\; \
   set-option window-status-current-style "bg=default,fg=brightblack,none"\; \
   set-option window-status-style "bg=default,fg=brightblack,dim"
+%endif
 
 bind-key -T disabled C-b \
   set-option key-table enable_pending

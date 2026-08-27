@@ -1,0 +1,22 @@
+#!/bin/sh
+# git-prompt-codicon: Fast Git status prompt using git-prompt-codicon.awk
+
+# Exit immediately if required commands or git work tree are not available
+command -v git >/dev/null 2>&1 || exit 0
+command -v awk >/dev/null 2>&1 || exit 0
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0
+
+# Resolve script directory for symlink compatibility
+if command -v realpath >/dev/null 2>&1; then
+    script_dir="$(dirname "$(realpath "$0")")"
+else
+    script_dir="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)"
+fi
+
+awk_script="${script_dir}/git-prompt-codicon.awk"
+[ -f "${awk_script}" ] || exit 0
+
+charset="${CHARSET:-ascii}"
+
+# Execute git status and parse via awk module
+git status --porcelain=v2 --branch 2>/dev/null | awk -v charset="${charset}" -f "${awk_script}"

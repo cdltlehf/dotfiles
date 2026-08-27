@@ -18,7 +18,28 @@ set-option -g status-interval 5
 set-option -g status-justify absolute-centre
 set-option -gu status-format
 
-# Set status-left
+# Set status-left, window-status, status-right based on CHARSET
+%if "#{==:$CHARSET,ascii}"
+set-option -g  status-left-length 50
+set-option -g  status-left "#[fg=default]#{session_id}:#{session_name}"
+set-option -ag status-left "#{?window_zoomed_flag, #[fg=brightblack]. zoom#[default],}"
+set-option -ag status-left "#{?pane_in_mode, #[fg=brightblack]. copy#[default],}"
+set-option -ag status-left "#{?pane_synchronized, #[fg=brightred]. synchronizing#[default],}"
+set-option -ag status-left "#{?client_prefix, #[fg=brightblack]. prefix#[default],}"
+
+set-option -g window-status-current-style "bg=default,fg=default,none"
+set-option -g window-status-style "bg=default,fg=brightblack,none"
+set-option -g window-status-current-format "#I:#W"
+set-option -g window-status-format "#I:#W"
+set-option -g window-status-separator " #[fg=brightblack]. "
+
+set-option -g window-status-activity-style "fg=brightblack,none"
+set-option -g window-status-bell-style "fg=brightred,none"
+
+set-option -g  status-right-length 30
+set-option -g  status-right "#[fg=default]%a %b %d"
+set-option -ag status-right " #[fg=brightblack]. #[fg=default]%H:%M"
+%else
 set-option -g  status-left-length 50
 set-option -g  status-left "#[fg=default]#{session_id}:#{session_name}"
 set-option -ag status-left "#{?window_zoomed_flag, #[fg=brightblack]· zoom#[default],}"
@@ -26,7 +47,6 @@ set-option -ag status-left "#{?pane_in_mode, #[fg=brightblack]· copy#[default],
 set-option -ag status-left "#{?pane_synchronized, #[fg=brightred]· synchronizing#[default],}"
 set-option -ag status-left "#{?client_prefix, #[fg=brightblack]· prefix#[default],}"
 
-# Set window-status
 set-option -g window-status-current-style "bg=default,fg=default,none"
 set-option -g window-status-style "bg=default,fg=brightblack,none"
 set-option -g window-status-current-format "#I:#W"
@@ -36,7 +56,7 @@ set-option -g window-status-separator " #[fg=brightblack]· "
 set-option -g window-status-activity-style "fg=brightblack,none"
 set-option -g window-status-bell-style "fg=brightred,none"
 
-# Set status-right
 set-option -g  status-right-length 30
 set-option -g  status-right "#[fg=default]%a %b %d"
 set-option -ag status-right " #[fg=brightblack]· #[fg=default]%H:%M"
+%endif

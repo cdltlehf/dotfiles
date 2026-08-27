@@ -3,17 +3,36 @@
 -- :help vim.diagnostic.config
 -- :help g:lsp_diagnostics_signs_enabled
 
+local charset = vim.env.CHARSET or "ascii"
+local diagnostic_signs = {
+	[vim.diagnostic.severity.ERROR] = "E",
+	[vim.diagnostic.severity.WARN] = "W",
+	[vim.diagnostic.severity.INFO] = "I",
+	[vim.diagnostic.severity.HINT] = "H",
+}
+
+if charset == "nerdfont" then
+	diagnostic_signs = {
+		[vim.diagnostic.severity.ERROR] = "",
+		[vim.diagnostic.severity.WARN] = "",
+		[vim.diagnostic.severity.INFO] = "",
+		[vim.diagnostic.severity.HINT] = "",
+	}
+elseif charset == "unicode" then
+	diagnostic_signs = {
+		[vim.diagnostic.severity.ERROR] = "●",
+		[vim.diagnostic.severity.WARN] = "▲",
+		[vim.diagnostic.severity.INFO] = "◆",
+		[vim.diagnostic.severity.HINT] = "○",
+	}
+end
+
 vim.diagnostic.config({
 	virtual_text = {
 		source = "if_many",
 	},
 	signs = {
-		text = {
-			[vim.diagnostic.severity.ERROR] = "",
-			[vim.diagnostic.severity.WARN] = "",
-			[vim.diagnostic.severity.INFO] = "",
-			[vim.diagnostic.severity.HINT] = "",
-		},
+		text = diagnostic_signs,
 	},
 	underline = true,
 	update_in_insert = false,
