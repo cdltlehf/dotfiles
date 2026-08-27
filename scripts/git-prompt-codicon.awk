@@ -27,15 +27,15 @@ BEGIN {
         ICON_BEHIND  = "↓"
         ICON_CONFLICT= "✖"
     } else if (charset == "nerdfont") {
-        ICON_BRANCH          = " "  # git-branch (\uec6f)
-        ICON_CHANGES         = " "  # git-branch-changes (\uec6c)
-        ICON_STAGED          = " "  # git-branch-staged-changes (\uec6d)
-        ICON_CONFLICT_BRANCH = " "  # git-branch-conflicts (\uec6e)
-        ICON_MERGE           = " "  # git-merge (\uea69)
-        ICON_COMPARE         = " "  # git-compare (\uea66)
-        ICON_COMMIT          = " "  # git-commit (\ueafc)
-        ICON_AHEAD           = ""  # arrow-up (\ueaa1)
-        ICON_BEHIND          = ""  # arrow-down (\ueaa0)
+        ICON_BRANCH          = " "  # nf-cod-git_branch (\uec6f)
+        ICON_CHANGES         = " "  # nf-cod-git_branch_changes (\uec6c)
+        ICON_STAGED          = " "  # nf-cod-git_branch_staged_changes (\uec6d)
+        ICON_CONFLICT_BRANCH = " "  # nf-cod-git_branch_conflicts (\uec6e)
+        ICON_MERGE           = " "  # nf-cod-git_merge (\ueafe)
+        ICON_COMPARE         = " "  # nf-cod-git_compare (\ueafd)
+        ICON_COMMIT          = " "  # nf-cod-git_commit (\ueafc)
+        ICON_AHEAD           = ""  # nf-cod-arrow_up (\ueaa1)
+        ICON_BEHIND          = ""  # nf-cod-arrow_down (\uea9a)
         ICON_CONFLICT        = "✖"
     } else {
         # Pure ASCII (default fallback)
