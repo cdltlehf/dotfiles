@@ -1,0 +1,19 @@
+# Reference: https://github.com/ggml-org/llama.cpp/discussions/12985
+# Reference: https://github.com/containers/krunkit
+# Reference: https://quay.io/repository/slopezpa/fedora-vgpu
+FROM quay.io/slopezpa/fedora-vgpu:latest AS base
+
+FROM base AS builder
+RUN dnf -y install gcc-c++ cmake ninja-build git vulkan-loader-devel vulkan-headers glslc spirv-headers-devel spirv-tools-devel glslang-devel
+RUN git clone --depth 1 https://github.com/ggml-org/llama.cpp.git /src
+WORKDIR /src
+RUN cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DGGML_VULKAN=ON \
+    && cmake --build build -j 2 --config Release --target llama-server
+
+FROM base
+RUN dnf -y install vulkan-loader && dnf clean all
+COPY --from=builder /src/build/bin/ /usr/local/bin/
+ENV LD_LIBRARY_PATH=/usr/local/bin:${LD_LIBRARY_PATH:-}
+
+EXPOSE 8080
+ENTRYPOINT ["llama-server"]
