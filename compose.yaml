@@ -1,0 +1,22 @@
+# Reference: https://github.com/ggml-org/llama.cpp/discussions/12985
+# Reference: https://docs.docker.com/compose/compose-file/
+services:
+  llama-server:
+    build:
+      context: ./containers/llama-server
+      dockerfile: Containerfile
+    image: local/llama-server-krunkit:latest
+    container_name: llama-server
+    restart: unless-stopped
+    devices:
+      - /dev/dri:/dev/dri
+    ports:
+      - "8080:8080"
+    volumes:
+      - ~/.local/share/models:/models:ro
+      - ~/.cache/huggingface:/root/.cache/huggingface:rw
+    command:
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "8080"
