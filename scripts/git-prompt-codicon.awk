@@ -12,8 +12,9 @@ BEGIN {
 
     # ANSI Color Codes (based on git-prompt.sh canonical standards)
     C_RESET  = "\033[0m"
-    C_OK     = "\033[32m"    # Green (Clean branch, Staged, Ahead)
+    C_OK     = "\033[32m"    # Green (Clean tracked branch, Staged, Ahead)
     C_BAD    = "\033[31m"    # Red (Detached, Dirty/Unstaged, Untracked, Behind, Conflict)
+    C_CYAN   = "\033[36m"    # Cyan (Clean local-only untracked branch)
     C_GRAY   = "\033[90m"    # Dim / Gray
 
     # Symbol table configuration based on charset ("nerdfont", "unicode", "ascii")
@@ -22,7 +23,6 @@ BEGIN {
         ICON_MERGE   = "⎇ "
         ICON_COMPARE = "⎇ "
         ICON_COMMIT  = "● "
-        ICON_NO_UP   = "☁"
         ICON_AHEAD   = "↑"
         ICON_BEHIND  = "↓"
         ICON_CONFLICT= "✖"
@@ -34,7 +34,6 @@ BEGIN {
         ICON_MERGE           = " "  # git-merge (\uea69)
         ICON_COMPARE         = " "  # git-compare (\uea66)
         ICON_COMMIT          = " "  # git-commit (\ueafc)
-        ICON_NO_UP           = ""  # cloud-upload (\ueb4a)
         ICON_AHEAD           = ""  # arrow-up (\ueaa1)
         ICON_BEHIND          = ""  # arrow-down (\ueaa0)
         ICON_CONFLICT        = "✖"
@@ -44,7 +43,6 @@ BEGIN {
         ICON_MERGE   = ""
         ICON_COMPARE = ""
         ICON_COMMIT  = ""
-        ICON_NO_UP   = "^"
         ICON_AHEAD   = ">"
         ICON_BEHIND  = "<"
         ICON_CONFLICT= "x"
@@ -102,20 +100,22 @@ END {
             branch_color = C_OK
             icon = ICON_STAGED
         } else {
-            branch_color = C_OK
+            branch_color = (upstream == "") ? C_CYAN : C_OK
             icon = ICON_BRANCH
         }
     } else {
-        branch_color = (unstaged > 0 || untracked > 0) ? C_BAD : C_OK
+        if (unstaged > 0 || untracked > 0) {
+            branch_color = C_BAD
+        } else {
+            branch_color = (upstream == "") ? C_CYAN : C_OK
+        }
         icon = ICON_BRANCH
     }
 
     res = branch_color icon branch C_RESET
 
     # Upstream and Sync status (VS Code format: 1 2)
-    if (upstream == "" && !is_detached) {
-        res = res " " C_GRAY ICON_NO_UP C_RESET
-    } else {
+    if (upstream != "" || is_detached) {
         if (ahead > 0)  res = res " " C_OK ahead ICON_AHEAD C_RESET
         if (behind > 0) res = res " " C_BAD behind ICON_BEHIND C_RESET
     }
