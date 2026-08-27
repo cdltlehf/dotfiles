@@ -1,19 +1,51 @@
-import = [ "~/.cache/wal/colors-alacritty.toml" ]
+import = [ "~/.local/state/alacritty/colors.toml" ]
 
 [env]
-CHARSET = "nerdfont"
+LC_TERMINAL_GLYPHS = "nerdfont"
 
 [window]
-padding =  { x = 0, y = 25 }
+padding = { x = 0, y = 25 }
 dimensions = { columns = 80, lines = 24 }
 decorations = "Transparent"
-opacity = 0.95
+opacity = 0.9
 blur = true
 
 [font]
-normal = { family = "JetBrainsMono Nerd Font" , style = "Regular" }
+normal = { family = "JetBrains Mono" }
 size = 13
 offset = { x = 0, y = 2 }
+
+[colors.primary]
+background = "#000000"
+foreground = "#ffffff"
+
+[colors.cursor]
+text = "#000000"
+cursor = "#ffffff"
+
+[colors.selection]
+text = "#ffffff"
+background = "#5a5a5a"
+
+[colors.normal]
+black = "#000000"
+red = "#ff5f59"
+green = "#44bc44"
+yellow = "#d0bc00"
+blue = "#2fafff"
+magenta = "#feacd0"
+cyan = "#00d3d0"
+white = "#a6a6a6"
+
+[colors.bright]
+black = "#595959"
+red = "#ff7f9f"
+green = "#00c06f"
+yellow = "#fec43f"
+blue = "#79a8ff"
+magenta = "#b6a0ff"
+cyan = "#6ae4b9"
+white = "#ffffff"
 
 [keyboard]
 bindings = [

@@ -1,10 +1,10 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
-config.font = wezterm.font_with_fallback({ "JetBrainsMono Nerd Font", "JetBrains Mono", "D2Coding" })
+config.font = wezterm.font_with_fallback({ "JetBrains Mono", "Symbols Nerd Font", "D2Coding" })
 config.font_size = 13.0
 config.line_height = 1.2
 config.set_environment_variables = {
-	CHARSET = "nerdfont",
+	LC_TERMINAL_GLYPHS = "nerdfont",
 }
 
 -- OSX liquid glass material thick
@@ -28,7 +28,14 @@ config.color_scheme_dirs = {
 }
 
 config.automatically_reload_config = true
-wezterm.add_to_config_reload_watch_list(os.getenv("HOME") .. "/.local/state/wezterm/colorschemes/colors.toml")
-config.color_scheme = "colors"
+local colors_path = os.getenv("HOME") .. "/.local/state/wezterm/colorschemes/colors.toml"
+wezterm.add_to_config_reload_watch_list(colors_path)
+local f = io.open(colors_path, "r")
+if f then
+	f:close()
+	config.color_scheme = "colors"
+else
+	config.color_scheme = "Modus Vivendi"
+end
 
 return config

@@ -7,3 +7,13 @@ rewrite = true
 file = "${XDG_STATE_HOME:-~/.local/state}/wezterm/colorschemes/colors.toml"
 template = "wezterm"
 rewrite = true
+
+[[items]]
+file = "${XDG_CONFIG_HOME:-~/.config}/ghostty/themes/flavours"
+template = "ghostty"
+rewrite = true
+
+[[items]]
+file = "${XDG_STATE_HOME:-~/.local/state}/alacritty/colors.toml"
+template = "alacritty"
+rewrite = true
