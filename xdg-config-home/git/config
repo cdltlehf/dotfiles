@@ -100,10 +100,10 @@
 
 [merge]
 	conflictstyle = zdiff3
-	tool = fugitive
+	tool = nvimdiff
 
-[mergetool "fugitive"]
-	cmd = vim -f -c "Gdiffsplit!" "$MERGED"
+; [mergetool "fugitive"]
+; 	cmd = vim -f -c "Gdiffsplit!" "$MERGED"
 
 [mergetool]
 	keepBackup = false

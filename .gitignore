@@ -1,12 +1,10 @@
 .DS_Store
-
 macos/hammerspoon/Spoons
-
+xdg-config-home/karabiner/automatic_backups
+xdg-config-home/vim/autoload/plug.vim
 xdg-config-home/zsh/.zcompdump
 xdg-config-home/zsh/.zprofile
 xdg-config-home/zsh/.zsh_history
 xdg-config-home/zsh/.zsh_sessions
 xdg-config-home/zsh/.zshenv
 xdg-config-home/zsh/.zshrc
-
-xdg-config-home/vim/autoload/plug.vim
