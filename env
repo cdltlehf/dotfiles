@@ -10,3 +10,10 @@ export XDG_DATA_DIRS="/usr/local/share:/usr/share"
 export XDG_CONFIG_DIRS="/etc/xdg"
 export XDG_CACHE_HOME="${HOME}/.cache"
 # export XDG_RUNTIME_DIR
+
+# https://wiki.archlinux.org/title/XDG_user_directories
+if [ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ]; then
+	# shellcheck source=/dev/null
+	. "${XDG_CONFIG_HOME}/user-dirs.dirs"
+fi
+export XDG_TEMPLATES_DIR="${XDG_TEMPLATES_DIR:-${HOME}/Templates}"
