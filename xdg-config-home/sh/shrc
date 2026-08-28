@@ -13,16 +13,10 @@ unset sh
 
 if [ -n "${WEZTERM_EXECUTABLE}" ]; then
   export WEZTERM_SHELL="${SHELL}"
-else
-  # if [ -f "${XDG_STATE_HOME}"/sh/colors.sh ]; then
-  #   # shellcheck source=/dev/null
-  #   case $- in
-  #     *i*) . "${XDG_STATE_HOME}"/sh/colors.sh ;;
-  #   esac
-  # fi
 fi
 
 if [ -f "${HOME}/.env" ]; then
+  # shellcheck source=/dev/null
   . "${HOME}/.env"
 fi
 unset SHRCDIR
