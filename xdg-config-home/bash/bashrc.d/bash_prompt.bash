@@ -1,18 +1,15 @@
-if [[ -f "${XDG_DATA_HOME}/git/completion/git-prompt.sh" ]]; then
-  source "${XDG_DATA_HOME}/git/completion/git-prompt.sh"
-fi
-
+# shellcheck disable=SC2088
 __prompt_pretty_path() {
+  local git_root="$1"
   local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
   local ellipsis="..."
   [[ "${glyphs}" != "ascii" ]] && ellipsis="…"
 
-  local git_root subpath
-  git_root=$(git rev-parse --show-toplevel 2>/dev/null)
+  local subpath
   if [[ -n "${git_root}" ]]; then
     local repo_name
     repo_name=$(basename "${git_root}")
-    subpath="${PWD#${git_root}}"
+    subpath="${PWD#"${git_root}"}"
     subpath="${subpath#/}"
     if [[ -z "${subpath}" ]]; then
       printf "%s" "${repo_name}"
@@ -28,14 +25,23 @@ __prompt_pretty_path() {
   else
     if [[ "${PWD}" == "${HOME}" ]]; then
       printf "%s" "${HOME}"
-    else
-      local full_path="${PWD/#${HOME}/~}"
-      IFS='/' read -r -a parts <<<"${full_path}"
+    elif [[ "${PWD}" == "${HOME}"/* ]]; then
+      local home_subpath="${PWD#"${HOME}"/}"
+      IFS='/' read -r -a parts <<<"${home_subpath}"
       local len=${#parts[@]}
-      if [[ ${len} -gt 3 ]]; then
-        printf "%s/%s/%s" "${ellipsis}" "${parts[len-2]}" "${parts[len-1]}"
+      if [[ ${len} -gt 2 ]]; then
+        printf "~/%s/%s/%s" "${ellipsis}" "${parts[len-2]}" "${parts[len-1]}"
       else
-        printf "%s" "${full_path}"
+        printf "~/%s" "${home_subpath}"
+      fi
+    else
+      local sys_subpath="${PWD#/}"
+      IFS='/' read -r -a parts <<<"${sys_subpath}"
+      local len=${#parts[@]}
+      if [[ ${len} -gt 2 ]]; then
+        printf "/%s/%s/%s" "${ellipsis}" "${parts[len-2]}" "${parts[len-1]}"
+      else
+        printf "%s" "${PWD}"
       fi
     fi
   fi
@@ -43,17 +49,46 @@ __prompt_pretty_path() {
 
 __prompt_command() {
   local exit_code=$?
+  printf $'\e]133;D;%s\a' "${exit_code}"
   local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
-  local sep="\[\e[1;30m\] . \[\e[0m\]"
+  local sep="\[\e[90m\] . \[\e[0m\]"
   local err_icon="!"
+  local job_icon="&"
+  local prompt_char="> "
   if [[ "${glyphs}" != "ascii" ]]; then
-    sep="\[\e[1;30m\] · \[\e[0m\]"
+    sep="\[\e[90m\] · \[\e[0m\]"
   fi
-  if [[ "${glyphs}" == "nerdfont" ]]; then
-    err_icon=""
+  if [[ "${glyphs}" == "unicode" ]]; then
+    err_icon="✖"
+    job_icon="✦"
+    prompt_char="❯ "
+  elif [[ "${glyphs}" == "nerdfont" ]]; then
+    err_icon=""
+    job_icon=""
+    prompt_char=" "
   fi
 
-  PS1=$'\n'
+  local git_root
+  git_root="$(git rev-parse --show-toplevel 2>/dev/null)"
+  local git_part=""
+  if [[ -n "${git_root}" ]]; then
+    local git_output
+    git_output="$(git-prompt-codicon 2>/dev/null)"
+    if [[ -n "${git_output}" ]]; then
+      git_part="${sep}${git_output}"
+    fi
+  fi
+
+  local job_count
+  job_count=$(jobs -p | wc -l | tr -d ' ')
+  local jobs_part=""
+  if [[ ${job_count} -gt 0 ]]; then
+    jobs_part="${sep}\[\e[90m\]${job_icon} ${job_count}\[\e[0m\]"
+  fi
+
+  local osc_a=$'\[\e]133;A\a\]'
+  local osc_b=$'\[\e]133;B\a\]'
+  PS1=$'\n'"${osc_a}"
 
   # Username (only when root/sudo)
   if [[ "${USER}" == "root" ]]; then
@@ -61,27 +96,30 @@ __prompt_command() {
   fi
 
   # Smart path
-  PS1+="\[\e[34m\]$(__prompt_pretty_path)\[\e[0m\]"
+  PS1+="\[\e[34m\]$(__prompt_pretty_path "${git_root}")\[\e[0m\]"
 
   # Git prompt
-  local git_output
-  git_output="$(git-prompt-codicon 2>/dev/null)"
-  if [[ -n "${git_output}" ]]; then
-    PS1+="${sep}${git_output}"
+  if [[ -n "${git_part}" ]]; then
+    PS1+="${git_part}"
   fi
 
   # Environment
   if [[ -n "${VIRTUAL_ENV}" ]]; then
-    PS1+="${sep}$(basename "${VIRTUAL_ENV}")"
+    PS1+="${sep}\[\e[90m\]$(basename "${VIRTUAL_ENV}")\[\e[0m\]"
+  fi
+
+  # Background jobs
+  if [[ -n "${jobs_part}" ]]; then
+    PS1+="${jobs_part}"
   fi
 
   # Remote host (only on SSH, before timestamp)
   if [[ -n "${SSH_TTY}" ]]; then
-    PS1+="${sep}\h"
+    PS1+="${sep}\[\e[90m\]\h\[\e[0m\]"
   fi
 
   # Timestamp
-  PS1+="${sep}\t\n"
+  PS1+="${sep}\[\e[90m\]\t\[\e[0m\]\n"
 
   # Return with error code on 2nd line if failed
   if [[ "${exit_code}" -ne 0 ]]; then
@@ -90,11 +128,13 @@ __prompt_command() {
   if [[ "${USER}" == "root" ]]; then
     PS1+="# "
   else
-    PS1+="\$ "
+    PS1+="${prompt_char}"
   fi
+  PS1+="${osc_b}"
 
-  # Continued prompt
-  PS2=$"\[\e[1;30m\]> \[\e[0m\]"
+  # Continued prompt & command start marker
+  PS0=$'\[\e]133;C\a\]'
+  PS2=$'\[\e]133;A;k=s\a\]\[\e[90m\]> \[\e[0m\]\[\e]133;B\a\]'
 }
 
 if [[ -z "${PROMPT_COMMAND}" ]]; then
