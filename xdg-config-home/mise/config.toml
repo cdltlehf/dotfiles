@@ -1,6 +1,7 @@
 # Reference: https://mise.jdx.dev/configuration.html
 [tools]
 bat = "latest"
+bats = "latest"
 bottom = "latest"
 bun = "latest"
 cmake = "latest"
@@ -29,6 +30,7 @@ stylua = "latest"
 taplo = "latest"
 tinytex = "latest"
 tmux = "latest"
+tree-sitter = "latest"
 ty = "latest"
 uv = "latest"
 vim = "latest"

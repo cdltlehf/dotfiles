@@ -50,16 +50,16 @@ symlink() {
 }
 export -f symlink
 
-# Reference: https://github.com/anishathalye/dotbot (clean directive)
-# Safely prune broken symbolic links that point to dotfiles targets
-clean_broken_symlinks() {
+# Reference: https://github.com/anishathalye/dotbot#clean
+# Prunes broken symbolic links that point into the dotfiles repository
+clean() {
 	local target_dir="$1"
 	[ -d "${target_dir}" ] || return 0
 	for link in "${target_dir}"/.* "${target_dir}"/*; do
 		[ -L "${link}" ] || continue
 		[ -e "${link}" ] && continue
 		local dest
-		dest="$(readlink "${link}" 2>/dev/null || true)"
+		dest="$(realpath "${link}" 2>/dev/null || true)"
 		case "${dest}" in
 		"${basedir}"* | "${XDG_CONFIG_HOME}"* | "${XDG_BIN_HOME:-${HOME}/.local/bin}"*)
 			rm -f "${link}"
@@ -67,10 +67,10 @@ clean_broken_symlinks() {
 		esac
 	done
 }
-export -f clean_broken_symlinks
+export -f clean
 
 mkdir -p "${XDG_CONFIG_HOME}"
-clean_broken_symlinks "${XDG_CONFIG_HOME}"
+clean "${XDG_CONFIG_HOME}"
 for item in "${basedir}/xdg-config-home"/*; do
 	symlink "$item" "${XDG_CONFIG_HOME}/$(basename "$item")"
 done
@@ -103,13 +103,13 @@ fi
 
 XDG_BIN_HOME="${HOME}/.local/bin"
 mkdir -p "${XDG_BIN_HOME}"
-clean_broken_symlinks "${XDG_BIN_HOME}"
+clean "${XDG_BIN_HOME}"
 for script in "${basedir}/xdg-bin-home"/*; do
 	[ -e "${script}" ] && symlink "${script}" "${XDG_BIN_HOME}/$(basename "${script}")"
 done
 export PATH="${XDG_BIN_HOME}:${PATH}"
 
-clean_broken_symlinks "${HOME}"
+clean "${HOME}"
 
 GIT_COMPLETION_DIR="${XDG_DATA_HOME}/git/completion"
 GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
