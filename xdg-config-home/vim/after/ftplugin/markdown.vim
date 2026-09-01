@@ -1,4 +1,3 @@
-setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
 
 let &l:comments = ""
       \."b:*,b:-,b:+"
