@@ -1,3 +1,6 @@
+# Reference:
+# - https://support.apple.com/guide/terminal/save-or-restore-sessions-trml1007/mac
+
 [[ -d "${XDG_STATE_HOME}/bash" ]] || mkdir -p "${XDG_STATE_HOME}/bash"
 export HISTFILE="${XDG_STATE_HOME}/bash/history"
 export HISTSIZE=10000
