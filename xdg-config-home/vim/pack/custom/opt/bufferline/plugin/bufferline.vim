@@ -1,3 +1,6 @@
+" Reference:
+" - https://github.com/bling/vim-bufferline
+
 augroup bufferline_highlight
   autocmd!
   autocmd ColorScheme,VimEnter * highlight link TabLineSelNr TabLineSel

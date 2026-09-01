@@ -1,3 +1,6 @@
+" Reference:
+" - https://github.com/vim/vim/blob/master/runtime/compiler/shellcheck.vim
+
 " Vim compiler file
 " Compiler:	ShellCheck
 " Maintainer:	Doug Kearns <dougkearns@gmail.com>

@@ -62,21 +62,20 @@ Plug 'github/copilot.vim'
 Plug 'rhysd/vim-healthcheck'
 Plug 'lervag/vimtex'
 Plug 'ojroques/vim-oscyank'
+Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-vinegar'
 
-if has('nvim')
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-endif
 call plug#end()
 
 packadd! bufferline
+packadd! editorconfig
 packadd! sensible
 packadd! statusline
 packadd! unimpaired
 packadd! vim-scriptease
-packadd! vim-templates
 packadd! vim-numbertoggle
 
-silent! colorscheme dracula16
+silent! colorscheme modus16
 
 " :help mapleader
 let mapleader = "\<space>"
