@@ -1,5 +1,7 @@
 #!/bin/sh
-# git-prompt-codicon: Fast Git status prompt using git-prompt-codicon.awk
+#
+# Reference:
+# - https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
 
 # Exit immediately if required commands or git work tree are not available
 command -v git >/dev/null 2>&1 || exit 0
@@ -67,7 +69,7 @@ if [ -f "${git_dir}/HEAD" ]; then
 fi
 
 # Execute git status and parse via awk module
-git status --porcelain=v2 --branch 2>/dev/null | awk \
+git status --porcelain=v2 --branch --untracked-files=normal 2>/dev/null | awk \
     -v charset="${glyphs}" \
     -v op="${operation}" \
     -v op_branch="${rebase_branch}" \

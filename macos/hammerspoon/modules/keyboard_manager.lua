@@ -19,50 +19,50 @@ webview:url(url)
 webview:bringToFront(false)
 
 function KeyboardManager.new(default_source_id)
-	local self = setmetatable({}, KeyboardManager)
+  local self = setmetatable({}, KeyboardManager)
 
-	self._escape_callback = function()
-		keycodes.currentSourceID(default_source_id)
-		keycodes.currentSourceID("com.apple.keylayout.ABC")
-		self.escape_bind:disable()
-		eventtap.keyStroke(eventtap.event.types.keyStroke, "escape", 0)
-		self.escape_bind:enable()
-	end
-	self.escape_bind = hotkey.new({}, "escape", self._escape_callback)
+  self._escape_callback = function()
+    keycodes.currentSourceID(default_source_id)
+    keycodes.currentSourceID("com.apple.keylayout.ABC")
+    self.escape_bind:disable()
+    eventtap.keyStroke(eventtap.event.types.keyStroke, "escape", 0)
+    self.escape_bind:enable()
+  end
+  self.escape_bind = hotkey.new({}, "escape", self._escape_callback)
 
-	self.input_source_changed_callback = function()
-		local current_source_id = keycodes.currentSourceID()
-		if current_source_id == self.last_alerted_source_id then
-			return
-		end
+  self.input_source_changed_callback = function()
+    local current_source_id = keycodes.currentSourceID()
+    if current_source_id == self.last_alerted_source_id then
+      return
+    end
 
-		if self.last_alert_uuid ~= nil then
-			alert.closeSpecific(self.last_alert_uuid)
-		end
-		self.last_alerted_source_id = keycodes.currentSourceID()
+    if self.last_alert_uuid ~= nil then
+      alert.closeSpecific(self.last_alert_uuid)
+    end
+    self.last_alerted_source_id = keycodes.currentSourceID()
 
-		local label = self.last_alerted_source_id:match(".%w+$"):sub(2)
-		self.last_alert_uuid = alert.show(label, 0.2)
-		print(self.last_alerted_source_id)
+    local label = self.last_alerted_source_id:match(".%w+$"):sub(2)
+    self.last_alert_uuid = alert.show(label, 0.2)
+    print(self.last_alerted_source_id)
 
-		if label == "390Sebulshik" then
-			webview:show()
-		else
-			webview:hide()
-		end
-	end
+    if label == "390Sebulshik" then
+      webview:show()
+    else
+      webview:hide()
+    end
+  end
 
-	self.last_alerted_source_id = nil
+  self.last_alerted_source_id = nil
 
-	return self
+  return self
 end
 
 function KeyboardManager:start()
-	self.escape_bind:enable()
+  self.escape_bind:enable()
 end
 
 function KeyboardManager:stop()
-	self.escape_bind:disable()
+  self.escape_bind:disable()
 end
 
 return KeyboardManager

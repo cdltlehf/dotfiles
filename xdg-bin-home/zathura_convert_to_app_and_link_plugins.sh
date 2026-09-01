@@ -1,4 +1,7 @@
 #!/bin/sh
+#
+# Reference:
+# - https://github.com/homebrew-zathura/homebrew-zathura
 (curl https://raw.githubusercontent.com/homebrew-zathura/homebrew-zathura/refs/heads/master/convert-into-app.sh | sh)
 
 d=$(brew --prefix zathura)/lib/zathura

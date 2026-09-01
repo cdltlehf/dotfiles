@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# Reference:
+# - https://github.com/Homebrew/homebrew-bundle
+# - https://github.com/Hammerspoon/Spoons
 
 if [ -z "${basedir}" ]; then
 	echo "It should be run from the main setup script." >&2
@@ -13,19 +17,10 @@ fi
 xcode-select --install &>/dev/null || true
 
 sudo -v
-sudo scutil --set HostName
-sudo scutil --set ComputerName
-sudo scutil --set LocalHostName
 
-read -r -p "Install rosetta? [Y/n] " yn
-case ${yn} in
-[Yy]* | "") sudo softwareupdate --install-rosetta ;;
-esac
-
-read -r -p "Check and install macOS software updates? [y/N] " yn
-case ${yn} in
-[Yy]*) sudo softwareupdate --all --install --force ;;
-esac
+if [ "$(uname -m)" = "arm64" ]; then
+	sudo softwareupdate --install-rosetta --agree-to-license 2>/dev/null || true
+fi
 
 if ! command -v brew &>/dev/null; then
 	[ -x "/opt/homebrew/bin/brew" ] || [ -x "/usr/local/bin/brew" ] || \
@@ -35,24 +30,23 @@ if ! command -v brew &>/dev/null; then
 fi
 
 export PATH="${HOME}/.local/bin:${PATH}"
-if ! command -v zb &>/dev/null; then
-	curl -fsSL https://zerobrew.rs/install | bash -s -- --no-modify-path
-fi
+curl -fsSL https://zerobrew.rs/install | bash -s -- --no-modify-path
 
 brewfile="${basedir}/Brewfile"
-command -v zb &>/dev/null && (zb bundle --file "${brewfile}" || true)
+command -v zb &>/dev/null && (zb bundle install -f "${brewfile}" || true)
 brew bundle --file "${brewfile}"
 
 "${basedir}"/macos/defaults/macos
 
+# Hammerspoon: Link explicit configuration files (prevents Spoons/cache pollution)
 mkdir -p "${HOME}/.hammerspoon"
-for item in "${basedir}/macos/hammerspoon"/*; do
-	if [ "$(basename "$item")" = "Spoons" ]; then
-		continue
-	fi
-	symlink "$item" "${HOME}/.hammerspoon/$(basename "$item")"
-done
+symlink "${basedir}/macos/hammerspoon/init.lua" "${HOME}/.hammerspoon/init.lua"
+symlink "${basedir}/macos/hammerspoon/modules" "${HOME}/.hammerspoon/modules"
+
+# Übersicht
 symlink "${basedir}/macos/ubersichtrc" "${HOME}/.ubersichtrc"
+
+# iCloud Drive shortcut
 symlink "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/iCloud"
 
 SPOON_INSTALL_URL="https://github.com/Hammerspoon/Spoons/raw/master/Spoons/SpoonInstall.spoon.zip"
@@ -65,7 +59,7 @@ if [ ! -d "${HOME}/.hammerspoon/Spoons/SpoonInstall.spoon" ]; then
 	unset tmpzip
 fi
 
-# VS Code user settings
+# VS Code user settings (explicit allowlist symlink)
 VSCODE_USER_DIR="${HOME}/Library/Application Support/Code/User"
 if [ -d "${VSCODE_USER_DIR}" ] || command -v code &>/dev/null; then
 	mkdir -p "${VSCODE_USER_DIR}"
