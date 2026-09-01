@@ -43,7 +43,7 @@ brewfile="${basedir}/Brewfile"
 command -v zb &>/dev/null && (zb bundle --file "${brewfile}" || true)
 brew bundle --file "${brewfile}"
 
-${basedir}/macos/defaults/macos
+"${basedir}"/macos/defaults/macos
 
 mkdir -p "${HOME}/.hammerspoon"
 for item in "${basedir}/macos/hammerspoon"/*; do
@@ -63,4 +63,11 @@ if [ ! -d "${HOME}/.hammerspoon/Spoons/SpoonInstall.spoon" ]; then
 	unzip -q "${tmpzip}" -d "${HOME}/.hammerspoon/Spoons/"
 	rm "${tmpzip}"
 	unset tmpzip
+fi
+
+# VS Code user settings
+VSCODE_USER_DIR="${HOME}/Library/Application Support/Code/User"
+if [ -d "${VSCODE_USER_DIR}" ] || command -v code &>/dev/null; then
+	mkdir -p "${VSCODE_USER_DIR}"
+	symlink "${basedir}/xdg-config-home/vscode/settings.json" "${VSCODE_USER_DIR}/settings.json"
 fi
