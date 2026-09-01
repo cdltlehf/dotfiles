@@ -9,7 +9,7 @@ force=0
 while [[ $# -gt 0 ]]; do
 	case "$1" in
 	-h | --help)
-		echo "Usage: $(basename $0) [options]"
+		echo "Usage: $(basename "$0") [options]"
 		echo "Options:"
 		echo "  -h, --help    Show this help message and exit"
 		echo "  -f, --force   Force overwrite existing files"
@@ -39,6 +39,7 @@ export basedir
 export os
 export force
 
+# shellcheck source=/dev/null
 source "${basedir}/env"
 
 symlink() {
@@ -50,6 +51,7 @@ symlink() {
 export -f symlink
 
 mkdir -p "${XDG_CONFIG_HOME}"
+find -L "${XDG_CONFIG_HOME}" -maxdepth 1 -type l -delete 2>/dev/null || true
 for item in "${basedir}/xdg-config-home"/*; do
 	symlink "$item" "${XDG_CONFIG_HOME}/$(basename "$item")"
 done

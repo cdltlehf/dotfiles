@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 # https://volta.sh
 # https://github.com/nvm-sh/nvm
 # https://deno.com
@@ -19,14 +20,6 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
 export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS:-/etc/xdg}"
-
-###############################################################################
-# Git prompt
-###############################################################################
-GIT_PS1_SHOWDIRTYSTATE=1
-GIT_PS1_SHOWSTASHSTATE=1
-GIT_PS1_SHOWUPSTREAM="auto"
-GIT_PS1_SHOWCOLORHINTS=1
 
 ###############################################################################
 # XDG_DATA_HOME
@@ -75,11 +68,34 @@ fi
 # FZF
 ###############################################################################
 # https://github.com/junegunn/fzf
+case "${LC_TERMINAL_GLYPHS:-ascii}" in
+nerdfont)
+	fzf_prompt=" "
+	fzf_pointer=""
+	fzf_ellipsis="…"
+	;;
+unicode)
+	fzf_prompt="❯ "
+	fzf_pointer="❯"
+	fzf_ellipsis="…"
+	;;
+*)
+	fzf_prompt="> "
+	fzf_pointer=">"
+	fzf_ellipsis=".."
+	;;
+esac
+
 export FZF_DEFAULT_OPTS="\
   --height=8 \
   --style=minimal \
-  --color=16
+  --prompt=\"${fzf_prompt}\" \
+  --pointer=\"${fzf_pointer}\" \
+  --marker=\"+\" \
+  --ellipsis=\"${fzf_ellipsis}\" \
+  --color=16,prompt:blue,pointer:green,marker:green,info:8,hl:cyan,hl+:cyan:underline
 "
+unset fzf_prompt fzf_pointer fzf_ellipsis
 if command -v fd >/dev/null 2>&1; then
 	export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --exclude .git'
 	export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
@@ -89,6 +105,7 @@ fi
 # WezTerm
 ###############################################################################
 SHELL_INTEGRATION="${XDG_DATA_HOME:-$HOME/.local/share}/wezterm/shell-integration/wezterm.sh"
+# shellcheck source=/dev/null
 [ -f "${SHELL_INTEGRATION}" ] && . "${SHELL_INTEGRATION}"
 unset SHELL_INTEGRATION
 
@@ -97,7 +114,6 @@ unset SHELL_INTEGRATION
 ###############################################################################
 zerobrew_dir="${HOME}/.zerobrew"
 zerobrew_bin="${zerobrew_dir}/bin"
-zerobrew_root="/opt/zerobrew"
 zerobrew_prefix="/opt/zerobrew"
 mise_shims_dir="${HOME}/.local/share/mise/shims"
 
@@ -107,4 +123,4 @@ export PATH="${mise_shims_dir}:${HOME}/.local/bin:${PATH}"
 
 export PKG_CONFIG_PATH="${zerobrew_prefix}/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
 
-unset zerobrew_dir zerobrew_bin zerobrew_root zerobrew_prefix mise_shims_dir
+unset zerobrew_dir zerobrew_bin zerobrew_prefix mise_shims_dir

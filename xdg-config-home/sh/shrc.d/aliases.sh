@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 # Easier navigation
 alias ..='command cd ..'
 alias ...='command cd ../..'
@@ -27,7 +28,7 @@ alias unfreeze='chmod a+w'
 
 # cd
 mkcd() {
-	mkdir -p "$1" && cd "$1"
+	mkdir -p "$1" && cd "$1" || return
 }
 
 cdls() {
@@ -38,9 +39,7 @@ cdls() {
 command -v git >/dev/null 2>&1 && alias g='command git'
 command -v bat >/dev/null 2>&1 && alias cat='command bat -pp'
 if command -v lsd >/dev/null 2>&1; then
-	if [ "${LC_TERMINAL_GLYPHS:-ascii}" = "ascii" ]; then
-		alias ls='command lsd --icon never'
-	else
+	if [ "${LC_TERMINAL_GLYPHS:-ascii}" = "nerdfont" ]; then
 		alias ls='command lsd'
 	fi
 fi
