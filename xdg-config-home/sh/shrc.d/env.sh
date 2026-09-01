@@ -1,15 +1,18 @@
 # shellcheck shell=sh
-# https://volta.sh
-# https://github.com/nvm-sh/nvm
-# https://deno.com
-# https://github.com/conda-forge/miniforge
-# https://github.com/eth-p/bat-extras
-# https://github.com/Misterio77/flavours
-# https://github.com/pyenv/pyenv
-# https://github.com/rust-lang/rustup
-# https://www.haskell.org/ghcup
-# https://mamba.readthedocs.io
-# https://brew.sh
+#
+# Reference:
+# - https://src.fedoraproject.org/rpms/setup/blob/rawhide/f/profile
+# - https://volta.sh
+# - https://github.com/nvm-sh/nvm
+# - https://deno.com
+# - https://github.com/conda-forge/miniforge
+# - https://github.com/eth-p/bat-extras
+# - https://github.com/Misterio77/flavours
+# - https://github.com/pyenv/pyenv
+# - https://github.com/rust-lang/rustup
+# - https://www.haskell.org/ghcup
+# - https://mamba.readthedocs.io
+# - https://brew.sh
 
 ###############################################################################
 # XDG Base Directories
@@ -42,6 +45,7 @@ export INPUTRC="${XDG_CONFIG_HOME}/readline/inputrc"
 export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
 export PYLINTRC="${XDG_CONFIG_HOME}/pylint/pylintrc"
 export TEXMFCONFIG="${XDG_CONFIG_HOME}/texlive/texmf-config"
+export XDG_TEMPLATES_DIR="${XDG_CONFIG_HOME}/templates"
 
 ###############################################################################
 # ~/.local/opt
@@ -112,15 +116,26 @@ unset SHELL_INTEGRATION
 ###############################################################################
 # Miscellaneous
 ###############################################################################
-zerobrew_dir="${HOME}/.zerobrew"
-zerobrew_bin="${zerobrew_dir}/bin"
-zerobrew_prefix="/opt/zerobrew"
-mise_shims_dir="${HOME}/.local/share/mise/shims"
+pathmunge() {
+	[ -h "$1" ] && return
 
-export PATH="${zerobrew_bin}:${PATH}"
-export PATH="${zerobrew_prefix}/bin:${PATH}"
-export PATH="${mise_shims_dir}:${HOME}/.local/bin:${PATH}"
+	case ":${PATH}:" in
+	*":$1:"*) ;;
+	*)
+		if [ "$2" = "after" ]; then
+			PATH="${PATH:+${PATH}:}$1"
+		else
+			PATH="$1${PATH:+:${PATH}}"
+		fi
+		;;
+	esac
+}
 
-export PKG_CONFIG_PATH="${zerobrew_prefix}/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
+pathmunge "${HOME}/.local/bin"
+pathmunge "${HOME}/.local/share/mise/shims"
+pathmunge "/opt/zerobrew/bin"
+pathmunge "${HOME}/.zerobrew/bin"
+export PATH
+unset -f pathmunge
 
-unset zerobrew_dir zerobrew_bin zerobrew_prefix mise_shims_dir
+export PKG_CONFIG_PATH="/opt/zerobrew/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
