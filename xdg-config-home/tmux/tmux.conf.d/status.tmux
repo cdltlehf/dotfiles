@@ -23,7 +23,7 @@ set-option -gu status-format
 set-option -g  status-left-length 50
 set-option -g  status-left "#[fg=default]#{session_id}:#{session_name}"
 set-option -ag status-left "#{?window_zoomed_flag, #[fg=brightblack]. #[fg=default]zoom#[default],}"
-set-option -ag status-left "#{?pane_in_mode, #[fg=brightblack]. #[fg=yellow]copy#[default],}"
+set-option -ag status-left "#{?pane_in_mode, #[fg=brightblack]. #[fg=default]copy#[default],}"
 set-option -ag status-left "#{?pane_synchronized, #[fg=brightblack]. #[fg=brightred]synchronizing#[default],}"
 set-option -ag status-left "#{?client_prefix, #[fg=brightblack]. #[fg=default]prefix#[default],}"
 
@@ -42,7 +42,7 @@ set-option -g  status-right "#[fg=brightblack]%a %b %d . %H:%M"
 set-option -g  status-left-length 50
 set-option -g  status-left "#[fg=default]#{session_id}:#{session_name}"
 set-option -ag status-left "#{?window_zoomed_flag, #[fg=brightblack]· #[fg=default]zoom#[default],}"
-set-option -ag status-left "#{?pane_in_mode, #[fg=brightblack]· #[fg=yellow]copy#[default],}"
+set-option -ag status-left "#{?pane_in_mode, #[fg=brightblack]· #[fg=default]copy#[default],}"
 set-option -ag status-left "#{?pane_synchronized, #[fg=brightblack]· #[fg=brightred]synchronizing#[default],}"
 set-option -ag status-left "#{?client_prefix, #[fg=brightblack]· #[fg=default]prefix#[default],}"
 
@@ -61,7 +61,7 @@ set-option -g  status-right "#[fg=brightblack]%a %b %d · %H:%M"
 set-option -g  status-left-length 50
 set-option -g  status-left "#[fg=default]#{session_id}:#{session_name}"
 set-option -ag status-left "#{?window_zoomed_flag, #[fg=brightblack]· #[fg=default]zoom#[default],}"
-set-option -ag status-left "#{?pane_in_mode, #[fg=brightblack]· #[fg=yellow]copy#[default],}"
+set-option -ag status-left "#{?pane_in_mode, #[fg=brightblack]· #[fg=default]copy#[default],}"
 set-option -ag status-left "#{?pane_synchronized, #[fg=brightblack]· #[fg=brightred]synchronizing#[default],}"
 set-option -ag status-left "#{?client_prefix, #[fg=brightblack]· #[fg=default]prefix#[default],}"
 

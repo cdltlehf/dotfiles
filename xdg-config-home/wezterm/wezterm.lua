@@ -4,7 +4,7 @@ config.font = wezterm.font_with_fallback({ "JetBrains Mono", "Symbols Nerd Font"
 config.font_size = 13.0
 config.line_height = 1.2
 config.set_environment_variables = {
-	LC_TERMINAL_GLYPHS = "nerdfont",
+  LC_TERMINAL_GLYPHS = "nerdfont",
 }
 
 -- OSX liquid glass material thick
@@ -16,15 +16,15 @@ config.window_padding = { left = 6, right = 6, top = 50, bottom = 6 }
 config.native_macos_fullscreen_mode = true
 
 config.keys = {
-	{
-		key = "f",
-		mods = "CTRL|CMD",
-		action = wezterm.action.ToggleFullScreen,
-	},
+  {
+    key = "f",
+    mods = "CTRL|CMD",
+    action = wezterm.action.ToggleFullScreen,
+  },
 }
 
 config.color_scheme_dirs = {
-	os.getenv("HOME") .. "/.local/state/wezterm/colorschemes",
+  os.getenv("HOME") .. "/.local/state/wezterm/colorschemes",
 }
 
 config.automatically_reload_config = true
@@ -32,10 +32,10 @@ local colors_path = os.getenv("HOME") .. "/.local/state/wezterm/colorschemes/col
 wezterm.add_to_config_reload_watch_list(colors_path)
 local f = io.open(colors_path, "r")
 if f then
-	f:close()
-	config.color_scheme = "colors"
+  f:close()
+  config.color_scheme = "colors"
 else
-	config.color_scheme = "Modus Vivendi"
+  config.color_scheme = "Modus Vivendi"
 end
 
 return config

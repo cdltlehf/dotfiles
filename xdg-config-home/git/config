@@ -47,6 +47,7 @@
 [difftool]
 	prompt = false
 [merge]
+	conflictStyle = zdiff3
 	tool = nvimdiff
 [mergetool]
 	prompt = false
@@ -89,21 +90,8 @@
 [pull]
 	rebase = true
 
-[commit]
-	template = "~/.gitmessage"
-
 [user]
 	useConfigOnly = true
 
 [include]
 	path = "~/.gitconfig.local"
-
-[merge]
-	conflictstyle = zdiff3
-	tool = nvimdiff
-
-; [mergetool "fugitive"]
-; 	cmd = vim -f -c "Gdiffsplit!" "$MERGED"
-
-[mergetool]
-	keepBackup = false
