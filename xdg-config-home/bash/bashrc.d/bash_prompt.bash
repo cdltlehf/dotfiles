@@ -1,4 +1,8 @@
 # shellcheck disable=SC2088
+#
+# Reference:
+# - https://gitlab.freedesktop.org/Per_Bothner/specifications/blob/master/proposals/semantic-prompts.md
+
 __prompt_pretty_path() {
   local git_root="$1"
   local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
@@ -7,8 +11,7 @@ __prompt_pretty_path() {
 
   local subpath
   if [[ -n "${git_root}" ]]; then
-    local repo_name
-    repo_name=$(basename "${git_root}")
+    local repo_name="${git_root##*/}"
     subpath="${PWD#"${git_root}"}"
     subpath="${subpath#/}"
     if [[ -z "${subpath}" ]]; then
@@ -79,8 +82,9 @@ __prompt_command() {
     fi
   fi
 
-  local job_count
-  job_count=$(jobs -p | wc -l | tr -d ' ')
+  local -a job_pids
+  readarray -t job_pids < <(jobs -p)
+  local job_count=${#job_pids[@]}
   local jobs_part=""
   if [[ ${job_count} -gt 0 ]]; then
     jobs_part="${sep}\[\e[90m\]${job_icon} ${job_count}\[\e[0m\]"
@@ -105,7 +109,7 @@ __prompt_command() {
 
   # Environment
   if [[ -n "${VIRTUAL_ENV}" ]]; then
-    PS1+="${sep}\[\e[90m\]$(basename "${VIRTUAL_ENV}")\[\e[0m\]"
+    PS1+="${sep}\[\e[90m\]${VIRTUAL_ENV##*/}\[\e[0m\]"
   fi
 
   # Background jobs
@@ -137,9 +141,7 @@ __prompt_command() {
   PS2=$'\[\e]133;A;k=s\a\]\[\e[90m\]> \[\e[0m\]\[\e]133;B\a\]'
 }
 
-if [[ -z "${PROMPT_COMMAND}" ]]; then
-  PROMPT_COMMAND="__prompt_command"
-else
-  PROMPT_COMMAND="${PROMPT_COMMAND}; __prompt_command"
+if [[ "${PROMPT_COMMAND:-}" != *"__prompt_command"* ]]; then
+  PROMPT_COMMAND="__prompt_command${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 fi
 export PROMPT_COMMAND
