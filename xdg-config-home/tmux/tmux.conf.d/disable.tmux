@@ -1,3 +1,6 @@
+# Reference:
+# - https://github.com/tmux/tmux/wiki/Advanced-Use-Cases#nested-tmux-sessions
+
 # C-a to disable outmost tmux, C-b C-a to enable it.
 %if "#{==:$LC_TERMINAL_GLYPHS,ascii}"
 bind-key D \
