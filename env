@@ -16,4 +16,4 @@ if [ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ]; then
 	# shellcheck source=/dev/null
 	. "${XDG_CONFIG_HOME}/user-dirs.dirs"
 fi
-export XDG_TEMPLATES_DIR="${XDG_TEMPLATES_DIR:-${HOME}/Templates}"
+export XDG_TEMPLATES_DIR="${XDG_TEMPLATES_DIR:-${XDG_CONFIG_HOME}/templates}"
