@@ -1,10 +1,20 @@
 # Reference: https://ghostty.org/docs/config/reference
-font-family = "JetBrains Mono"
-font-family = "Symbols Nerd Font"
-font-family = "D2Coding"
+
+# window-colorspace = display-p3
 adjust-cell-height = 20%
-theme = Modus Vivendi
-window-colorspace = display-p3
+background-blur = macos-glass-regular
 background-opacity = 0.9
-background-blur = macos-glass-clear
+window-padding-x = 6
+window-padding-y = 6
+window-padding-balance = true
+copy-on-select = clipboard
+theme = "Modus Vivendi"
+
+font-family = "JetBrains Mono"
+font-family = "D2Coding"
+font-family = "Symbols Nerd Font"
+
+title = ""
+shell-integration-features = no-title
+
 env = LC_TERMINAL_GLYPHS=nerdfont
