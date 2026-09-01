@@ -49,21 +49,20 @@ local function setup_highlights()
 	set_highlight(0, "StatusLineLspWarn", { fg = "Yellow", ctermfg = 11 })
 end
 
-local function format_file_path()
-	local full_path = vim.fn.expand("%:~:.")
-	if full_path == "" then
+local function format_smart_path(raw_path)
+	if not raw_path or raw_path == "" then
 		return "[No Name]"
 	end
 
-	local charset = vim.env.CHARSET or "ascii"
-	local ellipsis = (charset == "ascii") and "..." or "…"
+	local glyphs = vim.env.LC_TERMINAL_GLYPHS or "ascii"
+	local ellipsis = (glyphs == "ascii") and "..." or "…"
 
 	local git_status = vim.b.gitsigns_status_dict
 	local git_root = git_status and git_status.root or vim.fs.root(0, ".git")
 
 	if git_root then
 		local repo_name = vim.fs.basename(git_root)
-		local file_abs_path = vim.fn.expand("%:p")
+		local file_abs_path = vim.fn.fnamemodify(raw_path, ":p")
 		local subpath = file_abs_path:sub(#git_root + 2)
 
 		if subpath == "" then
@@ -77,42 +76,61 @@ local function format_file_path()
 			return string.format("%s/%s", repo_name, subpath)
 		end
 	else
-		local parts = vim.split(full_path, "/", { plain = true })
-		if #parts > 3 then
-			return string.format("%s/%s/%s", ellipsis, parts[#parts - 1], parts[#parts])
+		local full_path = vim.fn.fnamemodify(raw_path, ":~:.")
+		if full_path:sub(1, 2) == "~/" then
+			local home_subpath = full_path:sub(3)
+			local parts = vim.split(home_subpath, "/", { plain = true })
+			if #parts > 2 then
+				return string.format("~/%s/%s/%s", ellipsis, parts[#parts - 1], parts[#parts])
+			else
+				return full_path
+			end
 		else
-			return full_path
+			local sys_subpath = (full_path:sub(1, 1) == "/") and full_path:sub(2) or full_path
+			local parts = vim.split(sys_subpath, "/", { plain = true })
+			if #parts > 2 then
+				return string.format("/%s/%s/%s", ellipsis, parts[#parts - 1], parts[#parts])
+			else
+				return full_path
+			end
 		end
 	end
 end
 
+local function format_buffer_name()
+	local buftype = vim.bo.buftype
+	local raw_name = vim.api.nvim_buf_get_name(0)
+
+	if buftype == "help" then
+		return "help: " .. vim.fn.expand("%:t")
+	elseif buftype == "quickfix" then
+		local is_loc = vim.fn.getloclist(0, { filewinid = 1 }).filewinid ~= 0
+		return is_loc and "location-list" or "quickfix"
+	elseif buftype == "terminal" then
+		return "terminal"
+	end
+
+	local scheme, subpath = raw_name:match("^([%w_-]+)://(.*)")
+	if scheme then
+		if subpath == "" then
+			return scheme
+		end
+		return string.format("%s: %s", scheme, format_smart_path(subpath))
+	end
+
+	return format_smart_path(raw_name)
+end
+
 function statusline.render()
-	local charset = vim.env.CHARSET or "ascii"
-	local separator = (charset == "ascii") and "%#StatusLineDim# . " or "%#StatusLineDim# · "
+	local glyphs = vim.env.LC_TERMINAL_GLYPHS or "ascii"
+	local separator = (glyphs == "ascii") and "%#StatusLineDim# . " or "%#StatusLineDim# · "
 	local filetype = vim.bo.filetype
 	local git_status = vim.b.gitsigns_status_dict
 	local branch_name = git_status and git_status.head
 
-	if filetype == "oil" then
-		local oil = package.loaded["oil"]
-		local directory = (oil and oil.get_current_dir()) or vim.fn.expand("%")
-		directory = vim.fn.fnamemodify(directory, ":~:.")
-		if directory == "" then
-			directory = "./"
-		end
-
-		local left = string.format("%%#StatusLineBold#oil%s%%#StatusLineText#%s", separator, directory)
-		if branch_name and branch_name ~= "" then
-			left = left .. separator .. string.format("%%#StatusLineBold#%s", branch_name)
-		end
-
-		local right = "%#StatusLineText#oil"
-		return left .. "%=" .. right
-	end
-
 	local left_parts = {}
 
-	local formatted_path = format_file_path()
+	local formatted_path = format_buffer_name()
 	local target_string = string.format("%%#StatusLineBold#%s", formatted_path)
 	if branch_name and branch_name ~= "" then
 		target_string = target_string .. separator .. string.format("%%#StatusLineBold#%s", branch_name)

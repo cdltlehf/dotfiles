@@ -20,10 +20,10 @@ if glyphs == "nerdfont" then
 	}
 elseif glyphs == "unicode" then
 	diagnostic_signs = {
-		[vim.diagnostic.severity.ERROR] = "●",
-		[vim.diagnostic.severity.WARN] = "▲",
-		[vim.diagnostic.severity.INFO] = "◆",
-		[vim.diagnostic.severity.HINT] = "○",
+		[vim.diagnostic.severity.ERROR] = "✖",
+		[vim.diagnostic.severity.WARN] = "⚠",
+		[vim.diagnostic.severity.INFO] = "ℹ",
+		[vim.diagnostic.severity.HINT] = "?",
 	}
 end
 

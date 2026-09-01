@@ -37,7 +37,7 @@ elseif glyphs == "unicode" then
 	opt.fillchars = { vert = " ", fold = " ", foldopen = "▾", foldclose = "▸", foldsep = " " }
 else -- nerdfont
 	opt.listchars = { tab = "  ⇥", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
-	opt.fillchars = { vert = " ", fold = " ", foldopen = "", foldclose = "", foldsep = " " }
+	opt.fillchars = { vert = " ", fold = " ", foldopen = "", foldclose = "", foldsep = " " }
 end
 
 -- :help wildmode
