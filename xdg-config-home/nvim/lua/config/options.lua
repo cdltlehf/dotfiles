@@ -30,14 +30,14 @@ opt.list = true
 -- https://en.wikipedia.org/wiki/Non-printing_character_in_word_processors
 local glyphs = vim.env.LC_TERMINAL_GLYPHS or "ascii"
 if glyphs == "ascii" then
-	opt.listchars = { tab = "  >", trail = ".", extends = ">", precedes = "<", nbsp = "_" }
-	opt.fillchars = { vert = " ", fold = " ", foldopen = "v", foldclose = ">", foldsep = " " }
+  opt.listchars = { tab = "  >", trail = ".", extends = ">", precedes = "<", nbsp = "_" }
+  opt.fillchars = { vert = " ", fold = " ", foldopen = "v", foldclose = ">", foldsep = " " }
 elseif glyphs == "unicode" then
-	opt.listchars = { tab = "  ⇥", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
-	opt.fillchars = { vert = " ", fold = " ", foldopen = "▾", foldclose = "▸", foldsep = " " }
+  opt.listchars = { tab = "  ⇥", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
+  opt.fillchars = { vert = " ", fold = " ", foldopen = "▾", foldclose = "▸", foldsep = " " }
 else -- nerdfont
-	opt.listchars = { tab = "  ⇥", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
-	opt.fillchars = { vert = " ", fold = " ", foldopen = "", foldclose = "", foldsep = " " }
+  opt.listchars = { tab = "  ⇥", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
+  opt.fillchars = { vert = " ", fold = " ", foldopen = "", foldclose = "", foldsep = " " }
 end
 
 -- :help wildmode
@@ -48,21 +48,17 @@ opt.completeopt = { "menuone", "noinsert" }
 
 opt.lazyredraw = true
 
-pcall(vim.cmd.colorscheme, "dracula16")
+-- Share Vim runtimepath (colors, syntax, compiler, ftdetect)
+opt.runtimepath:append(vim.fn.expand("$XDG_CONFIG_HOME/vim"))
+
+pcall(vim.cmd.colorscheme, "modus16")
 
 -- Disable syntax highlighting on huge files (> 1MB)
 vim.api.nvim_create_autocmd("BufWinEnter", {
-	pattern = "*",
-	callback = function()
-		if vim.fn.line2byte(vim.fn.line("$") + 1) > 1000000 then
-			vim.cmd("syntax clear")
-		end
-	end,
-})
-
--- Neovim 0.12 built-in treesitter highlighting
-vim.api.nvim_create_autocmd("FileType", {
-	callback = function(args)
-		pcall(vim.treesitter.start, args.buf)
-	end,
+  pattern = "*",
+  callback = function()
+    if vim.fn.line2byte(vim.fn.line("$") + 1) > 1000000 then
+      vim.cmd("syntax clear")
+    end
+  end,
 })

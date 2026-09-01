@@ -30,7 +30,6 @@ augroup statusline_highlight
         \|highlight StatusLineNC ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
         \|highlight StatusLineDim ctermfg=8 guifg=DarkGray
         \|highlight StatusLineText ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
-        \|highlight StatusLineBold ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE gui=NONE cterm=NONE
         \|highlight StatusLineLspError ctermfg=9 guifg=Red
         \|highlight StatusLineLspWarn ctermfg=11 guifg=Yellow
 augroup end
@@ -108,16 +107,27 @@ function! s:format_buffer_name() abort
   return s:format_smart_path(l:raw_name)
 endfunction
 
+function! s:update_buffer_cache() abort
+  let b:statusline_buffer_name = s:format_buffer_name()
+  let b:statusline_branch = exists('*FugitiveHead') ? FugitiveHead() : ''
+endfunction
+
+augroup statusline_cache
+  autocmd!
+  autocmd BufEnter,BufFilePost,DirChanged,BufWritePost * call s:update_buffer_cache()
+augroup end
+
 function! StatusLineRender() abort
   let l:glyphs = getenv('LC_TERMINAL_GLYPHS')
   let l:sep = (l:glyphs ==# 'ascii') ? '%#StatusLineDim# . ' : '%#StatusLineDim# · '
 
   let l:left_parts = []
 
-  let l:target_string = '%#StatusLineBold#' . s:format_buffer_name()
-  let l:branch = exists('*FugitiveHead') ? FugitiveHead() : ''
+  let l:buf_name = exists('b:statusline_buffer_name') ? b:statusline_buffer_name : s:format_buffer_name()
+  let l:target_string = '%#StatusLineText#' . l:buf_name
+  let l:branch = exists('b:statusline_branch') ? b:statusline_branch : (exists('*FugitiveHead') ? FugitiveHead() : '')
   if !empty(l:branch)
-    let l:target_string .= l:sep . '%#StatusLineBold#' . l:branch
+    let l:target_string .= l:sep . '%#StatusLineText#' . l:branch
   endif
 
   if &readonly
@@ -128,12 +138,12 @@ function! StatusLineRender() abort
   let l:mode_code = mode(1)
   let l:mode_str = get(s:modes, l:mode_code, '')
   if !empty(l:mode_str)
-    call add(l:left_parts, '%#StatusLineDim#' . l:mode_str)
+    call add(l:left_parts, '%#StatusLineText#' . l:mode_str)
   endif
 
   let l:center_parts = []
   if &modified
-    call add(l:center_parts, '%#StatusLineDim#modified')
+    call add(l:center_parts, '%#StatusLineText#modified')
   endif
 
   if l:mode_code !~# '^[iR]' && exists('*lsp#get_buffer_diagnostics_counts')
@@ -152,7 +162,7 @@ function! StatusLineRender() abort
 
   let l:right_parts = []
   if !empty(&filetype)
-    call add(l:right_parts, '%#StatusLineText#' . &filetype)
+    call add(l:right_parts, '%#StatusLineDim#' . &filetype)
   endif
 
   let l:encoding = empty(&fileencoding) ? &encoding : &fileencoding
@@ -161,8 +171,8 @@ function! StatusLineRender() abort
     call add(l:right_parts, '%#StatusLineLspWarn#' . l:encoding . ':' . l:format)
   endif
 
-  call add(l:right_parts, '%#StatusLineText#%l:%c')
-  call add(l:right_parts, '%#StatusLineText#%p%%')
+  call add(l:right_parts, '%#StatusLineDim#%l:%c')
+  call add(l:right_parts, '%#StatusLineDim#%p%%')
 
   let l:left_out = join(l:left_parts, l:sep)
   let l:center_out = join(l:center_parts, l:sep)

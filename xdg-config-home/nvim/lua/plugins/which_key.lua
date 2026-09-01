@@ -1,3 +1,3 @@
 require("which-key").setup({
-	delay = 2000,
+  delay = 2000,
 })
