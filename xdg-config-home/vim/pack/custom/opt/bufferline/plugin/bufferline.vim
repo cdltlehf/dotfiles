@@ -59,7 +59,8 @@ function! BufferLine() abort
       let l:s .= '%#TabLine# ' . l:i . " "
       let l:s .= '%#TabLine#' . l:bufname
     else
-      let l:s .= '%#TabLineSelNr# ' . l:i . " ▏"
+      let l:bar = (getenv('LC_TERMINAL_GLYPHS') ==# 'ascii') ? " |" : " ▏"
+      let l:s .= '%#TabLineSelNr# ' . l:i . l:bar
       let l:s .= '%#TabLineSel#' . l:bufname
     endif
     let l:s .= l:flags . " "

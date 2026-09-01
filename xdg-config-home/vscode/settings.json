@@ -1,0 +1,9 @@
+{
+  "editor.fontFamily": "'JetBrains Mono', 'D2Coding', 'Symbols Nerd Font', monospace",
+  "editor.fontSize": 13,
+  "editor.lineHeight": 1.2,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "selection",
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "workbench.colorTheme": "Modus Vivendi"
+}
