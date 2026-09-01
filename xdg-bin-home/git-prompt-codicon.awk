@@ -1,4 +1,5 @@
-# scripts/git-prompt-codicon.awk
+# Reference:
+# - https://git-scm.com/docs/git-status#_porcelain_format_version_2
 BEGIN {
     branch = ""
     upstream = ""
