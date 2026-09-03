@@ -79,9 +79,9 @@
 [interactive]
 	diffFilter = delta --color-only
 [delta]
+	diff-highlight = true
 	navigate = true
-	light = false
-	line-numbers = true
+	keep-plus-minus-markers = true
 [rebase]
 	autoSquash = true
 	autoStash = true
