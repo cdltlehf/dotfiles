@@ -62,11 +62,40 @@ export VOLTA_HOME="${HOME}/.local/opt/volta"
 ###############################################################################
 # https://brew.sh
 export HOMEBREW_NO_ENV_HINTS=1
-if [ -x "/opt/homebrew/bin/brew" ]; then
-	eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [ -x "/usr/local/bin/brew" ]; then
-	eval "$(/usr/local/bin/brew shellenv)"
+if [ -z "${HOMEBREW_PREFIX:-}" ]; then
+	if [ -x "/opt/homebrew/bin/brew" ]; then
+		eval "$(/opt/homebrew/bin/brew shellenv)"
+	elif [ -x "/usr/local/bin/brew" ]; then
+		eval "$(/usr/local/bin/brew shellenv)"
+	fi
 fi
+
+###############################################################################
+# PATH & Miscellaneous
+###############################################################################
+pathmunge() {
+	[ -h "$1" ] && return
+
+	case ":${PATH}:" in
+	*":$1:"*) ;;
+	*)
+		if [ "$2" = "after" ]; then
+			PATH="${PATH:+${PATH}:}$1"
+		else
+			PATH="$1${PATH:+:${PATH}}"
+		fi
+		;;
+	esac
+}
+
+pathmunge "${HOME}/.local/bin"
+pathmunge "${HOME}/.local/share/mise/shims"
+pathmunge "/opt/zerobrew/bin"
+pathmunge "${HOME}/.zerobrew/bin"
+export PATH
+unset -f pathmunge
+
+export PKG_CONFIG_PATH="/opt/zerobrew/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
 
 ###############################################################################
 # FZF
@@ -105,6 +134,9 @@ if command -v fd >/dev/null 2>&1; then
 	export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
 fi
 
+export LS_COLORS="di=34:ln=36:ex=32:so=35:pi=33:bd=33:cd=33:su=31:sg=31:tw=34:ow=34:st=34:or=31:mi=31"
+export LSCOLORS="exfxcxdxbxegedabagacad"
+
 ###############################################################################
 # WezTerm
 ###############################################################################
@@ -112,30 +144,3 @@ SHELL_INTEGRATION="${XDG_DATA_HOME:-$HOME/.local/share}/wezterm/shell-integratio
 # shellcheck source=/dev/null
 [ -f "${SHELL_INTEGRATION}" ] && . "${SHELL_INTEGRATION}"
 unset SHELL_INTEGRATION
-
-###############################################################################
-# Miscellaneous
-###############################################################################
-pathmunge() {
-	[ -h "$1" ] && return
-
-	case ":${PATH}:" in
-	*":$1:"*) ;;
-	*)
-		if [ "$2" = "after" ]; then
-			PATH="${PATH:+${PATH}:}$1"
-		else
-			PATH="$1${PATH:+:${PATH}}"
-		fi
-		;;
-	esac
-}
-
-pathmunge "${HOME}/.local/bin"
-pathmunge "${HOME}/.local/share/mise/shims"
-pathmunge "/opt/zerobrew/bin"
-pathmunge "${HOME}/.zerobrew/bin"
-export PATH
-unset -f pathmunge
-
-export PKG_CONFIG_PATH="/opt/zerobrew/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
