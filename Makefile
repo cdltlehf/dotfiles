@@ -12,8 +12,8 @@ setup: ## Run dotfiles setup script
 	@./setup
 
 .PHONY: test
-test: ## Run BATS compatibility test suite
-	@bats tests/compatibility.bats
+test: ## Run BATS test suites (compatibility and idempotency)
+	@bats tests/*.bats
 
 .PHONY: podman-compose-up
 podman-compose-up: ## Start llama-server container in background
