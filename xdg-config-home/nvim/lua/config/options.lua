@@ -12,6 +12,9 @@ opt.smartcase = true
 opt.wrap = false
 opt.foldlevel = 99
 
+-- :help 'formatoptions' (disable auto-wrapping of text and comments)
+opt.formatoptions:remove({ "t", "c" })
+
 -- :help 'colorcolumn'
 opt.colorcolumn = "+2"
 
