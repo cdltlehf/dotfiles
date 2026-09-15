@@ -29,7 +29,8 @@ opt.laststatus = 3
 opt.showmode = false
 
 opt.list = true
--- :help listchars
+-- :help 'listchars'
+-- :help 'fillchars'
 -- https://en.wikipedia.org/wiki/Non-printing_character_in_word_processors
 local glyphs = vim.env.LC_TERMINAL_GLYPHS or "ascii"
 if glyphs == "ascii" then

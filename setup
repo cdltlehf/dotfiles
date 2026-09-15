@@ -45,7 +45,11 @@ source "${basedir}/env"
 symlink() {
 	local src="$1" dest="$2"
 	[[ $(readlink "$dest" 2>/dev/null) == "$src" ]] && return 0
-	[[ -e "$dest" && ! -L "$dest" ]] && mv -f "$dest" "${dest}.bak"
+	if [[ -e "$dest" && ! -L "$dest" ]]; then
+		local timestamp
+		timestamp="$(date +%Y%m%d%H%M%S)"
+		mv -f "$dest" "${dest}.${timestamp}.bak"
+	fi
 	ln -sfn "$src" "$dest"
 }
 export -f symlink
