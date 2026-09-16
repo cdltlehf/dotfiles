@@ -32,31 +32,29 @@ EOF
   shift
 done
 
+export __DOTFILES_SETUP=1
+export XDG_CACHE_HOME="${HOME}/.cache"
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_DATA_HOME="${HOME}/.local/share"
+export XDG_STATE_HOME="${HOME}/.local/state"
+export XDG_CONFIG_DIRS="/etc/xdg"
+export XDG_DATA_DIRS="/usr/local/share:/usr/share"
+mkdir -p "${XDG_DATA_HOME}" "${XDG_CONFIG_HOME}" "${XDG_STATE_HOME}" "${XDG_CACHE_HOME}"
+
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 readonly BASE_DIR
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 readonly OS
-__DOTFILES_SETUP=1
-
-export XDG_DATA_HOME="${HOME}/.local/share"
-export XDG_CONFIG_HOME="${HOME}/.config"
-export XDG_STATE_HOME="${HOME}/.local/state"
-export XDG_DATA_DIRS="/usr/local/share:/usr/share"
-export XDG_CONFIG_DIRS="/etc/xdg"
-export XDG_CACHE_HOME="${HOME}/.cache"
-
-if [ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ]; then
-  # shellcheck source=/dev/null
-  . "${XDG_CONFIG_HOME}/user-dirs.dirs"
-fi
-export XDG_TEMPLATES_DIR="${XDG_TEMPLATES_DIR:-${XDG_CONFIG_HOME}/templates}"
-
+readonly PRE_HOOK="${BASE_DIR}/platforms/${OS}/pre-setup.sh"
+readonly POST_HOOK="${BASE_DIR}/platforms/${OS}/post-setup.sh"
 readonly BIN_DIR="${HOME}/.local/bin"
 readonly LOCAL_GITCONFIG="${HOME}/.gitconfig.local"
 readonly GIT_COMPLETION_DIR="${XDG_DATA_HOME}/git/completion"
 readonly GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
 readonly WEZTERM_SHELL_INTEGRATION_DIR="${XDG_DATA_HOME}/wezterm/shell-integration"
 readonly WEZTERM_SHELL_INTEGRATION_URL="https://raw.githubusercontent.com/wezterm/wezterm/main/assets/shell-integration/wezterm.sh"
+readonly KARABINER_TEMPLATES_DIR="${BASE_DIR}/xdg-config-home/karabiner/templates"
+readonly KARABINER_RULES_DIR="${BASE_DIR}/xdg-config-home/karabiner/assets/complex_modifications"
 
 symlink() {
   local src="$1" dest="$2"
@@ -65,25 +63,20 @@ symlink() {
   ln -s "$src" "$dest"
 }
 
-pre_hook="${BASE_DIR}/platforms/${OS}/pre-setup.sh"
-if [ -f "${pre_hook}" ]; then
-  # shellcheck source=/dev/null
-  . "${pre_hook}"
-fi
+# shellcheck source=/dev/null
+[ ! -f "${PRE_HOOK}" ] || . "${PRE_HOOK}"
 
-karabiner_rules_dir="${BASE_DIR}/xdg-config-home/karabiner/assets/complex_modifications"
-if command -v erb &>/dev/null && [ -d "${BASE_DIR}/xdg-config-home/karabiner/templates" ]; then
-  for template in "${BASE_DIR}/xdg-config-home/karabiner/templates"/*.erb; do
+if command -v erb &>/dev/null && [ -d "${KARABINER_TEMPLATES_DIR}" ]; then
+  for template in "${KARABINER_TEMPLATES_DIR}"/*.erb; do
     [ -f "${template}" ] || continue
-    target="${karabiner_rules_dir}/$(basename "${template}" .erb)"
+    target="${KARABINER_RULES_DIR}/$(basename "${template}" .erb)"
     if [ ! -f "${target}" ]; then
-      mkdir -p "${karabiner_rules_dir}"
+      mkdir -p "${KARABINER_RULES_DIR}"
       erb "${template}" >"${target}"
     fi
   done
 fi
 
-mkdir -p "${XDG_CONFIG_HOME}"
 for item in "${BASE_DIR}/xdg-config-home"/*; do
   symlink "$item" "${XDG_CONFIG_HOME}/$(basename "$item")"
 done
@@ -135,8 +128,5 @@ if ! command -v mise &>/dev/null; then
 fi
 mise install --yes
 
-post_hook="${BASE_DIR}/platforms/${OS}/post-setup.sh"
-if [ -f "${post_hook}" ]; then
-  # shellcheck source=/dev/null
-  . "${post_hook}"
-fi
+# shellcheck source=/dev/null
+[ ! -f "${POST_HOOK}" ] || . "${POST_HOOK}"

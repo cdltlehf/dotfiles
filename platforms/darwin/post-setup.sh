@@ -66,8 +66,3 @@ if [ -d "${XDG_CONFIG_HOME}/ubersicht/widgets" ]; then
   mkdir -p "${UBERSICHT_USER_DIR}"
   symlink "${XDG_CONFIG_HOME}/ubersicht/widgets" "${UBERSICHT_USER_DIR}/widgets"
 fi
-
-if [ -d "${XDG_CONFIG_HOME}/ubersicht/widgets" ]; then
-  mkdir -p "${UBERSICHT_USER_DIR}"
-  symlink "${XDG_CONFIG_HOME}/ubersicht/widgets" "${UBERSICHT_USER_DIR}/widgets"
-fi
