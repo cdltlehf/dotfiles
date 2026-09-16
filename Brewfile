@@ -2,6 +2,7 @@
 tap "libkrun/krun", trusted: true
 
 brew "bash"
+brew "bash-completion@2"
 brew "coreutils"
 brew "docker-compose"
 brew "ffmpeg"
