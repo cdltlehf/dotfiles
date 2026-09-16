@@ -74,14 +74,7 @@
 	autoupdate = true
 	enabled = true
 [core]
-	pager = delta
 	excludesfile = "~/.config/git/ignore"
-[interactive]
-	diffFilter = delta --color-only
-[delta]
-	navigate = true
-	light = false
-	line-numbers = true
 [rebase]
 	autoSquash = true
 	autoStash = true
