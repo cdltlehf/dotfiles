@@ -1,0 +1,53 @@
+<%
+  require "json"
+
+  right_keys = %w[
+    6 7 8 9 0 hyphen equal_sign
+    y u i o p open_bracket close_bracket backslash
+    h j k l semicolon quote
+    n m comma period slash
+  ]
+
+  left_keys = %w[
+    1 2 3 4 5
+    q w e r t
+    a s d f g
+    z x c v b
+  ]
+
+  def format_manipulators(keys, shift)
+    keys.map do |k|
+      JSON.generate({
+        "type" => "basic",
+        "from" => {
+          "key_code" => k,
+          "modifiers" => { "mandatory" => [shift], "optional" => ["caps_lock"] }
+        },
+        "to" => [
+          { "key_code" => "vk_none" },
+          { "set_notification_message" => { "id" => "shift_inhibit", "text" => "Use opposite shift" } }
+        ],
+        "to_after_key_up" => [
+          { "set_notification_message" => { "id" => "shift_inhibit", "text" => "" } }
+        ]
+      }, separators: [", ", ": "])
+    end.map { |line| "        #{line}" }.join(",\n")
+  end
+%>
+{
+  "title": "Strict Shift (Bilateral Shift Chording)",
+  "rules": [
+    {
+      "description": "Inhibit Right Shift on Right-Hand Matrix (Allow Multi-Modifier Chords)",
+      "manipulators": [
+<%= format_manipulators(right_keys, "right_shift") %>
+      ]
+    },
+    {
+      "description": "Inhibit Left Shift on Left-Hand Matrix (Allow Multi-Modifier Chords)",
+      "manipulators": [
+<%= format_manipulators(left_keys, "left_shift") %>
+      ]
+    }
+  ]
+}
