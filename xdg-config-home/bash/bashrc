@@ -5,8 +5,8 @@
 
 # If not running interactively, don't do anything
 case "$-" in
-*i*) ;;
-*) return 0 2>/dev/null || exit 0 ;;
+  *i*) ;;
+  *) return 0 2>/dev/null || exit 0 ;;
 esac
 
 : "${XDG_CONFIG_HOME:="${HOME}/.config"}"
@@ -14,7 +14,7 @@ SHRC="${XDG_CONFIG_HOME}/sh/shrc"
 # shellcheck source=/dev/null
 [[ -e "${SHRC}" ]] && source "${SHRC}"
 
-shopt -s checkwinsize globstar 2> /dev/null || true
+shopt -s checkwinsize globstar 2>/dev/null || true
 
 unset PROMPT_COMMAND
 BASHRCDIR="${XDG_CONFIG_HOME}/bash/bashrc.d"
@@ -27,4 +27,4 @@ if [[ -d "${BASHRCDIR}" ]]; then
 fi
 
 # shellcheck source=/dev/null
-[[ -f "${HOME}/.bashrc.local" ]] && source "${HOME}/.bashrc.local" 2> /dev/null || true
+[[ -f "${HOME}/.bashrc.local" ]] && source "${HOME}/.bashrc.local" 2>/dev/null || true

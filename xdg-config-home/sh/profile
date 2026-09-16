@@ -11,32 +11,27 @@ export XDG_DATA_DIRS="/usr/local/share:/usr/share"
 export XDG_CONFIG_DIRS="/etc/xdg"
 export XDG_CACHE_HOME="${HOME}/.cache"
 
-[ -e "${HOME}/.shenv" ] && ENV="${HOME}/.shenv"
-# shellcheck source=/dev/null
-[ -n "${ENV}" ] && . "${ENV}"
-
 set -o allexport
 [ -e "${HOME}/.env" ] && . "${HOME}/.env"
 set +o allexport
 
 pathmunge() {
-	[ -h "$1" ] && return
+  [ -h "$1" ] && return
 
-	case ":${PATH}:" in
-	*":$1:"*) ;;
-	*)
-		if [ "$2" = "after" ]; then
-			PATH="${PATH:+${PATH}:}$1"
-		else
-			PATH="$1${PATH:+:${PATH}}"
-		fi
-		;;
-	esac
+  case ":${PATH}:" in
+    *":$1:"*) ;;
+    *)
+      if [ "$2" = "after" ]; then
+        PATH="${PATH:+${PATH}:}$1"
+      else
+        PATH="$1${PATH:+:${PATH}}"
+      fi
+      ;;
+  esac
 }
 
-XDG_BIN_HOME="${HOME}/.local/bin"
-mkdir -p "${XDG_BIN_HOME}"
-pathmunge "${XDG_BIN_HOME}"
+mkdir -p "${HOME}/.local/bin"
+pathmunge "${HOME}/.local/bin"
 export PATH
 unset -f pathmunge
 

@@ -4,7 +4,12 @@
 : "${XDG_CONFIG_HOME:="${HOME}/.config"}"
 SHRCDIR="${XDG_CONFIG_HOME}/sh/shrc.d"
 if [ -d "${SHRCDIR}" ]; then
+  if [ -f "${SHRCDIR}/env.sh" ]; then
+    # shellcheck source=/dev/null
+    . "${SHRCDIR}/env.sh"
+  fi
   for sh in "${SHRCDIR}"/*.sh; do
+    [ "${sh}" = "${SHRCDIR}/env.sh" ] && continue
     # shellcheck source=/dev/null
     . "${sh}"
   done

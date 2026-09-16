@@ -1,9 +1,9 @@
 # shellcheck shell=sh
 # Easier navigation
-alias ..='command cd ..'
-alias ...='command cd ../..'
-alias ....='command cd ../../..'
-alias .....='command cd ../../../..'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 
 # Fool-proof aliases
 alias rm='command rm -i'
@@ -19,43 +19,35 @@ alias lla='ls -lha'
 
 # Colorize `grep`
 alias grep='command grep --color=auto'
-alias egrep='command egrep --color=auto'
-alias fgrep='command fgrep --color=auto'
-
-# Freeze and unfreeze files
-alias freeze='chmod a-w'
-alias unfreeze='chmod a+w'
-
-# cd
-mkcd() {
-	mkdir -p "$1" && cd "$1" || return
-}
-
-cdls() {
-	cd "$1" && ls -lA
-}
 
 # third-party commands
 command -v git >/dev/null 2>&1 && alias g='command git'
 command -v bat >/dev/null 2>&1 && alias cat='command bat -pp'
 if command -v lsd >/dev/null 2>&1; then
-	if [ "${LC_TERMINAL_GLYPHS:-ascii}" = "nerdfont" ]; then
-		alias ls='command lsd'
-	fi
-fi
-
-# open command
-if ! command -v open >/dev/null 2>&1; then
-	case $(uname) in
-	MSYS*)
-		alias open='command start'
-		;;
-	*) ;;
-	esac
+  if [ "${LC_TERMINAL_GLYPHS:-ascii}" = "nerdfont" ]; then
+    alias ls='command lsd'
+  fi
 fi
 
 if [ "${TERM_PROGRAM}" = "WezTerm" ]; then
-	alias imgcat='wezterm imgcat'
+  alias imgcat='wezterm imgcat'
+fi
+
+# Cross-platform open and xdg-open
+if [ "$(uname -s)" = "Darwin" ]; then
+  alias xdg-open='open'
+elif ! command -v open >/dev/null 2>&1; then
+  if command -v xdg-open >/dev/null 2>&1; then
+    alias open='xdg-open'
+  else
+    case $(uname) in
+      MSYS* | MINGW*)
+        alias open='command start'
+        alias xdg-open='command start'
+        ;;
+      *) ;;
+    esac
+  fi
 fi
 
 # Reload shell
