@@ -4,6 +4,7 @@
 readonly SPOON_INSTALL_URL="https://github.com/Hammerspoon/Spoons/raw/master/Spoons/SpoonInstall.spoon.zip"
 readonly SPOONS_DIR="${XDG_CONFIG_HOME}/hammerspoon/Spoons"
 readonly VSCODE_USER_DIR="${HOME}/Library/Application Support/Code/User"
+readonly UBERSICHT_USER_DIR="${HOME}/Library/Application Support/Übersicht"
 
 defaults delete com.apple.desktopservices 2>/dev/null || true
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
@@ -61,6 +62,11 @@ if [ -d "${VSCODE_USER_DIR}" ] || command -v code &>/dev/null; then
   mkdir -p "${VSCODE_USER_DIR}"
   symlink "${XDG_CONFIG_HOME}/vscode/settings.json" "${VSCODE_USER_DIR}/settings.json"
 fi
+if [ -d "${XDG_CONFIG_HOME}/ubersicht/widgets" ]; then
+  mkdir -p "${UBERSICHT_USER_DIR}"
+  symlink "${XDG_CONFIG_HOME}/ubersicht/widgets" "${UBERSICHT_USER_DIR}/widgets"
+fi
+
 if [ -d "${XDG_CONFIG_HOME}/ubersicht/widgets" ]; then
   mkdir -p "${UBERSICHT_USER_DIR}"
   symlink "${XDG_CONFIG_HOME}/ubersicht/widgets" "${UBERSICHT_USER_DIR}/widgets"
