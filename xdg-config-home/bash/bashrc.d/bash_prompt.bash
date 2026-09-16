@@ -20,7 +20,7 @@ __prompt_pretty_path() {
       IFS='/' read -r -a parts <<<"${subpath}"
       local len=${#parts[@]}
       if [[ ${len} -gt 2 ]]; then
-        printf "%s/%s/%s/%s" "${repo_name}" "${ellipsis}" "${parts[len-2]}" "${parts[len-1]}"
+        printf "%s/%s/%s/%s" "${repo_name}" "${ellipsis}" "${parts[len - 2]}" "${parts[len - 1]}"
       else
         printf "%s/%s" "${repo_name}" "${subpath}"
       fi
@@ -33,7 +33,7 @@ __prompt_pretty_path() {
       IFS='/' read -r -a parts <<<"${home_subpath}"
       local len=${#parts[@]}
       if [[ ${len} -gt 2 ]]; then
-        printf "~/%s/%s/%s" "${ellipsis}" "${parts[len-2]}" "${parts[len-1]}"
+        printf "~/%s/%s/%s" "${ellipsis}" "${parts[len - 2]}" "${parts[len - 1]}"
       else
         printf "~/%s" "${home_subpath}"
       fi
@@ -42,7 +42,7 @@ __prompt_pretty_path() {
       IFS='/' read -r -a parts <<<"${sys_subpath}"
       local len=${#parts[@]}
       if [[ ${len} -gt 2 ]]; then
-        printf "/%s/%s/%s" "${ellipsis}" "${parts[len-2]}" "${parts[len-1]}"
+        printf "/%s/%s/%s" "${ellipsis}" "${parts[len - 2]}" "${parts[len - 1]}"
       else
         printf "%s" "${PWD}"
       fi
