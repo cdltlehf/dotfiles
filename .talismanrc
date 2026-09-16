@@ -1,4 +1,0 @@
-fileignoreconfig:
-- filename: xdg-config-home/sh/profile
-  checksum: c7b687d3df3681b71f59ad6452b98e4c5531b4d739df9676b79919e8489aa67e
-version: "1.0"
