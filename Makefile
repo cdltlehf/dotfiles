@@ -1,6 +1,7 @@
 # Reference: https://www.gnu.org/software/make/manual/make.html
+# Setup prerequisites: bash, curl
 .PHONY: default
-default: help
+default: setup
 
 .PHONY: help
 help: ## Show this help message
@@ -8,7 +9,11 @@ help: ## Show this help message
 
 .PHONY: setup
 setup: ## Run dotfiles setup script
-	@./setup
+	@./scripts/setup
+
+.PHONY: test
+test: ## Run BATS test suites (compatibility and idempotency)
+	@bats tests/*.bats
 
 .PHONY: podman-compose-up
 podman-compose-up: ## Start llama-server container in background
