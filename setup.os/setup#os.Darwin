@@ -67,3 +67,8 @@ if [ -d "${VSCODE_USER_DIR}" ] || command -v code &>/dev/null; then
 	mkdir -p "${VSCODE_USER_DIR}"
 	symlink "${basedir}/xdg-config-home/vscode/settings.json" "${VSCODE_USER_DIR}/settings.json"
 fi
+
+# Karabiner: Compile ERB template to karabiner.json
+if command -v erb &>/dev/null && [ -f "${basedir}/xdg-config-home/karabiner/karabiner.json.erb" ]; then
+	erb "${basedir}/xdg-config-home/karabiner/karabiner.json.erb" > "${basedir}/xdg-config-home/karabiner/karabiner.json"
+fi

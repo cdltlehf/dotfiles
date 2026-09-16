@@ -1,6 +1,7 @@
 .DS_Store
 macos/hammerspoon/Spoons
 xdg-config-home/karabiner/automatic_backups
+xdg-config-home/karabiner/karabiner.json
 xdg-config-home/vim/autoload/plug.vim
 xdg-config-home/zsh/.zcompdump
 xdg-config-home/zsh/.zprofile
