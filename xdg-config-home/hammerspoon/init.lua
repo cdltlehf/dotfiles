@@ -1,16 +1,6 @@
-hs.loadSpoon("SpoonInstall")
-
-spoon.SpoonInstall:andUse("ReloadConfiguration", {
-  config = {
-    reloadOnSpoonUpdate = true,
-    watchPaths = { hs.configdir .. "/modules/" },
-  },
-  start = true,
-})
+_G.config_watcher = hs.pathwatcher.new(hs.configdir, hs.reload):start()
 
 local WindowManager = require(".modules.window_manager")
-
-local spoonInstallPath = hs.configdir .. "/Spoons/SpoonInstall.spoon"
 local modifiers = { "ctrl", "alt" }
 
 local window_manager = WindowManager.new(modifiers)

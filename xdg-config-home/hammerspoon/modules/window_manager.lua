@@ -5,9 +5,6 @@ local spaces = require("hs.spaces")
 local canvas = require("hs.canvas")
 local eventtap = require("hs.eventtap")
 
-local checkMods = eventtap.checkKeyboardModifiers
-
-local MODS_INTERVAL = 0.05
 local PADDING = 5
 local DURATION = 0
 
@@ -16,11 +13,6 @@ local HIDE_BOXES_DELAY = 0.2
 local SHOW_BOX_DELAY = 0.2
 
 local MISSION_CONTROL_DELAY = 0.3 -- Mission Control animation delay
-
-local function modsPressed()
-  local mods = checkMods(true)._raw
-  return mods > 0
-end
 
 local function getFrameWithRatio(screen, x, y, w, h, padding)
   local padding = padding or 0
@@ -42,10 +34,6 @@ local function getFrameWithRatio(screen, x, y, w, h, padding)
   }
 
   return frame
-end
-
-local function modsPressed()
-  return checkMods(true)._raw > 0
 end
 
 local function getNextSpace()
@@ -170,22 +158,6 @@ function WindowManager.new(leader)
   self.show_indicator = false
   self.boxes = {}
 
-  self.border = nil
-  self.border_width = 0
-  local allwindows = hs.window.filter.new(nil)
-  local events = {
-    hs.window.filter.windowFocused,
-    hs.window.filter.windowMoved,
-    hs.window.filter.windowFocused,
-    hs.window.filter.windowUnfocused,
-  }
-  for _, event in ipairs(events) do
-    allwindows:subscribe(event, function()
-      self:redrawBorder()
-    end)
-  end
-  self:redrawBorder()
-
   self.dragging_eventtap = eventtap.new({
     eventtap.event.types.leftMouseDragged,
     eventtap.event.types.leftMouseDown,
@@ -201,7 +173,6 @@ function WindowManager.new(leader)
     }
     self.draw_timer:stop()
     self.target_window:setFrame(new_frame, 0)
-    self:redrawBorder()
     return true, {}
   end)
 
@@ -301,7 +272,6 @@ function WindowManager:_initialize_modal(leader)
       local ratio = WindowManager.keymap[self.state][1]
       local f = getFrameWithRatio(self.target_window:screen(), ratio[1], ratio[2], ratio[3], ratio[4], self.padding)
       self.target_window:setFrame(f, DURATION)
-      self:redrawBorder()
     end)
   end
 
@@ -437,42 +407,6 @@ end
 
 function WindowManager:stop()
   self.activate_eventtap:stop()
-end
-
-function WindowManager:redrawBorder()
-  if true then
-    return
-  end
-
-  if self.border ~= nil then
-    self.border = nil
-  end
-
-  local win = hs.window.focusedWindow()
-  if win == nil then
-    return
-  end
-
-  local top_left = win:topLeft()
-  if top_left["x"] == 0 and top_left["y"] == 0 then
-    return
-  end
-
-  local size = win:size()
-  self.border = hs.drawing.rectangle(
-    hs.geometry.rect(
-      top_left["x"] - self.border_width / 4,
-      top_left["y"] - self.border_width / 4,
-      size["w"] + self.border_width / 2,
-      size["h"] + self.border_width / 2
-    )
-  )
-  self.border:sendToBack()
-  self.border:setRoundedRectRadii(10, 10)
-  self.border:setStrokeColor({ hex = "#bd93f9", alpha = 1.0 })
-  self.border:setFill(false)
-  self.border:setStrokeWidth(self.border_width)
-  self.border:show()
 end
 
 return WindowManager

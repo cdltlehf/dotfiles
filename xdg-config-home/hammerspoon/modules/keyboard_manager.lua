@@ -6,16 +6,23 @@ local hotkey = require("hs.hotkey")
 local KeyboardManager = {}
 KeyboardManager.__index = KeyboardManager
 
-local screen_frame = hs.window.focusedWindow():screen():frame()
-local w = 800
-local h = 200
-local x = screen_frame.w / 2 - w / 2
-local y = screen_frame.h - h
-local webview = hs.webview.new({ x = x, y = y, w = w, h = h })
-local url = "file://" .. hs.configdir .. "/modules/korean_3set/index.html"
-webview:transparent(true)
-webview:url(url)
-webview:bringToFront(false)
+local webview = nil
+
+local function getWebview()
+  if not webview then
+    local focused = hs.window.focusedWindow()
+    local screen_frame = focused and focused:screen():frame() or hs.screen.mainScreen():frame()
+    local w, h = 800, 200
+    local x = screen_frame.w / 2 - w / 2
+    local y = screen_frame.h - h
+    webview = hs.webview.new({ x = x, y = y, w = w, h = h })
+    local url = "file://" .. hs.configdir .. "/modules/korean_3set/index.html"
+    webview:transparent(true)
+    webview:url(url)
+    webview:bringToFront(false)
+  end
+  return webview
+end
 
 function KeyboardManager.new(default_source_id)
   local self = setmetatable({}, KeyboardManager)
@@ -45,8 +52,8 @@ function KeyboardManager.new(default_source_id)
     print(self.last_alerted_source_id)
 
     if label == "390Sebulshik" then
-      webview:show()
-    else
+      getWebview():show()
+    elseif webview then
       webview:hide()
     end
   end
