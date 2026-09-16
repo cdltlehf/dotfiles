@@ -12,6 +12,9 @@ opt.smartcase = true
 opt.wrap = false
 opt.foldlevel = 99
 
+-- :help 'formatoptions' (disable auto-wrapping of text and comments)
+opt.formatoptions:remove({ "t", "c" })
+
 -- :help 'colorcolumn'
 opt.colorcolumn = "+2"
 
@@ -26,7 +29,8 @@ opt.laststatus = 3
 opt.showmode = false
 
 opt.list = true
--- :help listchars
+-- :help 'listchars'
+-- :help 'fillchars'
 -- https://en.wikipedia.org/wiki/Non-printing_character_in_word_processors
 local glyphs = vim.env.LC_TERMINAL_GLYPHS or "ascii"
 if glyphs == "ascii" then

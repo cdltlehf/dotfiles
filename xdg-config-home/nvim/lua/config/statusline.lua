@@ -129,10 +129,17 @@ function statusline.render()
 
   local left_parts = {}
 
+  local branch_icon = ""
+  if glyphs == "unicode" then
+    branch_icon = "⎇ "
+  elseif glyphs == "nerdfont" then
+    branch_icon = " "
+  end
+
   local formatted_path = format_buffer_name()
   local target_string = string.format("%%#StatusLineText#%s", formatted_path)
   if branch_name and branch_name ~= "" then
-    target_string = target_string .. separator .. string.format("%%#StatusLineText#%s", branch_name)
+    target_string = target_string .. separator .. string.format("%%#StatusLineText#%s%s", branch_icon, branch_name)
   end
 
   if vim.bo.readonly then
