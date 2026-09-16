@@ -1,6 +1,0 @@
-#!/usr/bin/zsh
-## Custom defaults for keyboard
-## https://developer.apple.com/documentation/foundation/nsglobaldomain
-## ~/Library/Preferences/.GlobalPreferences.plist
-
-# ... > Keyboard > Modifier keys > Caps Lock Key (Control)

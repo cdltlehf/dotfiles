@@ -1,0 +1,75 @@
+#!/bin/sh
+#
+# Reference:
+# - https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+
+command -v git >/dev/null 2>&1 || exit 0
+command -v awk >/dev/null 2>&1 || exit 0
+GIT_DIR="$(git rev-parse --git-dir 2>/dev/null)" || exit 0
+readonly GIT_DIR
+
+target="$0"
+while [ -L "${target}" ]; do
+  target_dir="$(dirname "${target}")"
+  target="$(readlink "${target}")"
+  case "${target}" in
+    /*) ;;
+    *) target="${target_dir}/${target}" ;;
+  esac
+done
+AWK_SCRIPT="$(CDPATH='' cd -- "$(dirname -- "${target}")" && pwd -P)/git-prompt-codicon.awk"
+readonly AWK_SCRIPT
+[ -f "${AWK_SCRIPT}" ] || exit 0
+
+operation=""
+rebase_branch=""
+
+if [ -d "${GIT_DIR}/rebase-merge" ]; then
+  read -r step <"${GIT_DIR}/rebase-merge/msgnum" 2>/dev/null || step=""
+  read -r total <"${GIT_DIR}/rebase-merge/end" 2>/dev/null || total=""
+  read -r head_name <"${GIT_DIR}/rebase-merge/head-name" 2>/dev/null || head_name=""
+  rebase_branch="${head_name#refs/heads/}"
+  operation="REBASE ${step}/${total}"
+elif [ -d "${GIT_DIR}/rebase-apply" ]; then
+  read -r head_name <"${GIT_DIR}/rebase-apply/head-name" 2>/dev/null || head_name=""
+  rebase_branch="${head_name#refs/heads/}"
+  if [ -f "${GIT_DIR}/rebase-apply/rebasing" ]; then
+    read -r step <"${GIT_DIR}/rebase-apply/next" 2>/dev/null || step=""
+    read -r total <"${GIT_DIR}/rebase-apply/last" 2>/dev/null || total=""
+    operation="REBASE ${step}/${total}"
+  elif [ -f "${GIT_DIR}/rebase-apply/applying" ]; then
+    operation="AM"
+  else
+    operation="AM/REBASE"
+  fi
+elif [ -f "${GIT_DIR}/MERGE_HEAD" ]; then
+  operation="MERGING"
+elif [ -f "${GIT_DIR}/CHERRY_PICK_HEAD" ]; then
+  operation="CHERRY-PICKING"
+elif [ -f "${GIT_DIR}/REVERT_HEAD" ]; then
+  operation="REVERTING"
+elif [ -f "${GIT_DIR}/sequencer/todo" ]; then
+  read -r first_word _ <"${GIT_DIR}/sequencer/todo" 2>/dev/null || first_word=""
+  case "${first_word}" in
+    p | pick) operation="CHERRY-PICKING" ;;
+    revert)   operation="REVERTING" ;;
+  esac
+elif [ -f "${GIT_DIR}/BISECT_LOG" ]; then
+  operation="BISECTING"
+fi
+
+tag_name=""
+if [ -f "${GIT_DIR}/HEAD" ]; then
+  read -r head_content <"${GIT_DIR}/HEAD" 2>/dev/null || head_content=""
+  case "${head_content}" in
+    ref:*) ;;
+    *) tag_name="$(git describe --tags --exact-match 2>/dev/null)" ;;
+  esac
+fi
+
+git status --porcelain=v2 --branch --untracked-files=normal 2>/dev/null | awk \
+  -v charset="${LC_TERMINAL_GLYPHS:-ascii}" \
+  -v op="${operation}" \
+  -v op_branch="${rebase_branch}" \
+  -v tag_name="${tag_name}" \
+  -f "${AWK_SCRIPT}"

@@ -1,0 +1,142 @@
+#!/bin/bash
+
+set -o nounset
+set -o errexit
+shopt -s nullglob
+
+interactive=0
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h | --help)
+      cat <<EOF
+Usage: $(basename "$0") [options]
+
+Options:
+  -h, --help           Show this help message and exit
+  -i, --interactive    Interactive setup mode (prompt for user details)
+EOF
+      exit 0
+      ;;
+    --)
+      break
+      ;;
+    -i | --interactive)
+      interactive=1
+      ;;
+    *)
+      echo "Unknown option: $1"
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+readonly BASE_DIR
+OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+readonly OS
+__DOTFILES_SETUP=1
+
+export XDG_DATA_HOME="${HOME}/.local/share"
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_STATE_HOME="${HOME}/.local/state"
+export XDG_DATA_DIRS="/usr/local/share:/usr/share"
+export XDG_CONFIG_DIRS="/etc/xdg"
+export XDG_CACHE_HOME="${HOME}/.cache"
+
+if [ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ]; then
+  # shellcheck source=/dev/null
+  . "${XDG_CONFIG_HOME}/user-dirs.dirs"
+fi
+export XDG_TEMPLATES_DIR="${XDG_TEMPLATES_DIR:-${XDG_CONFIG_HOME}/templates}"
+
+readonly BIN_DIR="${HOME}/.local/bin"
+readonly LOCAL_GITCONFIG="${HOME}/.gitconfig.local"
+readonly GIT_COMPLETION_DIR="${XDG_DATA_HOME}/git/completion"
+readonly GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
+readonly WEZTERM_SHELL_INTEGRATION_DIR="${XDG_DATA_HOME}/wezterm/shell-integration"
+readonly WEZTERM_SHELL_INTEGRATION_URL="https://raw.githubusercontent.com/wezterm/wezterm/main/assets/shell-integration/wezterm.sh"
+
+symlink() {
+  local src="$1" dest="$2"
+  [[ $(readlink "$dest" 2>/dev/null) == "$src" ]] && return 0
+  [[ -e "$dest" || -L "$dest" ]] && mv -f "$dest" "${dest}.$(date +%Y%m%d%H%M%S).bak"
+  ln -s "$src" "$dest"
+}
+
+pre_hook="${BASE_DIR}/platforms/${OS}/pre-setup.sh"
+if [ -f "${pre_hook}" ]; then
+  # shellcheck source=/dev/null
+  . "${pre_hook}"
+fi
+
+karabiner_rules_dir="${BASE_DIR}/xdg-config-home/karabiner/assets/complex_modifications"
+if command -v erb &>/dev/null && [ -d "${BASE_DIR}/xdg-config-home/karabiner/templates" ]; then
+  for template in "${BASE_DIR}/xdg-config-home/karabiner/templates"/*.erb; do
+    [ -f "${template}" ] || continue
+    target="${karabiner_rules_dir}/$(basename "${template}" .erb)"
+    if [ ! -f "${target}" ]; then
+      mkdir -p "${karabiner_rules_dir}"
+      erb "${template}" >"${target}"
+    fi
+  done
+fi
+
+mkdir -p "${XDG_CONFIG_HOME}"
+for item in "${BASE_DIR}/xdg-config-home"/*; do
+  symlink "$item" "${XDG_CONFIG_HOME}/$(basename "$item")"
+done
+
+symlink "${XDG_CONFIG_HOME}/sh/profile" "${HOME}/.profile"
+symlink "${XDG_CONFIG_HOME}/bash/bash_profile" "${HOME}/.bash_profile"
+symlink "${XDG_CONFIG_HOME}/bash/bashrc" "${HOME}/.bashrc"
+symlink "${XDG_CONFIG_HOME}/zsh/zshenv" "${HOME}/.zshenv"
+symlink "zprofile" "${XDG_CONFIG_HOME}/zsh/.zprofile"
+symlink "zshrc" "${XDG_CONFIG_HOME}/zsh/.zshrc"
+symlink "${XDG_CONFIG_HOME}/editorconfig/config" "${HOME}/.editorconfig"
+
+if [ ! -f "${LOCAL_GITCONFIG}" ]; then
+  if [ "${interactive}" -eq 1 ]; then
+    read -r -p "Enter your Git user name: " git_username
+    read -r -p "Enter your Git user email: " git_useremail
+    cat <<EOF >>"${LOCAL_GITCONFIG}"
+[user]
+  name = ${git_username}
+  email = ${git_useremail}
+EOF
+  else
+    cat <<EOF >>"${LOCAL_GITCONFIG}"
+# [user]
+#   name =
+#   email =
+EOF
+  fi
+fi
+
+mkdir -p "${BIN_DIR}"
+for script in "${BASE_DIR}/local-bin"/*; do
+  [ -e "${script}" ] && symlink "${script}" "${BIN_DIR}/$(basename "${script}")"
+done
+export PATH="${BIN_DIR}:${PATH}"
+
+mkdir -p "${GIT_COMPLETION_DIR}"
+if [ ! -f "${GIT_COMPLETION_DIR}/git-prompt.sh" ]; then
+  curl -fsSL "${GIT_PROMPT_URL}" -o "${GIT_COMPLETION_DIR}/git-prompt.sh"
+fi
+
+mkdir -p "${WEZTERM_SHELL_INTEGRATION_DIR}"
+if [ ! -f "${WEZTERM_SHELL_INTEGRATION_DIR}/wezterm.sh" ]; then
+  curl -fsSL "${WEZTERM_SHELL_INTEGRATION_URL}" -o "${WEZTERM_SHELL_INTEGRATION_DIR}/wezterm.sh"
+fi
+
+if ! command -v mise &>/dev/null; then
+  curl "https://mise.run" | sh
+fi
+mise install --yes
+
+post_hook="${BASE_DIR}/platforms/${OS}/post-setup.sh"
+if [ -f "${post_hook}" ]; then
+  # shellcheck source=/dev/null
+  . "${post_hook}"
+fi

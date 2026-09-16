@@ -12,8 +12,7 @@ local h = 200
 local x = screen_frame.w / 2 - w / 2
 local y = screen_frame.h - h
 local webview = hs.webview.new({ x = x, y = y, w = w, h = h })
-local url = "file:///" .. os.getenv("HOME")
-url = url .. "/.hammerspoon/modules/korean_3set/index.html"
+local url = "file://" .. hs.configdir .. "/modules/korean_3set/index.html"
 webview:transparent(true)
 webview:url(url)
 webview:bringToFront(false)
