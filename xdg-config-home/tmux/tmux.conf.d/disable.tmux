@@ -7,21 +7,21 @@ bind-key D \
   set-option key-table disabled\; \
   set-option prefix None\; \
   \
-  set-option status-style "bg=default,fg=brightblack,dim"\; \
-  set-option status-left "#[fg=brightblack]#{session_id}:#{session_name} . disabled"\; \
+  set-option status-style "bg=default,fg=brightblack,none"\; \
+  set-option status-left "#[fg=brightblack]#{session_id}:#{session_name} . disabled#{?#{==:#{client_key_table},enable_pending}, . #[fg=terminal]prefix#[fg=brightblack],}"\; \
   set-option status-right "#[fg=brightblack]Press C-b C-b to enable"\; \
   set-option window-status-current-style "bg=default,fg=brightblack,none"\; \
-  set-option window-status-style "bg=default,fg=brightblack,dim"
+  set-option window-status-style "bg=default,fg=brightblack,none"
 %else
 bind-key D \
   set-option key-table disabled\; \
   set-option prefix None\; \
   \
-  set-option status-style "bg=default,fg=brightblack,dim"\; \
-  set-option status-left "#[fg=brightblack]#{session_id}:#{session_name} · disabled"\; \
+  set-option status-style "bg=default,fg=brightblack,none"\; \
+  set-option status-left "#[fg=brightblack]#{session_id}:#{session_name} · disabled#{?#{==:#{client_key_table},enable_pending}, · #[fg=terminal]prefix#[fg=brightblack],}"\; \
   set-option status-right "#[fg=brightblack]Press C-b C-b to enable"\; \
   set-option window-status-current-style "bg=default,fg=brightblack,none"\; \
-  set-option window-status-style "bg=default,fg=brightblack,dim"
+  set-option window-status-style "bg=default,fg=brightblack,none"
 %endif
 
 bind-key -T disabled C-b \
