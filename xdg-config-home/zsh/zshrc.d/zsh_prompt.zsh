@@ -125,7 +125,8 @@ precmd() {
 	fi
 	local osc_a=$'%{\e]133;A\a%}'
 	local osc_b=$'%{\e]133;B\a%}'
-	PS1=$'\n'"${osc_a}${user_part}%F{blue}$(_prompt_pretty_path "${git_root}")%f${git_part}${virtualenv_part}${jobs_part}${host_part}${sep}%F{8}%*%f"$'\n'"${return_part}"'$(_prompt_char)'"${osc_b}"
+	print
+	PS1="${osc_a}${user_part}%F{blue}$(_prompt_pretty_path "${git_root}")%f${git_part}${virtualenv_part}${jobs_part}${host_part}${sep}%F{8}%*%f"$'\n'"${return_part}"'$(_prompt_char)'"${osc_b}"
 }
 
 PS2=$'%{\e]133;A;k=s\a%}%F{8}> %f%{\e]133;B\a%}'
