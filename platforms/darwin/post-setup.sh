@@ -5,6 +5,7 @@ readonly SPOON_INSTALL_URL="https://github.com/Hammerspoon/Spoons/raw/master/Spo
 readonly SPOONS_DIR="${XDG_CONFIG_HOME}/hammerspoon/Spoons"
 readonly VSCODE_USER_DIR="${HOME}/Library/Application Support/Code/User"
 readonly UBERSICHT_USER_DIR="${HOME}/Library/Application Support/Übersicht"
+readonly SHORTCUTS_PLIST_DIR="${BASE_DIR}/platforms/darwin/plists/shortcuts"
 
 defaults delete com.apple.desktopservices 2>/dev/null || true
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
@@ -52,10 +53,11 @@ symlink "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/iCloud"
 
 if [ ! -d "${SPOONS_DIR}/SpoonInstall.spoon" ]; then
   mkdir -p "${SPOONS_DIR}"
-  tmp_zip=$(mktemp /tmp/SpoonInstall.XXXXXX)
-  curl -fsSL "${SPOON_INSTALL_URL}" -o "${tmp_zip}"
-  unzip -q "${tmp_zip}" -d "${SPOONS_DIR}"
-  rm "${tmp_zip}"
+  tmpfile=$(mktemp)
+  curl -fsSL "${SPOON_INSTALL_URL}" -o "${tmpfile}"
+  unzip -q "${tmpfile}" -d "${SPOONS_DIR}"
+  rm "${tmpfile}"
+  unset tmpfile
 fi
 
 if [ -d "${VSCODE_USER_DIR}" ] || command -v code &>/dev/null; then
@@ -65,4 +67,14 @@ fi
 if [ -d "${XDG_CONFIG_HOME}/ubersicht/widgets" ]; then
   mkdir -p "${UBERSICHT_USER_DIR}"
   symlink "${XDG_CONFIG_HOME}/ubersicht/widgets" "${UBERSICHT_USER_DIR}/widgets"
+fi
+
+if command -v shortcuts &>/dev/null && ! shortcuts list 2>/dev/null | grep -Fxq "Toggle High Dynamic Range"; then
+  tmpdir=$(mktemp -d)
+  plutil -convert binary1 "${SHORTCUTS_PLIST_DIR}/toggle_high_dynamic_range.plist" -o "${tmpdir}/Toggle High Dynamic Range.unsigned.shortcut"
+  shortcuts sign --mode people-who-know-me -i "${tmpdir}/Toggle High Dynamic Range.unsigned.shortcut" -o "${tmpdir}/Toggle High Dynamic Range.shortcut"
+  open "${tmpdir}/Toggle High Dynamic Range.shortcut"
+  sleep 2
+  rm -rf "${tmpdir}"
+  unset tmpdir
 fi

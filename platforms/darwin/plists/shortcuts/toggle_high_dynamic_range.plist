@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>WFWorkflowActions</key>
+	<array>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.runshellscript</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>Script</key>
+				<string>/usr/bin/swift -F /System/Library/PrivateFrameworks - &lt;&lt; 'EOF'
+import Foundation
+
+Bundle(path: "/System/Library/PrivateFrameworks/MonitorPanel.framework")?.load()
+
+guard let mgrClass = NSClassFromString("MPDisplayMgr") as? NSObject.Type,
+      let mgr = mgrClass.perform(NSSelectorFromString("sharedMgr"))?.takeUnretainedValue(),
+      let displays = mgr.perform(NSSelectorFromString("displays"))?.takeUnretainedValue() as? [AnyObject] else {
+    exit(1)
+}
+
+typealias GetB = @convention(c) (AnyObject, Selector) -&gt; Bool
+typealias SetB = @convention(c) (AnyObject, Selector, Bool) -&gt; Void
+
+let hasHDR = NSSelectorFromString("hasHDRModes")
+let getHDR = NSSelectorFromString("preferHDRModes")
+let setHDR = NSSelectorFromString("setPreferHDRModes:")
+
+for d in displays where d.responds(to: hasHDR) &amp;&amp; d.responds(to: getHDR) &amp;&amp; d.responds(to: setHDR) {
+    if unsafeBitCast(d.method(for: hasHDR), to: GetB.self)(d, hasHDR) {
+        let cur = unsafeBitCast(d.method(for: getHDR), to: GetB.self)(d, getHDR)
+        unsafeBitCast(d.method(for: setHDR), to: SetB.self)(d, setHDR, !cur)
+    }
+}
+EOF
+</string>
+			</dict>
+		</dict>
+	</array>
+	<key>WFWorkflowIcon</key>
+	<dict>
+		<key>WFWorkflowIconGlyphNumber</key>
+		<integer>61989</integer>
+		<key>WFWorkflowIconStartColor</key>
+		<integer>255</integer>
+	</dict>
+</dict>
+</plist>
