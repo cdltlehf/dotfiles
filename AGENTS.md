@@ -1,28 +1,69 @@
-# Coding conventions
+# AGENTS.md
 
 <!--toc:start-->
-- [Coding conventions](#coding-conventions)
-  - [General coding conventions](#general-coding-conventions)
-  - [Python coding conventions](#python-coding-conventions)
-    - [Python tools](#python-tools)
-    - [Python project structure](#python-project-structure)
+
+- [AGENTS.md](#agentsmd)
+  - [Writing conventions](#writing-conventions)
+  - [Coding conventions](#coding-conventions)
+    - [General conventions](#general-conventions)
+    - [Python conventions](#python-conventions)
+      - [Python tools](#python-tools)
+      - [Python project structure](#python-project-structure)
+      - [Code design and typing](#code-design-and-typing)
+
 <!--toc:end-->
 
-## General coding conventions
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in BCP 14 (RFC 2119 and RFC 8174)
+when, and only when, they appear in all capitals, as shown here.
 
-- Prefer clear naming rather than abbreviations
+## Writing conventions
 
-## Python coding conventions
+- Agent prompts and technical specifications SHOULD follow BCP 14 (RFC 2119 and
+  RFC 8174).
+- When specifying requirements, text SHOULD prefer the canonical terms "MUST",
+  "SHOULD", and "MAY" (and their negative forms) over their synonyms.
+- Documentation and comments MUST explain intent, edge cases, and design
+  rationale ("why"), rather than restating code execution ("what").
+- For any style or documentation decision not enforced by automated tooling,
+  text MUST adhere to the
+  [Google Developer Documentation Style Guide](https://developers.google.com/style).
 
-### Python tools
+## Coding conventions
 
-- Project manager: `uv`
-- Liter & formatter: `ruff`
-- Type checker: `ty`
-- Task runner: `make`
+### General conventions
 
-### Python project structure
+- Code MUST prefer clear, descriptive naming over abbreviations.
+- Code MUST NOT introduce hacks, workarounds, or compatibility shims to bypass
+  missing structure or architectural debt. Domain concepts MUST be modeled
+  explicitly.
+- For any style, convention, or architectural decision not strictly enforced by
+  automated linters or formatters, code MUST adhere to the relevant
+  [Google Style Guide](https://google.github.io/styleguide/) (e.g., the
+  [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html)).
 
-- Every runnable script must have a `main` function.
-- Use `python -m <module>`, `ur run <command>`, or `make <command>` to run scripts instead of `python <script>.py`.
-- Use `if __name__ == "__main__":` block to call the `main` function.
+### Python conventions
+
+#### Python tools
+
+- Projects MUST use `uv` for project and dependency management.
+- Code formatting and linting MUST be performed by `ruff`.
+- Static type checking MUST be performed by `ty`.
+- Task orchestration SHOULD be coordinated via `make`.
+
+#### Python project structure
+
+- Every runnable script MUST have a `main` function.
+- Scripts MUST be executed via `python -m <module>`, `uv run <command>`, or
+  `make <command>`, and MUST NOT be run directly via `python <script>.py`.
+- Top-level script execution MUST be guarded with an
+  `if __name__ == "__main__":` block that invokes `main()`.
+
+#### Code design and typing
+
+- Code MUST NOT use runtime duck-typing hacks or dynamic introspection—including
+  `hasattr()`, `getattr()`, `setattr()`, or dynamic monkey-patching—to bypass
+  static typing.
+- Domain models MUST define explicit, statically-typed fields using type-checked
+  schemas (e.g., Pydantic models or dataclasses).
