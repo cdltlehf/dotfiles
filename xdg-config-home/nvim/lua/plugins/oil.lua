@@ -1,6 +1,10 @@
 require("oil").setup({
   columns = {},
   view_options = { show_hidden = true },
+  keymaps = {
+    ["<C-p>"] = false,
+    ["K"] = "actions.preview",
+  },
 })
 
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
