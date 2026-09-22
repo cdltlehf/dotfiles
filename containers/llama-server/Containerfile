@@ -1,6 +1,7 @@
 # Reference: https://github.com/ggml-org/llama.cpp/discussions/12985
 # Reference: https://github.com/containers/krunkit
 # Reference: https://quay.io/repository/slopezpa/fedora-vgpu
+
 FROM quay.io/slopezpa/fedora-vgpu:latest AS base
 
 FROM base AS builder

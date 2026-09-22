@@ -1,5 +1,6 @@
 # Reference: https://gitlab.freedesktop.org/xdg/xdg-user-dirs
 # Reference: https://wiki.archlinux.org/title/XDG_user_directories
+
 XDG_DESKTOP_DIR="$HOME/Desktop"
 XDG_DOCUMENTS_DIR="$HOME/Documents"
 XDG_DOWNLOAD_DIR="$HOME/Downloads"

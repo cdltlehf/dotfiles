@@ -1,4 +1,5 @@
 #!/bin/bash
+
 : "${__DOTFILES_SETUP:?Do not run directly}"
 
 xcode-select --install 2>/dev/null || true

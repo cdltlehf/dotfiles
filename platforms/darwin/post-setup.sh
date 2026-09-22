@@ -1,4 +1,5 @@
 #!/bin/bash
+
 : "${__DOTFILES_SETUP:?Do not run directly}"
 
 readonly SPOON_INSTALL_URL="https://github.com/Hammerspoon/Spoons/raw/master/Spoons/SpoonInstall.spoon.zip"

@@ -1,5 +1,5 @@
-# Reference: https://github.com/ggml-org/llama.cpp/discussions/12985
-# Reference: https://docs.docker.com/compose/compose-file/
+# Reference: https://compose-spec.io/
+
 services:
   llama-server:
     build:
