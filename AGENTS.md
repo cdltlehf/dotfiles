@@ -6,10 +6,13 @@
   - [Writing conventions](#writing-conventions)
   - [Coding conventions](#coding-conventions)
     - [General conventions](#general-conventions)
-    - [Python conventions](#python-conventions)
-      - [Python tools](#python-tools)
-      - [Python project structure](#python-project-structure)
-      - [Code design and typing](#code-design-and-typing)
+    - [Shell conventions](#shell-conventions)
+      - [Shell environments and portability](#shell-environments-and-portability)
+      - [Idempotency](#idempotency)
+      - [Shell tools and style](#shell-tools-and-style)
+    - [Makefile conventions](#makefile-conventions)
+    - [Reference conventions](#reference-conventions)
+    - [Testing and verification](#testing-and-verification)
 
 <!--toc:end-->
 
@@ -40,30 +43,55 @@ when, and only when, they appear in all capitals, as shown here.
   explicitly.
 - For any style, convention, or architectural decision not strictly enforced by
   automated linters or formatters, code MUST adhere to the relevant
-  [Google Style Guide](https://google.github.io/styleguide/) (e.g., the
-  [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html)).
+  [Google Style Guide](https://google.github.io/styleguide/).
 
-### Python conventions
+### Shell conventions
 
-#### Python tools
+#### Shell environments and portability
 
-- Projects MUST use `uv` for project and dependency management.
-- Code formatting and linting MUST be performed by `ruff`.
-- Static type checking MUST be performed by `ty`.
-- Task orchestration SHOULD be coordinated via `make`.
+- Shared shell startup files in `xdg-config-home/sh/` MUST remain strictly
+  POSIX shell (`sh`) compliant and MUST NOT include Bashisms or Zshisms.
+- Bash-specific configurations MUST reside in `xdg-config-home/bash/`.
+- Zsh-specific configurations MUST reside in `xdg-config-home/zsh/`.
+- Executable scripts in `bin/` MUST specify their target shell via a shebang
+  (e.g., `#!/bin/sh` or `#!/bin/bash`) and adhere strictly to that dialect.
 
-#### Python project structure
+#### Idempotency
 
-- Every runnable script MUST have a `main` function.
-- Scripts MUST be executed via `python -m <module>`, `uv run <command>`, or
-  `make <command>`, and MUST NOT be run directly via `python <script>.py`.
-- Top-level script execution MUST be guarded with an
-  `if __name__ == "__main__":` block that invokes `main()`.
+- Shell initialization files (e.g., `profile`, `shrc`, `bashrc`, `zshenv`,
+  `zshrc`) MUST be idempotent.
+- Repeated sourcing or execution of initialization files MUST NOT produce
+  duplicate `$PATH` entries or accumulate unintended side effects.
 
-#### Code design and typing
+#### Shell tools and style
 
-- Code MUST NOT use runtime duck-typing hacks or dynamic introspection—including
-  `hasattr()`, `getattr()`, `setattr()`, or dynamic monkey-patching—to bypass
-  static typing.
-- Domain models MUST define explicit, statically-typed fields using type-checked
-  schemas (e.g., Pydantic models or dataclasses).
+- Shell scripts MUST pass `shellcheck` linting without errors.
+- Shell scripts MUST be formatted by `shfmt`.
+- Shell code SHOULD adhere to the
+  [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html).
+
+### Makefile conventions
+
+- Target orchestration SHOULD be coordinated via GNU `make`.
+- The root `Makefile` SHOULD delegate domain-specific targets to modular files
+  in `makefiles/*.mk` via `-include makefiles/*.mk`.
+- Targets SHOULD provide self-documenting help comments formatted as
+  `## <Description>` following the Kubebuilder help pattern.
+- Makefile recipes MUST remain concise and MUST NOT introduce multi-line
+  script state machines directly inside recipes; complex procedures MUST be
+  extracted into standalone scripts under `bin/` or `scripts/`.
+
+### Reference conventions
+
+- Documentation and upstream specifications MUST be cited using standard
+  single-line reference comments (e.g., `# Reference: <URL>`).
+- Reference comments MUST be consolidated into a header block at the top of
+  the file.
+- Reference URLs MUST use HTTPS where supported.
+- Reference URLs SHOULD NOT retain unnecessary URL fragment anchors (`#...`),
+  unless referencing a specific section in a multi-topic specification.
+
+### Testing and verification
+
+- All changes affecting shell initialization, path resolution, or tool
+  compatibility MUST pass the BATS test suites executed via `make test`.
