@@ -108,7 +108,7 @@ EOF
 fi
 
 mkdir -p "${BIN_DIR}"
-for script in "${BASE_DIR}/local-bin"/*; do
+for script in "${BASE_DIR}/bin"/*; do
   [ -e "${script}" ] && symlink "${script}" "${BIN_DIR}/$(basename "${script}")"
 done
 export PATH="${BIN_DIR}:${PATH}"
