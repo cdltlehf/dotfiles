@@ -1,5 +1,5 @@
 #!/bin/bash
-# https://github.com/gnachman/iTerm2/blob/master/tests/24-bit-color.sh
+# Reference: https://github.com/gnachman/iTerm2/blob/master/tests/24-bit-color.sh
 #
 #   This file echoes four gradients with 24-bit color codes
 #   to the terminal to demonstrate their functionality.

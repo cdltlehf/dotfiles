@@ -1,4 +1,4 @@
-" https://github.com/prabirshrestha/vim-lsp
+" Reference: https://github.com/prabirshrestha/vim-lsp
 " :help vim-lsp.txt
 
 " help vim-lsp-performance

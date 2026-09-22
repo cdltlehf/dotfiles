@@ -1,5 +1,4 @@
-" Reference:
-" - https://github.com/vim/vim/blob/master/runtime/compiler/shellcheck.vim
+" Reference: https://github.com/vim/vim/blob/master/runtime/compiler/shellcheck.vim
 
 " Vim compiler file
 " Compiler:	ShellCheck

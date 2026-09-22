@@ -1,7 +1,6 @@
 #!/bin/bash
 #
-# Reference:
-# - https://github.com/tmux/tmux/wiki/FAQ#what-is-the-passthrough-escape-sequence-and-how-do-i-use-it
+# Reference: https://github.com/tmux/tmux/wiki/FAQ
 
 ESC="$(printf '\033')"
 readonly ESC

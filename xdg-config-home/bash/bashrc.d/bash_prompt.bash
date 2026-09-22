@@ -1,7 +1,6 @@
 # shellcheck disable=SC2088
 #
-# Reference:
-# - https://gitlab.freedesktop.org/Per_Bothner/specifications/blob/master/proposals/semantic-prompts.md
+# Reference: https://gitlab.freedesktop.org/Per_Bothner/specifications/blob/master/proposals/semantic-prompts.md
 
 __prompt_pretty_path() {
   local git_root="$1"

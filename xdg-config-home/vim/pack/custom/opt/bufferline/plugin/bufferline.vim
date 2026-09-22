@@ -1,5 +1,4 @@
-" Reference:
-" - https://github.com/bling/vim-bufferline
+" Reference: https://github.com/bling/vim-bufferline
 
 augroup bufferline_highlight
   autocmd!

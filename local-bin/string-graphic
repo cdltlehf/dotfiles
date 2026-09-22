@@ -1,5 +1,5 @@
 #!/bin/bash
-# https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
+# Reference: https://en.wikipedia.org/wiki/ANSI_escape_code
 
 echo -e "\033[0mnormal\033[0m"
 echo -e "\033[1mbold\033[0m"

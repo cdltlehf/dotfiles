@@ -1,7 +1,7 @@
 " ~/.vim/vimrc
 " :help :help
-" https://learnvimscriptthehardway.stevelosh.com
-" https://learnvim.irian.to
+" Reference: https://learnvimscriptthehardway.stevelosh.com
+" Reference: https://learnvim.irian.to
 
 " :help xdg-base-dir
 if empty("$XDG_CACHE_HOME") | let $XDG_CACHE_HOME="$HOME/.cache" | endif

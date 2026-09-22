@@ -1,5 +1,4 @@
-# Reference:
-# - https://tiswww.case.edu/php/chet/readline/readline.html#Readline-Init-File-Syntax
+# Reference: https://tiswww.case.edu/php/chet/readline/readline.html
 
 # vi mode
 set editing-mode vi

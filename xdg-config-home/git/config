@@ -1,8 +1,8 @@
-; See more:
-; https://github.com/tj/git-extras
-; https://blog.gitbutler.com/how-git-core-devs-configure-git/
+; Reference: https://github.com/tj/git-extras
+; Reference: https://blog.gitbutler.com/how-git-core-devs-configure-git/
+; Reference: https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
+
 [alias]
-	; https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
 	co = checkout
 	sw = switch
 	swc = switch -c

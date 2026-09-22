@@ -36,6 +36,5 @@
 # - Use the body to explain what and why vs. how
 # - Can use multiple lines with "-" for bullet points in body
 # --------------------
-# Refer:
-# https://gist.github.com/adeekshith/cd4c95a064977cdc6c50
-# http://commitizen.github.io/cz-cli/
+# Reference: https://gist.github.com/adeekshith/cd4c95a064977cdc6c50
+# Reference: https://commitizen.github.io/cz-cli/

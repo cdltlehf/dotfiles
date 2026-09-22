@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/bin/scripts/test-fonts.sh
+# Reference: https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/bin/scripts/test-fonts.sh
 #
 # Nerd Fonts Version: 2.1.0
 # Script Version: 1.0.0

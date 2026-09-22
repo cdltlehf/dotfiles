@@ -1,4 +1,4 @@
-" https://github.com/ojroques/vim-oscyank
+" Reference: https://github.com/ojroques/vim-oscyank
 
 nmap <leader>c <Plug>OSCYankOperator
 nmap <leader>cc <leader>c_

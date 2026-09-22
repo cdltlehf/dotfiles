@@ -1,7 +1,6 @@
 #!/bin/sh
 #
-# Reference:
-# - https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+# Reference: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
 
 command -v git >/dev/null 2>&1 || exit 0
 command -v awk >/dev/null 2>&1 || exit 0

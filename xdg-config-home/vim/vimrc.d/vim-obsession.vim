@@ -1,4 +1,4 @@
-" https://github.com/tpope/vim-obsession
+" Reference: https://github.com/tpope/vim-obsession
 " :help obsession.txt
 
 let g:session_dir = expand('$XDG_STATE_HOME/vim/session')

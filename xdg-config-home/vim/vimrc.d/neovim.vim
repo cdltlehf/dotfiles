@@ -1,4 +1,4 @@
-"" https://neovim.io/doc/user/vim_diff.html
+" Reference: https://neovim.io/doc/user/vim_diff.html
 filetype plugin indent on
 
 set autoindent

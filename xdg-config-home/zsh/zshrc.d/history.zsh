@@ -1,5 +1,4 @@
-# Reference:
-# - https://support.apple.com/guide/terminal/save-or-restore-sessions-trml1007/mac
+# Reference: https://support.apple.com/guide/terminal/save-or-restore-sessions-trml1007/mac
 
 [[ -d "${XDG_STATE_HOME}/zsh" ]] || mkdir -p "${XDG_STATE_HOME}/zsh"
 export HISTFILE="${XDG_STATE_HOME}/zsh/history"

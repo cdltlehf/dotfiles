@@ -1,6 +1,5 @@
-# Reference:
-# - https://gitlab.freedesktop.org/Per_Bothner/specifications/blob/master/proposals/semantic-prompts.md
-# - https://vt100.net/docs/vt510-rm/DECSCUSR.html
+# Reference: https://gitlab.freedesktop.org/Per_Bothner/specifications/blob/master/proposals/semantic-prompts.md
+# Reference: https://vt100.net/docs/vt510-rm/DECSCUSR.html
 
 setopt PROMPT_SUBST
 ZLE_RPROMPT_INDENT=0

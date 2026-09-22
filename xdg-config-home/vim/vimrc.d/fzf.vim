@@ -1,4 +1,4 @@
-" https://github.com/junegunn/fzf.vim
+" Reference: https://github.com/junegunn/fzf.vim
 " :help fzf.txt
 
 let g:fzf_layout = { 'down': '8' }

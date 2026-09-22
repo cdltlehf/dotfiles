@@ -1,8 +1,7 @@
 # POSIX shell startup file for an interactive login shell
 #
-# Reference:
-# - https://src.fedoraproject.org/rpms/setup/blob/rawhide/f/profile
-# - https://cygwin.com/cygwin-ug-net/using-cygwinenv.html
+# Reference: https://src.fedoraproject.org/rpms/setup/blob/rawhide/f/profile
+# Reference: https://cygwin.com/cygwin-ug-net/using-cygwinenv.html
 
 export XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_CONFIG_HOME="${HOME}/.config"

@@ -1,5 +1,4 @@
-# Reference:
-# - https://git-scm.com/docs/git-status#_porcelain_format_version_2
+# Reference: https://git-scm.com/docs/git-status
 
 BEGIN {
     branch = ""

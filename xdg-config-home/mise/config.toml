@@ -1,4 +1,5 @@
 # Reference: https://mise.jdx.dev/configuration.html
+
 [tools]
 bat = "latest"
 bats = "latest"
@@ -34,8 +35,6 @@ ty = "latest"
 uv = "latest"
 vim = "latest"
 zoxide = "latest"
-"aqua:tummychow/git-absorb" = "latest"
-"github:leejet/stable-diffusion.cpp" = "latest"
 "npm:@colbymchenry/codegraph" = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:bash-language-server" = "latest"

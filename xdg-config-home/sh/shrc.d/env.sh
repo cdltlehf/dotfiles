@@ -1,18 +1,19 @@
 # shellcheck shell=sh
 #
-# Reference:
-# - https://src.fedoraproject.org/rpms/setup/blob/rawhide/f/profile
-# - https://volta.sh
-# - https://github.com/nvm-sh/nvm
-# - https://deno.com
-# - https://github.com/conda-forge/miniforge
-# - https://github.com/eth-p/bat-extras
-# - https://github.com/Misterio77/flavours
-# - https://github.com/pyenv/pyenv
-# - https://github.com/rust-lang/rustup
-# - https://www.haskell.org/ghcup
-# - https://mamba.readthedocs.io
-# - https://brew.sh
+# Reference: https://brew.sh
+# Reference: https://deno.com
+# Reference: https://github.com/Misterio77/flavours
+# Reference: https://github.com/conda-forge/miniforge
+# Reference: https://github.com/eth-p/bat-extras
+# Reference: https://github.com/junegunn/fzf
+# Reference: https://github.com/nvm-sh/nvm
+# Reference: https://github.com/pyenv/pyenv
+# Reference: https://github.com/rust-lang/rustup
+# Reference: https://mamba.readthedocs.io
+# Reference: https://src.fedoraproject.org/rpms/setup/blob/rawhide/f/profile
+# Reference: https://volta.sh
+# Reference: https://wezfurlong.org/wezterm/shell-integration.html
+# Reference: https://www.haskell.org/ghcup
 
 ###############################################################################
 # XDG Base Directories
@@ -60,7 +61,6 @@ export VOLTA_HOME="${HOME}/.local/opt/volta"
 ###############################################################################
 # Homebrew
 ###############################################################################
-# https://brew.sh
 export HOMEBREW_NO_ENV_HINTS=1
 if [ -z "${HOMEBREW_PREFIX:-}" ] && [ -x "/opt/homebrew/bin/brew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -92,7 +92,6 @@ unset -f pathmunge
 ###############################################################################
 # FZF
 ###############################################################################
-# https://github.com/junegunn/fzf
 case "${LC_TERMINAL_GLYPHS:-ascii}" in
   nerdfont)
     fzf_prompt=" "

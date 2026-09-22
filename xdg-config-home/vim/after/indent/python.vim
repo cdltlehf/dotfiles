@@ -1,5 +1,4 @@
-" Reference:
-" - https://github.com/google/styleguide/blob/gh-pages/google_python_style.vim
+" Reference: https://github.com/google/styleguide/blob/gh-pages/google_python_style.vim
 "
 " Copyright 2019 Google LLC
 "
