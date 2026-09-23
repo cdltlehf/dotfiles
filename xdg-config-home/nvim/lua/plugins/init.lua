@@ -17,6 +17,28 @@ vim.pack.add({
   "https://github.com/sphamba/smear-cursor.nvim",
 })
 
+-- vim.pack.add installs into opt/; packadd is required to actually load them.
+for _, name in ipairs({
+  "fzf",
+  "fzf.vim",
+  "gitsigns.nvim",
+  "vim-fugitive",
+  "vim-obsession",
+  "vim-surround",
+  "vim-repeat",
+  "vim-abolish",
+  "vim-unimpaired",
+  "nvim-web-devicons",
+  "oil.nvim",
+  "vim-projectionist",
+  "copilot.vim",
+  "vimtex",
+  "which-key.nvim",
+  "smear-cursor.nvim",
+}) do
+  vim.cmd.packadd(name)
+end
+
 require("plugins.lsp")
 require("plugins.fzf")
 require("plugins.copilot")
