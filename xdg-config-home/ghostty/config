@@ -18,3 +18,6 @@ title = ""
 shell-integration-features = no-title
 
 env = LC_TERMINAL_GLYPHS=nerdfont
+
+# Pass Shift+Space through to IME for Korean input toggle (구름 입력기 한/영 전환)
+keybind = shift+space=unbind
