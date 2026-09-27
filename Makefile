@@ -32,14 +32,14 @@ upgrade: ## Upgrade tools and dependencies across package managers
 	@./scripts/upgrade
 
 .PHONY: clean
-clean: TARGET_DIRS := $(XDG_CONFIG_HOME) $(BIN_DIR)
+clean: TARGET_DIRS := $(XDG_CONFIG_HOME) $(BIN_DIR) $(CURDIR)
 clean: ## Clean dangling symlinks and backup files
 	@for d in $(TARGET_DIRS); do \
 		[ -d "$$d" ] || continue; \
 		symlinks -dr "$$d" | grep -v '^absolute:' || true; \
-		find "$$d" -type f -name "*.bak" -delete; \
+		find "$$d" \( -type f -o -type l \) \( -name "*.bak" -o -name ".*.bak" \) -delete; \
 	done
 	@symlinks -d "$(HOME)" | grep -v '^absolute:' || true
-	@find "$(HOME)" -maxdepth 1 -type f -name ".*.bak" -delete
+	@find "$(HOME)" -maxdepth 1 \( -type f -o -type l \) -name ".*.bak" -delete
 
 -include makefiles/*.mk

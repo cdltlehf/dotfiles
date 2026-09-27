@@ -114,7 +114,6 @@ symlink "${XDG_CONFIG_HOME}/zsh/zshenv" "${HOME}/.zshenv"
 symlink "zprofile" "${XDG_CONFIG_HOME}/zsh/.zprofile"
 symlink "zshrc" "${XDG_CONFIG_HOME}/zsh/.zshrc"
 symlink "${XDG_CONFIG_HOME}/editorconfig/config" "${HOME}/.editorconfig"
-symlink "${XDG_CONFIG_HOME}/editorconfig/config" "${BASE_DIR}/.editorconfig"
 
 if [[ ! -f "${LOCAL_GITCONFIG}" ]]; then
   if [[ "${interactive}" -eq 1 ]]; then

@@ -18,11 +18,7 @@ switch_case_indent = true
 indent_size = 2
 max_line_length = 80
 
-[*.{lua,toml,yaml,yml}]
-indent_size = 2
-
-[*.json]
-indent_style = tab
+[*.{lua,toml,yaml,yml,json}]
 indent_size = 2
 
 [*.py]
