@@ -1,21 +1,19 @@
-import = [ "~/.local/state/alacritty/colors.toml" ]
+import = ["~/.local/state/alacritty/colors.toml"]
 
 [env]
 LC_TERMINAL_GLYPHS = "nerdfont"
 
 [window]
-padding = { x = 0, y = 25 }
-dimensions = { columns = 80, lines = 24 }
-decorations = "Transparent"
-opacity = 0.9
 blur = true
+decorations = "Transparent"
+dimensions = { columns = 80, lines = 24 }
+opacity = 0.9
+padding = { x = 0, y = 25 }
 
 [font]
 normal = { family = "JetBrains Mono" }
-size = 13
 offset = { x = 0, y = 2 }
+size = 13
 
 [keyboard]
-bindings = [
-  { key = "Key6", mods = "Control", chars = "\u001e" }
-]
+bindings = [{ key = "Key6", mods = "Control", chars = "\u001e" }]

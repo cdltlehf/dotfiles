@@ -264,3 +264,25 @@ endif
 
 command LspDisableDiagnostics call lsp#disable_diagnostics_for_buffer()
 command LspEnableDiagnostics call lsp#enable_diagnostics_for_buffer()
+
+if executable('markdownlint-lsp')
+  augroup LspMarkdownlint
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'markdownlint-lsp',
+          \   'cmd': {server_info->['markdownlint-lsp', '--stdio']},
+          \   'allowlist': ['markdown', 'markdown.mdx'],
+          \ })
+  augroup END
+endif
+
+if executable('efm-langserver')
+  augroup LspEfm
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \   'name': 'efm-langserver',
+          \   'cmd': {server_info->['efm-langserver']},
+          \   'allowlist': ['yaml'],
+          \ })
+  augroup END
+endif

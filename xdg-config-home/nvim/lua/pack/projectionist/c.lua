@@ -1,3 +1,5 @@
+---@param read_template fun(rel_path: string): string[]?
+---@return table<string, table<string, any>>
 local function get_projections(read_template)
   local c_source_tmpl = {
     alternate = { "include/{}.h", "{}.h" },
@@ -21,9 +23,6 @@ local function get_projections(read_template)
   }
   return {
     ["*"] = {
-      -- Pipe-separated keys are not supported in vim-projectionist's inner projection
-      -- dicts (s:valid_key only allows one glob star). Split each alternative into a
-      -- separate key and use string aliases where both sides share the same star-ness.
       ["main.c"] = { type = "source", template = read_template("c/main.c.tmpl") },
       ["main.cc"] = { type = "source", template = read_template("cpp/main.cc.tmpl") },
       ["main.cpp"] = "main.cc",

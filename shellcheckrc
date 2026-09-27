@@ -1,0 +1,7 @@
+# Reference: https://www.shellcheck.net/wiki/
+# Reference: https://github.com/koalaman/shellcheck/blob/master/shellcheck.1.md
+
+enable=all
+severity=style
+external-sources=true
+check-sourced=true

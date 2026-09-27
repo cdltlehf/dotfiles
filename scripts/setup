@@ -6,28 +6,32 @@ shopt -s nullglob
 
 interactive=0
 
+echoerr() {
+  printf "%s\n" "$*" >&2
+}
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    -h | --help)
-      cat <<EOF
+  -h | --help)
+    cat <<EOF
 Usage: $(basename "$0") [options]
 
 Options:
   -h, --help           Show this help message and exit
   -i, --interactive    Interactive setup mode (prompt for user details)
 EOF
-      exit 0
-      ;;
-    --)
-      break
-      ;;
-    -i | --interactive)
-      interactive=1
-      ;;
-    *)
-      echo "Unknown option: $1"
-      exit 1
-      ;;
+    exit 0
+    ;;
+  --)
+    break
+    ;;
+  -i | --interactive)
+    interactive=1
+    ;;
+  *)
+    echoerr "Unknown option: $1"
+    exit 1
+    ;;
   esac
   shift
 done
@@ -39,7 +43,11 @@ export XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_STATE_HOME="${HOME}/.local/state"
 export XDG_CONFIG_DIRS="/etc/xdg"
 export XDG_DATA_DIRS="/usr/local/share:/usr/share"
-mkdir -p "${XDG_DATA_HOME}" "${XDG_CONFIG_HOME}" "${XDG_STATE_HOME}" "${XDG_CACHE_HOME}"
+mkdir -p \
+  "${XDG_DATA_HOME}" \
+  "${XDG_CONFIG_HOME}" \
+  "${XDG_STATE_HOME}" \
+  "${XDG_CACHE_HOME}"
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 readonly BASE_DIR
@@ -53,24 +61,42 @@ readonly GIT_COMPLETION_DIR="${XDG_DATA_HOME}/git/completion"
 readonly GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
 readonly WEZTERM_SHELL_INTEGRATION_DIR="${XDG_DATA_HOME}/wezterm/shell-integration"
 readonly WEZTERM_SHELL_INTEGRATION_URL="https://raw.githubusercontent.com/wezterm/wezterm/main/assets/shell-integration/wezterm.sh"
+readonly COLOR_24BIT_URL="https://raw.githubusercontent.com/gnachman/iTerm2/master/tests/24-bit-color.sh"
+readonly COLOR_256_URL="https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw"
+readonly TEST_FONTS_URL="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/bin/scripts/test-fonts.sh"
+readonly MISE_INSTALL_URL="https://mise.run"
 readonly KARABINER_TEMPLATES_DIR="${BASE_DIR}/xdg-config-home/karabiner/templates"
 readonly KARABINER_RULES_DIR="${BASE_DIR}/xdg-config-home/karabiner/assets/complex_modifications"
 
 symlink() {
   local src="$1" dest="$2"
-  [[ $(readlink "$dest" 2>/dev/null) == "$src" ]] && return 0
-  [[ -e "$dest" || -L "$dest" ]] && mv -f "$dest" "${dest}.$(date +%Y%m%d%H%M%S).bak"
-  ln -s "$src" "$dest"
+  [[ $(readlink "${dest}" 2>/dev/null || true) == "${src}" ]] && return 0
+  if [[ -e "${dest}" || -L "${dest}" ]]; then
+    mv -f "${dest}" "${dest}.$(date +%Y%m%d%H%M%S || true).bak"
+  fi
+  ln -s "${src}" "${dest}"
+}
+
+download() {
+  local url="$1" dest="$2" mode="${3:-}"
+  [[ -f "${dest}" ]] && return 0
+  mkdir -p "$(dirname "${dest}")"
+  if curl -fsSL "${url}" -o "${dest}"; then
+    [[ -n "${mode}" ]] && chmod "${mode}" "${dest}"
+  else
+    echoerr "Warning: failed to download ${url}"
+    rm -f "${dest}"
+  fi
 }
 
 # shellcheck source=/dev/null
-[ ! -f "${PRE_HOOK}" ] || . "${PRE_HOOK}"
+[[ ! -f "${PRE_HOOK}" ]] || . "${PRE_HOOK}"
 
-if command -v erb &>/dev/null && [ -d "${KARABINER_TEMPLATES_DIR}" ]; then
+if command -v erb &>/dev/null && [[ -d "${KARABINER_TEMPLATES_DIR}" ]]; then
   for template in "${KARABINER_TEMPLATES_DIR}"/*.erb; do
-    [ -f "${template}" ] || continue
+    [[ -f "${template}" ]] || continue
     target="${KARABINER_RULES_DIR}/$(basename "${template}" .erb)"
-    if [ ! -f "${target}" ]; then
+    if [[ ! -f "${target}" ]]; then
       mkdir -p "${KARABINER_RULES_DIR}"
       erb "${template}" >"${target}"
     fi
@@ -78,7 +104,7 @@ if command -v erb &>/dev/null && [ -d "${KARABINER_TEMPLATES_DIR}" ]; then
 fi
 
 for item in "${BASE_DIR}/xdg-config-home"/*; do
-  symlink "$item" "${XDG_CONFIG_HOME}/$(basename "$item")"
+  symlink "${item}" "${XDG_CONFIG_HOME}/$(basename "${item}")"
 done
 
 symlink "${XDG_CONFIG_HOME}/sh/profile" "${HOME}/.profile"
@@ -88,9 +114,10 @@ symlink "${XDG_CONFIG_HOME}/zsh/zshenv" "${HOME}/.zshenv"
 symlink "zprofile" "${XDG_CONFIG_HOME}/zsh/.zprofile"
 symlink "zshrc" "${XDG_CONFIG_HOME}/zsh/.zshrc"
 symlink "${XDG_CONFIG_HOME}/editorconfig/config" "${HOME}/.editorconfig"
+symlink "${XDG_CONFIG_HOME}/editorconfig/config" "${BASE_DIR}/.editorconfig"
 
-if [ ! -f "${LOCAL_GITCONFIG}" ]; then
-  if [ "${interactive}" -eq 1 ]; then
+if [[ ! -f "${LOCAL_GITCONFIG}" ]]; then
+  if [[ "${interactive}" -eq 1 ]]; then
     read -r -p "Enter your Git user name: " git_username
     read -r -p "Enter your Git user email: " git_useremail
     cat <<EOF >>"${LOCAL_GITCONFIG}"
@@ -109,24 +136,20 @@ fi
 
 mkdir -p "${BIN_DIR}"
 for script in "${BASE_DIR}/bin"/*; do
-  [ -e "${script}" ] && symlink "${script}" "${BIN_DIR}/$(basename "${script}")"
+  [[ -e "${script}" ]] || continue
+  symlink "${script}" "${BIN_DIR}/$(basename "${script}")"
 done
 export PATH="${BIN_DIR}:${PATH}"
 
-mkdir -p "${GIT_COMPLETION_DIR}"
-if [ ! -f "${GIT_COMPLETION_DIR}/git-prompt.sh" ]; then
-  curl -fsSL "${GIT_PROMPT_URL}" -o "${GIT_COMPLETION_DIR}/git-prompt.sh"
-fi
+download "${GIT_PROMPT_URL}" "${GIT_COMPLETION_DIR}/git-prompt.sh"
+download "${WEZTERM_SHELL_INTEGRATION_URL}" \
+  "${WEZTERM_SHELL_INTEGRATION_DIR}/wezterm.sh"
+download "${COLOR_24BIT_URL}" "${BIN_DIR}/24-bit-color" "+x"
+download "${COLOR_256_URL}" "${BIN_DIR}/256-color-table" "+x"
+download "${TEST_FONTS_URL}" "${BIN_DIR}/test-fonts" "+x"
 
-mkdir -p "${WEZTERM_SHELL_INTEGRATION_DIR}"
-if [ ! -f "${WEZTERM_SHELL_INTEGRATION_DIR}/wezterm.sh" ]; then
-  curl -fsSL "${WEZTERM_SHELL_INTEGRATION_URL}" -o "${WEZTERM_SHELL_INTEGRATION_DIR}/wezterm.sh"
-fi
-
-if ! command -v mise &>/dev/null; then
-  curl "https://mise.run" | sh
-fi
+command -v mise &>/dev/null || curl "${MISE_INSTALL_URL}" | sh
 mise install --yes
 
 # shellcheck source=/dev/null
-[ ! -f "${POST_HOOK}" ] || . "${POST_HOOK}"
+[[ ! -f "${POST_HOOK}" ]] || . "${POST_HOOK}"

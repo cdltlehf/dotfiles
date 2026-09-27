@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -o nounset
+set -o errexit
+
+echoerr() {
+  printf "%s\n" "$*" >&2
+}
+
+export __DOTFILES_UPGRADE=1
+
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+readonly BASE_DIR
+OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+readonly OS
+readonly PRE_HOOK="${BASE_DIR}/platforms/${OS}/pre-upgrade.sh"
+readonly POST_HOOK="${BASE_DIR}/platforms/${OS}/post-upgrade.sh"
+
+# shellcheck source=/dev/null
+[[ ! -f "${PRE_HOOK}" ]] || . "${PRE_HOOK}"
+
+! command -v brew &>/dev/null || (brew update && brew upgrade)
+! command -v mise &>/dev/null || mise upgrade --bump
+! command -v prek &>/dev/null || prek update
+! command -v nvim &>/dev/null ||
+  nvim --headless \
+    -c "lua vim.pack.update(nil, { force = true })" \
+    -c "qall!"
+
+# shellcheck source=/dev/null
+[[ ! -f "${POST_HOOK}" ]] || . "${POST_HOOK}"

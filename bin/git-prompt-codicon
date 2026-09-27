@@ -12,8 +12,8 @@ while [ -L "${target}" ]; do
   target_dir="$(dirname "${target}")"
   target="$(readlink "${target}")"
   case "${target}" in
-    /*) ;;
-    *) target="${target_dir}/${target}" ;;
+  /*) ;;
+  *) target="${target_dir}/${target}" ;;
   esac
 done
 AWK_SCRIPT="$(CDPATH='' cd -- "$(dirname -- "${target}")" && pwd -P)/git-prompt-codicon.awk"
@@ -50,8 +50,9 @@ elif [ -f "${GIT_DIR}/REVERT_HEAD" ]; then
 elif [ -f "${GIT_DIR}/sequencer/todo" ]; then
   read -r first_word _ <"${GIT_DIR}/sequencer/todo" 2>/dev/null || first_word=""
   case "${first_word}" in
-    p | pick) operation="CHERRY-PICKING" ;;
-    revert)   operation="REVERTING" ;;
+  p | pick) operation="CHERRY-PICKING" ;;
+  revert) operation="REVERTING" ;;
+  *) ;;
   esac
 elif [ -f "${GIT_DIR}/BISECT_LOG" ]; then
   operation="BISECTING"
@@ -61,8 +62,8 @@ tag_name=""
 if [ -f "${GIT_DIR}/HEAD" ]; then
   read -r head_content <"${GIT_DIR}/HEAD" 2>/dev/null || head_content=""
   case "${head_content}" in
-    ref:*) ;;
-    *) tag_name="$(git describe --tags --exact-match 2>/dev/null)" ;;
+  ref:*) ;;
+  *) tag_name="$(git describe --tags --exact-match 2>/dev/null)" ;;
   esac
 fi
 

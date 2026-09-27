@@ -82,7 +82,7 @@ __prompt_command() {
   fi
 
   local -a job_pids
-  readarray -t job_pids < <(jobs -p)
+  readarray -t job_pids < <(jobs -p || true)
   local job_count=${#job_pids[@]}
   local jobs_part=""
   if [[ ${job_count} -gt 0 ]]; then
@@ -141,6 +141,6 @@ __prompt_command() {
 }
 
 if [[ "${PROMPT_COMMAND:-}" != *"__prompt_command"* ]]; then
-  PROMPT_COMMAND="__prompt_command${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+  PROMPT_COMMAND="__prompt_command${PROMPT_COMMAND:+; ${PROMPT_COMMAND}}"
 fi
 export PROMPT_COMMAND

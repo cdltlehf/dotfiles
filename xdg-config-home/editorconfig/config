@@ -10,6 +10,17 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 2
 
+[*.{sh,bash,bats}]
+indent_size = 2
+switch_case_indent = true
+
+[*.{lua,toml,yaml,yml}]
+indent_size = 2
+
+[*.json]
+indent_style = tab
+indent_size = 2
+
 [*.py]
 indent_size = 4
 max_line_length = 88
@@ -19,4 +30,5 @@ indent_style = tab
 indent_size = 4
 
 [*.md]
+max_line_length = 80
 trim_trailing_whitespace = false

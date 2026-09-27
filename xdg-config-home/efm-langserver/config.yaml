@@ -1,0 +1,15 @@
+# Reference: https://github.com/mattn/efm-langserver
+
+version: 2
+
+tools:
+  yaml-yamllint:
+    lint-command: 'yamllint -f parsable -'
+    lint-stdin: true
+    lint-formats:
+      - '%f:%l:%c: [warning] %m'
+      - '%f:%l:%c: [error] %m'
+
+languages:
+  yaml:
+    - tool: yaml-yamllint

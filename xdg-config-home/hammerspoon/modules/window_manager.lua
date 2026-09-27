@@ -362,8 +362,7 @@ function WindowManager:showBox(f, text, delay, textSize)
   text = text or ""
   delay = delay or 0
   textSize = textSize or 150
-
-  padding = padding or 0
+  local padding = 0
   local f = {
     x = f.x + padding,
     y = f.y + padding,

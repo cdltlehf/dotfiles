@@ -1,17 +1,21 @@
 # Reference: https://github.com/Homebrew/homebrew-bundle
 
 tap "libkrun/krun", trusted: true
+tap "homebrew-zathura/zathura", trusted: true
 
 brew "bash"
 brew "bash-completion@2"
 brew "coreutils"
 brew "docker-compose"
 brew "ffmpeg"
+brew "girara"
 brew "imagemagick"
 brew "krunkit"
 brew "mise"
 brew "podman"
 brew "symlinks"
+brew "zathura"
+brew "zathura-pdf-poppler"
 cask "fliqlo"
 cask "font-d2coding"
 cask "font-jetbrains-mono"

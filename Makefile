@@ -27,15 +27,19 @@ references: ## List references
 setup: ## Run setup script
 	@./scripts/setup
 
+.PHONY: upgrade
+upgrade: ## Upgrade tools and dependencies across package managers
+	@./scripts/upgrade
+
 .PHONY: clean
 clean: TARGET_DIRS := $(XDG_CONFIG_HOME) $(BIN_DIR)
 clean: ## Clean dangling symlinks and backup files
 	@for d in $(TARGET_DIRS); do \
 		[ -d "$$d" ] || continue; \
-		symlinks -dr "$$d" || true; \
+		symlinks -dr "$$d" | grep -v '^absolute:' || true; \
 		find "$$d" -type f -name "*.bak" -delete; \
 	done
-	@symlinks -d "$(HOME)" || true
+	@symlinks -d "$(HOME)" | grep -v '^absolute:' || true
 	@find "$(HOME)" -maxdepth 1 -type f -name ".*.bak" -delete
 
 -include makefiles/*.mk

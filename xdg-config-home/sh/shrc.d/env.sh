@@ -63,7 +63,7 @@ export VOLTA_HOME="${HOME}/.local/opt/volta"
 ###############################################################################
 export HOMEBREW_NO_ENV_HINTS=1
 if [ -z "${HOMEBREW_PREFIX:-}" ] && [ -x "/opt/homebrew/bin/brew" ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+  eval "$(/opt/homebrew/bin/brew shellenv || true)"
 fi
 
 ###############################################################################
@@ -131,7 +131,7 @@ export LSCOLORS="exfxcxdxbxegedabagacad"
 ###############################################################################
 # WezTerm
 ###############################################################################
-SHELL_INTEGRATION="${XDG_DATA_HOME:-$HOME/.local/share}/wezterm/shell-integration/wezterm.sh"
+SHELL_INTEGRATION="${XDG_DATA_HOME:-${HOME}/.local/share}/wezterm/shell-integration/wezterm.sh"
 # shellcheck source=/dev/null
 [ -f "${SHELL_INTEGRATION}" ] && . "${SHELL_INTEGRATION}"
 unset SHELL_INTEGRATION

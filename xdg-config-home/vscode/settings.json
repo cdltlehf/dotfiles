@@ -1,7 +1,7 @@
 {
-  "editor.fontFamily": "'JetBrains Mono', 'D2Coding', 'Symbols Nerd Font', monospace",
-  "editor.fontSize": 13,
-  "editor.lineHeight": 1.2,
-  "editor.renderWhitespace": "selection",
-  "workbench.colorTheme": "Modus Vivendi"
+	"editor.fontFamily": "'JetBrains Mono', 'D2Coding', 'Symbols Nerd Font', monospace",
+	"editor.fontSize": 13,
+	"editor.lineHeight": 1.2,
+	"editor.renderWhitespace": "selection",
+	"workbench.colorTheme": "Modus Vivendi"
 }

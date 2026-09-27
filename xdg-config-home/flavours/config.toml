@@ -1,19 +1,19 @@
 [[items]]
 file = "${XDG_STATE_HOME:-~/.local/state}/sh/colors.sh"
-template = "shell"
 rewrite = true
+template = "shell"
 
 [[items]]
 file = "${XDG_STATE_HOME:-~/.local/state}/wezterm/colorschemes/colors.toml"
-template = "wezterm"
 rewrite = true
+template = "wezterm"
 
 [[items]]
 file = "${XDG_CONFIG_HOME:-~/.config}/ghostty/themes/flavours"
-template = "ghostty"
 rewrite = true
+template = "ghostty"
 
 [[items]]
 file = "${XDG_STATE_HOME:-~/.local/state}/alacritty/colors.toml"
-template = "alacritty"
 rewrite = true
+template = "alacritty"

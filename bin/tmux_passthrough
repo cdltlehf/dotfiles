@@ -5,5 +5,5 @@
 ESC="$(printf '\033')"
 readonly ESC
 
-payload="$(cat | sed "s/${ESC}/${ESC}${ESC}/g")"
+payload="$(cat | sed "s/${ESC}/${ESC}${ESC}/g" || true)"
 printf "${ESC}Ptmux;%s${ESC}\\${ESC}\\" "${payload}"
