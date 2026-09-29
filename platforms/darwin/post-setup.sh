@@ -10,6 +10,11 @@ readonly SPOONS_DIR="${XDG_CONFIG_HOME}/hammerspoon/Spoons"
 readonly VSCODE_USER_DIR="${HOME}/Library/Application Support/Code/User"
 readonly UBERSICHT_USER_DIR="${HOME}/Library/Application Support/Übersicht"
 readonly SHORTCUTS_PLIST_DIR="${BASE_DIR}/platforms/darwin/plists/shortcuts"
+readonly GUREUM_PREF_DIR="${HOME}/Library/Containers/org.youknowone.inputmethod.Gureum/Data/Library/Preferences"
+readonly GUREUM_SOURCE_PLIST="${BASE_DIR}/platforms/darwin/plists/gureum/org.youknowone.Gureum.plist"
+readonly SYMBOLIC_HOTKEYS_PLIST="${HOME}/Library/Preferences/com.apple.symbolichotkeys.plist"
+readonly HOTKEY_SELECT_PREVIOUS_INPUT_SOURCE=60
+readonly HOTKEY_SELECT_NEXT_INPUT_SOURCE=61
 
 defaults delete com.apple.desktopservices 2>/dev/null || true
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
@@ -73,6 +78,17 @@ fi
 if [[ -d "${XDG_CONFIG_HOME}/ubersicht/widgets" ]]; then
   mkdir -p "${UBERSICHT_USER_DIR}"
   symlink "${XDG_CONFIG_HOME}/ubersicht/widgets" "${UBERSICHT_USER_DIR}/widgets"
+fi
+
+if [[ -f "${SYMBOLIC_HOTKEYS_PLIST}" ]]; then
+  for hotkey_id in "${HOTKEY_SELECT_PREVIOUS_INPUT_SOURCE}" "${HOTKEY_SELECT_NEXT_INPUT_SOURCE}"; do
+    plutil -replace "AppleSymbolicHotKeys.${hotkey_id}.enabled" -bool false "${SYMBOLIC_HOTKEYS_PLIST}" 2>/dev/null || true
+  done
+fi
+
+if [[ -f "${GUREUM_SOURCE_PLIST}" ]]; then
+  mkdir -p "${GUREUM_PREF_DIR}"
+  cp -f "${GUREUM_SOURCE_PLIST}" "${GUREUM_PREF_DIR}/org.youknowone.Gureum.plist"
 fi
 
 if command -v shortcuts &>/dev/null; then

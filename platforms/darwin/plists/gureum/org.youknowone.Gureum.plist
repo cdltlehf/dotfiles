@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ExchangeToRomanModeByEscapeKey</key>
+	<true/>
+	<key>HangulAutoReorder</key>
+	<true/>
+	<key>HangulForceStrictCombinationRule</key>
+	<true/>
+	<key>InputModeExchangeKey</key>
+	<dict>
+		<key>keyCode</key>
+		<integer>49</integer>
+		<key>modifier</key>
+		<integer>131072</integer>
+	</dict>
+	<key>InputModeHanjaKey</key>
+	<dict/>
+	<key>LastHangulInputMode</key>
+	<string>org.youknowone.inputmethod.Gureum.han3finalnoshift</string>
+	<key>LastRomanInputMode</key>
+	<string>org.youknowone.inputmethod.Gureum.qwerty</string>
+	<key>UpdateNotificationExperimental</key>
+	<true/>
+</dict>
+</plist>
