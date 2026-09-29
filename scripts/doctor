@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -o nounset
+set -o errexit
+
+echoerr() {
+  printf "%s\n" "$*" >&2
+}
+
+export __DOTFILES_DOCTOR=1
+
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+readonly BASE_DIR
+OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+readonly OS
+readonly PRE_HOOK="${BASE_DIR}/platforms/${OS}/pre-doctor.sh"
+readonly POST_HOOK="${BASE_DIR}/platforms/${OS}/post-doctor.sh"
+
+# shellcheck source=/dev/null
+[[ ! -f "${PRE_HOOK}" ]] || . "${PRE_HOOK}"
+
+! command -v brew &>/dev/null || brew doctor || true
+! command -v mise &>/dev/null || mise doctor
+
+# shellcheck source=/dev/null
+[[ ! -f "${POST_HOOK}" ]] || . "${POST_HOOK}"

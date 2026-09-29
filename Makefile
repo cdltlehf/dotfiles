@@ -31,6 +31,10 @@ setup: ## Run setup script
 upgrade: ## Upgrade tools and dependencies across package managers
 	@./scripts/upgrade
 
+.PHONY: doctor
+doctor: ## Run diagnostic doctor checks across package managers
+	@./scripts/doctor
+
 .PHONY: clean
 clean: TARGET_DIRS := $(XDG_CONFIG_HOME) $(BIN_DIR) $(CURDIR)
 clean: ## Clean dangling symlinks and backup files
