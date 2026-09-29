@@ -5,8 +5,7 @@ adjust-cell-height = 20%
 background-blur = macos-glass-regular
 background-opacity = 0.9
 copy-on-select = clipboard
-# Pass Shift+Space through to IME for Korean input toggle (구름 입력기 한/영 전환)
-keybind = shift+space=unbind
+keybind = shift+space=ignore
 theme = "Modus Vivendi"
 window-padding-balance = true
 window-padding-x = 6
