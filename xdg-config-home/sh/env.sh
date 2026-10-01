@@ -12,7 +12,6 @@
 # Reference: https://mamba.readthedocs.io
 # Reference: https://src.fedoraproject.org/rpms/setup/blob/rawhide/f/profile
 # Reference: https://volta.sh
-# Reference: https://wezfurlong.org/wezterm/shell-integration.html
 # Reference: https://www.haskell.org/ghcup
 
 ###############################################################################
@@ -24,6 +23,13 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
 export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS:-/etc/xdg}"
+
+if [ -f "${HOME}/.env" ]; then
+  set -o allexport
+  # shellcheck source=/dev/null
+  . "${HOME}/.env"
+  set +o allexport
+fi
 
 ###############################################################################
 # XDG_DATA_HOME
@@ -64,30 +70,51 @@ export VOLTA_HOME="${HOME}/.local/opt/volta"
 export HOMEBREW_NO_ENV_HINTS=1
 if [ -z "${HOMEBREW_PREFIX:-}" ] && [ -x "/opt/homebrew/bin/brew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv || true)"
+elif [ -z "${HOMEBREW_PREFIX:-}" ] && [ -x "/usr/local/bin/brew" ]; then
+  eval "$(/usr/local/bin/brew shellenv || true)"
 fi
 
 ###############################################################################
-# PATH & Miscellaneous
+# PATH & Libraries
 ###############################################################################
 pathmunge() {
-  [ -h "$1" ] && return
+  [ -d "$1" ] || return 0
 
-  case ":${PATH}:" in
-    *":$1:"*) ;;
-    *)
-      if [ "$2" = "after" ]; then
-        PATH="${PATH:+${PATH}:}$1"
-      else
-        PATH="$1${PATH:+:${PATH}}"
-      fi
-      ;;
-  esac
+  path_tmp=":${PATH}:"
+  while true; do
+    case "${path_tmp}" in
+      *":$1:"*) path_tmp="${path_tmp%%:"$1":*}:${path_tmp#*:"$1":}" ;;
+      *) break ;;
+    esac
+  done
+  path_tmp="${path_tmp#:}"
+  PATH="${path_tmp%:}"
+
+  if [ "$2" = "after" ]; then
+    PATH="${PATH:+${PATH}:}$1"
+  else
+    PATH="$1${PATH:+:${PATH}}"
+  fi
 }
 
-pathmunge "${HOME}/.local/bin"
 pathmunge "${HOME}/.local/share/mise/shims"
+pathmunge "${HOME}/.local/bin"
 export PATH
-unset -f pathmunge
+
+PKG_CONFIG_PATH="${HOME}/.local/lib/pkgconfig${PKG_CONFIG_PATH:+:${PKG_CONFIG_PATH}}"
+PKG_CONFIG_PATH="${HOME}/.local/lib64/pkgconfig:${PKG_CONFIG_PATH}"
+export PKG_CONFIG_PATH
+
+LD_LIBRARY_PATH="${HOME}/.local/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+LD_LIBRARY_PATH="${HOME}/.local/lib64:${LD_LIBRARY_PATH}"
+export LD_LIBRARY_PATH
+
+###############################################################################
+# Default Programs & OS Quirks
+###############################################################################
+export EDITOR='nvim'
+export CYGWIN=winsymlinks:nativestrict
+export MSYS="${CYGWIN}"
 
 ###############################################################################
 # FZF
@@ -127,11 +154,3 @@ fi
 
 export LS_COLORS="di=34:ln=36:ex=32:so=35:pi=33:bd=33:cd=33:su=31:sg=31:tw=34:ow=34:st=34:or=31:mi=31"
 export LSCOLORS="exfxcxdxbxegedabagacad"
-
-###############################################################################
-# WezTerm
-###############################################################################
-SHELL_INTEGRATION="${XDG_DATA_HOME:-${HOME}/.local/share}/wezterm/shell-integration/wezterm.sh"
-# shellcheck source=/dev/null
-[ -f "${SHELL_INTEGRATION}" ] && . "${SHELL_INTEGRATION}"
-unset SHELL_INTEGRATION

@@ -4,4 +4,6 @@
 # Reference: https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html
 
 # shellcheck source=/dev/null
+[[ -e "${HOME}/.profile" ]] && source "${HOME}/.profile"
+# shellcheck source=/dev/null
 [[ -f "${HOME}/.bashrc" ]] && source "${HOME}/.bashrc"
