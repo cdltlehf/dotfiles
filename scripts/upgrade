@@ -26,12 +26,13 @@ fi
 
 # shellcheck disable=SC2310
 if has mise; then
+  mise self-update --yes
   mise upgrade --bump
 fi
 
 # shellcheck disable=SC2310
 if has prek; then
-  prek update
+  prek auto-update
 fi
 # shellcheck disable=SC2310
 if has nvim; then
