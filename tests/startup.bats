@@ -1,7 +1,8 @@
 #!/usr/bin/env bats
 # shellcheck shell=bash
 # shellcheck disable=SC2016,SC2154,SC2292,SC2312
-# Reference: https://bats-core.readthedocs.io/
+
+PATH_ORDER_REGEX='^([^:]*\.local/share/mise/shims):([^:]*\.local/bin):(/opt/homebrew/bin):.*:/usr/bin:'
 
 setup() {
   export TEST_REPO_DIR="${BATS_TEST_DIRNAME:-.}/.."
@@ -12,26 +13,25 @@ setup() {
 @test "startup: zsh login shell orders PATH correctly" {
   local path_val
   path_val="$(env -i HOME="${HOME}" PATH="/usr/bin:/bin" zsh -l -c 'echo "${PATH}"')"
-  # mise shims and .local/bin must precede homebrew, which must precede /usr/bin
-  [[ "${path_val}" =~ ^([^:]*\.local/share/mise/shims):([^:]*\.local/bin):(/opt/homebrew/bin):.*:/usr/bin: ]]
+  [[ "${path_val}" =~ ${PATH_ORDER_REGEX} ]]
 }
 
 @test "startup: zsh non-login shell orders PATH correctly" {
   local path_val
   path_val="$(env -i HOME="${HOME}" PATH="/usr/bin:/bin" zsh -c 'echo "${PATH}"')"
-  [[ "${path_val}" =~ ^([^:]*\.local/share/mise/shims):([^:]*\.local/bin):(/opt/homebrew/bin):.*:/usr/bin: ]]
+  [[ "${path_val}" =~ ${PATH_ORDER_REGEX} ]]
 }
 
 @test "startup: bash login shell orders PATH correctly" {
   local path_val
   path_val="$(env -i HOME="${HOME}" PATH="/usr/bin:/bin" bash -l -c 'echo "${PATH}"')"
-  [[ "${path_val}" =~ ^([^:]*\.local/share/mise/shims):([^:]*\.local/bin):(/opt/homebrew/bin):.*:/usr/bin: ]]
+  [[ "${path_val}" =~ ${PATH_ORDER_REGEX} ]]
 }
 
 @test "startup: posix sh login shell orders PATH correctly" {
   local path_val
   path_val="$(env -i HOME="${HOME}" PATH="/usr/bin:/bin" sh -l -c 'echo "${PATH}"')"
-  [[ "${path_val}" =~ ^([^:]*\.local/share/mise/shims):([^:]*\.local/bin):(/opt/homebrew/bin):.*:/usr/bin: ]]
+  [[ "${path_val}" =~ ${PATH_ORDER_REGEX} ]]
 }
 
 @test "startup: zsh executes files in expected subsequence" {
