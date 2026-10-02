@@ -12,8 +12,8 @@ readonly ZATHURA_APP_CONVERT_URL="https://raw.githubusercontent.com/homebrew-zat
 readonly SPOONS_DIR="${XDG_CONFIG_HOME}/hammerspoon/Spoons"
 readonly VSCODE_USER_DIR="${HOME}/Library/Application Support/Code/User"
 readonly UBERSICHT_USER_DIR="${HOME}/Library/Application Support/Übersicht"
-readonly SHORTCUTS_PLIST_DIR="${BASE_DIR}/platforms/darwin/plists/shortcuts"
-readonly GUREUM_SOURCE_PLIST="${BASE_DIR}/platforms/darwin/plists/gureum/org.youknowone.Gureum.plist"
+readonly SHORTCUTS_DIR="${BASE_DIR}/platforms/darwin/shortcuts"
+readonly PREFERENCES_DIR="${BASE_DIR}/platforms/darwin/preferences"
 readonly SYMBOLIC_HOTKEYS_PLIST="${HOME}/Library/Preferences/com.apple.symbolichotkeys.plist"
 readonly KARABINER_TEMPLATES_DIR="${BASE_DIR}/xdg-config-home/karabiner/templates"
 readonly KARABINER_RULES_DIR="${BASE_DIR}/xdg-config-home/karabiner/assets/complex_modifications"
@@ -97,8 +97,13 @@ if [ -f "${SYMBOLIC_HOTKEYS_PLIST}" ]; then
   unset hotkey_id
 fi
 
-if [ -f "${GUREUM_SOURCE_PLIST}" ]; then
-  defaults import org.youknowone.Gureum "${GUREUM_SOURCE_PLIST}" 2>/dev/null || true
+if [ -d "${PREFERENCES_DIR}" ]; then
+  for plist in "${PREFERENCES_DIR}"/*.plist; do
+    [ -f "${plist}" ] || continue
+    domain="$(basename "${plist}" .plist)"
+    defaults import "${domain}" "${plist}" 2>/dev/null || true
+  done
+  unset plist domain
 fi
 
 # shellcheck disable=SC2310
@@ -109,7 +114,7 @@ if has shortcuts; then
     if [ -n "${tmpdir}" ] && [ -d "${tmpdir}" ]; then
       plutil \
         -convert binary1 \
-        "${SHORTCUTS_PLIST_DIR}/toggle_high_dynamic_range.plist" \
+        "${SHORTCUTS_DIR}/toggle_high_dynamic_range.plist" \
         -o "${tmpdir}/Toggle High Dynamic Range.unsigned.shortcut"
       shortcuts sign \
         --mode people-who-know-me \
