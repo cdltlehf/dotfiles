@@ -30,8 +30,9 @@ fi
 
 # shellcheck disable=SC2310
 if has prek; then
-  prek auto-update
+  prek update
 fi
+
 # shellcheck disable=SC2310
 if has nvim; then
   nvim --headless \

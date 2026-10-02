@@ -43,7 +43,8 @@ upgrade: ## Upgrade tools and dependencies
 
 .PHONY: doctor
 doctor: ## Run diagnostic doctor checks across package managers
-	@./scripts/doctor
+	./scripts/doctor
+
 
 .PHONY: clean
 clean: TARGET_DIRS := $(XDG_CONFIG_HOME) $(BIN_DIR) $(CURDIR)
