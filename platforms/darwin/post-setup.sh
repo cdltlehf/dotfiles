@@ -65,7 +65,9 @@ for app in "Finder" "Dock" "SystemUIServer"; do
 done
 unset app
 
-symlink "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/iCloud"
+if [ -d "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" ]; then
+  symlink "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/iCloud"
+fi
 
 if [ ! -d "${SPOONS_DIR}/SpoonInstall.spoon" ]; then
   tmpdir="$(mktemp -d)"
