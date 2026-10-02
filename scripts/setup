@@ -1,4 +1,11 @@
 #!/bin/sh
+#
+# Reference: https://github.com/git/git
+# Reference: https://wezfurlong.org/wezterm
+# Reference: https://iterm2.com
+# Reference: https://gist.github.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263
+# Reference: https://github.com/ryanoasis/nerd-fonts
+# Reference: https://mise.jdx.dev
 
 set -o nounset
 set -o errexit

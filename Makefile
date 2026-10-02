@@ -18,8 +18,9 @@ help: ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 .PHONY: references
-references: ## List references
-	@git --no-pager grep -P -o '[R]eference:\K[ ].*'
+references: ## List references sorted by URL
+	@git --no-pager grep -E '^[^a-zA-Z0-9]*Reference: [^<]' | \
+		sed -E $$'s/^([^:]+):.*Reference: (.*)/\033[36m\\2\033[0m \033[90m\\1\033[0m/' | sort -k1,1
 
 ##@ Dotfiles
 
@@ -54,5 +55,7 @@ clean: ## Clean dangling symlinks and backup files
 	done
 	@symlinks -d "$(HOME)" | grep -v '^absolute:' || true
 	@find "$(HOME)" -maxdepth 1 \( -type f -o -type l \) -name ".*.bak" -delete
+	@rm -rf "$(XDG_CACHE_HOME)/evalcache"
+
 
 -include makefiles/*.mk
