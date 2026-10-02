@@ -16,7 +16,7 @@ if [ -d "${SHRCDIR}" ]; then
 fi
 unset sh
 
-if [ -n "${WEZTERM_EXECUTABLE}" ]; then
+if [ -n "${WEZTERM_EXECUTABLE:-}" ]; then
   export WEZTERM_SHELL="${SHELL}"
 fi
 unset SHRCDIR

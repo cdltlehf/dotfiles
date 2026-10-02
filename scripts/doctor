@@ -1,26 +1,31 @@
-#!/bin/bash
+#!/bin/sh
 
 set -o nounset
 set -o errexit
 
-echoerr() {
-  printf "%s\n" "$*" >&2
-}
-
 export __DOTFILES_DOCTOR=1
 
-BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 readonly BASE_DIR
-OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
-readonly OS
-readonly PRE_HOOK="${BASE_DIR}/platforms/${OS}/pre-doctor.sh"
-readonly POST_HOOK="${BASE_DIR}/platforms/${OS}/post-doctor.sh"
 
-# shellcheck source=/dev/null
-[[ ! -f "${PRE_HOOK}" ]] || . "${PRE_HOOK}"
+# shellcheck source=scripts/lib.sh
+. "${BASE_DIR}/scripts/lib.sh"
 
-! command -v brew &>/dev/null || brew doctor || true
-! command -v mise &>/dev/null || mise doctor
+OS="$(detect_os)"
+ARCH="$(detect_arch)"
+export OS ARCH
+readonly OS ARCH
 
-# shellcheck source=/dev/null
-[[ ! -f "${POST_HOOK}" ]] || . "${POST_HOOK}"
+run_hook pre-doctor
+
+# shellcheck disable=SC2310
+if has brew; then
+  brew doctor || true
+fi
+
+# shellcheck disable=SC2310
+if has mise; then
+  mise doctor || true
+fi
+
+run_hook post-doctor

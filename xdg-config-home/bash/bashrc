@@ -24,6 +24,7 @@ if [[ -d "${BASHRCDIR}" ]]; then
   done
   unset -v sh
 fi
+unset -v SHRC BASHRCDIR
 
 # shellcheck source=/dev/null
 [[ -f "${HOME}/.bashrc.local" ]] && source "${HOME}/.bashrc.local" 2>/dev/null || true

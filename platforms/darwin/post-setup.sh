@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/bin/sh
+
+set -o nounset
+set -o errexit
 
 : "${__DOTFILES_SETUP:?Do not run directly}"
 : "${XDG_CONFIG_HOME:?Do not run directly}"
@@ -13,6 +16,8 @@ readonly SHORTCUTS_PLIST_DIR="${BASE_DIR}/platforms/darwin/plists/shortcuts"
 readonly GUREUM_PREF_DIR="${HOME}/Library/Containers/org.youknowone.inputmethod.Gureum/Data/Library/Preferences"
 readonly GUREUM_SOURCE_PLIST="${BASE_DIR}/platforms/darwin/plists/gureum/org.youknowone.Gureum.plist"
 readonly SYMBOLIC_HOTKEYS_PLIST="${HOME}/Library/Preferences/com.apple.symbolichotkeys.plist"
+readonly KARABINER_TEMPLATES_DIR="${BASE_DIR}/xdg-config-home/karabiner/templates"
+readonly KARABINER_RULES_DIR="${BASE_DIR}/xdg-config-home/karabiner/assets/complex_modifications"
 readonly HOTKEY_SELECT_PREVIOUS_INPUT_SOURCE=60
 readonly HOTKEY_SELECT_NEXT_INPUT_SOURCE=61
 
@@ -56,63 +61,72 @@ defaults write org.hammerspoon.Hammerspoon \
   MJConfigFile "${XDG_CONFIG_HOME}/hammerspoon/init.lua"
 
 for app in "Finder" "Dock" "SystemUIServer"; do
-  killall "${app}" &>/dev/null || true
+  killall "${app}" >/dev/null 2>&1 || true
 done
+unset app
 
 symlink "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/iCloud"
 
-if [[ ! -d "${SPOONS_DIR}/SpoonInstall.spoon" ]]; then
-  tmpfile="$(mktemp || true)"
-  download "${SPOON_INSTALL_URL}" "${tmpfile}"
-  unzip -q "${tmpfile}" -d "${SPOONS_DIR}"
-  rm "${tmpfile}"
-  unset tmpfile
+if [ ! -d "${SPOONS_DIR}/SpoonInstall.spoon" ]; then
+  tmpdir="$(mktemp -d)"
+  if [ -n "${tmpdir}" ] && [ -d "${tmpdir}" ]; then
+    download "${SPOON_INSTALL_URL}" "${tmpdir}/SpoonInstall.zip"
+    unzip -q "${tmpdir}/SpoonInstall.zip" -d "${SPOONS_DIR}"
+    rm -rf "${tmpdir}"
+  fi
+  unset tmpdir
 fi
 
-if [[ -d "${VSCODE_USER_DIR}" ]] || command -v code &>/dev/null; then
+# shellcheck disable=SC2310
+if [ -d "${VSCODE_USER_DIR}" ] || has code; then
   mkdir -p "${VSCODE_USER_DIR}"
   symlink \
     "${XDG_CONFIG_HOME}/vscode/settings.json" \
     "${VSCODE_USER_DIR}/settings.json"
 fi
-if [[ -d "${XDG_CONFIG_HOME}/ubersicht/widgets" ]]; then
+if [ -d "${XDG_CONFIG_HOME}/ubersicht/widgets" ]; then
   mkdir -p "${UBERSICHT_USER_DIR}"
   symlink "${XDG_CONFIG_HOME}/ubersicht/widgets" "${UBERSICHT_USER_DIR}/widgets"
 fi
 
-if [[ -f "${SYMBOLIC_HOTKEYS_PLIST}" ]]; then
+if [ -f "${SYMBOLIC_HOTKEYS_PLIST}" ]; then
   for hotkey_id in "${HOTKEY_SELECT_PREVIOUS_INPUT_SOURCE}" "${HOTKEY_SELECT_NEXT_INPUT_SOURCE}"; do
     plutil -replace "AppleSymbolicHotKeys.${hotkey_id}.enabled" -bool false "${SYMBOLIC_HOTKEYS_PLIST}" 2>/dev/null || true
   done
+  unset hotkey_id
 fi
 
-if [[ -f "${GUREUM_SOURCE_PLIST}" ]]; then
+if [ -f "${GUREUM_SOURCE_PLIST}" ]; then
   mkdir -p "${GUREUM_PREF_DIR}"
   cp -f "${GUREUM_SOURCE_PLIST}" "${GUREUM_PREF_DIR}/org.youknowone.Gureum.plist"
 fi
 
-if command -v shortcuts &>/dev/null; then
+# shellcheck disable=SC2310
+if has shortcuts; then
   if ! (shortcuts list 2>/dev/null || true) |
     grep -Fxq "Toggle High Dynamic Range"; then
-    tmpdir=$(mktemp -d)
-    plutil \
-      -convert binary1 \
-      "${SHORTCUTS_PLIST_DIR}/toggle_high_dynamic_range.plist" \
-      -o "${tmpdir}/Toggle High Dynamic Range.unsigned.shortcut"
-    shortcuts sign \
-      --mode people-who-know-me \
-      -i "${tmpdir}/Toggle High Dynamic Range.unsigned.shortcut" \
-      -o "${tmpdir}/Toggle High Dynamic Range.shortcut"
-    open "${tmpdir}/Toggle High Dynamic Range.shortcut"
-    sleep 2
-    rm -rf "${tmpdir}"
+    tmpdir="$(mktemp -d)"
+    if [ -n "${tmpdir}" ] && [ -d "${tmpdir}" ]; then
+      plutil \
+        -convert binary1 \
+        "${SHORTCUTS_PLIST_DIR}/toggle_high_dynamic_range.plist" \
+        -o "${tmpdir}/Toggle High Dynamic Range.unsigned.shortcut"
+      shortcuts sign \
+        --mode people-who-know-me \
+        -i "${tmpdir}/Toggle High Dynamic Range.unsigned.shortcut" \
+        -o "${tmpdir}/Toggle High Dynamic Range.shortcut"
+      open "${tmpdir}/Toggle High Dynamic Range.shortcut"
+      sleep 2
+      rm -rf "${tmpdir}"
+    fi
     unset tmpdir
   fi
 fi
 
-if command -v brew &>/dev/null && brew list zathura &>/dev/null; then
-  if [[ ! -d "/Applications/Zathura.app" ]]; then
-    (curl -fsSL "${ZATHURA_APP_CONVERT_URL}" || true) | sh
+# shellcheck disable=SC2310
+if has brew && brew list zathura >/dev/null 2>&1; then
+  if [ ! -d "/Applications/Zathura.app" ]; then
+    download "${ZATHURA_APP_CONVERT_URL}" | sh
   fi
   zathura_lib_dir="$(brew --prefix zathura 2>/dev/null || true)/lib/zathura"
   mkdir -p "${zathura_lib_dir}"
@@ -120,10 +134,23 @@ if command -v brew &>/dev/null && brew list zathura &>/dev/null; then
     plugin_prefix="$(
       brew --prefix "zathura-${plugin}" 2>/dev/null || true
     )"
-    if [[ -n "${plugin_prefix}" ]] &&
-      [[ -f "${plugin_prefix}/lib${plugin}.dylib" ]]; then
+    if [ -n "${plugin_prefix}" ] &&
+      [ -f "${plugin_prefix}/lib${plugin}.dylib" ]; then
       ln -sf "${plugin_prefix}/lib${plugin}.dylib" "${zathura_lib_dir}/"
     fi
   done
   unset zathura_lib_dir plugin plugin_prefix
+fi
+
+# shellcheck disable=SC2310
+if has erb && [ -d "${KARABINER_TEMPLATES_DIR}" ]; then
+  for template in "${KARABINER_TEMPLATES_DIR}"/*.erb; do
+    [ -f "${template}" ] || continue
+    target="${KARABINER_RULES_DIR}/$(basename "${template}" .erb)"
+    if [ ! -f "${target}" ]; then
+      mkdir -p "${KARABINER_RULES_DIR}"
+      erb "${template}" >"${target}"
+    fi
+  done
+  unset template target
 fi

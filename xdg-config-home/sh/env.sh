@@ -90,11 +90,12 @@ pathmunge() {
   path_tmp="${path_tmp#:}"
   PATH="${path_tmp%:}"
 
-  if [ "$2" = "after" ]; then
+  if [ "${2:-}" = "after" ]; then
     PATH="${PATH:+${PATH}:}$1"
   else
     PATH="$1${PATH:+:${PATH}}"
   fi
+  unset path_tmp
 }
 
 pathmunge "${HOME}/.local/share/mise/shims"

@@ -1,6 +1,7 @@
 if command -v brew >/dev/null 2>&1; then
-  local brew_prefix="${HOMEBREW_PREFIX:-$(brew --prefix)}"
+  brew_prefix="${HOMEBREW_PREFIX:-$(brew --prefix)}"
   [[ -d "${brew_prefix}/share/zsh/site-functions" ]] && fpath=("${brew_prefix}/share/zsh/site-functions" $fpath)
+  unset brew_prefix
 fi
 
 fpath=(

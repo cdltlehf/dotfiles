@@ -1,61 +1,25 @@
-#!/bin/bash
+#!/bin/sh
 
 set -o nounset
 set -o errexit
-shopt -s nullglob
 
-interactive=0
+BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+readonly BASE_DIR
 
-echoerr() {
-  printf "%s\n" "$*" >&2
-}
-
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-  -h | --help)
-    cat <<EOF
-Usage: $(basename "$0") [options]
-
-Options:
-  -h, --help           Show this help message and exit
-  -i, --interactive    Interactive setup mode (prompt for user details)
-EOF
-    exit 0
-    ;;
-  --)
-    break
-    ;;
-  -i | --interactive)
-    interactive=1
-    ;;
-  *)
-    echoerr "Unknown option: $1"
-    exit 1
-    ;;
-  esac
-  shift
-done
+# shellcheck source=scripts/lib.sh
+. "${BASE_DIR}/scripts/lib.sh"
 
 export __DOTFILES_SETUP=1
-export XDG_CACHE_HOME="${HOME}/.cache"
-export XDG_CONFIG_HOME="${HOME}/.config"
-export XDG_DATA_HOME="${HOME}/.local/share"
-export XDG_STATE_HOME="${HOME}/.local/state"
-export XDG_CONFIG_DIRS="/etc/xdg"
-export XDG_DATA_DIRS="/usr/local/share:/usr/share"
-mkdir -p \
-  "${XDG_DATA_HOME}" \
-  "${XDG_CONFIG_HOME}" \
-  "${XDG_STATE_HOME}" \
-  "${XDG_CACHE_HOME}"
 
-BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-readonly BASE_DIR
-OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
-readonly OS
-readonly PRE_HOOK="${BASE_DIR}/platforms/${OS}/pre-setup.sh"
-readonly POST_HOOK="${BASE_DIR}/platforms/${OS}/post-setup.sh"
 readonly BIN_DIR="${HOME}/.local/bin"
+export PATH="${BIN_DIR}:${PATH}"
+
+: "${XDG_CACHE_HOME:="${HOME}/.cache"}"
+: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
+: "${XDG_DATA_HOME:="${HOME}/.local/share"}"
+: "${XDG_STATE_HOME:="${HOME}/.local/state"}"
+export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME
+
 readonly LOCAL_GITCONFIG="${HOME}/.gitconfig.local"
 readonly GIT_COMPLETION_DIR="${XDG_DATA_HOME}/git/completion"
 readonly GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
@@ -65,80 +29,53 @@ readonly COLOR_24BIT_URL="https://raw.githubusercontent.com/gnachman/iTerm2/mast
 readonly COLOR_256_URL="https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw"
 readonly TEST_FONTS_URL="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/bin/scripts/test-fonts.sh"
 readonly MISE_INSTALL_URL="https://mise.run"
-readonly KARABINER_TEMPLATES_DIR="${BASE_DIR}/xdg-config-home/karabiner/templates"
-readonly KARABINER_RULES_DIR="${BASE_DIR}/xdg-config-home/karabiner/assets/complex_modifications"
 
-symlink() {
-  local src="$1" dest="$2"
-  [[ $(readlink "${dest}" 2>/dev/null || true) == "${src}" ]] && return 0
-  if [[ -e "${dest}" || -L "${dest}" ]]; then
-    mv -f "${dest}" "${dest}.$(date +%Y%m%d%H%M%S || true).bak"
-  fi
-  ln -s "${src}" "${dest}"
-}
+OS="$(detect_os)"
+ARCH="$(detect_arch)"
+export OS ARCH
+readonly OS ARCH
+mkdir -p "${XDG_DATA_HOME}"
+mkdir -p "${XDG_CONFIG_HOME}"
+mkdir -p "${XDG_STATE_HOME}"
+mkdir -p "${XDG_CACHE_HOME}"
+mkdir -p "${BIN_DIR}"
 
-download() {
-  local url="$1" dest="$2" mode="${3:-}"
-  [[ -f "${dest}" ]] && return 0
-  mkdir -p "$(dirname "${dest}")"
-  if curl -fsSL "${url}" -o "${dest}"; then
-    [[ -n "${mode}" ]] && chmod "${mode}" "${dest}"
-  else
-    echoerr "Warning: failed to download ${url}"
-    rm -f "${dest}"
-  fi
-}
-
-# shellcheck source=/dev/null
-[[ ! -f "${PRE_HOOK}" ]] || . "${PRE_HOOK}"
-
-if command -v erb &>/dev/null && [[ -d "${KARABINER_TEMPLATES_DIR}" ]]; then
-  for template in "${KARABINER_TEMPLATES_DIR}"/*.erb; do
-    [[ -f "${template}" ]] || continue
-    target="${KARABINER_RULES_DIR}/$(basename "${template}" .erb)"
-    if [[ ! -f "${target}" ]]; then
-      mkdir -p "${KARABINER_RULES_DIR}"
-      erb "${template}" >"${target}"
-    fi
-  done
-fi
+run_hook pre-setup
 
 for item in "${BASE_DIR}/xdg-config-home"/*; do
+  [ -e "${item}" ] || continue
   symlink "${item}" "${XDG_CONFIG_HOME}/$(basename "${item}")"
 done
+unset item
 
 symlink "${XDG_CONFIG_HOME}/sh/profile" "${HOME}/.profile"
 symlink "${XDG_CONFIG_HOME}/bash/bash_profile" "${HOME}/.bash_profile"
 symlink "${XDG_CONFIG_HOME}/bash/bashrc" "${HOME}/.bashrc"
 symlink "${XDG_CONFIG_HOME}/zsh/zshenv" "${HOME}/.zshenv"
+# NOTE: The existence of "${XDG_CONFIG_HOME}/zsh/.z{shrc,zprofile}" is guaranteed by the above symlink command.
 symlink "zprofile" "${XDG_CONFIG_HOME}/zsh/.zprofile"
 symlink "zshrc" "${XDG_CONFIG_HOME}/zsh/.zshrc"
 symlink "${XDG_CONFIG_HOME}/editorconfig/config" "${HOME}/.editorconfig"
 
-if [[ ! -f "${LOCAL_GITCONFIG}" ]]; then
-  if [[ "${interactive}" -eq 1 ]]; then
-    read -r -p "Enter your Git user name: " git_username
-    read -r -p "Enter your Git user email: " git_useremail
-    cat <<EOF >>"${LOCAL_GITCONFIG}"
-[user]
-  name = ${git_username}
-  email = ${git_useremail}
-EOF
-  else
-    cat <<EOF >>"${LOCAL_GITCONFIG}"
-# [user]
-#   name =
-#   email =
-EOF
+if [ -t 0 ] && [ ! -f "${LOCAL_GITCONFIG}" ]; then
+  _default_username="$(git config --global user.name 2>/dev/null || true)"
+  _default_useremail="$(git config --global user.email 2>/dev/null || true)"
+
+  _git_username="$(prompt "Git user.name" "${_default_username}")"
+  _git_useremail="$(prompt "Git user.email" "${_default_useremail}")"
+
+  if [ -n "${_git_username}" ] && [ -n "${_git_useremail}" ]; then
+    git config -f "${LOCAL_GITCONFIG}" user.name "${_git_username}"
+    git config -f "${LOCAL_GITCONFIG}" user.email "${_git_useremail}"
   fi
+  unset _default_username _default_useremail _git_username _git_useremail
 fi
 
-mkdir -p "${BIN_DIR}"
 for script in "${BASE_DIR}/bin"/*; do
-  [[ -e "${script}" ]] || continue
+  [ -e "${script}" ] || continue
   symlink "${script}" "${BIN_DIR}/$(basename "${script}")"
 done
-export PATH="${BIN_DIR}:${PATH}"
+unset script
 
 download "${GIT_PROMPT_URL}" "${GIT_COMPLETION_DIR}/git-prompt.sh"
 download "${WEZTERM_SHELL_INTEGRATION_URL}" \
@@ -147,8 +84,14 @@ download "${COLOR_24BIT_URL}" "${BIN_DIR}/24-bit-color" "+x"
 download "${COLOR_256_URL}" "${BIN_DIR}/256-color-table" "+x"
 download "${TEST_FONTS_URL}" "${BIN_DIR}/test-fonts" "+x"
 
-command -v mise &>/dev/null || curl "${MISE_INSTALL_URL}" | sh
-mise install --yes
+# shellcheck disable=SC2310
+if ! has mise; then
+  download "${MISE_INSTALL_URL}" | sh
+fi
 
-# shellcheck source=/dev/null
-[[ ! -f "${POST_HOOK}" ]] || . "${POST_HOOK}"
+# shellcheck disable=SC2310
+if has mise; then
+  mise install --yes
+fi
+
+run_hook post-setup

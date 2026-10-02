@@ -2,6 +2,9 @@
 #
 # Reference: https://github.com/tmux/tmux/wiki/FAQ
 
+set -o nounset
+set -o errexit
+
 ESC="$(printf '\033')"
 readonly ESC
 

@@ -12,5 +12,6 @@ if [[ -d "${ZSHRCDIR}" ]]; then
   done
   unset -v sh
 fi
+unset -v SHRC ZSHRCDIR
 
 [[ -f "${HOME}/.zshrc.local" ]] && source "${HOME}/.zshrc.local" 2> /dev/null || true

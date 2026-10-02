@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/bin/sh
+
+set -o nounset
+set -o errexit
 
 : "${__DOTFILES_UPGRADE:?Do not run directly}"
 
