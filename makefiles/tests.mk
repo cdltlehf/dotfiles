@@ -1,5 +1,5 @@
 ##@ Tests
 
 .PHONY: test
-test: ## Run test suites
+test: ## Run tests
 	@bats tests/*.bats

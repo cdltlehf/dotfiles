@@ -98,8 +98,10 @@ pathmunge() {
   unset path_tmp
 }
 
-pathmunge "${HOME}/.local/share/mise/shims"
+pathmunge "${HOMEBREW_PREFIX:-/opt/homebrew}/sbin"
+pathmunge "${HOMEBREW_PREFIX:-/opt/homebrew}/bin"
 pathmunge "${HOME}/.local/bin"
+pathmunge "${HOME}/.local/share/mise/shims"
 export PATH
 
 PKG_CONFIG_PATH="${HOME}/.local/lib/pkgconfig${PKG_CONFIG_PATH:+:${PKG_CONFIG_PATH}}"

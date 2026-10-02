@@ -2,10 +2,6 @@
 # Shell-independent startup file for an interactive shell
 
 : "${XDG_CONFIG_HOME:="${HOME}/.config"}"
-if [ -f "${XDG_CONFIG_HOME}/sh/env.sh" ]; then
-  # shellcheck source=/dev/null
-  . "${XDG_CONFIG_HOME}/sh/env.sh"
-fi
 
 SHRCDIR="${XDG_CONFIG_HOME}/sh/shrc.d"
 if [ -d "${SHRCDIR}" ]; then

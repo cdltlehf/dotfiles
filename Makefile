@@ -14,41 +14,36 @@ export BIN_DIR ?= $(HOME)/.local/bin
 ##@ General
 
 .PHONY: help
-help: ## Display this help
+help: ## Display help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 .PHONY: references
-references: ## List references sorted by URL
+references: ## List references
 	@git --no-pager grep -E '^[^a-zA-Z0-9]*Reference: [^<]' | \
 		sed -E $$'s/^([^:]+):.*Reference: (.*)/\033[36m\\2\033[0m \033[90m\\1\033[0m/' | sort -k1,1
 
 ##@ Dotfiles
 
 .PHONY: sync
-sync: ## Sync repository and apply setup
+sync: ## Sync repo and apply setup
 	@git pull --ff-only
 	@$(MAKE) default
 
 .PHONY: setup
-setup: ## Run setup script
+setup: ## Apply setup
 	@./scripts/setup
 
 .PHONY: update
-update: ## Update package manager indexes
+update: ## Update package indexes
 	@./scripts/update
 
 .PHONY: upgrade
-upgrade: ## Upgrade tools and dependencies
+upgrade: ## Upgrade tools
 	@./scripts/upgrade
-
-.PHONY: doctor
-doctor: ## Run diagnostic doctor checks across package managers
-	./scripts/doctor
-
 
 .PHONY: clean
 clean: TARGET_DIRS := $(XDG_CONFIG_HOME) $(BIN_DIR) $(CURDIR)
-clean: ## Clean dangling symlinks and backup files
+clean: ## Clean dangling symlinks and cache
 	@for d in $(TARGET_DIRS); do \
 		[ -d "$$d" ] || continue; \
 		symlinks -dr "$$d" | grep -v '^absolute:' || true; \
