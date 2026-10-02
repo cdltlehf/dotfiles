@@ -3,7 +3,7 @@
 SHELL := /bin/bash
 
 .PHONY: default
-default: setup
+default: setup update
 
 export XDG_CONFIG_HOME ?= $(HOME)/.config
 export XDG_DATA_HOME ?= $(HOME)/.local/share
@@ -23,12 +23,21 @@ references: ## List references
 
 ##@ Dotfiles
 
+.PHONY: sync
+sync: ## Sync repository and apply setup
+	@git pull --ff-only
+	@$(MAKE) default
+
 .PHONY: setup
 setup: ## Run setup script
 	@./scripts/setup
 
+.PHONY: update
+update: ## Update package manager indexes
+	@./scripts/update
+
 .PHONY: upgrade
-upgrade: ## Upgrade tools and dependencies across package managers
+upgrade: ## Upgrade tools and dependencies
 	@./scripts/upgrade
 
 .PHONY: doctor

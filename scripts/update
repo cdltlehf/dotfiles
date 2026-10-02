@@ -3,7 +3,7 @@
 set -o nounset
 set -o errexit
 
-export __DOTFILES_UPGRADE=1
+export __DOTFILES_UPDATE=1
 
 BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 readonly BASE_DIR
@@ -16,27 +16,16 @@ ARCH="$(detect_arch)"
 export OS ARCH
 readonly OS ARCH
 
-run_hook pre-upgrade
+run_hook pre-update
 
 # shellcheck disable=SC2310
 if has brew; then
-  brew upgrade
+  brew update
 fi
 
 # shellcheck disable=SC2310
 if has mise; then
-  mise upgrade --bump
+  mise self-update --yes 2>/dev/null || true
 fi
 
-# shellcheck disable=SC2310
-if has prek; then
-  prek auto-update
-fi
-# shellcheck disable=SC2310
-if has nvim; then
-  nvim --headless \
-    -c "lua vim.pack.update(nil, { force = true })" \
-    -c "qall!"
-fi
-
-run_hook post-upgrade
+run_hook post-update

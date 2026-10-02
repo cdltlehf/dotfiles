@@ -13,7 +13,6 @@ readonly SPOONS_DIR="${XDG_CONFIG_HOME}/hammerspoon/Spoons"
 readonly VSCODE_USER_DIR="${HOME}/Library/Application Support/Code/User"
 readonly UBERSICHT_USER_DIR="${HOME}/Library/Application Support/Übersicht"
 readonly SHORTCUTS_PLIST_DIR="${BASE_DIR}/platforms/darwin/plists/shortcuts"
-readonly GUREUM_PREF_DIR="${HOME}/Library/Containers/org.youknowone.inputmethod.Gureum/Data/Library/Preferences"
 readonly GUREUM_SOURCE_PLIST="${BASE_DIR}/platforms/darwin/plists/gureum/org.youknowone.Gureum.plist"
 readonly SYMBOLIC_HOTKEYS_PLIST="${HOME}/Library/Preferences/com.apple.symbolichotkeys.plist"
 readonly KARABINER_TEMPLATES_DIR="${BASE_DIR}/xdg-config-home/karabiner/templates"
@@ -99,8 +98,7 @@ if [ -f "${SYMBOLIC_HOTKEYS_PLIST}" ]; then
 fi
 
 if [ -f "${GUREUM_SOURCE_PLIST}" ]; then
-  mkdir -p "${GUREUM_PREF_DIR}"
-  cp -f "${GUREUM_SOURCE_PLIST}" "${GUREUM_PREF_DIR}/org.youknowone.Gureum.plist"
+  defaults import org.youknowone.Gureum "${GUREUM_SOURCE_PLIST}" 2>/dev/null || true
 fi
 
 # shellcheck disable=SC2310
