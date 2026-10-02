@@ -22,6 +22,11 @@ references: ## List references
 	@git --no-pager grep -E '^[^a-zA-Z0-9]*Reference: [^<]' | \
 		sed -E $$'s/^([^:]+):.*Reference: (.*)/\033[36m\\2\033[0m \033[90m\\1\033[0m/' | sort -k1,1
 
+.PHONY: todo
+todo: ## List todos
+	@git --no-pager grep -n -E '(TODO|FIXME|XXX)(\([^)]+\))?:' | \
+		sed -E $$'s/^([^:]+):([0-9]+):[[:space:]]*[^a-zA-Z0-9]*((TODO|FIXME|XXX)(\\([^)]+\\))?:[[:space:]]*(.*))/\033[36m\\3\033[0m \033[90m\\1:\\2\033[0m/' | sort
+
 ##@ Dotfiles
 
 .PHONY: sync

@@ -1,10 +1,11 @@
 " Reference: https://github.com/prabirshrestha/vim-lsp
+" Reference: https://clang.llvm.org/docs/ClangFormat.html#vim-integration
 " :help vim-lsp.txt
 
 " help vim-lsp-performance
 if !has('nvim')
   let g:lsp_use_native_client = 1
-  " NOTE: If vim is slow, suspect the following line.
+  " If vim is slow, suspect the following line.
   " let g:lsp_semantic_enabled = 1
   let g:lsp_format_sync_timeout = 1000
 endif
@@ -25,7 +26,6 @@ function! s:on_lsp_buffer_enabled() abort
   nnoremap <buffer> gq <plug>(lsp-document-range-format)
   nnoremap <buffer> gqq V<plug>(lsp-document-range-format)
   vnoremap <buffer> gq <plug>(lsp-document-range-format)
-  " NOTE: https://clang.llvm.org/docs/ClangFormat.html#vim-integration
   nnoremap <buffer> <c-k> <plug>(lsp-document-format)
 
   nnoremap <buffer> K <plug>(lsp-hover)

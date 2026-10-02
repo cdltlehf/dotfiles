@@ -59,7 +59,7 @@ symlink "${XDG_CONFIG_HOME}/sh/profile" "${HOME}/.profile"
 symlink "${XDG_CONFIG_HOME}/bash/bash_profile" "${HOME}/.bash_profile"
 symlink "${XDG_CONFIG_HOME}/bash/bashrc" "${HOME}/.bashrc"
 symlink "${XDG_CONFIG_HOME}/zsh/zshenv" "${HOME}/.zshenv"
-# NOTE: The existence of "${XDG_CONFIG_HOME}/zsh/.z{shrc,zprofile}" is guaranteed by the above symlink command.
+# The existence of "${XDG_CONFIG_HOME}/zsh/.z{shrc,zprofile}" is guaranteed by the above symlink command.
 symlink "zprofile" "${XDG_CONFIG_HOME}/zsh/.zprofile"
 symlink "zshrc" "${XDG_CONFIG_HOME}/zsh/.zshrc"
 symlink "${XDG_CONFIG_HOME}/editorconfig/config" "${HOME}/.editorconfig"
