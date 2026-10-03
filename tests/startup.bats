@@ -10,28 +10,24 @@ setup() {
   export HOMEBREW_PREFIX="/opt/homebrew"
 }
 
+get_clean_path() {
+  env -i HOME="${HOME}" XDG_CONFIG_HOME="${XDG_CONFIG_HOME}" PATH="/usr/bin:/bin" "$@" -c 'echo "${PATH}"'
+}
+
 @test "startup: zsh login shell orders PATH correctly" {
-  local path_val
-  path_val="$(env -i HOME="${HOME}" PATH="/usr/bin:/bin" zsh -l -c 'echo "${PATH}"')"
-  [[ "${path_val}" =~ ${PATH_ORDER_REGEX} ]]
+  [[ "$(get_clean_path zsh -l)" =~ ${PATH_ORDER_REGEX} ]]
 }
 
 @test "startup: zsh non-login shell orders PATH correctly" {
-  local path_val
-  path_val="$(env -i HOME="${HOME}" PATH="/usr/bin:/bin" zsh -c 'echo "${PATH}"')"
-  [[ "${path_val}" =~ ${PATH_ORDER_REGEX} ]]
+  [[ "$(get_clean_path zsh)" =~ ${PATH_ORDER_REGEX} ]]
 }
 
 @test "startup: bash login shell orders PATH correctly" {
-  local path_val
-  path_val="$(env -i HOME="${HOME}" PATH="/usr/bin:/bin" bash -l -c 'echo "${PATH}"')"
-  [[ "${path_val}" =~ ${PATH_ORDER_REGEX} ]]
+  [[ "$(get_clean_path bash -l)" =~ ${PATH_ORDER_REGEX} ]]
 }
 
 @test "startup: posix sh login shell orders PATH correctly" {
-  local path_val
-  path_val="$(env -i HOME="${HOME}" PATH="/usr/bin:/bin" sh -l -c 'echo "${PATH}"')"
-  [[ "${path_val}" =~ ${PATH_ORDER_REGEX} ]]
+  [[ "$(get_clean_path sh -l)" =~ ${PATH_ORDER_REGEX} ]]
 }
 
 @test "startup: zsh executes files in expected subsequence" {

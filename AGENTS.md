@@ -28,7 +28,6 @@ when, and only when, they appear in all capitals, as shown here.
 
 ### General conventions
 
-- Code MUST prefer clear, descriptive naming over abbreviations.
 - Code MUST NOT introduce hacks, workarounds, or compatibility shims to bypass
   missing structure or architectural debt. Domain concepts MUST be modeled
   explicitly.
