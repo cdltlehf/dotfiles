@@ -95,3 +95,9 @@ get_clean_path() {
   [[ "${trace_out}" =~ ${pattern} ]]
   [ "$(grep -c "${XDG_CONFIG_HOME}/sh/env.sh" <<<"${trace_out}")" -eq 1 ]
 }
+
+@test "doctor: runs in minimal posix environment without error" {
+  local doc_out
+  doc_out="$(env -i PATH="/bin:/usr/bin" "${TEST_REPO_DIR}/scripts/doctor")"
+  [[ "${doc_out}" =~ OS:.*ARCH: ]]
+}

@@ -3,7 +3,7 @@
 FROM registry.fedoraproject.org/fedora-minimal:latest
 
 RUN microdnf -y install --nodocs --setopt=install_weak_deps=0 \
-    git curl make tar gzip xz libatomic \
+    curl make \
     && microdnf clean all
 
 WORKDIR /root/dotfiles

@@ -67,23 +67,23 @@ download() {
   # shellcheck disable=SC2310
   if has curl; then
     if ! curl -fsSL "${_url}" -o "${_dest}"; then
-      err "Error: failed to download ${_url}"
+      err "Warning: failed to download ${_url}"
       [ "${_dest}" = "-" ] || rm -f "${_dest}"
       unset _url _dest _mode
-      return 1
+      return 0
     fi
   elif has wget; then
     if ! wget -q -O "${_dest}" "${_url}"; then
-      err "Error: failed to download ${_url}"
+      err "Warning: failed to download ${_url}"
       [ "${_dest}" = "-" ] || rm -f "${_dest}"
       unset _url _dest _mode
-      return 1
+      return 0
     fi
   else
-    err "Error: neither curl nor wget is available to download ${_url}"
+    err "Warning: neither curl nor wget is available to download ${_url}"
     [ "${_dest}" = "-" ] || rm -f "${_dest}"
     unset _url _dest _mode
-    return 1
+    return 0
   fi
 
   if [ "${_dest}" != "-" ] && [ -n "${_mode}" ]; then

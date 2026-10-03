@@ -18,13 +18,18 @@ readonly OS ARCH
 
 run_hook pre-doctor
 
+printf "OS: %s\n" "${OS}"
+printf "ARCH: %s\n" "${ARCH}"
+
 # shellcheck disable=SC2310
 if has brew; then
+  printf "\nHomebrew:\n"
   brew doctor || true
 fi
 
 # shellcheck disable=SC2310
 if has mise; then
+  printf "\nmise:\n"
   mise doctor || true
 fi
 

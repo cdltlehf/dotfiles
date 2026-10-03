@@ -93,12 +93,12 @@ download "${TEST_FONTS_URL}" "${BIN_DIR}/test-fonts" "+x"
 
 # shellcheck disable=SC2310
 if ! has mise; then
-  download "${MISE_INSTALL_URL}" | sh
+  download "${MISE_INSTALL_URL}" | sh 2>/dev/null || true
 fi
 
 # shellcheck disable=SC2310
 if has mise; then
-  mise install --yes
+  mise install --yes || true
 fi
 
 run_hook post-setup
