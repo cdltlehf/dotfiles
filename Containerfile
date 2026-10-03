@@ -10,3 +10,4 @@ WORKDIR /root/dotfiles
 COPY . .
 
 RUN make
+RUN make doctor
