@@ -62,8 +62,6 @@ Plug 'github/copilot.vim'
 Plug 'rhysd/vim-healthcheck'
 Plug 'lervag/vimtex'
 Plug 'ojroques/vim-oscyank'
-Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-vinegar'
 
 call plug#end()
 
@@ -158,7 +156,7 @@ if has('syntax') | set spell | endif
 " :help .netrwhist
 let g:netrw_home = expand('$XDG_STATE_HOME/vim/netrw')
 
-let g:template_dir = expand('$XDG_CONFIG_HOME/vim/templates')
+let g:template_dir = expand('$XDG_CONFIG_HOME/templates')
 
 cabbr <expr> %% expand('%:p:h')
 
