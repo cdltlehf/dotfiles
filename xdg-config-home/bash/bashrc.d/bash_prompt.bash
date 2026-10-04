@@ -143,4 +143,3 @@ __prompt_command() {
 if [[ "${PROMPT_COMMAND:-}" != *"__prompt_command"* ]]; then
   PROMPT_COMMAND="__prompt_command${PROMPT_COMMAND:+; ${PROMPT_COMMAND}}"
 fi
-export PROMPT_COMMAND

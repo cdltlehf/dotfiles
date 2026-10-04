@@ -1,9 +1,9 @@
+# Reference: https://github.com/scop/bash-completion
+
 if [[ -z "${BASH_COMPLETION_VERSINFO:-}" ]]; then
-  if command -v brew >/dev/null 2>&1; then
-    brew_prefix="${HOMEBREW_PREFIX:-$(brew --prefix)}"
+  if [[ -n "${HOMEBREW_PREFIX:-}" && -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
     # shellcheck source=/dev/null
-    [[ -r "${brew_prefix}/etc/profile.d/bash_completion.sh" ]] && . "${brew_prefix}/etc/profile.d/bash_completion.sh"
-    unset brew_prefix
+    . "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
   elif [[ -r "/usr/share/bash-completion/bash_completion" ]]; then
     # shellcheck source=/dev/null
     . "/usr/share/bash-completion/bash_completion"
