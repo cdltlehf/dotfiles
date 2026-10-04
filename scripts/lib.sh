@@ -1,5 +1,21 @@
 #!/bin/sh
 
+_scripts_base_dir="${BASE_DIR:-}"
+if [ -z "${_scripts_base_dir}" ]; then
+  if [ -f "./xdg-config-home/sh/lib.sh" ]; then
+    _scripts_base_dir="$(pwd)"
+  elif [ -f "../xdg-config-home/sh/lib.sh" ]; then
+    _scripts_base_dir="$(cd .. && pwd)"
+  else
+    _scripts_base_dir="$(cd "$(dirname "$0")/.." && pwd)"
+  fi
+fi
+# shellcheck source=xdg-config-home/sh/lib.sh
+if [ -f "${_scripts_base_dir}/xdg-config-home/sh/lib.sh" ]; then
+  . "${_scripts_base_dir}/xdg-config-home/sh/lib.sh"
+fi
+unset _scripts_base_dir
+
 err() {
   printf "%s\n" "$*" >&2
 }
@@ -10,11 +26,11 @@ die() {
 }
 
 detect_os() {
-  uname -s | tr '[:upper:]' '[:lower:]'
+  __detect_os
 }
 
 detect_arch() {
-  uname -m | tr '[:upper:]' '[:lower:]'
+  __detect_arch
 }
 
 has() {

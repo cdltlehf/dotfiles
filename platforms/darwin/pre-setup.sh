@@ -25,7 +25,7 @@ case "${ARCH}" in
 esac
 
 if [ -n "${BREW_BIN:-}" ] && [ -x "${BREW_BIN}" ]; then
-  eval "$("${BREW_BIN}" shellenv || true)"
+  __cached "${BREW_BIN}" shellenv
 fi
 
 xcode-select --install 2>/dev/null || true
@@ -33,7 +33,7 @@ xcode-select --install 2>/dev/null || true
 if ! has brew; then
   download "${HOMEBREW_INSTALL_URL}" | /bin/bash
   if [ -n "${BREW_BIN:-}" ] && [ -x "${BREW_BIN}" ]; then
-    eval "$("${BREW_BIN}" shellenv || true)"
+    __cached "${BREW_BIN}" shellenv
   fi
 fi
 

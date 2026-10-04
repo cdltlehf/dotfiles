@@ -19,7 +19,7 @@ readonly BASE_DIR
 export __DOTFILES_SETUP=1
 
 readonly BIN_DIR="${HOME}/.local/bin"
-export PATH="${BIN_DIR}:${PATH}"
+__pathmunge "${BIN_DIR}"
 
 : "${XDG_CACHE_HOME:="${HOME}/.cache"}"
 : "${XDG_CONFIG_HOME:="${HOME}/.config"}"
