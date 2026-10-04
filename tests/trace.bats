@@ -79,8 +79,8 @@ assert_subsequence() {
 
 @test "trace: bash path" {
   local brew_bin="${HOMEBREW_PREFIX:-/opt/homebrew}/bin"
-  local expected="${HOME}/.local/share/mise/shims"
-  expected="${expected}:${HOME}/.local/bin"
+  local expected="${HOME}/.local/bin"
+  expected="${expected}:${HOME}/.local/share/mise/shims"
   expected="${expected}:${brew_bin}"
   expected="${expected}:/usr/bin"
 
@@ -91,8 +91,8 @@ assert_subsequence() {
 
 @test "trace: zsh path" {
   local brew_bin="${HOMEBREW_PREFIX:-/opt/homebrew}/bin"
-  local expected="${HOME}/.local/share/mise/shims"
-  expected="${expected}:${HOME}/.local/bin"
+  local expected="${HOME}/.local/bin"
+  expected="${expected}:${HOME}/.local/share/mise/shims"
   expected="${expected}:${brew_bin}"
   expected="${expected}:/usr/bin"
 

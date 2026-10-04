@@ -8,28 +8,46 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
-shell="$1"
+shell_bin="$1"
 shift 1
+
+if ! command -v "${shell_bin}" >/dev/null 2>&1; then
+  echo "Shell binary not found: ${shell_bin}" >&2
+  exit 1
+fi
+
+shell_name="$(basename "${shell_bin}")"
 
 if [ $# -eq 0 ]; then
   set -- -l -i
+else
+  norm_args=""
+  for arg in "$@"; do
+    case "${arg}" in
+    --interactive) norm_args="${norm_args} -i" ;;
+    --login) norm_args="${norm_args} -l" ;;
+    *) norm_args="${norm_args} ${arg}" ;;
+    esac
+  done
+  # shellcheck disable=SC2086
+  set -- ${norm_args}
 fi
 
-case "${shell}" in
+case "${shell_name}" in
 zsh | bash)
   ;;
 *)
-  echo "Unsupported shell: ${shell}" >&2
+  echo "Unsupported shell: ${shell_name}" >&2
   exit 2
   ;;
 esac
 
-case "${shell}" in
+case "${shell_name}" in
 zsh)
-  zsh --sourcetrace "$@" -c exit 2>&1
+  "${shell_bin}" --sourcetrace "$@" -c exit 2>&1
   ;;
 bash)
-  PS4='+${BASH_SOURCE[0]}:${LINENO}> ' bash -x "$@" -c exit 2>&1
+  PS4='+${BASH_SOURCE[0]}:${LINENO}> ' "${shell_bin}" -x "$@" -c exit 2>&1
   ;;
 *)
   exit 1
