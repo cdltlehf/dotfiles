@@ -1,4 +1,4 @@
-#!/bin/zsh
+# Reference: https://zsh.sourceforge.io/Doc/Release/Files.html
 
 : "${XDG_CONFIG_HOME:="${HOME}/.config"}"
 SHRC="${XDG_CONFIG_HOME}/sh/shrc"
@@ -14,4 +14,4 @@ if [[ -d "${ZSHRCDIR}" ]]; then
 fi
 unset -v SHRC ZSHRCDIR
 
-[[ -f "${HOME}/.zshrc.local" ]] && source "${HOME}/.zshrc.local" 2> /dev/null || true
+[[ -f "${HOME}/.zshrc.local" ]] && source "${HOME}/.zshrc.local" 2>/dev/null || true

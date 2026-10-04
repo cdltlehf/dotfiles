@@ -1,7 +1,10 @@
 # Reference: https://support.apple.com/guide/terminal/save-or-restore-sessions-trml1007/mac
 
-[[ -d "${XDG_STATE_HOME}/zsh" ]] || mkdir -p "${XDG_STATE_HOME}/zsh"
-export HISTFILE="${XDG_STATE_HOME}/zsh/history"
+_hist_dir="${XDG_STATE_HOME:-${HOME}/.local/state}/zsh"
+[[ -d "${_hist_dir}" ]] || mkdir -p "${_hist_dir}"
+export HISTFILE="${_hist_dir}/history"
+unset _hist_dir
+
 export HISTSIZE=10000
 export SAVEHIST=10000
 setopt APPEND_HISTORY

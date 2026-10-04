@@ -1,3 +1,5 @@
+# Reference: https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html
+
 bindkey -v '^?' backward-delete-char
 bindkey -v '^A' beginning-of-line
 bindkey -v '^B' backward-char

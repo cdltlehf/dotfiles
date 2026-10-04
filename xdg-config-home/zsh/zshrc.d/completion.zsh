@@ -1,19 +1,35 @@
-if command -v brew >/dev/null 2>&1; then
-  brew_prefix="${HOMEBREW_PREFIX:-$(brew --prefix)}"
-  [[ -d "${brew_prefix}/share/zsh/site-functions" ]] && fpath=("${brew_prefix}/share/zsh/site-functions" $fpath)
-  unset brew_prefix
+# Reference: https://zsh.sourceforge.io/Doc/Release/Shell-Builtin-Commands.html
+# Reference: https://zsh.sourceforge.io/Doc/Release/Parameters.html
+# Reference: https://zsh.sourceforge.io/Doc/Release/Completion-System.html
+# Reference: https://docs.brew.sh/Shell-Completion
+
+typeset -U fpath
+
+_brew_prefix="${HOMEBREW_PREFIX:-}"
+if [[ -z "${_brew_prefix}" ]]; then
+  if [[ -d "/opt/homebrew" ]]; then
+    _brew_prefix="/opt/homebrew"
+  elif [[ -d "/usr/local" ]]; then
+    _brew_prefix="/usr/local"
+  fi
 fi
+if [[ -n "${_brew_prefix}" && -d "${_brew_prefix}/share/zsh/site-functions" ]]; then
+  fpath=("${_brew_prefix}/share/zsh/site-functions" $fpath)
+fi
+unset _brew_prefix
 
 fpath=(
-  "${XDG_DATA_HOME:-$HOME/.local/share}/zsh/site-functions"
-  "${XDG_DATA_HOME:-$HOME/.local/share}/mise/completions"
+  "${XDG_DATA_HOME:-${HOME}/.local/share}/zsh/site-functions"
+  "${XDG_DATA_HOME:-${HOME}/.local/share}/mise/completions"
   $fpath
 )
 
-[[ -d "${XDG_CACHE_HOME}/zsh" ]] || mkdir -p "${XDG_CACHE_HOME}/zsh"
+_comp_cache="${XDG_CACHE_HOME:-${HOME}/.cache}/zsh"
+mkdir -p "${_comp_cache}"
 autoload -Uz compinit
-compinit -d "${XDG_CACHE_HOME}/zsh/zcompdump-${ZSH_VERSION}"
+compinit -d "${_comp_cache}/zcompdump-${ZSH_VERSION}"
 
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompcache"
+zstyle ':completion:*' cache-path "${_comp_cache}/zcompcache"
+unset _comp_cache

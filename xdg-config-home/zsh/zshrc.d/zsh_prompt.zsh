@@ -4,7 +4,7 @@
 setopt PROMPT_SUBST
 ZLE_RPROMPT_INDENT=0
 
-_prompt_pretty_path() {
+__prompt_pretty_path() {
   local git_root="$1"
   local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
   local ellipsis="..."
@@ -48,7 +48,7 @@ _prompt_pretty_path() {
   fi
 }
 
-_prompt_char() {
+__prompt_char() {
   local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
   if [[ "${USER}" == "root" ]]; then
     print -n "# "
@@ -125,13 +125,13 @@ precmd() {
   local osc_a=$'%{\e]133;A\a%}'
   local osc_b=$'%{\e]133;B\a%}'
   print
-  PS1="${osc_a}${user_part}%F{blue}$(_prompt_pretty_path "${git_root}")%f${git_part}${virtualenv_part}${jobs_part}${host_part}${sep}%F{8}%*%f"$'\n'"${return_part}"'$(_prompt_char)'"${osc_b}"
+  PS1="${osc_a}${user_part}%F{blue}$(__prompt_pretty_path "${git_root}")%f${git_part}${virtualenv_part}${jobs_part}${host_part}${sep}%F{8}%*%f"$'\n'"${return_part}"'$(__prompt_char)'"${osc_b}"
 }
 
 PS2=$'%{\e]133;A;k=s\a%}%F{8}> %f%{\e]133;B\a%}'
 
 RPS1=""
-update_vi_mode_indicator() {
+__update_vi_mode_indicator() {
   case $KEYMAP in
   vicmd | viopp)
     echo -ne '\e[1 q'
@@ -143,13 +143,13 @@ update_vi_mode_indicator() {
   zle reset-prompt
 }
 
-hide_vi_mode_indicator() {
+__hide_vi_mode_indicator() {
   zle reset-prompt
 }
 
-zle -N zle-line-init update_vi_mode_indicator
-zle -N zle-line-finish hide_vi_mode_indicator
-zle -N zle-keymap-select update_vi_mode_indicator
+zle -N zle-line-init __update_vi_mode_indicator
+zle -N zle-line-finish __hide_vi_mode_indicator
+zle -N zle-keymap-select __update_vi_mode_indicator
 echo -ne '\e[5 q'
 preexec() {
   print -n $'\e]133;C\a'

@@ -1,5 +1,12 @@
-#!/bin/zsh
-
-# Zsh startup file for a login shell
+# Reference: https://zsh.sourceforge.io/Doc/Release/Files.html
 
 [[ -e "${HOME}/.profile" ]] && source "${HOME}/.profile"
+
+if [[ -x "/opt/homebrew/bin/brew" ]]; then
+  __cached /opt/homebrew/bin/brew shellenv
+elif [[ -x "/usr/local/bin/brew" ]]; then
+  __cached /usr/local/bin/brew shellenv
+fi
+
+__pathmunge "${HOME}/.local/share/mise/shims"
+__pathmunge "${HOME}/.local/bin"
