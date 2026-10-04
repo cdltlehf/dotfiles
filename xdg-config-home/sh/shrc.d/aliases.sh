@@ -28,21 +28,20 @@ command -v bat >/dev/null 2>&1 && alias cat='command bat -pp'
 [ "${TERM_PROGRAM:-}" = "WezTerm" ] && alias imgcat='wezterm imgcat'
 
 # Cross-platform open and xdg-open
-if [ "$(uname -s || true)" = "Darwin" ]; then
-  alias xdg-open='open'
-elif ! command -v open >/dev/null 2>&1; then
-  if command -v xdg-open >/dev/null 2>&1; then
-    alias open='xdg-open'
-  else
-    case $(uname) in
-      MSYS* | MINGW*)
-        alias open='command start'
-        alias xdg-open='command start'
-        ;;
-      *) ;;
-    esac
-  fi
-fi
+case "$(__detect_os)" in
+  darwin)
+    alias xdg-open='open'
+    ;;
+  msys*)
+    alias open='command start'
+    alias xdg-open='command start'
+    ;;
+  *)
+    if ! command -v open >/dev/null 2>&1 && command -v xdg-open >/dev/null 2>&1; then
+      alias open='xdg-open'
+    fi
+    ;;
+esac
 
 # Reload shell
 alias reload='exec ${SHELL} --login'

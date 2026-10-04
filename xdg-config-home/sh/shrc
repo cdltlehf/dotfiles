@@ -1,7 +1,17 @@
-#!/bin/sh
-# Shell-independent startup file for an interactive shell
+# shellcheck shell=sh
+#
+# Reference: https://specifications.freedesktop.org/basedir-spec/latest/
 
-: "${XDG_CONFIG_HOME:="${HOME}/.config"}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
+
+export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS:-/etc/xdg}"
+export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+
+# shellcheck source=/dev/null
+[ -f "${XDG_CONFIG_HOME}/sh/lib.sh" ] && . "${XDG_CONFIG_HOME}/sh/lib.sh"
 
 SHRCDIR="${XDG_CONFIG_HOME}/sh/shrc.d"
 if [ -d "${SHRCDIR}" ]; then
@@ -12,7 +22,4 @@ if [ -d "${SHRCDIR}" ]; then
 fi
 unset sh
 
-if [ -n "${WEZTERM_EXECUTABLE:-}" ]; then
-  export WEZTERM_SHELL="${SHELL}"
-fi
 unset SHRCDIR
