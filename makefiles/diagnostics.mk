@@ -6,9 +6,7 @@ doctor: ## Check tool health
 
 .PHONY: trace
 trace: ## Trace startup order
-	@printf "POSIX sh:\n"
-	@./scripts/trace sh -l -i
-	@printf "\nBash:\n"
-	@./scripts/trace bash -l -i
-	@printf "\nZsh:\n"
-	@./scripts/trace zsh -l -i
+	@printf "\033[36m==> Bash\033[0m\n"
+	@printf "%b\n" "$(subst :,\n,$(shell ./scripts/trace bash))"
+	@printf "\n\033[36m==> Zsh\033[0m\n"
+	@printf "%b\n" "$(subst :,\n,$(shell ./scripts/trace zsh))"

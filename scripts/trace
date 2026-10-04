@@ -3,30 +3,38 @@
 set -o nounset
 set -o errexit
 
-BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-readonly BASE_DIR
-
-# shellcheck source=scripts/lib.sh
-. "${BASE_DIR}/scripts/lib.sh"
-
 if [ $# -lt 1 ]; then
-  die "Usage: $0 <sh|bash|zsh> [flags...]"
+  echo "Usage: $0 <bash|zsh> [flags...]" >&2
+  exit 1
 fi
 
 shell="$1"
 shift 1
 
+if [ $# -eq 0 ]; then
+  set -- -l -i
+fi
+
 case "${shell}" in
-zsh)
-  zsh --sourcetrace "$@" -c exit 2>&1 | awk -F'[:<]' '{sub(/^\+/, "", $1); print $1}'
-  ;;
-bash)
-  bash -x "$@" -c exit 2>&1 | grep -E '^\+* *(source|\.) ' | awk '{print $NF}'
-  ;;
-sh)
-  sh -x "$@" -c exit 2>&1 | grep -E '^\+* *(source|\.) ' | awk '{print $NF}'
+zsh | bash)
   ;;
 *)
-  die "Unsupported shell: ${shell}"
+  echo "Unsupported shell: ${shell}" >&2
+  exit 2
   ;;
 esac
+
+case "${shell}" in
+zsh)
+  zsh --sourcetrace "$@" -c exit 2>&1
+  ;;
+bash)
+  PS4='+${BASH_SOURCE[0]}:${LINENO}> ' bash -x "$@" -c exit 2>&1
+  ;;
+*)
+  exit 1
+  ;;
+esac |
+  LC_ALL=C sed -E -n 's/^\++(.*):[0-9]+> .*$/\1/p' |
+  awk '!seen[$0]++ && /^\//' |
+  paste -sd: -
