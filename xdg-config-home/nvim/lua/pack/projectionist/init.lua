@@ -18,17 +18,3 @@ vim.g.projectionist_heuristics = vim.tbl_deep_extend(
   require("pack.projectionist.python")(read_template),
   require("pack.projectionist.c")(read_template)
 )
-
-vim.api.nvim_create_autocmd("User", {
-  pattern = "ProjectionistDetect",
-  group = vim.api.nvim_create_augroup("projectionist_detect_fix", { clear = true }),
-  callback = function()
-    if vim.fn.empty(vim.b.projectionist) == 1 then
-      local root = vim.fn.fnamemodify(vim.g.projectionist_file, ":h")
-      local projections = vim.g.projectionist_heuristics["*"]
-      if projections then
-        vim.fn["projectionist#append"](root, projections)
-      end
-    end
-  end,
-})

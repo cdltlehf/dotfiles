@@ -13,9 +13,8 @@ local function get_projections(read_template)
     template = read_template("python/main.py.tmpl"),
   }
   return {
-    ["*"] = {
+    ["pyproject.toml|requirements.txt|setup.py"] = {
       [".pre-commit-config.yaml"] = pre_commit_tmpl,
-      ["*.pre-commit-config.yaml"] = pre_commit_tmpl,
       ["__main__.py"] = { template = read_template("python/__main__.py.tmpl") },
       ["__init__.py"] = { template = read_template("python/init.py.tmpl") },
       ["tests/test_*.py"] = test_tmpl,

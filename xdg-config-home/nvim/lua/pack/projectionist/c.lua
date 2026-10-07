@@ -22,7 +22,7 @@ local function get_projections(read_template)
     template = read_template("cpp/module.cc.tmpl"),
   }
   return {
-    ["*"] = {
+    ["Makefile|CMakeLists.txt"] = {
       ["main.c"] = { type = "source", template = read_template("c/main.c.tmpl") },
       ["main.cc"] = { type = "source", template = read_template("cpp/main.cc.tmpl") },
       ["main.cpp"] = "main.cc",
