@@ -78,12 +78,17 @@ assert_subsequence() {
 }
 
 @test "trace: bash path" {
+  local brew_prefix="${HOMEBREW_PREFIX:-}"
+  if [[ -z "${brew_prefix}" ]] && command -v brew >/dev/null 2>&1; then
+    brew_prefix="$(brew --prefix)"
+  fi
+
   local expected="${HOME}/.local/bin"
+  if [[ -n "${brew_prefix}" ]]; then
+    expected="${expected}:${brew_prefix}/bin"
+  fi
   if [[ -d "${HOME}/.local/share/mise/shims" ]]; then
     expected="${expected}:${HOME}/.local/share/mise/shims"
-  fi
-  if command -v brew >/dev/null 2>&1; then
-    expected="${expected}:$(brew --prefix)/bin"
   fi
   expected="${expected}:/usr/bin"
 
@@ -93,12 +98,17 @@ assert_subsequence() {
 }
 
 @test "trace: zsh path" {
+  local brew_prefix="${HOMEBREW_PREFIX:-}"
+  if [[ -z "${brew_prefix}" ]] && command -v brew >/dev/null 2>&1; then
+    brew_prefix="$(brew --prefix)"
+  fi
+
   local expected="${HOME}/.local/bin"
+  if [[ -n "${brew_prefix}" ]]; then
+    expected="${expected}:${brew_prefix}/bin"
+  fi
   if [[ -d "${HOME}/.local/share/mise/shims" ]]; then
     expected="${expected}:${HOME}/.local/share/mise/shims"
-  fi
-  if command -v brew >/dev/null 2>&1; then
-    expected="${expected}:$(brew --prefix)/bin"
   fi
   expected="${expected}:/usr/bin"
 

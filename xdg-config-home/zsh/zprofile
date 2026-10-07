@@ -2,11 +2,14 @@
 
 [[ -e "${HOME}/.profile" ]] && source "${HOME}/.profile"
 
-if [[ -x "/opt/homebrew/bin/brew" ]]; then
-  __cached /opt/homebrew/bin/brew shellenv
-elif [[ -x "/usr/local/bin/brew" ]]; then
-  __cached /usr/local/bin/brew shellenv
-fi
-
 __pathmunge "${HOME}/.local/share/mise/shims"
+
+for _brew_prefix in "${HOMEBREW_PREFIX:-}" /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+  if [[ -n "${_brew_prefix}" && -x "${_brew_prefix}/bin/brew" ]]; then
+    __cached "${_brew_prefix}/bin/brew" shellenv
+    break
+  fi
+done
+unset _brew_prefix
+
 __pathmunge "${HOME}/.local/bin"

@@ -6,12 +6,8 @@
 typeset -U fpath
 
 _brew_prefix="${HOMEBREW_PREFIX:-}"
-if [[ -z "${_brew_prefix}" ]]; then
-  if [[ -d "/opt/homebrew" ]]; then
-    _brew_prefix="/opt/homebrew"
-  elif [[ -d "/usr/local" ]]; then
-    _brew_prefix="/usr/local"
-  fi
+if [[ -z "${_brew_prefix}" ]] && command -v brew >/dev/null 2>&1; then
+  _brew_prefix="$(brew --prefix 2>/dev/null)"
 fi
 if [[ -n "${_brew_prefix}" && -d "${_brew_prefix}/share/zsh/site-functions" ]]; then
   fpath=("${_brew_prefix}/share/zsh/site-functions" $fpath)

@@ -9,22 +9,29 @@ set -o errexit
 
 readonly HOMEBREW_INSTALL_URL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
 
-case "${ARCH}" in
-  arm64)
-    if ! arch -x86_64 /usr/bin/true 2>/dev/null; then
-      sudo softwareupdate --install-rosetta || true
-    fi
-    BREW_BIN="/opt/homebrew/bin/brew"
-    ;;
-  x86_64)
-    BREW_BIN="/usr/local/bin/brew"
-    ;;
-  *)
-    err "Warning: unsupported macOS architecture: ${ARCH}"
-    ;;
-esac
+if [ "${ARCH}" = "arm64" ] && ! arch -x86_64 /usr/bin/true 2>/dev/null; then
+  sudo softwareupdate --install-rosetta || true
+fi
 
-if [ -n "${BREW_BIN:-}" ] && [ -x "${BREW_BIN}" ]; then
+_brew_prefix="${HOMEBREW_PREFIX:-}"
+if [ -z "${_brew_prefix}" ]; then
+  case "${ARCH}" in
+    arm64)
+      _brew_prefix="/opt/homebrew"
+      ;;
+    x86_64)
+      _brew_prefix="/usr/local"
+      ;;
+    *)
+      err "Warning: unsupported macOS architecture: ${ARCH}"
+      ;;
+  esac
+fi
+
+BREW_BIN="${_brew_prefix}/bin/brew"
+unset _brew_prefix
+
+if [ -x "${BREW_BIN}" ]; then
   __cached "${BREW_BIN}" shellenv
 fi
 
