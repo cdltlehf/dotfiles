@@ -1,3 +1,4 @@
+# Reference: https://github.com/kubernetes-sigs/kubebuilder/blob/master/Makefile
 # Reference: https://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html
 # Reference: https://tech.davis-hansson.com/p/make/
 
@@ -25,7 +26,20 @@ DEPS := $(OBJS:.o=.d)
 
 .PRECIOUS: $(BUILD_DIR)/%.o
 
-all: $(BUILD_DIR)/$(TARGET)
+##@ General
+
+.PHONY: help
+help: ## Display help
+	@awk ' \
+		BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} \
+		/^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } \
+		/^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } \
+	' $(MAKEFILE_LIST)
+
+##@ Build & Run
+
+.PHONY: all
+all: $(BUILD_DIR)/$(TARGET) ## Build target
 
 $(BUILD_DIR)/$(TARGET): $(OBJS)
 	@mkdir -p $(dir $@)
@@ -41,10 +55,10 @@ $(BUILD_DIR)/%.c.o: $(SRC_DIR)/%.c
 
 -include $(DEPS)
 
-.PHONY: all run clean
-
-run: all
+.PHONY: run
+run: all ## Run built target
 	./$(BUILD_DIR)/$(TARGET)
 
-clean:
+.PHONY: clean
+clean: ## Clean build artifacts
 	rm -rf $(BUILD_DIR)
