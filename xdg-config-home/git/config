@@ -1,36 +1,28 @@
 ; Reference: https://github.com/tj/git-extras
 ; Reference: https://blog.gitbutler.com/how-git-core-devs-configure-git/
 ; Reference: https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
+; Reference: https://stackoverflow.com/questions/1057564/pretty-git-branch-graphs
 
 [alias]
-	co = checkout
 	sw = switch
-	swc = switch -c
 	br = branch
 	ci = commit
 	st = status
 	rs = restore
-	rss = restore --staged
-	unstage = reset HEAD --
+	unstage = restore --staged
+	ff = merge --ff-only
 	last = log -1 HEAD
-	; misc
-	cim = commit --message
-	sts = status --short
 	root = rev-parse --show-toplevel
-	ls-untracked = ls-files --others --exclude-standard
-	lg = log --color --graph --oneline --abbrev-commit --decorate
-	alias = !git config --get-regexp 'alias.*' \
-		| sed 's/^alias\\.//' | sed 's/ / = /' | sed 's/ \\+/ /g' \
-		| sort
-	bclean = "!f() { git checkout main && git fetch --prune && git branch --merged | grep -v * | xargs -n 1 git branch -d; }; f"
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+	alias = "!git config --get-regexp '^alias\\.' \
+		| sed 's/^alias\\.//; s/ /\t/' \
+		| sort \
+		| column -t -s '\t' \
+		| awk '{printf \"\\033[36m%s\\033[0m%s\\n\", $1, substr($0, length($1)+1)}'"
+	bclean = "!f() { git branch --merged ${1:-HEAD} --format='%(refname:short)' | grep -v -E '^(main|master|develop)$' | xargs -r git branch -d; }; f"
 
 [color]
 	ui = auto
-	diff = auto
-	status = auto
-	branch = auto
-	interactive = auto
-	grep = auto
 
 [column]
 	ui = auto
