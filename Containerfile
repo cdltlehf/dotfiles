@@ -3,7 +3,7 @@
 FROM registry.fedoraproject.org/fedora-minimal:latest
 
 RUN microdnf -y install --nodocs --setopt=install_weak_deps=0 \
-    curl make \
+    curl make bats git-core tmux zsh vim-enhanced neovim \
     && microdnf clean all
 
 WORKDIR /root/dotfiles
@@ -11,3 +11,4 @@ COPY . .
 
 RUN make
 RUN make doctor
+RUN make test

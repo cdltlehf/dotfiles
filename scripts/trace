@@ -18,19 +18,23 @@ fi
 
 shell_name="$(basename "${shell_bin}")"
 
+is_login=0
 if [ $# -eq 0 ]; then
   set -- -l -i
+  is_login=1
 else
-  norm_args=""
-  for arg in "$@"; do
-    case "${arg}" in
-    --interactive) norm_args="${norm_args} -i" ;;
-    --login) norm_args="${norm_args} -l" ;;
-    *) norm_args="${norm_args} ${arg}" ;;
+  for _a in "$@"; do
+    case "${_a}" in
+    --interactive) set -- "$@" "-i" ;;
+    --login | -l)
+      set -- "$@" "-l"
+      is_login=1
+      ;;
+    *) set -- "$@" "${_a}" ;;
     esac
+    shift
   done
-  # shellcheck disable=SC2086
-  set -- ${norm_args}
+  unset _a
 fi
 
 case "${shell_name}" in
@@ -44,15 +48,21 @@ esac
 
 case "${shell_name}" in
 zsh)
-  "${shell_bin}" --sourcetrace "$@" -c exit 2>&1
+  "${shell_bin}" --sourcetrace "$@" -c exit 2>&1 |
+    LC_ALL=C sed -E -n 's/^\++([^:]+):[0-9]+>.*$/\1/p'
   ;;
 bash)
-  PS4='+${BASH_SOURCE[0]}:${LINENO}> ' "${shell_bin}" -x "$@" -c exit 2>&1
+  if [ "${is_login}" -eq 1 ]; then
+    printf "%s\n" "${HOME}/.bash_profile"
+  else
+    printf "%s\n" "${HOME}/.bashrc"
+  fi
+  "${shell_bin}" -x "$@" -c exit 2>&1 |
+    LC_ALL=C sed -n -E 's/^\++[[:space:]]*(source|\.)[[:space:]]+(\/[^[:space:]]+).*/\2/p'
   ;;
 *)
   exit 1
   ;;
 esac |
-  LC_ALL=C sed -E -n 's/^\++(.*):[0-9]+> .*$/\1/p' |
   awk '!seen[$0]++ && /^\//' |
   paste -sd: -
