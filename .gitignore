@@ -10,3 +10,4 @@ xdg-config-home/zsh/.zsh_history
 xdg-config-home/zsh/.zsh_sessions
 xdg-config-home/zsh/.zshenv
 xdg-config-home/zsh/.zshrc
+.env

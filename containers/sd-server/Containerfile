@@ -1,0 +1,20 @@
+# Reference: https://github.com/leejet/stable-diffusion.cpp
+# Reference: https://github.com/containers/krunkit
+# Reference: https://quay.io/repository/slopezpa/fedora-vgpu
+
+FROM quay.io/slopezpa/fedora-vgpu:latest AS base
+
+FROM base AS builder
+RUN dnf -y install gcc-c++ cmake ninja-build git vulkan-loader-devel vulkan-headers glslc spirv-headers-devel spirv-tools-devel glslang-devel
+RUN git clone --recursive --depth 1 https://github.com/leejet/stable-diffusion.cpp.git /src
+WORKDIR /src
+RUN cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DSD_VULKAN=ON \
+    && cmake --build build -j 2 --config Release --target sd-server
+
+FROM base
+RUN dnf -y install vulkan-loader && dnf clean all
+COPY --from=builder /src/build/bin/sd-server /usr/local/bin/sd-server
+ENV LD_LIBRARY_PATH=/usr/local/bin:${LD_LIBRARY_PATH:-}
+
+EXPOSE 8080
+ENTRYPOINT ["sd-server"]

@@ -1,6 +1,20 @@
 # Reference: https://compose-spec.io/
+# Reference: https://platform.openai.com/docs/api-reference
 
 services:
+  gateway:
+    image: docker.io/library/caddy:alpine
+    container_name: gateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./containers/gateway/Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - llama-server
+      - whisper-server
+      - sd-server
+
   llama-server:
     build:
       context: ./containers/llama-server
@@ -10,14 +24,51 @@ services:
     restart: unless-stopped
     devices:
       - /dev/dri:/dev/dri
-    ports:
-      - "8080:8080"
     volumes:
       - ~/.local/share/models:/models:ro
       - ~/.cache/huggingface:/root/.cache/huggingface:rw
     command:
       - --host
       - "0.0.0.0"
-      - --port
-      - "8080"
+      - --models-dir
+      - /models
       - --webui-mcp-proxy
+      - --tools
+      - all
+
+  whisper-server:
+    build:
+      context: ./containers/whisper-server
+      dockerfile: Containerfile
+    image: local/whisper-server-krunkit:latest
+    container_name: whisper-server
+    restart: unless-stopped
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - ~/.local/share/models:/models:ro
+    command:
+      - -m
+      - /models/${WHISPER_MODEL:?WHISPER_MODEL is required}
+      - --host
+      - "0.0.0.0"
+
+  sd-server:
+    build:
+      context: ./containers/sd-server
+      dockerfile: Containerfile
+    image: local/sd-server-krunkit:latest
+    container_name: sd-server
+    restart: unless-stopped
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - ~/.local/share/models:/models:ro
+    command:
+      - -m
+      - /models/${SD_MODEL:?SD_MODEL is required}
+      - --vae-tiling
+      - --listen-ip
+      - "0.0.0.0"
+      - --listen-port
+      - "8080"

@@ -19,7 +19,6 @@ when, and only when, they appear in all capitals, as shown here.
   RFC 8174).
 - When specifying requirements, text SHOULD prefer the canonical terms "MUST",
   "SHOULD", and "MAY" (and their negative forms) over their synonyms.
-- Documentation and comments MUST explain "why", rather than "what".
 - For any style or documentation decision not enforced by automated tooling,
   text MUST adhere to the
   [Google Developer Documentation Style Guide](https://developers.google.com/style).
