@@ -5,7 +5,7 @@
       "src": "https://github.com/github/copilot.vim"
     },
     "fzf": {
-      "rev": "b1be3a8be1b833ce5b92fbbac11637643d60a046",
+      "rev": "981f1539b001e620af29beebf5e1bd036bd6e354",
       "src": "https://github.com/junegunn/fzf"
     },
     "fzf.vim": {
@@ -17,7 +17,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "nvim-lspconfig": {
-      "rev": "db68de3575fff9dd9bb78b34c8371759ed35fe34",
+      "rev": "c59fc922f718fa055f69f5f3bc888f23211571eb",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-web-devicons": {
@@ -81,7 +81,7 @@
       "src": "https://github.com/tpope/vim-vinegar"
     },
     "vimtex": {
-      "rev": "bbfa1501287b65e8803d5cc1007db2c2351c4453",
+      "rev": "f029f22b418530788704bec2397b880da136b31c",
       "src": "https://github.com/lervag/vimtex"
     },
     "which-key.nvim": {

@@ -38,7 +38,7 @@ repos:
         types_or: [shell, bats]
         exclude: \.zsh$
   - repo: https://github.com/JohnnyMorganz/StyLua
-    rev: v2.5.2
+    rev: v2.6.0
     hooks:
       - id: stylua-github
   - repo: https://github.com/adrienverge/yamllint
