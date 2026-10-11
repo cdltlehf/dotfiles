@@ -15,6 +15,7 @@ end
 
 vim.g.projectionist_heuristics = vim.tbl_deep_extend(
   "force",
+  require("pack.projectionist.git")(read_template),
   require("pack.projectionist.python")(read_template),
   require("pack.projectionist.c")(read_template)
 )
