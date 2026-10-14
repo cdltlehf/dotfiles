@@ -26,7 +26,7 @@ _c_cyan=''
 _c_magenta=''
 _c_reset=''
 
-if [ -z "${NO_COLOR:-}" ] && [ -n "${TERM:-}" ] && [ "${TERM}" != "dumb" ]; then
+if [ -z "${NO_COLOR:-}" ] && [ "${TERM:-dumb}" != "dumb" ]; then
   if command -v tput >/dev/null 2>&1; then
     _ncolors="$(tput colors 2>/dev/null || echo 0)"
     if [ "${_ncolors}" -ge 8 ] 2>/dev/null; then

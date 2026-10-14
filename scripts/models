@@ -15,10 +15,13 @@ SUBCOMMAND_DIR="${BASE_DIR}/scripts/models.d"
 readonly SUBCOMMAND_DIR
 
 cmd="${1:-}"
-[ -n "${cmd}" ] && [ "${cmd}" != "-h" ] && [ "${cmd}" != "--help" ] && [ "${cmd}" != "help" ] || {
+case "${cmd}" in
+"" | -h | --help | help)
   printf "Usage: %s <audio|chat|download|images|list> [args...]\n" "$0"
   exit 0
-}
+  ;;
+*) ;;
+esac
 
 target="${SUBCOMMAND_DIR}/${cmd}"
 [ -f "${target}" ] || die "Unknown models subcommand: ${cmd}"

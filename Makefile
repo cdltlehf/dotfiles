@@ -66,7 +66,7 @@ upgrade: ## Upgrade tools
 clean: TARGET_DIRS := $(XDG_CONFIG_HOME) $(BIN_DIR) $(CURDIR)
 clean: ## Clean dangling symlinks and cache
 	@for d in $(TARGET_DIRS); do \
-		[ -d "$$d" ] || continue; \
+		[[ -d "$$d" ]] || continue; \
 		symlinks -dr "$$d" | grep -v '^absolute:' || true; \
 		find "$$d" \( -type f -o -type l \) \
 			\( -name "*.bak" -o -name ".*.bak" \) -delete; \

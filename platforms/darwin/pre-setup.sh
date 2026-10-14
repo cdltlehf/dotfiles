@@ -23,7 +23,7 @@ if [ -z "${_brew_prefix}" ]; then
       _brew_prefix="/usr/local"
       ;;
     *)
-      err "Warning: unsupported macOS architecture: ${ARCH}"
+      warning "Unsupported macOS architecture: ${ARCH}"
       ;;
   esac
 fi
