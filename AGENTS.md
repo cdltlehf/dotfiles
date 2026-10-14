@@ -22,6 +22,14 @@ The key words in this document are to be interpreted as described in
 
 - Unenforced coding decisions MUST adhere to the relevant
   [Google Style Guides](https://google.github.io/styleguide/).
+- Makefiles SHOULD adhere to conventional target names
+  ([POSIX make](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html)
+  and
+  [GNU standard targets](https://www.gnu.org/prep/standards/html_node/Standard-Targets.html))
+  and use standard predefined variables
+  ([GNU make](https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html)).
+- HTML documents MUST use semantic elements for their intended purpose
+  according to the [WHATWG HTML Living Standard](https://html.spec.whatwg.org/).
 - Source files MUST consolidate upstream reference comments (`# Reference: <URL>`)
   into a top header block.
 - Reference URLs MUST use HTTPS and SHOULD NOT retain unnecessary fragment
