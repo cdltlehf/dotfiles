@@ -75,5 +75,10 @@ clean: ## Clean dangling symlinks and cache
 	@find "$(HOME)" -maxdepth 1 \( -type f -o -type l \) -name ".*.bak" -delete
 	@rm -rf "$(XDG_CACHE_HOME)/evalcache"
 
+.PHONY: check
+check: brew-check mise-check ## Check all package manifests (Homebrew and mise)
+
+.PHONY: diff
+diff: brew-diff mise-diff ## Diff all package manifests (Homebrew and mise)
 
 -include makefiles/*.mk

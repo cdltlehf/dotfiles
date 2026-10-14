@@ -2,12 +2,10 @@
 
 BREWFILE ?= platforms/darwin/Brewfile
 
-.PHONY: brew-diff diff
-brew-diff: ## Diff Brewfile (alias: diff)
+.PHONY: brew-diff
+brew-diff: ## Diff Brewfile
 	@diff -u --color=auto $(BREWFILE) <(brew bundle dump --file=- --no-describe) || true
-diff: brew-diff
 
-.PHONY: brew-check check
-brew-check: ## Check Brewfile (alias: check)
+.PHONY: brew-check
+brew-check: ## Check Brewfile
 	@brew bundle check --file=$(BREWFILE)
-check: brew-check
