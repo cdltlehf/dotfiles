@@ -1,0 +1,75 @@
+# Reference: https://google.github.io/styleguide/pyguide.html
+# Reference: https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
+# Reference: https://docs.astral.sh/ruff/configuration/
+# Reference: https://docs.astral.sh/ruff/formatter/
+# Reference: https://docs.astral.sh/ruff/rules/
+
+[build-system]
+build-backend = "uv_build"
+requires = ["uv_build>=0.13.0,<0.14.0"]
+
+[project]
+authors = [
+  {open} name = "Your Name", email = "your.email@example.com" {close},
+]
+dependencies = []
+description = "Add your description here"
+name = "{project|basename}"
+readme = "README.md"
+requires-python = ">=3.14"
+version = "0.1.0"
+
+[tool.ruff]
+line-length = 80
+preview = true
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 80
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  # Reference: https://docs.astral.sh/ruff/formatter/
+  "COM812",  # missing-trailing-comma
+  "COM819",  # prohibited-trailing-comma
+  "D206",  # docstring-tab-indentation
+  "D300",  # triple-single-quotes
+  "E111",  # indentation-with-invalid-multiple
+  "E114",  # indentation-with-invalid-multiple-comment
+  "E117",  # over-indented
+  "Q000",  # bad-quotes-inline-string
+  "Q001",  # bad-quotes-multiline-string
+  "Q002",  # bad-quotes-docstring
+  "Q003",  # avoidable-escaped-quote
+  "Q004",  # unnecessary-escaped-quote
+  "W191",  # tab-indentation
+
+  # Reference: https://google.github.io/styleguide/pyguide.html
+  "D100",  # undocumented-public-module
+  "D101",  # undocumented-public-class
+  "D102",  # undocumented-public-method
+  "D103",  # undocumented-public-function
+  "D104",  # undocumented-public-package
+  "D105",  # undocumented-magic-method
+  "D106",  # undocumented-public-nested-class
+  "D107",  # undocumented-public-init
+  "D203",  # incorrect-blank-line-before-class
+  "D213",  # multi-line-summary-second-line
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+force-single-line = true
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = [
+  # Reference: https://google.github.io/styleguide/pyguide.html
+  "S101",  # assert
+  "SLF001",  # private-member-access
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

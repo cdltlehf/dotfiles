@@ -3,7 +3,7 @@
 local function get_projections(read_template)
   return {
     [".git/"] = {
-      ["AGENTS.md"] = { template = read_template("AGENTS.md.tmpl") },
+      ["AGENTS.md"] = { type = "doc", template = read_template("AGENTS.md.tmpl") },
     },
   }
 end
