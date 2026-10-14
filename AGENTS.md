@@ -28,8 +28,16 @@ The key words in this document are to be interpreted as described in
   [GNU standard targets](https://www.gnu.org/prep/standards/html_node/Standard-Targets.html))
   and use standard predefined variables
   ([GNU make](https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html)).
+- POSIX shell scripts MUST adhere to the
+  [POSIX Shell Command Language](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html).
 - HTML documents MUST use semantic elements for their intended purpose
   according to the [WHATWG HTML Living Standard](https://html.spec.whatwg.org/).
+- File paths MUST adhere to the
+  [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/latest/).
+- Version numbers and dependency constraints SHOULD adhere to
+  [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+- Git commit messages MUST adhere to
+  [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 - Source files MUST consolidate upstream reference comments (`# Reference: <URL>`)
   into a top header block.
 - Reference URLs MUST use HTTPS and SHOULD NOT retain unnecessary fragment
