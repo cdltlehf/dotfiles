@@ -31,31 +31,31 @@ docstring-code-line-length = 80
 select = ["ALL"]
 ignore = [
   # Reference: https://docs.astral.sh/ruff/formatter/
-  "COM812",  # missing-trailing-comma
-  "COM819",  # prohibited-trailing-comma
-  "D206",  # docstring-tab-indentation
-  "D300",  # triple-single-quotes
-  "E111",  # indentation-with-invalid-multiple
-  "E114",  # indentation-with-invalid-multiple-comment
-  "E117",  # over-indented
-  "Q000",  # bad-quotes-inline-string
-  "Q001",  # bad-quotes-multiline-string
-  "Q002",  # bad-quotes-docstring
-  "Q003",  # avoidable-escaped-quote
-  "Q004",  # unnecessary-escaped-quote
-  "W191",  # tab-indentation
+  "avoidable-escaped-quote",  # Q003
+  "bad-quotes-docstring",  # Q002
+  "bad-quotes-inline-string",  # Q000
+  "bad-quotes-multiline-string",  # Q001
+  "docstring-tab-indentation",  # D206
+  "indentation-with-invalid-multiple",  # E111
+  "indentation-with-invalid-multiple-comment",  # E114
+  "missing-trailing-comma",  # COM812
+  "over-indented",  # E117
+  "prohibited-trailing-comma",  # COM819
+  "tab-indentation",  # W191
+  "triple-single-quotes",  # D300
+  "unnecessary-escaped-quote",  # Q004
 
   # Reference: https://google.github.io/styleguide/pyguide.html
-  "D100",  # undocumented-public-module
-  "D101",  # undocumented-public-class
-  "D102",  # undocumented-public-method
-  "D103",  # undocumented-public-function
-  "D104",  # undocumented-public-package
-  "D105",  # undocumented-magic-method
-  "D106",  # undocumented-public-nested-class
-  "D107",  # undocumented-public-init
-  "D203",  # incorrect-blank-line-before-class
-  "D213",  # multi-line-summary-second-line
+  "incorrect-blank-line-before-class",  # D203
+  "multi-line-summary-second-line",  # D213
+  "undocumented-magic-method",  # D105
+  "undocumented-public-class",  # D101
+  "undocumented-public-function",  # D103
+  "undocumented-public-init",  # D107
+  "undocumented-public-method",  # D102
+  "undocumented-public-module",  # D100
+  "undocumented-public-nested-class",  # D106
+  "undocumented-public-package",  # D104
 ]
 
 [tool.ruff.lint.flake8-tidy-imports]
@@ -67,8 +67,8 @@ force-single-line = true
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*" = [
   # Reference: https://google.github.io/styleguide/pyguide.html
-  "S101",  # assert
-  "SLF001",  # private-member-access
+  "assert",  # S101
+  "private-member-access",  # SLF001
 ]
 
 [tool.ruff.lint.pydocstyle]
