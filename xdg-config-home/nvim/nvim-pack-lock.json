@@ -13,19 +13,19 @@
       "src": "https://github.com/junegunn/fzf.vim"
     },
     "gitsigns.nvim": {
-      "rev": "851a051e2bd2caba97e23314c68d69f1b1cf5d19",
+      "rev": "fd780920613e541cbdfac41bf711583ed49f9249",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "nvim-lspconfig": {
-      "rev": "6d27c288ff951e1e94cb5f91c800adeddf0dc0c2",
+      "rev": "ac062d0d01c019c0dbdb798968f3e5d8b35c3853",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-web-devicons": {
-      "rev": "58447c1fca354bbf184425e4a8d01deecbd6f3c4",
+      "rev": "ec309a0eaff6ea967e58c275996155ab5c16938d",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "oil.nvim": {
-      "rev": "b73018b75affd13fa38e2fc94ef753b465f770d7",
+      "rev": "d3733d933833a0e59b813ecec99341527adf0c28",
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "smear-cursor.nvim": {
@@ -81,7 +81,7 @@
       "src": "https://github.com/tpope/vim-vinegar"
     },
     "vimtex": {
-      "rev": "f029f22b418530788704bec2397b880da136b31c",
+      "rev": "98615cefc441aaa5721c144ecfeacddcdf78816d",
       "src": "https://github.com/lervag/vimtex"
     },
     "which-key.nvim": {
