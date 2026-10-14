@@ -20,11 +20,16 @@ run_hook pre-upgrade
 
 # shellcheck disable=SC2310
 if has brew; then
+  brew update
+  if [ -f "${BASE_DIR}/platforms/${OS}/Brewfile" ]; then
+    brew bundle --file "${BASE_DIR}/platforms/${OS}/Brewfile"
+  fi
   brew upgrade
 fi
 
 # shellcheck disable=SC2310
 if has mise; then
+  mise install --yes
   mise upgrade --bump
 fi
 
