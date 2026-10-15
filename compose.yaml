@@ -34,6 +34,14 @@ services:
       - "8080"
       - --models-dir
       - /models
+      - -c
+      - "8192"
+      - -np
+      - "1"
+      - --models-max
+      - "1"
+      - --sleep-idle-seconds
+      - "300"
       - --webui-mcp-proxy
       - --tools
       - all
