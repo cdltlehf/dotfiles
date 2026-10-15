@@ -23,7 +23,7 @@ highlight! Dracula16ClassName ctermfg=darkblue ctermbg=none cterm=none
 highlight! Dracula16InstanceReservedWords ctermfg=darkmagenta ctermbg=none cterm=italic
 highlight! Dracula16InheritedClassName ctermfg=darkcyan ctermbg=none cterm=italic
 
-highlight! Dracula16Comment ctermfg=darkgrey ctermbg=none cterm=none
+highlight! Dracula16Comment ctermfg=darkgrey ctermbg=none cterm=italic gui=italic
 highlight! Dracula16DocCommentKeywords ctermfg=darkmagenta ctermbg=none cterm=none
 highlight! Dracula16DocCommentTypes ctermfg=darkcyan ctermbg=none cterm=italic
 highlight! Dracula16DocParameters ctermfg=darkyellow ctermbg=none cterm=italic
@@ -84,7 +84,7 @@ highlight! link PreCondit PreProc
 
 highlight Type ctermfg=darkcyan ctermbg=none cterm=italic
 highlight StorageClass ctermfg=darkmagenta ctermbg=none cterm=none
-highlight! link Structure StroageClass
+highlight! link Structure StorageClass
 highlight! link Typedef StorageClass
 
 highlight Special ctermfg=darkmagenta ctermbg=none cterm=none
@@ -122,8 +122,6 @@ highlight! link Added DiffAdd
 highlight! link Changed DiffChange
 highlight! link Removed DiffDelete
 
-highlight! link EndOfBuffer NonText
-
 highlight! link ErrorMsg Error
 
 highlight VertSplit ctermfg=darkgrey ctermbg=none cterm=none
@@ -134,17 +132,10 @@ highlight! link NormalNC Normal
 
 highlight Folded ctermfg=darkgrey ctermbg=black cterm=none
 highlight FoldColumn ctermfg=darkgrey ctermbg=none cterm=none
-highlight! link IncSearch CurSearch
-
-highlight! link SignColumn Comment
 
 highlight LineNr ctermfg=darkgrey ctermbg=none cterm=none
-highlight! link LineNrAbove LineNr
-highlight! link LineNrBelow LineNr
 
 highlight CursorLineNr ctermfg=darkyellow ctermbg=black cterm=none
-highlight! link CursorLineFold CursorLine
-highlight! link CursorLineSign CursorLine
 
 highlight MatchParen ctermfg=darkgreen ctermbg=none cterm=underline
 
@@ -156,8 +147,6 @@ highlight NonText ctermfg=darkgrey ctermbg=none cterm=none
 highlight Normal ctermfg=none ctermbg=none cterm=none
 highlight! link NormalFloat Pmenu
 highlight! link FloatBorder VertSplit
-highlight! link FloatTitle Title
-highlight! link FloatFooter Title
 highlight! link FloatShadow Pmenu
 highlight! link FloatShadowThrough Pmenu
 
@@ -174,10 +163,6 @@ highlight! link PmenuShadow Pmenu
 highlight! link PmenuShadowThrough Pmenu
 highlight! link PmenuSbar Pmenu
 highlight PmenuThumb ctermfg=none ctermbg=white cterm=none
-highlight! link ComplHint Comment
-highlight! link ComplHintMore Comment
-highlight! link ComplMatchIns PmenuMatch
-highlight! link PreInsert Comment
 
 highlight! link PopupNotification WarningMsg
 
@@ -189,7 +174,6 @@ highlight CurSearch ctermfg=darkyellow ctermbg=none cterm=inverse
 highlight! link Substitute CurSearch
 
 highlight SpecialKey ctermfg=darkmagenta ctermbg=none cterm=none
-highlight! link Whitespace NonText
 highlight SpellBad ctermfg=none ctermbg=none cterm=underline
 highlight SpellCap ctermfg=none ctermbg=none cterm=underline
 highlight! link SpellLocal SpellCap
@@ -207,12 +191,10 @@ highlight TabLineSel ctermfg=darkblue ctermbg=black cterm=inverse
 
 highlight Title ctermfg=darkgreen ctermbg=none cterm=bold
 highlight Visual ctermfg=white ctermbg=none cterm=inverse
-highlight! link VisualNOS Visual
 highlight! link SnippetTabstop Visual
 highlight! link SnippetTabstopActive CurSearch
 
 highlight WarningMsg ctermfg=darkyellow ctermbg=none cterm=inverse
-highlight! link OkMsg Dracula16FunctionNames
 highlight! link StderrMsg ErrorMsg
 highlight! link StdoutMsg Normal
 highlight! link MsgArea Normal
@@ -225,44 +207,6 @@ highlight WildMenu ctermfg=darkblue ctermbg=none cterm=bold,inverse
 
 " TermCursor
 highlight! link TermCursor Cursor
-
-" Neovim Built-in LSP {{{
-highlight! link LspReferenceText Visual
-highlight! link LspReferenceRead Visual
-highlight! link LspReferenceWrite Visual
-highlight! link LspReferenceTarget Visual
-highlight! link LspInlayHint Comment
-highlight! link LspCodeLens Comment
-highlight! link LspCodeLensSeparator Comment
-highlight! link LspSignatureActiveParameter CurSearch
-" }}}
-
-" airblade/vim-gitgutter {{{
-highlight GitGutterAdd ctermfg=darkgreen ctermbg=none cterm=none
-highlight GitGutterChange ctermfg=darkyellow ctermbg=none cterm=none
-highlight GitGutterDelete ctermfg=darkred ctermbg=none cterm=none
-" }}}
-
-" github/copilot {{{
-highlight CopilotSuggestion ctermfg=darkgrey cterm=italic
-" }}}
-
-" prabirshrestha/vim-lsp {{{
-highlight! link LspErrorHighlight Error
-highlight! link LspWarningHighlight Todo
-highlight LspInformationHighlight ctermfg=darkblue ctermbg=none cterm=none
-highlight LspHintHighlight ctermfg=darkgreen ctermbg=none cterm=none
-
-highlight! link LspErrorText Error
-highlight! link LspWarningText Todo
-highlight! link LspInformationText LspInformationHighlight
-highlight! link LspHintText LspHintHighlight
-
-highlight! link LspErrorVirtualText LspErrorText
-highlight! link LspWarningVirtualText LspWarningText
-highlight! link LspInformationVirtualText LspInformationText
-highlight! link LspHintVirtualText LspHintText
-" }}}
 
 " Typescript: {{{
 highlight! link typescriptArrowFuncArg Identifier
