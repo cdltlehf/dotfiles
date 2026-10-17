@@ -37,6 +37,7 @@ services:
       - ~/.cache/huggingface:/root/.cache/huggingface:rw
     environment:
       - LLAMA_ARG_MODEL=/models/${LLM_MODEL:?LLM_MODEL is required}
+      - LLAMA_ARG_MMPROJ=${MMPROJ_MODEL:+/models/${MMPROJ_MODEL}}
       - LLAMA_ARG_ALIAS=llm
       - LLAMA_ARG_HOST=0.0.0.0
       - LLAMA_ARG_PORT=8080
