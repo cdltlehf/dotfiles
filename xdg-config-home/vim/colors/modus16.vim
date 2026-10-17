@@ -59,7 +59,7 @@ highlight Todo ctermfg=darkyellow ctermbg=none cterm=bold
 " }}}
 
 " UI Highlight Groups (:help highlight-groups) {{{
-highlight ColorColumn ctermfg=white ctermbg=darkgrey cterm=none
+highlight ColorColumn ctermfg=none ctermbg=darkgrey cterm=none
 highlight Conceal ctermfg=darkcyan ctermbg=none cterm=none
 
 highlight Cursor ctermfg=none ctermbg=none cterm=none
@@ -72,12 +72,8 @@ highlight Directory ctermfg=darkblue ctermbg=none cterm=bold
 
 highlight DiffAdd ctermfg=0 ctermbg=10 cterm=none
 highlight DiffChange ctermfg=none ctermbg=darkgrey cterm=none
-highlight DiffDelete ctermfg=9 ctermbg=none cterm=bold
+highlight DiffDelete ctermfg=0 ctermbg=9 cterm=none
 highlight DiffText ctermfg=0 ctermbg=14 cterm=none
-highlight! link DiffTextAdd DiffText
-highlight! link Added DiffAdd
-highlight! link Changed DiffChange
-highlight! link Removed DiffDelete
 
 highlight! link ErrorMsg Error
 
@@ -146,7 +142,7 @@ highlight! link TabLineFill TabLine
 highlight TabLineSel ctermfg=darkblue ctermbg=black cterm=inverse
 
 highlight Title ctermfg=darkblue ctermbg=none cterm=bold
-highlight Visual ctermfg=white ctermbg=none cterm=inverse
+highlight Visual ctermfg=white ctermbg=darkgrey cterm=none
 highlight! link SnippetTabstop Visual
 highlight! link SnippetTabstopActive CurSearch
 
@@ -159,28 +155,30 @@ highlight WildMenu ctermfg=darkblue ctermbg=none cterm=bold,inverse
 highlight! link TermCursor Cursor
 " }}}
 
-" Neovim Treesitter Mappings (Modus Semantics) {{{
-highlight! link @variable.builtin Statement
-highlight! link @constant.builtin Statement
-highlight! link @constant.macro PreProc
+if has('nvim')
+  " Neovim Treesitter Mappings (Modus Semantics) {{{
+  highlight! link @variable.builtin Statement
+  highlight! link @constant.builtin Statement
+  highlight! link @constant.macro PreProc
 
-highlight! link @string.regex Special
+  highlight! link @string.regex Special
 
-highlight! link @function.builtin Function
-highlight! link @function.macro Macro
+  highlight! link @function.builtin Function
+  highlight! link @function.macro Macro
 
-highlight! link @constructor Type
-highlight! link @keyword.import Include
+  highlight! link @constructor Type
+  highlight! link @keyword.import Include
 
-highlight! link @type.builtin Type
-highlight! link @type.qualifier StorageClass
-highlight! link @type.definition Typedef
+  highlight! link @type.builtin Type
+  highlight! link @type.qualifier StorageClass
+  highlight! link @type.definition Typedef
 
-highlight! link @tag.attribute Identifier
-highlight! link @tag.delimiter Delimiter
+  highlight! link @tag.attribute Identifier
+  highlight! link @tag.delimiter Delimiter
 
-highlight! link @comment.documentation SpecialComment
+  highlight! link @comment.documentation SpecialComment
 
-highlight! link @markup.raw String
-highlight! link @markup.list Special
-" }}}
+  highlight! link @markup.raw String
+  highlight! link @markup.list Special
+  " }}}
+endif
