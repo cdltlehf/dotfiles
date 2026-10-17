@@ -29,7 +29,7 @@ services:
     container_name: llama-server
     restart: unless-stopped
     profiles:
-      - llm
+      - llama
     devices:
       - /dev/dri:/dev/dri
     volumes:
@@ -55,16 +55,15 @@ services:
     container_name: whisper-server
     restart: unless-stopped
     profiles:
-      - audio
+      - whisper
     devices:
       - /dev/dri:/dev/dri
     volumes:
       - ~/.local/share/models:/models:ro
-    command:
-      - -m
-      - /models/${WHISPER_MODEL:?WHISPER_MODEL is required}
-      - --host
-      - "0.0.0.0"
+    command: [
+      "-m", "/models/${WHISPER_MODEL:?WHISPER_MODEL is required}",
+      "--host", "0.0.0.0"
+    ]
 
   sd-server:
     build:
@@ -74,16 +73,14 @@ services:
     container_name: sd-server
     restart: unless-stopped
     profiles:
-      - images
+      - sd
     devices:
       - /dev/dri:/dev/dri
     volumes:
       - ~/.local/share/models:/models:ro
-    command:
-      - -m
-      - /models/${SD_MODEL:?SD_MODEL is required}
-      - --vae-tiling
-      - --listen-ip
-      - "0.0.0.0"
-      - --listen-port
-      - "8080"
+    command: [
+      "-m", "/models/${SD_MODEL:?SD_MODEL is required}",
+      "--vae-tiling",
+      "--listen-ip", "0.0.0.0",
+      "--listen-port", "8080"
+    ]
