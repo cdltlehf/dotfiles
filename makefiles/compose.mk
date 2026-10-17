@@ -11,3 +11,13 @@ up: compose-up
 compose-down: ## Stop services (alias: down)
 	@$(COMPOSE) down
 down: compose-down
+
+.PHONY: compose-ps ps
+compose-ps: ## Status of services (alias: ps)
+	@$(COMPOSE) ps
+ps: compose-ps
+
+.PHONY: compose-logs logs
+compose-logs: ## Follow service logs (alias: logs)
+	@$(COMPOSE) logs -f
+logs: compose-logs
