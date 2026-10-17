@@ -38,7 +38,7 @@ The key words in this document are to be interpreted as described in
   [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Git commit messages MUST adhere to
   [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
-- Source files MUST consolidate upstream reference comments (`# Reference: <URL>`)
-  into a top header block.
-- Reference URLs MUST use HTTPS and SHOULD NOT retain unnecessary fragment
+- Upstream reference comments (`# Reference: <URL>`), when present, SHOULD be
+  consolidated into a top header block.
+- Reference URLs SHOULD use HTTPS and SHOULD NOT retain unnecessary fragment
   anchors.
