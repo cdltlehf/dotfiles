@@ -11,9 +11,15 @@ services:
     volumes:
       - ./containers/gateway/Caddyfile:/etc/caddy/Caddyfile:ro
     depends_on:
-      - llama-server
-      - whisper-server
-      - sd-server
+      llama-server:
+        condition: service_started
+        required: false
+      whisper-server:
+        condition: service_started
+        required: false
+      sd-server:
+        condition: service_started
+        required: false
 
   llama-server:
     build:
@@ -22,6 +28,8 @@ services:
     image: local/llama-server-krunkit:latest
     container_name: llama-server
     restart: unless-stopped
+    profiles:
+      - llm
     devices:
       - /dev/dri:/dev/dri
     volumes:
@@ -46,6 +54,8 @@ services:
     image: local/whisper-server-krunkit:latest
     container_name: whisper-server
     restart: unless-stopped
+    profiles:
+      - audio
     devices:
       - /dev/dri:/dev/dri
     volumes:
@@ -63,6 +73,8 @@ services:
     image: local/sd-server-krunkit:latest
     container_name: sd-server
     restart: unless-stopped
+    profiles:
+      - images
     devices:
       - /dev/dri:/dev/dri
     volumes:
