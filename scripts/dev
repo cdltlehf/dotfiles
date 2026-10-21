@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# Reference: https://prek.j178.dev/
+
+set -o nounset
+set -o errexit
+
+BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+readonly BASE_DIR
+
+# shellcheck source=scripts/lib.sh
+. "${BASE_DIR}/scripts/lib.sh"
+
+if command -v prek >/dev/null 2>&1; then
+  prek install
+else
+  warning "prek is not installed; run make install first"
+fi

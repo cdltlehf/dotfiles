@@ -1,11 +1,13 @@
 #!/bin/sh
 #
 # Reference: https://github.com/git/git
-# Reference: https://wezfurlong.org/wezterm
-# Reference: https://iterm2.com
-# Reference: https://gist.github.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263
+# Reference: https://wezfurlong.org/wezterm/
+# Reference: https://iterm2.com/
+# Reference: https://github.com/ThomasDickey/xterm-snapshots
+# Reference: https://github.com/robertknight/konsole
 # Reference: https://github.com/ryanoasis/nerd-fonts
-# Reference: https://mise.jdx.dev
+# Reference: https://mise.jdx.dev/
+# Reference: https://adr.github.io/madr/
 
 set -o nounset
 set -o errexit
@@ -27,15 +29,22 @@ __pathmunge "${BIN_DIR}"
 : "${XDG_STATE_HOME:="${HOME}/.local/state"}"
 export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME
 
-readonly LOCAL_GITCONFIG="${HOME}/.gitconfig.local"
+readonly BOLD_ITALICS_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/bold-italics.pl"
+readonly COLOR_256_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/256colors2.pl"
+readonly COLOR_SPACES_URL="https://raw.githubusercontent.com/robertknight/konsole/master/tests/color-spaces.pl"
 readonly GIT_COMPLETION_DIR="${XDG_DATA_HOME}/git/completion"
 readonly GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
+readonly IMGCAT_URL="https://iterm2.com/utilities/imgcat"
+readonly IMGLS_URL="https://iterm2.com/utilities/imgls"
+readonly MADR_TEMPLATE_URL="https://raw.githubusercontent.com/adr/madr/4.0.0/template"
+readonly MISE_INSTALL_URL="https://mise.run"
+readonly OTHER_SGR_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/other-sgr.sh"
+readonly QUERY_COLOR_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/query-color.pl"
+readonly QUERY_DYNAMIC_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/query-dynamic.pl"
+readonly QUERY_FONTS_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/query-fonts.pl"
+readonly TEST_FONTS_URL="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/bin/scripts/test-fonts.sh"
 readonly WEZTERM_SHELL_INTEGRATION_DIR="${XDG_DATA_HOME}/wezterm/shell-integration"
 readonly WEZTERM_SHELL_INTEGRATION_URL="https://raw.githubusercontent.com/wezterm/wezterm/main/assets/shell-integration/wezterm.sh"
-readonly COLOR_24BIT_URL="https://raw.githubusercontent.com/gnachman/iTerm2/master/tests/24-bit-color.sh"
-readonly COLOR_256_URL="https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw"
-readonly TEST_FONTS_URL="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/bin/scripts/test-fonts.sh"
-readonly MISE_INSTALL_URL="https://mise.run"
 
 OS="$(detect_os)"
 ARCH="$(detect_arch)"
@@ -55,28 +64,18 @@ for item in "${BASE_DIR}/xdg-config-home"/*; do
 done
 unset item
 
-symlink "${XDG_CONFIG_HOME}/sh/profile" "${HOME}/.profile"
-symlink "${XDG_CONFIG_HOME}/bash/bash_profile" "${HOME}/.bash_profile"
-symlink "${XDG_CONFIG_HOME}/bash/bashrc" "${HOME}/.bashrc"
-symlink "${XDG_CONFIG_HOME}/zsh/zshenv" "${HOME}/.zshenv"
+# shellcheck source=/dev/null
+[ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ] && . "${XDG_CONFIG_HOME}/user-dirs.dirs"
+: "${XDG_TEMPLATES_DIR:="${HOME}/Templates"}"
+export XDG_TEMPLATES_DIR
+
+symlink "${XDG_CONFIG_HOME}/sh/dot_profile" "${HOME}/.profile"
+symlink "${XDG_CONFIG_HOME}/bash/dot_bash_profile" "${HOME}/.bash_profile"
+symlink "${XDG_CONFIG_HOME}/bash/dot_bashrc" "${HOME}/.bashrc"
+symlink "${XDG_CONFIG_HOME}/zsh/dot_zshenv" "${HOME}/.zshenv"
 # The existence of "${XDG_CONFIG_HOME}/zsh/.z{shrc,zprofile}" is guaranteed by the above symlink command.
-symlink "zprofile" "${XDG_CONFIG_HOME}/zsh/.zprofile"
-symlink "zshrc" "${XDG_CONFIG_HOME}/zsh/.zshrc"
-symlink "${XDG_CONFIG_HOME}/editorconfig/config" "${HOME}/.editorconfig"
-
-if [ -t 0 ] && [ ! -f "${LOCAL_GITCONFIG}" ]; then
-  _default_username="$(git config --global user.name 2>/dev/null || true)"
-  _default_useremail="$(git config --global user.email 2>/dev/null || true)"
-
-  _git_username="$(prompt "Git user.name" "${_default_username}")"
-  _git_useremail="$(prompt "Git user.email" "${_default_useremail}")"
-
-  if [ -n "${_git_username}" ] && [ -n "${_git_useremail}" ]; then
-    git config -f "${LOCAL_GITCONFIG}" user.name "${_git_username}"
-    git config -f "${LOCAL_GITCONFIG}" user.email "${_git_useremail}"
-  fi
-  unset _default_username _default_useremail _git_username _git_useremail
-fi
+symlink "dot_zprofile" "${XDG_CONFIG_HOME}/zsh/.zprofile"
+symlink "dot_zshrc" "${XDG_CONFIG_HOME}/zsh/.zshrc"
 
 for script in "${BASE_DIR}/bin"/*; do
   [ -e "${script}" ] || continue
@@ -84,20 +83,72 @@ for script in "${BASE_DIR}/bin"/*; do
 done
 unset script
 
+download "${BOLD_ITALICS_URL}" "${BIN_DIR}/bold-italics" "+x"
+download "${COLOR_256_URL}" "${BIN_DIR}/256colors2" "+x"
+download "${COLOR_SPACES_URL}" "${BIN_DIR}/color-spaces" "+x"
 download "${GIT_PROMPT_URL}" "${GIT_COMPLETION_DIR}/git-prompt.sh"
+download "${IMGCAT_URL}" "${BIN_DIR}/imgcat" "+x"
+download "${IMGLS_URL}" "${BIN_DIR}/imgls" "+x"
+download "${OTHER_SGR_URL}" "${BIN_DIR}/other-sgr" "+x"
+download "${QUERY_COLOR_URL}" "${BIN_DIR}/query-color" "+x"
+download "${QUERY_DYNAMIC_URL}" "${BIN_DIR}/query-dynamic" "+x"
+download "${QUERY_FONTS_URL}" "${BIN_DIR}/query-fonts" "+x"
+download "${TEST_FONTS_URL}" "${BIN_DIR}/test-fonts" "+x"
 download "${WEZTERM_SHELL_INTEGRATION_URL}" \
   "${WEZTERM_SHELL_INTEGRATION_DIR}/wezterm.sh"
-download "${COLOR_24BIT_URL}" "${BIN_DIR}/24-bit-color" "+x"
-download "${COLOR_256_URL}" "${BIN_DIR}/256-color-table" "+x"
-download "${TEST_FONTS_URL}" "${BIN_DIR}/test-fonts" "+x"
 
-# shellcheck disable=SC2310
-if ! has mise; then
-  download "${MISE_INSTALL_URL}" | sh 2>/dev/null || true
+readonly MADR_FILES=".markdownlint.yml \
+  0000-use-markdown-architectural-decision-records.md \
+  adr-template-bare-minimal.md \
+  adr-template-bare.md \
+  adr-template-minimal.md \
+  adr-template.md"
+
+for file in ${MADR_FILES}; do
+  download "${MADR_TEMPLATE_URL}/${file}" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/${file}"
+done
+unset file
+symlink "adr-template-minimal.md" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/{}.md"
+symlink "{}.h.tmpl" "${BASE_DIR}/xdg-templates-dir/c/include/{}.hpp.tmpl"
+
+[ -L "${XDG_TEMPLATES_DIR}" ] && rm "${XDG_TEMPLATES_DIR}"
+mkdir -p "${XDG_TEMPLATES_DIR}"
+for item in "${BASE_DIR}/xdg-templates-dir"/*; do
+  [ -e "${item}" ] || continue
+  name="$(basename "${item}")"
+  case "${name}" in
+  dot_*) name=".${name#dot_}" ;;
+  *) ;;
+  esac
+  symlink "${item}" "${XDG_TEMPLATES_DIR}/${name}"
+done
+unset item name
+symlink "${BASE_DIR}/xdg-templates-dir/dot_biome.json" "${XDG_TEMPLATES_DIR}/biome.json"
+
+if command -v claude >/dev/null; then
+  symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.claude/CLAUDE.md"
 fi
 
-# shellcheck disable=SC2310
-if has mise; then
+if command -v agy >/dev/null; then
+  symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.gemini/GEMINI.md"
+  symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.gemini/config/AGENTS.md"
+fi
+
+if command -v codex >/dev/null; then
+  symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${CODEX_HOME:-${HOME}/.codex}/AGENTS.md"
+fi
+
+if ! command -v mise >/dev/null; then
+  tmpdir="$(mktemp -d)"
+  if [ -n "${tmpdir}" ] && [ -d "${tmpdir}" ]; then
+    download "${MISE_INSTALL_URL}" "${tmpdir}/install.sh"
+    sh "${tmpdir}/install.sh" 2>/dev/null || true
+    rm -rf "${tmpdir}"
+  fi
+  unset tmpdir
+fi
+
+if command -v mise >/dev/null; then
   mise install --yes || true
 fi
 

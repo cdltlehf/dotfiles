@@ -23,7 +23,7 @@ if [ -z "${_brew_prefix}" ]; then
       _brew_prefix="/usr/local"
       ;;
     *)
-      err "Warning: unsupported macOS architecture: ${ARCH}"
+      warning "Unsupported macOS architecture: ${ARCH}"
       ;;
   esac
 fi
@@ -37,7 +37,7 @@ fi
 
 xcode-select --install 2>/dev/null || true
 
-if ! has brew; then
+if ! command -v brew >/dev/null; then
   download "${HOMEBREW_INSTALL_URL}" | /bin/bash
   if [ -n "${BREW_BIN:-}" ] && [ -x "${BREW_BIN}" ]; then
     __cached "${BREW_BIN}" shellenv

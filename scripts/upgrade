@@ -18,23 +18,24 @@ readonly OS ARCH
 
 run_hook pre-upgrade
 
-# shellcheck disable=SC2310
-if has brew; then
+if command -v brew >/dev/null; then
+  brew update
+  if [ -f "${BASE_DIR}/platforms/${OS}/Brewfile" ]; then
+    brew bundle --file "${BASE_DIR}/platforms/${OS}/Brewfile"
+  fi
   brew upgrade
 fi
 
-# shellcheck disable=SC2310
-if has mise; then
+if command -v mise >/dev/null; then
+  mise install --yes
   mise upgrade --bump
 fi
 
-# shellcheck disable=SC2310
-if has prek; then
+if command -v prek >/dev/null; then
   prek auto-update
 fi
 
-# shellcheck disable=SC2310
-if has nvim; then
+if command -v nvim >/dev/null; then
   nvim --headless \
     -c "lua vim.pack.update(nil, { force = true })" \
     -c "qall!"

@@ -12,11 +12,10 @@ setup() {
 # as a subsequence. Subsequence matching is required because machine-specific directories
 # and system files vary, whereas the dotfiles ordering contract MUST remain invariant.
 assert_subsequence() {
-  local IFS=":"
-  # shellcheck disable=SC2086,SC2206
-  local -a actual=($1)
-  # shellcheck disable=SC2086
-  set -- $2
+  local -a actual wanted
+  IFS=":" read -ra actual <<<"$1"
+  IFS=":" read -ra wanted <<<"$2"
+  set -- "${wanted[@]}"
   for item in "${actual[@]}"; do
     [[ "${item}" == "$1" ]] && shift
     [[ $# -eq 0 ]] && break
