@@ -3,6 +3,7 @@
 [tools]
 "aqua:mattn/efm-langserver" = "0.0.57"
 "aqua:tmux/tmux-builds" = "3.7c"
+"github:gittower/git-flow-next" = "2.1.0"
 bat = "0.26.1"
 bats = "1.14.0"
 biome = "2.5.15"
