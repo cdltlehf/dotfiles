@@ -11,6 +11,25 @@
 		reverse_proxy sd-server:8080
 	}
 
+	handle /sse* {
+		reverse_proxy mcp-server:8080 {
+			flush_interval -1
+		}
+	}
+
+	handle /messages* {
+		reverse_proxy mcp-server:8080 {
+			flush_interval -1
+		}
+	}
+
+	handle /mcp* {
+		uri strip_prefix /mcp
+		reverse_proxy mcp-server:8080 {
+			flush_interval -1
+		}
+	}
+
 	handle {
 		reverse_proxy llama-server:8080
 	}

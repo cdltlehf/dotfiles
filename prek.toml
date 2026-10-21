@@ -39,14 +39,13 @@ repo = "https://github.com/scop/pre-commit-shfmt"
 rev = "v3.14.1-1"
 
 [[repos]]
-hooks = [
-  { id = "shellcheck", types_or = [
-    "shell",
-    "bats",
-  ], exclude = '\.zsh$' },
-]
 repo = "https://github.com/shellcheck-py/shellcheck-py"
 rev = "v0.11.0.1-1"
+
+[[repos.hooks]]
+exclude = '\.zsh$'
+id = "shellcheck"
+types_or = ["shell", "bats"]
 
 [[repos]]
 hooks = [{ id = "stylua-github" }]
@@ -66,35 +65,41 @@ rev = "v0.23.3"
 # TODO: Pin these tools in xdg-config-home/mise/config.toml. On macOS they
 # come from Homebrew unpinned, so their versions differ from Linux.
 [[repos]]
-hooks = [
-  { id = "lua-language-server", name = "lua-language-server", entry = "lua-language-server --check . --checklevel=Information", language = "system", pass_filenames = false, types = [
-    "lua",
-  ] },
-  { id = "taplo-check", name = "taplo check", entry = "taplo check", language = "system", pass_filenames = false, types = [
-    "toml",
-  ] },
-  { id = "taplo-format", name = "taplo fmt", entry = "taplo fmt", language = "system", types = [
-    "toml",
-  ] },
-]
 repo = "local"
+
+[[repos.hooks]]
+entry = "lua-language-server --check . --checklevel=Information"
+id = "lua-language-server"
+language = "system"
+name = "lua-language-server"
+pass_filenames = false
+types = ["lua"]
+
+[[repos.hooks]]
+entry = "taplo check"
+id = "taplo-check"
+language = "system"
+name = "taplo check"
+pass_filenames = false
+types = ["toml"]
+
+[[repos.hooks]]
+entry = "taplo fmt"
+id = "taplo-format"
+language = "system"
+name = "taplo fmt"
+types = ["toml"]
 
 # Biome indents continuation lines by 2 spaces, not by the 4 or more of
 # the Google JavaScript Style Guide, and cannot be configured to.
 [[repos]]
-hooks = [
-  { id = "biome-format", additional_dependencies = [
-    "@biomejs/biome@2.5.14",
-  ], types_or = [
-    "javascript",
-    "json",
-    "jsx",
-    "ts",
-    "tsx",
-  ] },
-]
 repo = "https://github.com/biomejs/pre-commit"
 rev = "v2.5.15"
+
+[[repos.hooks]]
+additional_dependencies = ["@biomejs/biome@2.5.14"]
+id = "biome-format"
+types_or = ["javascript", "json", "jsx", "ts", "tsx"]
 
 [[repos]]
 hooks = [{ id = "gitleaks" }]

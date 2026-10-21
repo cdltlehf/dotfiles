@@ -1,0 +1,16 @@
+FROM docker.io/library/python:alpine AS builder
+
+RUN pip install --no-cache-dir --prefix=/install "mcp[cli]" httpx
+
+FROM docker.io/library/python:alpine
+
+COPY --from=builder /install /usr/local
+COPY server.py /app/server.py
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+EXPOSE 8080
+ENTRYPOINT ["python", "-u", "/app/server.py"]

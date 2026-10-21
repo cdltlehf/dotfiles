@@ -20,6 +20,9 @@ services:
       sd-server:
         condition: service_started
         required: false
+      mcp-server:
+        condition: service_started
+        required: false
 
   llama-server:
     build:
@@ -39,6 +42,7 @@ services:
       "--host", "0.0.0.0",
       "--port", "8080",
       "--models-dir", "/models",
+      "--jinja",
       "-c", "8192",
       "-ub", "2048",
       "-np", "1",
@@ -88,3 +92,20 @@ services:
       "--listen-ip", "0.0.0.0",
       "--listen-port", "8080"
     ]
+
+  mcp-server:
+    build:
+      context: ./containers/mcp-server
+      dockerfile: Containerfile
+    image: local/mcp-server:latest
+    container_name: mcp-server
+    restart: unless-stopped
+    profiles:
+      - mcp
+    depends_on:
+      sd-server:
+        condition: service_started
+        required: false
+      whisper-server:
+        condition: service_started
+        required: false
