@@ -1,15 +1,12 @@
-# Reference: https://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html
-# Reference: https://tech.davis-hansson.com/p/make/
-
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
-SHELL := bash
+SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := all
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
-TARGET := {dirname}
+TARGET := {project|basename}
 BUILD_DIR := build
 SRC_DIR := src
 
@@ -25,7 +22,20 @@ DEPS := $(OBJS:.o=.d)
 
 .PRECIOUS: $(BUILD_DIR)/%.o
 
-all: $(BUILD_DIR)/$(TARGET)
+##@ General
+
+.PHONY: help
+help: ## Display help
+	@awk ' \
+		BEGIN {open}FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"{close} \
+		/^[a-zA-Z_0-9-]+:.*?##/ {open} printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 {close} \
+		/^##@/ {open} printf "\n\033[1m%s\033[0m\n", substr($$0, 5) {close} \
+	' $(MAKEFILE_LIST)
+
+##@ Build & Run
+
+.PHONY: all
+all: $(BUILD_DIR)/$(TARGET) ## Build target
 
 $(BUILD_DIR)/$(TARGET): $(OBJS)
 	@mkdir -p $(dir $@)
@@ -41,10 +51,10 @@ $(BUILD_DIR)/%.c.o: $(SRC_DIR)/%.c
 
 -include $(DEPS)
 
-.PHONY: all run clean
-
-run: all
+.PHONY: run
+run: all ## Run built target
 	./$(BUILD_DIR)/$(TARGET)
 
-clean:
+.PHONY: clean
+clean: ## Clean build artifacts
 	rm -rf $(BUILD_DIR)

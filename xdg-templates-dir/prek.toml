@@ -1,0 +1,91 @@
+#:schema https://www.schemastore.org/prek.json
+
+default_install_hook_types = [
+  "commit-msg",
+  "post-checkout",
+  "post-commit",
+  "post-merge",
+  "post-rewrite",
+  "pre-commit",
+  "pre-merge-commit",
+  "pre-push",
+  "pre-rebase",
+  "prepare-commit-msg",
+]
+default_stages = ["pre-commit"]
+
+[[repos]]
+hooks = [
+  { id = "check-added-large-files" },
+  { id = "check-executables-have-shebangs" },
+  { id = "check-json" },
+  { id = "check-merge-conflict" },
+  { id = "check-symlinks" },
+  { id = "check-toml" },
+  { id = "check-yaml" },
+  { id = "destroyed-symlinks" },
+  { id = "end-of-file-fixer" },
+  { id = "trailing-whitespace" },
+  { id = "no-commit-to-branch", args = [
+    "--branch",
+    "main",
+    "--branch",
+    "develop",
+  ] },
+]
+repo = "builtin"
+
+[[repos]]
+hooks = [{ id = "shfmt", types_or = ["shell", "bats"] }]
+repo = "https://github.com/scop/pre-commit-shfmt"
+rev = "v3.14.1-1"
+
+[[repos]]
+hooks = [
+  { id = "shellcheck", types_or = [
+    "shell",
+    "bats",
+  ], exclude = '\.zsh$' },
+]
+repo = "https://github.com/shellcheck-py/shellcheck-py"
+rev = "v0.11.0.1-1"
+
+[[repos]]
+hooks = [{ id = "yamllint" }]
+repo = "https://github.com/adrienverge/yamllint"
+rev = "v1.38.0"
+
+[[repos]]
+hooks = [{ id = "markdownlint-cli2", args = ["--fix"] }]
+repo = "https://github.com/DavidAnson/markdownlint-cli2"
+rev = "v0.23.3"
+
+[[repos]]
+hooks = [
+  { id = "biome-format", additional_dependencies = [
+    "@biomejs/biome@2.5.14",
+  ], types_or = [
+    "javascript",
+    "json",
+    "jsx",
+    "ts",
+    "tsx",
+  ] },
+]
+repo = "https://github.com/biomejs/pre-commit"
+rev = "v2.5.15"
+
+[[repos]]
+hooks = [{ id = "gitleaks" }]
+repo = "https://github.com/gitleaks/gitleaks"
+rev = "v8.30.1"
+
+[[repos]]
+hooks = [
+  { id = "commitizen" },
+  { id = "commitizen-branch", stages = [
+    "pre-push",
+  ] },
+]
+repo = "https://github.com/commitizen-tools/commitizen"
+rev = "v4.19.2"
