@@ -8,6 +8,7 @@ Deviations from a SHOULD, a SHOULD NOT, or a lint rule in committed work
 MUST be approved by the user.
 Each deviated rule MUST have its reason stated
 in a decision record or in a comment at the deviation.
+One decision record MAY state the reasons for several deviations.
 
 ## Documentation conventions
 
@@ -66,6 +67,6 @@ in a decision record or in a comment at the deviation.
     when a matching template exists.
 *   Branches SHOULD follow
     [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/).
-*   Architecturally significant decisions SHOULD be recorded in
+*   Architecturally significant decisions MAY be recorded in
     `docs/decisions/` with [MADR](https://adr.github.io/madr/),
     keeping only the sections the decision needs.
