@@ -26,5 +26,7 @@ if [[ -d "${BASHRCDIR}" ]]; then
 fi
 unset -v SHRC BASHRCDIR
 
+# ~/.bashrc.local is in $HOME, not in XDG_CONFIG_HOME, which links into the
+# dotfiles working tree, so that it cannot be committed by mistake.
 # shellcheck source=/dev/null
 [[ -f "${HOME}/.bashrc.local" ]] && source "${HOME}/.bashrc.local" 2>/dev/null || true

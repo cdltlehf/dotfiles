@@ -183,7 +183,8 @@ if !has('nvim') && exists('*TerminalWinOpen')
   augroup end
 endif
 
-" source local vimrc
+" ~/.vimrc.local is in $HOME, not in XDG_CONFIG_HOME, which links into the
+" dotfiles working tree, so that it cannot be committed by mistake.
 let s:vimrc_local = expand('$HOME/.vimrc.local')
 if filereadable(s:vimrc_local) | execute "source " . s:vimrc_local | endif
 

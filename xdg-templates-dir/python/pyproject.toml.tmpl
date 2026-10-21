@@ -24,38 +24,49 @@ docstring-code-line-length = 80
 
 [tool.ruff.lint]
 ignore = [
+  # Conflict with the Ruff formatter:
+  # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
   "avoidable-escaped-quote",
   "bad-quotes-docstring",
   "bad-quotes-inline-string",
   "bad-quotes-multiline-string",
-  "docstring-missing-exception",
-  "docstring-missing-returns",
-  "docstring-missing-yields",
   "docstring-tab-indentation",
-  "f-string-in-exception",
-  "future-required-type-annotation",
-  "future-rewritable-type-annotation",
   "indentation-with-invalid-multiple",
   "indentation-with-invalid-multiple-comment",
-  "line-contains-todo",
   "line-too-long",
-  "missing-todo-author",
-  "missing-todo-link",
   "missing-trailing-comma",
   "over-indented",
-  "print",
   "prohibited-trailing-comma",
-  "raise-vanilla-args",
-  "raw-string-in-exception",
   "tab-indentation",
   "triple-single-quotes",
+  "unnecessary-escaped-quote",
+  # Python 3.14 evaluates annotations lazily (PEP 649).
+  "future-required-type-annotation",
+  "future-rewritable-type-annotation",
   "typing-only-first-party-import",
   "typing-only-standard-library-import",
   "typing-only-third-party-import",
-  "unnecessary-escaped-quote",
+  # Google 3.8.3 allows one-line docstrings without Returns, Yields, or
+  # Raises. Revisit when Ruff skips one-line docstrings.
+  "docstring-missing-exception",
+  "docstring-missing-returns",
+  "docstring-missing-yields",
+  # Google 3.12 allows `# TODO(link): ...` and avoids naming individuals.
+  # Revisit missing-todo-link when Ruff accepts a link in the parentheses.
+  "line-contains-todo",
+  "missing-todo-author",
+  "missing-todo-link",
+  # Google raises exceptions with f-string messages in its examples.
+  "f-string-in-exception",
+  "raise-vanilla-args",
+  "raw-string-in-exception",
+  # Google uses print in its examples and does not forbid it.
+  "print",
 ]
 select = ["ALL"]
 
+# Google 3.8.2 requires license boilerplate in every file. The SPDX line
+# serves as the boilerplate, so no year or author has to be filled in.
 [tool.ruff.lint.flake8-copyright]
 notice-rgx = "SPDX-License-Identifier: "
 

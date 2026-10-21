@@ -1,5 +1,8 @@
 # Reference: https://mise.jdx.dev/configuration.html
 
+# Tools that need the same version on every platform, such as language
+# runtimes and the tools that projects and hooks depend on.
+
 [tools]
 java = "27"
 "npm:@colbymchenry/codegraph" = "1.6.2"

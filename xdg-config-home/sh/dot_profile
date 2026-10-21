@@ -86,6 +86,8 @@ fi
 export LS_COLORS="di=34:ln=36:ex=32:so=35:pi=33:bd=33:cd=33:su=31:sg=31:tw=34:ow=34:st=34:or=31:mi=31"
 export LSCOLORS="exfxcxdxbxegedabagacad"
 
+# ~/.profile.local is in $HOME, not in XDG_CONFIG_HOME, which links into the
+# dotfiles working tree, so that it cannot be committed by mistake.
 if [ -f "${HOME}/.profile.local" ]; then
   . "${HOME}/.profile.local"
 fi

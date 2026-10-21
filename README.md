@@ -4,6 +4,11 @@
 
 sh (POSIX-compliant), curl (or wget)
 
+## Layout
+
+* `xdg-config-home/`: configurations for the user, linked into `XDG_CONFIG_HOME`
+* `xdg-templates-dir/`: templates for projects, linked into `XDG_TEMPLATES_DIR`
+
 ## Installation
 
 ```bash

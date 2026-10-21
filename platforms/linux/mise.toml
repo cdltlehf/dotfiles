@@ -1,5 +1,8 @@
 # Reference: https://mise.jdx.dev/configuration.html
 
+# The command-line tools of platforms/darwin/Brewfile, as far as mise
+# provides them.
+
 [tools]
 "aqua:mattn/efm-langserver" = "0.0.57"
 "aqua:tmux/tmux-builds" = "3.7c"

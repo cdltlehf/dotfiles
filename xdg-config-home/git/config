@@ -78,5 +78,7 @@
 [user]
 	useConfigOnly = true
 
+; ~/.gitconfig.local is in $HOME, not in XDG_CONFIG_HOME, which links into the
+; dotfiles working tree, so that it cannot be committed by mistake.
 [include]
 	path = "~/.gitconfig.local"

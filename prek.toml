@@ -70,6 +70,8 @@ hooks = [
 ]
 repo = "local"
 
+# Biome indents continuation lines by 2 spaces, not by the 4 or more of
+# the Google JavaScript Style Guide, and cannot be configured to.
 [[repos]]
 hooks = [
   { id = "biome-format", additional_dependencies = [

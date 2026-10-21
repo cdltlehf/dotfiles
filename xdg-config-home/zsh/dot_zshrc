@@ -14,4 +14,6 @@ if [[ -d "${ZSHRCDIR}" ]]; then
 fi
 unset -v SHRC ZSHRCDIR
 
+# ~/.zshrc.local is in $HOME, not in XDG_CONFIG_HOME, which links into the
+# dotfiles working tree, so that it cannot be committed by mistake.
 [[ -f "${HOME}/.zshrc.local" ]] && source "${HOME}/.zshrc.local" 2>/dev/null || true

@@ -69,6 +69,8 @@ unset item
 : "${XDG_TEMPLATES_DIR:="${HOME}/Templates"}"
 export XDG_TEMPLATES_DIR
 
+# These shells read only fixed paths in $HOME.
+# Revisit each link when its shell reads XDG_CONFIG_HOME.
 symlink "${XDG_CONFIG_HOME}/sh/dot_profile" "${HOME}/.profile"
 symlink "${XDG_CONFIG_HOME}/bash/dot_bash_profile" "${HOME}/.bash_profile"
 symlink "${XDG_CONFIG_HOME}/bash/dot_bashrc" "${HOME}/.bashrc"
@@ -123,8 +125,15 @@ for item in "${BASE_DIR}/xdg-templates-dir"/*; do
   symlink "${item}" "${XDG_TEMPLATES_DIR}/${name}"
 done
 unset item name
+# Biome rejects a biome.json in xdg-templates-dir as a nested root
+# configuration beside the root .biome.json.
 symlink "${BASE_DIR}/xdg-templates-dir/dot_biome.json" "${XDG_TEMPLATES_DIR}/biome.json"
 
+# Agents read their global instructions only from fixed paths in $HOME.
+# Link them to one tracked file, so that a tool writing into them shows up
+# in `git diff`. Moving the whole directory with a variable such as
+# CODEX_HOME would also move data, state, and cache into XDG_CONFIG_HOME.
+# Revisit each link when its agent separates configuration from data.
 if command -v claude >/dev/null; then
   symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.claude/CLAUDE.md"
 fi
