@@ -265,12 +265,12 @@ endif
 command LspDisableDiagnostics call lsp#disable_diagnostics_for_buffer()
 command LspEnableDiagnostics call lsp#enable_diagnostics_for_buffer()
 
-if executable('markdownlint-lsp')
+if executable('markdownlint-lsp-server')
   augroup LspMarkdownlint
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
           \   'name': 'markdownlint-lsp',
-          \   'cmd': {server_info->['markdownlint-lsp', '--stdio']},
+          \   'cmd': {server_info->['markdownlint-lsp-server', '--stdio']},
           \   'allowlist': ['markdown', 'markdown.mdx'],
           \ })
   augroup END
