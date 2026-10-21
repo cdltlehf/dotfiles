@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# Reference: https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+
+set -o nounset
+set -o errexit
+
+ESC="$(printf '\033')"
+readonly ESC
+RESET="${ESC}[0m"
+readonly RESET
+
+STYLE_NORMAL="0"
+STYLE_BOLD="1"
+STYLE_ITALIC="3"
+STYLE_BOLD_ITALIC="1;3"
+
+EN_TEXT="Quick brown fox jumps over the lazy dog."
+KO_TEXT="다람쥐 헌 쳇바퀴에 타고파."
+
+print_style() {
+  label="$1"
+  code="$2"
+  sgr="${ESC}[${code}m"
+
+  printf '%s%-12s%s\n' "${sgr}" "[${label}]" "${RESET}"
+  printf '  %s%s%s\n' "${sgr}" "${EN_TEXT}" "${RESET}"
+  printf '  %s%s%s\n\n' "${sgr}" "${KO_TEXT}" "${RESET}"
+}
+
+print_style "Normal" "${STYLE_NORMAL}"
+print_style "Bold" "${STYLE_BOLD}"
+print_style "Italic" "${STYLE_ITALIC}"
+print_style "Bold Italic" "${STYLE_BOLD_ITALIC}"

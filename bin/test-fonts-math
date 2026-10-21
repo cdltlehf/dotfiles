@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# Reference: https://mono-math.netlify.app/
+# Reference: https://github.com/sijow/mono-math
+
+set -o nounset
+set -o errexit
+
+CACHE_DIR="${XDG_CACHE_HOME:-${HOME}/.cache}/mono-math"
+BASE_URL="https://raw.githubusercontent.com/sijow/mono-math/main/public/samples"
+mkdir -p "${CACHE_DIR}"
+
+for sample in 01 02 03 04 05 06 07 08 09 10 11 12; do
+  file="${CACHE_DIR}/${sample}.txt"
+  [ -s "${file}" ] || curl -fsSL "${BASE_URL}/${sample}.txt" -o "${file}"
+  cat "${file}"
+done

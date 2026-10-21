@@ -1,6 +1,6 @@
-import { css } from "uebersicht";
+import {css} from 'uebersicht';
 
-export const command = "git config user.name";
+export const command = 'git config user.name';
 export const refreshFrequency = 60000;
 
 export const className = css`
@@ -17,11 +17,20 @@ export const className = css`
   font-weight: 900;
   letter-spacing: -0.03em;
   filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.35));
+  text-shadow:
+    0.04em 0 #000,
+    -0.04em 0 #000,
+    0 0.04em #000,
+    0 -0.04em #000,
+    0.03em 0.03em #000,
+    -0.03em 0.03em #000,
+    0.03em -0.03em #000,
+    -0.03em -0.03em #000;
   user-select: none;
   pointer-events: none;
 `;
 
-export const render = ({ output, error }) => {
+export const render = ({output, error}) => {
   if (error || !output) return null;
   return <div>{output.trim()}</div>;
 };
