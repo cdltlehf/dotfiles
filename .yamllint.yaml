@@ -2,5 +2,8 @@
 
 extends: default
 
+ignore: |
+  **/docs/decisions/.markdownlint.yml
+
 rules:
   document-start: disable
