@@ -22,7 +22,6 @@ elseif v:version >= 900
 else
   set fillchars=vert:│,fold:·
 endif
-set formatoptions=tcqj
 set nofsync
 set hidden
 set history=10000

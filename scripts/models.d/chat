@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# Reference: https://curl.se/docs/manpage.html
+# Reference: https://platform.openai.com/docs/api-reference/chat
+
+set -o nounset
+set -o errexit
+
+BASE_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+readonly BASE_DIR
+
+# shellcheck source=scripts/lib.sh
+. "${BASE_DIR}/scripts/lib.sh"
+
+BASE_URL="${BASE_URL:-http://localhost:8080/v1}"
+API_KEY="${API_KEY:-no-key}"
+PROMPT="${1:-Reply with exactly: Hello, world!}"
+readonly BASE_URL API_KEY
+
+MODEL_NAME="${MODEL:-${CHAT_MODEL:-chat}}"
+readonly MODEL_NAME
+
+PAYLOAD="$(jq -n \
+  --arg model "${MODEL_NAME}" \
+  --arg prompt "${PROMPT}" \
+  '{
+    model: $model,
+    messages: [{role: "user", content: $prompt}],
+    temperature: 0.1,
+    max_tokens: 32
+  }')"
+
+curl -fsS "${BASE_URL}/chat/completions" \
+  -H "Authorization: Bearer ${API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d "${PAYLOAD}" | jq .

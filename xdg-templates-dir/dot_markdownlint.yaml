@@ -1,0 +1,29 @@
+# Reference: https://google.github.io/styleguide/docguide/style.html
+# Reference: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+
+default: true
+
+MD003:
+  style: atx
+MD004:
+  style: asterisk
+MD007:
+  indent: 4
+MD009:
+  br_spaces: 0
+MD013:
+  line_length: 80
+  code_blocks: false
+  headings: false
+  tables: false
+MD029:
+  style: one_or_ordered
+MD030:
+  ul_single: 1
+  ul_multi: 3
+  ol_single: 1
+  ol_multi: 2
+MD046:
+  style: fenced
+MD048:
+  style: backtick

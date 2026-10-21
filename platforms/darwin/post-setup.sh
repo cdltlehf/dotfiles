@@ -78,8 +78,7 @@ if [ ! -d "${SPOONS_DIR}/SpoonInstall.spoon" ]; then
   unset tmpdir
 fi
 
-# shellcheck disable=SC2310
-if [ -d "${VSCODE_USER_DIR}" ] || has code; then
+if [ -d "${VSCODE_USER_DIR}" ] || command -v code >/dev/null; then
   mkdir -p "${VSCODE_USER_DIR}"
   symlink \
     "${XDG_CONFIG_HOME}/vscode/settings.json" \
@@ -106,8 +105,7 @@ if [ -d "${PREFERENCES_DIR}" ]; then
   unset plist domain
 fi
 
-# shellcheck disable=SC2310
-if has shortcuts; then
+if command -v shortcuts >/dev/null; then
   if ! (shortcuts list 2>/dev/null || true) |
     grep -Fxq "Toggle High Dynamic Range"; then
     tmpdir="$(mktemp -d)"
@@ -128,8 +126,7 @@ if has shortcuts; then
   fi
 fi
 
-# shellcheck disable=SC2310
-if has brew && brew list zathura >/dev/null 2>&1; then
+if command -v brew >/dev/null && brew list zathura >/dev/null 2>&1; then
   if [ ! -d "/Applications/Zathura.app" ]; then
     download "${ZATHURA_APP_CONVERT_URL}" | sh
   fi
@@ -147,8 +144,7 @@ if has brew && brew list zathura >/dev/null 2>&1; then
   unset zathura_lib_dir plugin plugin_prefix
 fi
 
-# shellcheck disable=SC2310
-if has erb && [ -d "${KARABINER_TEMPLATES_DIR}" ]; then
+if command -v erb >/dev/null && [ -d "${KARABINER_TEMPLATES_DIR}" ]; then
   for template in "${KARABINER_TEMPLATES_DIR}"/*.erb; do
     [ -f "${template}" ] || continue
     target="${KARABINER_RULES_DIR}/$(basename "${template}" .erb)"

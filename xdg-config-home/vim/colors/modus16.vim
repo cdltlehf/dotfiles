@@ -48,7 +48,7 @@ highlight Special ctermfg=darkcyan ctermbg=none cterm=none
 highlight SpecialChar ctermfg=darkcyan ctermbg=none cterm=none
 highlight Tag ctermfg=darkblue ctermbg=none cterm=none
 highlight Delimiter ctermfg=darkgrey ctermbg=none cterm=none
-highlight SpecialComment ctermfg=darkgrey ctermbg=none cterm=italic
+highlight SpecialComment ctermfg=darkgrey ctermbg=none cterm=none
 highlight Debug ctermfg=darkmagenta ctermbg=none cterm=none
 
 highlight Underlined ctermfg=none ctermbg=none cterm=underline
@@ -59,7 +59,7 @@ highlight Todo ctermfg=darkyellow ctermbg=none cterm=bold
 " }}}
 
 " UI Highlight Groups (:help highlight-groups) {{{
-highlight ColorColumn ctermfg=white ctermbg=darkgrey cterm=none
+highlight ColorColumn ctermfg=none ctermbg=darkgrey cterm=none
 highlight Conceal ctermfg=darkcyan ctermbg=none cterm=none
 
 highlight Cursor ctermfg=none ctermbg=none cterm=none
@@ -72,14 +72,9 @@ highlight Directory ctermfg=darkblue ctermbg=none cterm=bold
 
 highlight DiffAdd ctermfg=0 ctermbg=10 cterm=none
 highlight DiffChange ctermfg=none ctermbg=darkgrey cterm=none
-highlight DiffDelete ctermfg=9 ctermbg=none cterm=bold
+highlight DiffDelete ctermfg=0 ctermbg=9 cterm=none
 highlight DiffText ctermfg=0 ctermbg=14 cterm=none
-highlight! link DiffTextAdd DiffText
-highlight! link Added DiffAdd
-highlight! link Changed DiffChange
-highlight! link Removed DiffDelete
 
-highlight! link EndOfBuffer NonText
 highlight! link ErrorMsg Error
 
 highlight VertSplit ctermfg=darkgrey ctermbg=none cterm=none
@@ -90,17 +85,10 @@ highlight! link NormalNC Normal
 
 highlight Folded ctermfg=darkgrey ctermbg=black cterm=none
 highlight FoldColumn ctermfg=darkgrey ctermbg=none cterm=none
-highlight! link IncSearch CurSearch
-
-highlight! link SignColumn Comment
 
 highlight LineNr ctermfg=darkgrey ctermbg=none cterm=none
-highlight! link LineNrAbove LineNr
-highlight! link LineNrBelow LineNr
 
 highlight CursorLineNr ctermfg=darkyellow ctermbg=black cterm=none
-highlight! link CursorLineFold CursorLine
-highlight! link CursorLineSign CursorLine
 
 highlight MatchParen ctermfg=darkcyan ctermbg=none cterm=underline
 
@@ -112,8 +100,6 @@ highlight NonText ctermfg=darkgrey ctermbg=none cterm=none
 highlight Normal ctermfg=none ctermbg=none cterm=none
 highlight! link NormalFloat Pmenu
 highlight! link FloatBorder VertSplit
-highlight! link FloatTitle Title
-highlight! link FloatFooter Title
 highlight! link FloatShadow Pmenu
 highlight! link FloatShadowThrough Pmenu
 
@@ -130,10 +116,6 @@ highlight! link PmenuShadow Pmenu
 highlight! link PmenuShadowThrough Pmenu
 highlight! link PmenuSbar Pmenu
 highlight PmenuThumb ctermfg=none ctermbg=white cterm=none
-highlight! link ComplHint Comment
-highlight! link ComplHintMore Comment
-highlight! link ComplMatchIns PmenuMatch
-highlight! link PreInsert Comment
 
 highlight! link PopupNotification WarningMsg
 
@@ -145,9 +127,13 @@ highlight CurSearch ctermfg=darkyellow ctermbg=none cterm=inverse
 highlight! link Substitute CurSearch
 
 highlight SpecialKey ctermfg=darkmagenta ctermbg=none cterm=none
-highlight! link Whitespace NonText
-highlight SpellBad ctermfg=none ctermbg=none cterm=underline
-highlight SpellCap ctermfg=none ctermbg=none cterm=underline
+highlight SpellBad ctermfg=none ctermbg=none cterm=undercurl guisp=#ff5f59
+highlight SpellCap ctermfg=none ctermbg=none cterm=undercurl guisp=#d0bc00
+" Neovim has no ctermul; it applies guisp to cterm attributes instead.
+if !has('nvim')
+  highlight SpellBad ctermul=darkred
+  highlight SpellCap ctermul=darkyellow
+endif
 highlight! link SpellLocal SpellCap
 highlight! link SpellRare SpellCap
 
@@ -161,13 +147,11 @@ highlight! link TabLineFill TabLine
 highlight TabLineSel ctermfg=darkblue ctermbg=black cterm=inverse
 
 highlight Title ctermfg=darkblue ctermbg=none cterm=bold
-highlight Visual ctermfg=white ctermbg=none cterm=inverse
-highlight! link VisualNOS Visual
+highlight Visual ctermfg=white ctermbg=darkgrey cterm=none
 highlight! link SnippetTabstop Visual
 highlight! link SnippetTabstopActive CurSearch
 
 highlight WarningMsg ctermfg=darkyellow ctermbg=none cterm=inverse
-highlight! link OkMsg Function
 highlight! link StderrMsg ErrorMsg
 highlight! link StdoutMsg Normal
 highlight! link MsgArea Normal
@@ -176,111 +160,30 @@ highlight WildMenu ctermfg=darkblue ctermbg=none cterm=bold,inverse
 highlight! link TermCursor Cursor
 " }}}
 
-" Neovim Diagnostics & LSP {{{
-highlight DiagnosticError ctermfg=9 ctermbg=none cterm=none
-highlight DiagnosticWarn ctermfg=11 ctermbg=none cterm=none
-highlight DiagnosticInfo ctermfg=12 ctermbg=none cterm=none
-highlight DiagnosticHint ctermfg=14 ctermbg=none cterm=none
-highlight DiagnosticOk ctermfg=10 ctermbg=none cterm=none
+if has('nvim')
+  " Neovim Treesitter Mappings (Modus Semantics) {{{
+  highlight! link @variable.builtin Statement
+  highlight! link @constant.builtin Statement
+  highlight! link @constant.macro PreProc
 
-highlight DiagnosticUnderlineError ctermfg=9 ctermbg=none cterm=underline
-highlight DiagnosticUnderlineWarn ctermfg=11 ctermbg=none cterm=underline
-highlight DiagnosticUnderlineInfo ctermfg=12 ctermbg=none cterm=underline
-highlight DiagnosticUnderlineHint ctermfg=14 ctermbg=none cterm=underline
-highlight DiagnosticUnderlineOk ctermfg=10 ctermbg=none cterm=underline
+  highlight! link @string.regex Special
 
-highlight! link LspReferenceText Visual
-highlight! link LspReferenceRead Visual
-highlight! link LspReferenceWrite Visual
-highlight! link LspReferenceTarget Visual
-highlight! link LspInlayHint Comment
-highlight! link LspCodeLens Comment
-highlight! link LspCodeLensSeparator Comment
-highlight! link LspSignatureActiveParameter CurSearch
-" }}}
+  highlight! link @function.builtin Function
+  highlight! link @function.macro Macro
 
-" Plugins (vim-lsp, gitgutter, copilot) {{{
-highlight GitGutterAdd ctermfg=darkgreen ctermbg=none cterm=none
-highlight GitGutterChange ctermfg=darkyellow ctermbg=none cterm=none
-highlight GitGutterDelete ctermfg=darkred ctermbg=none cterm=none
+  highlight! link @constructor Type
+  highlight! link @keyword.import Include
 
-highlight CopilotSuggestion ctermfg=darkgrey cterm=italic
+  highlight! link @type.builtin Type
+  highlight! link @type.qualifier StorageClass
+  highlight! link @type.definition Typedef
 
-highlight! link LspErrorHighlight DiagnosticUnderlineError
-highlight! link LspWarningHighlight DiagnosticUnderlineWarn
-highlight! link LspInformationHighlight DiagnosticUnderlineInfo
-highlight! link LspHintHighlight DiagnosticUnderlineHint
+  highlight! link @tag.attribute Identifier
+  highlight! link @tag.delimiter Delimiter
 
-highlight! link LspErrorText DiagnosticError
-highlight! link LspWarningText DiagnosticWarn
-highlight! link LspInformationText DiagnosticInfo
-highlight! link LspHintText DiagnosticHint
+  highlight! link @comment.documentation SpecialComment
 
-highlight! link LspErrorVirtualText LspErrorText
-highlight! link LspWarningVirtualText LspWarningText
-highlight! link LspInformationVirtualText LspInformationText
-highlight! link LspHintVirtualText LspHintText
-" }}}
-
-" Neovim Treesitter Mappings (Modus Semantics) {{{
-highlight! link @variable Normal
-highlight! link @variable.builtin Statement
-highlight! link @variable.parameter Normal
-highlight! link @variable.member Normal
-
-highlight! link @constant Constant
-highlight! link @constant.builtin Statement
-highlight! link @constant.macro PreProc
-
-highlight! link @string String
-highlight! link @string.regex Special
-highlight! link @string.escape SpecialChar
-
-highlight! link @character Character
-highlight! link @number Number
-highlight! link @boolean Boolean
-highlight! link @float Float
-
-highlight! link @function Function
-highlight! link @function.builtin Function
-highlight! link @function.call Function
-highlight! link @function.macro Macro
-highlight! link @function.method Function
-
-highlight! link @constructor Type
-highlight! link @keyword Keyword
-highlight! link @keyword.function Keyword
-highlight! link @keyword.operator Keyword
-highlight! link @keyword.return Keyword
-highlight! link @keyword.import Include
-highlight! link @keyword.repeat Repeat
-highlight! link @keyword.conditional Conditional
-
-highlight! link @conditional Conditional
-highlight! link @repeat Repeat
-highlight! link @label Label
-highlight! link @operator Operator
-highlight! link @exception Exception
-
-highlight! link @type Type
-highlight! link @type.builtin Type
-highlight! link @type.qualifier StorageClass
-highlight! link @type.definition Typedef
-
-highlight! link @tag Tag
-highlight! link @tag.attribute Identifier
-highlight! link @tag.delimiter Delimiter
-
-highlight! link @comment Comment
-highlight! link @comment.documentation SpecialComment
-highlight! link @comment.todo Todo
-highlight! link @comment.warning DiagnosticWarn
-highlight! link @comment.error DiagnosticError
-
-highlight! link @markup.heading Title
-highlight! link @markup.link Underlined
-highlight! link @markup.strong Bold
-highlight! link @markup.italic Italic
-highlight! link @markup.raw String
-highlight! link @markup.list Special
-" }}}
+  highlight! link @markup.raw String
+  highlight! link @markup.list Special
+  " }}}
+endif

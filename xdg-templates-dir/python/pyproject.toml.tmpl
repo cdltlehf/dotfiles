@@ -1,0 +1,80 @@
+[build-system]
+build-backend = "uv_build"
+requires = ["uv_build>=0.13.0,<0.14.0"]
+
+[project]
+authors = [
+  {open} name = "Your Name", email = "your.email@example.com" {close},
+]
+dependencies = []
+description = "Add your description here"
+license = "MIT"
+name = "{project|basename}"
+readme = "README.md"
+requires-python = ">=3.14"
+version = "0.1.0"
+
+[tool.ruff]
+line-length = 80
+preview = true
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 80
+
+[tool.ruff.lint]
+ignore = [
+  "avoidable-escaped-quote",
+  "bad-quotes-docstring",
+  "bad-quotes-inline-string",
+  "bad-quotes-multiline-string",
+  "docstring-missing-exception",
+  "docstring-missing-returns",
+  "docstring-missing-yields",
+  "docstring-tab-indentation",
+  "f-string-in-exception",
+  "future-required-type-annotation",
+  "future-rewritable-type-annotation",
+  "indentation-with-invalid-multiple",
+  "indentation-with-invalid-multiple-comment",
+  "line-contains-todo",
+  "line-too-long",
+  "missing-todo-author",
+  "missing-todo-link",
+  "missing-trailing-comma",
+  "over-indented",
+  "print",
+  "prohibited-trailing-comma",
+  "raise-vanilla-args",
+  "raw-string-in-exception",
+  "tab-indentation",
+  "triple-single-quotes",
+  "typing-only-first-party-import",
+  "typing-only-standard-library-import",
+  "typing-only-third-party-import",
+  "unnecessary-escaped-quote",
+]
+select = ["ALL"]
+
+[tool.ruff.lint.flake8-copyright]
+notice-rgx = "SPDX-License-Identifier: "
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+force-single-line = true
+force-sort-within-sections = true
+order-by-type = false
+single-line-exclusions = ["collections.abc", "typing", "typing_extensions"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = [
+  "assert",
+  "implicit-namespace-package",
+  "magic-value-comparison",
+  "private-member-access",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

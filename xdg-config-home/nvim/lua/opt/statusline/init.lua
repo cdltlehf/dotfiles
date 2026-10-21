@@ -4,7 +4,11 @@ local M = {}
 
 local glyphs = vim.env.LC_TERMINAL_GLYPHS or "ascii"
 local default_ellipsis = (glyphs == "ascii") and "..." or "…"
-local default_separator = ({ ascii = "%#Comment# . ", unicode = "%#Comment# · ", nerdfont = "%#Comment# · " })[glyphs]
+local default_separator = ({
+  ascii = "%#StatusLineNC# . ",
+  unicode = "%#StatusLineNC# · ",
+  nerdfont = "%#StatusLineNC# · ",
+})[glyphs]
 local default_branch_icon = ({ ascii = "", unicode = "⎇ ", nerdfont = " " })[glyphs]
 
 ---@alias StatuslineConfig { ellipsis: string, separator: string, branch_icon: string }
@@ -15,12 +19,12 @@ local config = {
 }
 
 local hl = {
-  buffer = { name = "StatusLine", readonly = "Comment" },
+  buffer = { name = "StatusLine", modified = "StatusLine", readonly = "StatusLineNC" },
   git = { branch = "StatusLine" },
   mode = { token = "StatusLine" },
   diagnostics = { error = "DiagnosticError", warn = "DiagnosticWarn" },
-  file = { filetype = "Comment", encoding = "DiagnosticWarn" },
-  ruler = "Comment",
+  file = { filetype = "StatusLineNC", encoding = "DiagnosticWarn" },
+  ruler = "StatusLineNC",
 }
 
 ---@param uri string

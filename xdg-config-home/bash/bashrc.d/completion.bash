@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+#
 # Reference: https://github.com/scop/bash-completion
 
 if [[ -z "${BASH_COMPLETION_VERSINFO:-}" ]]; then

@@ -1,0 +1,49 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+
+Files: xdg-config-home/agents/AGENTS.md xdg-templates-dir/AGENTS.md
+Reference: https://agents.md/
+
+Files: xdg-templates-dir/REFERENCES
+Reference: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+
+Files: xdg-templates-dir/c/dot_clang-format
+Reference: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+Reference: https://google.github.io/styleguide/cppguide.html
+
+Files: xdg-templates-dir/c/Makefile.tmpl
+Reference: https://github.com/kubernetes-sigs/kubebuilder/blob/master/Makefile
+Reference: https://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html
+Reference: https://tech.davis-hansson.com/p/make/
+
+Files: xdg-templates-dir/python/__main__.py.tmpl
+Reference: https://docs.python.org/3/library/__main__.html
+
+Files: xdg-templates-dir/python/__init__.py
+Reference: https://docs.python.org/3/tutorial/modules.html
+
+Files: xdg-templates-dir/python/src/{}.py.tmpl
+Reference: https://docs.python.org/3/howto/logging.html
+Reference: https://docs.python.org/3/library/__main__.html
+Reference: https://peps.python.org/pep-0484/
+
+Files: xdg-templates-dir/prek.toml
+Reference: https://prek.j178.dev/
+
+Files: xdg-templates-dir/python/prek.toml.tmpl
+Reference: https://prek.j178.dev/
+Reference: https://github.com/astral-sh/ruff-pre-commit
+Reference: https://github.com/astral-sh/uv-pre-commit
+
+Files: xdg-templates-dir/python/pyproject.toml.tmpl
+Reference: https://docs.astral.sh/ruff/configuration/
+Reference: https://docs.astral.sh/ruff/formatter/
+Reference: https://docs.astral.sh/ruff/rules/
+Reference: https://docs.pytest.org/en/stable/explanation/goodpractices.html
+Reference: https://docs.pytest.org/en/stable/getting-started.html
+Reference: https://docs.python.org/3/howto/logging.html
+Reference: https://google.github.io/styleguide/pyguide.html
+Reference: https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
+Reference: https://peps.python.org/pep-0649/
+
+Files: xdg-templates-dir/python/tests/test_{}.py.tmpl
+Reference: https://docs.pytest.org/en/stable/getting-started.html

@@ -1,0 +1,60 @@
+MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules
+SHELL := /bin/bash
+.SHELLFLAGS := -eu -o pipefail -c
+.DEFAULT_GOAL := all
+.DELETE_ON_ERROR:
+.SUFFIXES:
+
+TARGET := {project|basename}
+BUILD_DIR := build
+SRC_DIR := src
+
+CXX ?= g++
+CXXFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic
+CPPFLAGS ?= -MMD -MP
+LDFLAGS ?=
+LDLIBS ?=
+
+SRCS := $(wildcard $(SRC_DIR)/*.cc $(SRC_DIR)/*.c)
+OBJS := $(SRCS:$(SRC_DIR)/%=$(BUILD_DIR)/%.o)
+DEPS := $(OBJS:.o=.d)
+
+.PRECIOUS: $(BUILD_DIR)/%.o
+
+##@ General
+
+.PHONY: help
+help: ## Display help
+	@awk ' \
+		BEGIN {open}FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"{close} \
+		/^[a-zA-Z_0-9-]+:.*?##/ {open} printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 {close} \
+		/^##@/ {open} printf "\n\033[1m%s\033[0m\n", substr($$0, 5) {close} \
+	' $(MAKEFILE_LIST)
+
+##@ Build & Run
+
+.PHONY: all
+all: $(BUILD_DIR)/$(TARGET) ## Build target
+
+$(BUILD_DIR)/$(TARGET): $(OBJS)
+	@mkdir -p $(dir $@)
+	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(BUILD_DIR)/%.cc.o: $(SRC_DIR)/%.cc
+	@mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/%.c.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+-include $(DEPS)
+
+.PHONY: run
+run: all ## Run built target
+	./$(BUILD_DIR)/$(TARGET)
+
+.PHONY: clean
+clean: ## Clean build artifacts
+	rm -rf $(BUILD_DIR)

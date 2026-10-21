@@ -1,7 +1,7 @@
 " ~/.vim/vimrc
 " :help :help
-" Reference: https://learnvimscriptthehardway.stevelosh.com
-" Reference: https://learnvim.irian.to
+" Reference: https://learnvimscriptthehardway.stevelosh.com/
+" Reference: https://learnvim.irian.to/
 
 " :help xdg-base-dir
 if empty("$XDG_CACHE_HOME") | let $XDG_CACHE_HOME="$HOME/.cache" | endif
@@ -156,7 +156,17 @@ if has('syntax') | set spell | endif
 " :help .netrwhist
 let g:netrw_home = expand('$XDG_STATE_HOME/vim/netrw')
 
-let g:template_dir = expand('$XDG_CONFIG_HOME/templates')
+let g:template_dir = !empty($XDG_TEMPLATES_DIR) ? expand('$XDG_TEMPLATES_DIR') : expand('$HOME/Templates')
+if !has('nvim')
+  augroup template_loader
+    autocmd!
+    autocmd BufNewFile *
+          \ if line('$') == 1 && empty(getline(1)) && filereadable(g:template_dir . '/' . expand('<afile>:t')) |
+          \   silent! execute '0read ' . fnameescape(g:template_dir . '/' . expand('<afile>:t')) |
+          \   silent! $delete _ |
+          \ endif
+  augroup END
+endif
 
 cabbr <expr> %% expand('%:p:h')
 

@@ -1,4 +1,8 @@
 #!/bin/sh
+#
+# Reference: https://pubs.opengroup.org/onlinepubs/9799919799/utilities/tput.html
+# Reference: https://no-color.org/
+# Reference: https://protesilaos.com/emacs/modus-themes-colors
 
 _scripts_base_dir="${BASE_DIR:-}"
 if [ -z "${_scripts_base_dir}" ]; then
@@ -16,12 +20,62 @@ if [ -f "${_scripts_base_dir}/xdg-config-home/sh/lib.sh" ]; then
 fi
 unset _scripts_base_dir
 
-err() {
-  printf "%s\n" "$*" >&2
+_c_red=''
+_c_yellow=''
+_c_cyan=''
+_c_magenta=''
+_c_reset=''
+
+if [ -z "${NO_COLOR:-}" ] && [ "${TERM:-dumb}" != "dumb" ]; then
+  if command -v tput >/dev/null 2>&1; then
+    _ncolors="$(tput colors 2>/dev/null || echo 0)"
+    if [ "${_ncolors}" -ge 8 ] 2>/dev/null; then
+      _c_red="$(tput setaf 1 2>/dev/null || true)"
+      _c_yellow="$(tput setaf 3 2>/dev/null || true)"
+      _c_cyan="$(tput setaf 6 2>/dev/null || true)"
+      _c_magenta="$(tput setaf 5 2>/dev/null || true)"
+      _c_reset="$(tput sgr0 2>/dev/null || true)"
+    fi
+    unset _ncolors
+  fi
+fi
+
+error() {
+  if [ -t 2 ]; then
+    printf '%s[ERROR]%s %s\n' "${_c_red}" "${_c_reset}" "$*" >&2
+  else
+    printf '[ERROR] %s\n' "$*" >&2
+  fi
+}
+
+warning() {
+  if [ -t 2 ]; then
+    printf '%s[WARN]%s  %s\n' "${_c_yellow}" "${_c_reset}" "$*" >&2
+  else
+    printf '[WARN]  %s\n' "$*" >&2
+  fi
+}
+
+info() {
+  if [ -t 1 ]; then
+    printf '%s[INFO]%s  %s\n' "${_c_cyan}" "${_c_reset}" "$*"
+  else
+    printf '[INFO]  %s\n' "$*"
+  fi
+}
+
+debug() {
+  if [ "${DEBUG:-0}" = "1" ]; then
+    if [ -t 2 ]; then
+      printf '%s[DEBUG]%s %s\n' "${_c_magenta}" "${_c_reset}" "$*" >&2
+    else
+      printf '[DEBUG] %s\n' "$*" >&2
+    fi
+  fi
 }
 
 die() {
-  err "$*"
+  error "$@"
   exit 1
 }
 
@@ -31,10 +85,6 @@ detect_os() {
 
 detect_arch() {
   __detect_arch
-}
-
-has() {
-  command -v "$1" >/dev/null 2>&1
 }
 
 run_hook() {
@@ -80,23 +130,22 @@ download() {
     mkdir -p "$(dirname "${_dest}")"
   fi
 
-  # shellcheck disable=SC2310
-  if has curl; then
+  if command -v curl >/dev/null; then
     if ! curl -fsSL "${_url}" -o "${_dest}"; then
-      err "Warning: failed to download ${_url}"
+      warning "Failed to download ${_url}"
       [ "${_dest}" = "-" ] || rm -f "${_dest}"
       unset _url _dest _mode
       return 0
     fi
-  elif has wget; then
+  elif command -v wget >/dev/null; then
     if ! wget -q -O "${_dest}" "${_url}"; then
-      err "Warning: failed to download ${_url}"
+      warning "Failed to download ${_url}"
       [ "${_dest}" = "-" ] || rm -f "${_dest}"
       unset _url _dest _mode
       return 0
     fi
   else
-    err "Warning: neither curl nor wget is available to download ${_url}"
+    warning "Neither curl nor wget is available to download ${_url}"
     [ "${_dest}" = "-" ] || rm -f "${_dest}"
     unset _url _dest _mode
     return 0
@@ -106,22 +155,4 @@ download() {
     chmod "${_mode}" "${_dest}"
   fi
   unset _url _dest _mode
-}
-
-prompt() {
-  _message="$1"
-  _default="${2:-}"
-  _value=""
-
-  if [ -n "${_default}" ]; then
-    printf "%s [%s]: " "${_message}" "${_default}" >&2
-  else
-    printf "%s: " "${_message}" >&2
-  fi
-  if ! read -r _value; then
-    unset _message _default _value
-    return 1
-  fi
-  printf "%s\n" "${_value:-${_default}}"
-  unset _message _default _value
 }

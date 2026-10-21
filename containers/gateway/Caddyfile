@@ -1,0 +1,17 @@
+# Reference: https://caddyserver.com/docs/caddyfile
+# Reference: https://platform.openai.com/docs/api-reference
+
+:8080 {
+	handle /v1/audio/* {
+		rewrite /v1/audio/transcriptions /inference
+		reverse_proxy whisper-server:8080
+	}
+
+	handle /v1/images/* {
+		reverse_proxy sd-server:8080
+	}
+
+	handle {
+		reverse_proxy llama-server:8080
+	}
+}

@@ -15,8 +15,7 @@ readonly LINUX_MISE_CONFIG="${BASE_DIR}/platforms/linux/mise.toml"
 if [ -f "${LINUX_MISE_CONFIG}" ]; then
   mkdir -p "${MISE_CONF_DIR}"
   symlink "${LINUX_MISE_CONFIG}" "${MISE_CONF_DIR}/linux.toml"
-  # shellcheck disable=SC2310
-  if has mise; then
+  if command -v mise >/dev/null; then
     mise install --yes || true
   fi
 fi

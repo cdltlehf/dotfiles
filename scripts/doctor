@@ -21,14 +21,12 @@ run_hook pre-doctor
 printf "OS: %s\n" "${OS}"
 printf "ARCH: %s\n" "${ARCH}"
 
-# shellcheck disable=SC2310
-if has brew; then
+if command -v brew >/dev/null; then
   printf "\nHomebrew:\n"
   brew doctor || true
 fi
 
-# shellcheck disable=SC2310
-if has mise; then
+if command -v mise >/dev/null; then
   printf "\nmise:\n"
   mise doctor || true
 fi

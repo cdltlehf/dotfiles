@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# Reference: https://google.github.io/styleguide/shellguide.html
+# Reference: https://github.com/ggml-org/llama.cpp/tree/master/tools/server
+
+set -o nounset
+set -o errexit
+
+BASE_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+readonly BASE_DIR
+
+# shellcheck source=scripts/lib.sh
+. "${BASE_DIR}/scripts/lib.sh"
+
+MODELS_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}/models"
+readonly MODELS_DIR
+
+if [ -f "${BASE_DIR}/.env" ]; then
+  # shellcheck source=/dev/null
+  . "${BASE_DIR}/.env"
+fi
+
+if [ -n "${CHAT_MODEL:-}" ]; then
+  [ -e "${MODELS_DIR}/${CHAT_MODEL}" ] || die "${CHAT_MODEL} not found in ${MODELS_DIR}"
+  case "${CHAT_MODEL}" in
+  *.gguf) symlink "${CHAT_MODEL}" "${MODELS_DIR}/chat.gguf" ;;
+  *) symlink "${CHAT_MODEL}" "${MODELS_DIR}/chat" ;;
+  esac
+fi
+
+if [ -n "${EMBEDDING_MODEL:-}" ]; then
+  [ -e "${MODELS_DIR}/${EMBEDDING_MODEL}" ] || die "${EMBEDDING_MODEL} not found in ${MODELS_DIR}"
+  case "${EMBEDDING_MODEL}" in
+  *.gguf) symlink "${EMBEDDING_MODEL}" "${MODELS_DIR}/embedding.gguf" ;;
+  *) symlink "${EMBEDDING_MODEL}" "${MODELS_DIR}/embedding" ;;
+  esac
+fi

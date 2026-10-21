@@ -7,7 +7,6 @@ set -o errexit
 
 : "${__DOTFILES_UPDATE:?Do not run directly}"
 
-# shellcheck disable=SC2310
-if has mise; then
+if command -v mise >/dev/null; then
   mise plugins update || true
 fi
