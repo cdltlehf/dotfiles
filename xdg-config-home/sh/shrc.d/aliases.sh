@@ -24,7 +24,9 @@ alias grep='command grep --color=auto'
 # third-party commands
 command -v git >/dev/null 2>&1 && alias g='command git'
 command -v bat >/dev/null 2>&1 && alias cat='command bat -pp'
-[ "${LC_TERMINAL_GLYPHS:-ascii}" = "nerdfont" ] && command -v lsd >/dev/null 2>&1 && alias ls='command lsd'
+if [ "${LC_TERMINAL_GLYPHS:-ascii}" = "nerdfont" ] && command -v lsd >/dev/null 2>&1; then
+  alias ls='command lsd'
+fi
 [ "${TERM_PROGRAM:-}" = "WezTerm" ] && alias imgcat='wezterm imgcat'
 
 # Cross-platform open and xdg-open

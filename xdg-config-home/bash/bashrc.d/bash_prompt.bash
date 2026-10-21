@@ -1,4 +1,4 @@
-# shellcheck disable=SC2088
+# shellcheck shell=bash
 #
 # Reference: https://gitlab.freedesktop.org/Per_Bothner/specifications/blob/master/proposals/semantic-prompts.md
 
@@ -32,9 +32,9 @@ __prompt_pretty_path() {
       IFS='/' read -r -a parts <<<"${home_subpath}"
       local len=${#parts[@]}
       if [[ ${len} -gt 2 ]]; then
-        printf "~/%s/%s/%s" "${ellipsis}" "${parts[len - 2]}" "${parts[len - 1]}"
+        printf "%s/%s/%s/%s" "~" "${ellipsis}" "${parts[len - 2]}" "${parts[len - 1]}"
       else
-        printf "~/%s" "${home_subpath}"
+        printf "%s/%s" "~" "${home_subpath}"
       fi
     else
       local sys_subpath="${PWD#/}"

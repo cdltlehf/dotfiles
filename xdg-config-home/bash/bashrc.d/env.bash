@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+#
 # Reference: https://github.com/junegunn/fzf
 # Reference: https://wezfurlong.org/wezterm/
 # Reference: https://github.com/ajeetdsouza/zoxide

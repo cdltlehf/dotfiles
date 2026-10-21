@@ -66,7 +66,7 @@ if [ -f "${GIT_DIR}/HEAD" ]; then
   read -r head_content <"${GIT_DIR}/HEAD" 2>/dev/null || head_content=""
   case "${head_content}" in
   ref:*) ;;
-  *) tag_name="$(git describe --tags --exact-match 2>/dev/null)" ;;
+  *) tag_name="$(git describe --tags --exact-match 2>/dev/null || true)" ;;
   esac
 fi
 

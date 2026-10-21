@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+#
 # Reference: https://support.apple.com/guide/terminal/save-or-restore-sessions-trml1007/mac
 
 _state_bash_dir="${XDG_STATE_HOME:-${HOME}/.local/state}/bash"
