@@ -63,10 +63,19 @@ hooks = [{ id = "markdownlint-cli2", args = ["--fix"] }]
 repo = "https://github.com/DavidAnson/markdownlint-cli2"
 rev = "v0.23.3"
 
+# TODO: Pin these tools in xdg-config-home/mise/config.toml. On macOS they
+# come from Homebrew unpinned, so their versions differ from Linux.
 [[repos]]
 hooks = [
-  { id = "lua-language-server", name = "lua-language-server", entry = "lua-language-server --check . --checklevel=Information", language = "system" },
-  { id = "taplo-check", name = "taplo check", entry = "taplo check", language = "system", pass_filenames = false },
+  { id = "lua-language-server", name = "lua-language-server", entry = "lua-language-server --check . --checklevel=Information", language = "system", pass_filenames = false, types = [
+    "lua",
+  ] },
+  { id = "taplo-check", name = "taplo check", entry = "taplo check", language = "system", pass_filenames = false, types = [
+    "toml",
+  ] },
+  { id = "taplo-format", name = "taplo fmt", entry = "taplo fmt", language = "system", types = [
+    "toml",
+  ] },
 ]
 repo = "local"
 

@@ -32,7 +32,9 @@ if command -v mise >/dev/null; then
 fi
 
 if command -v prek >/dev/null; then
-  prek auto-update
+  prek update
+  # TODO: Also update xdg-templates-dir/prek.toml and
+  # xdg-templates-dir/python/prek.toml.tmpl, which this leaves behind.
 fi
 
 if command -v nvim >/dev/null; then
