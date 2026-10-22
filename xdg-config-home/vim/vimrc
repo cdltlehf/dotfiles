@@ -58,6 +58,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'airblade/vim-rooter'
 
 Plug 'DingDean/wgsl.vim'
+Plug 'google/styleguide', { 'branch': 'gh-pages' }
 Plug 'github/copilot.vim'
 Plug 'rhysd/vim-healthcheck'
 Plug 'lervag/vimtex'

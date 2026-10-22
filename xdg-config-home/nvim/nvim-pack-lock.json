@@ -32,6 +32,11 @@
       "rev": "f6cb57c342268177f719acc3968b9d8de3ecc969",
       "src": "https://github.com/sphamba/smear-cursor.nvim"
     },
+    "styleguide": {
+      "rev": "2ac1584cd3c9854760f02418ec24687ec1698fb8",
+      "src": "https://github.com/google/styleguide",
+      "version": "'gh-pages'"
+    },
     "vim-abolish": {
       "rev": "dcbfe065297d31823561ba787f51056c147aa682",
       "src": "https://github.com/tpope/vim-abolish"

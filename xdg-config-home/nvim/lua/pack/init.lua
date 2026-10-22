@@ -16,6 +16,7 @@ vim.pack.add({
   gh("stevearc/oil.nvim"),
   gh("tpope/vim-projectionist"),
   gh("github/copilot.vim"),
+  { src = gh("google/styleguide"), version = "gh-pages" },
   gh("lervag/vimtex"),
   gh("folke/which-key.nvim"),
   gh("sphamba/smear-cursor.nvim"),
