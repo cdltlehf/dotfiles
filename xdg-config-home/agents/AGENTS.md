@@ -26,7 +26,5 @@ Project instructions take precedence over this document.
 
 ## Changes
 
-*   Git commit messages SHOULD adhere to
-    [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
-*   Agents SHOULD ask the user before they commit, amend, rebase, or push.
-*   Agents SHOULD ask the user before they create or change a decision record.
+* Agents SHOULD ask the user before they commit, amend, rebase, or push.
+* Agents SHOULD ask the user before they create or change a decision record.

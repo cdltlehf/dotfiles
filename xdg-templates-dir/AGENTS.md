@@ -67,6 +67,8 @@ One decision record MAY state the reasons for several deviations.
     when a matching template exists.
 *   Branches SHOULD follow
     [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/).
+*   Commit messages SHOULD adhere to
+    [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 *   Architecturally significant decisions MAY be recorded in
     `docs/decisions/` with [MADR](https://adr.github.io/madr/),
     keeping only the sections the decision needs.
