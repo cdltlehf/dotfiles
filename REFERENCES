@@ -1,7 +1,3 @@
-Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-# TODO: Record licensing in a machine-readable form. DEP-5 Files paragraphs
-# require Copyright and License fields, which this file lacks.
-
 Files: xdg-config-home/agents/AGENTS.md xdg-templates-dir/AGENTS.md
 Reference: https://agents.md/
 

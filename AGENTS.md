@@ -72,3 +72,16 @@ One decision record MAY state the reasons for several deviations.
 *   Architecturally significant decisions MAY be recorded in
     `docs/decisions/` with [MADR](https://adr.github.io/madr/),
     keeping only the sections the decision needs.
+
+## This repository
+
+This section adds to the conventions above, and overrides them where it names a
+rule. The conventions above MUST stay identical to
+`xdg-templates-dir/AGENTS.md`.
+
+*   `REFERENCES` lists the sources of files that cannot carry
+    `Reference:` comments, in
+    [deb822](https://manpages.debian.org/trixie/dpkg-dev/deb822.5.en.html)
+    paragraph syntax.
+    It carries no copyright metadata,
+    which overrides the DEP-5 rule above.

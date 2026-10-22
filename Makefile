@@ -90,6 +90,8 @@ check: bats-test ## Run tests
 lint: prek-run ## Run linters
 
 .PHONY: diff
+# TODO: Run this and installcheck from a git-flow pre-flow-feature-finish
+# hook, so that a feature reaches develop only after the check.
 diff: brew-diff mise-diff templates-diff ## Diff package manifests and repository configs
 
 ##@ Diagnostics
