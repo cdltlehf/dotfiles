@@ -11,9 +11,9 @@ local diagnostic_signs = ({
     [vim.diagnostic.severity.HINT] = "H",
   },
   unicode = {
-    [vim.diagnostic.severity.ERROR] = "✖",
-    [vim.diagnostic.severity.WARN] = "⚠",
-    [vim.diagnostic.severity.INFO] = "ℹ",
+    [vim.diagnostic.severity.ERROR] = "×",
+    [vim.diagnostic.severity.WARN] = "W",
+    [vim.diagnostic.severity.INFO] = "I",
     [vim.diagnostic.severity.HINT] = "?",
   },
   nerdfont = {

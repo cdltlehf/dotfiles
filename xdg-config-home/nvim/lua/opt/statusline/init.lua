@@ -9,7 +9,7 @@ local default_separator = ({
   unicode = "%#StatusLineNC# · ",
   nerdfont = "%#StatusLineNC# · ",
 })[glyphs]
-local default_branch_icon = ({ ascii = "", unicode = "⎇ ", nerdfont = " " })[glyphs]
+local default_branch_icon = ({ ascii = "", unicode = "", nerdfont = " " })[glyphs]
 
 ---@alias StatuslineConfig { ellipsis: string, separator: string, branch_icon: string }
 local config = {

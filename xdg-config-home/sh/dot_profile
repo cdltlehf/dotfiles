@@ -57,8 +57,8 @@ case "${LC_TERMINAL_GLYPHS:-ascii}" in
     fzf_ellipsis="…"
     ;;
   unicode)
-    fzf_prompt="❯ "
-    fzf_pointer="❯"
+    fzf_prompt="› "
+    fzf_pointer="›"
     fzf_ellipsis="…"
     ;;
   *)

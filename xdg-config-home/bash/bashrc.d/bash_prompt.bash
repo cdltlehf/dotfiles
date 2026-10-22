@@ -61,12 +61,11 @@ __prompt_command() {
     sep="\[\e[90m\] · \[\e[0m\]"
   fi
   if [[ "${glyphs}" == "unicode" ]]; then
-    err_icon="✖"
-    job_icon="✦"
-    prompt_char="❯ "
+    err_icon="×"
+    prompt_char="› "
   elif [[ "${glyphs}" == "nerdfont" ]]; then
     err_icon=""
-    job_icon=""
+    job_icon=""
     prompt_char=" "
   fi
 

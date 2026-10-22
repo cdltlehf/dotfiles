@@ -26,7 +26,7 @@ opt.listchars:append({
   precedes = "…",
   nbsp = "°",
 })
-opt.fillchars:append({ diff = "─", foldopen = "▾", foldclose = "▸", lastline = "⋮" })
+opt.fillchars:append({ diff = "─", foldopen = "▼", foldclose = "›", lastline = "…" })
 if glyphs == "ascii" then
   opt.listchars:append({ tab = "> ", trail = "-", extends = ">", precedes = "<", nbsp = "+" })
   opt.fillchars:remove({ "diff", "lastline" })

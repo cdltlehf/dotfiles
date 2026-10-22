@@ -58,7 +58,7 @@ __prompt_char() {
   case ${KEYMAP} in
   vicmd | viopp)
     if [[ "${glyphs}" == "unicode" ]]; then
-      print -n "❮ "
+      print -n "‹ "
     elif [[ "${glyphs}" == "nerdfont" ]]; then
       print -n " "
     else
@@ -67,7 +67,7 @@ __prompt_char() {
     ;;
   *)
     if [[ "${glyphs}" == "unicode" ]]; then
-      print -n "❯ "
+      print -n "› "
     elif [[ "${glyphs}" == "nerdfont" ]]; then
       print -n " "
     else
@@ -88,11 +88,10 @@ precmd() {
     sep="%F{8} · %f"
   fi
   if [[ "${glyphs}" == "unicode" ]]; then
-    err_icon="✖"
-    job_icon="✦"
+    err_icon="×"
   elif [[ "${glyphs}" == "nerdfont" ]]; then
     err_icon=""
-    job_icon=""
+    job_icon=""
   fi
 
   local git_root

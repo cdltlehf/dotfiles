@@ -21,15 +21,15 @@ BEGIN {
     C_GRAY = "\033[90m"
 
     if (charset == "unicode") {
-        ICON_BRANCH = "⎇ "
-        ICON_TAG = "⚑ "
-        ICON_MERGE = "⎇ "
-        ICON_COMPARE = "⎇ "
+        ICON_BRANCH = ""
+        ICON_TAG = "tag:"
+        ICON_MERGE = ""
+        ICON_COMPARE = ""
         ICON_COMMIT = "● "
-        ICON_AHEAD = "⇡"
-        ICON_BEHIND = "⇣"
+        ICON_AHEAD = "↑"
+        ICON_BEHIND = "↓"
         ICON_STASH = "≡ "
-        ICON_CONFLICT = "✖"
+        ICON_CONFLICT = "×"
     } else if (charset == "nerdfont") {
         ICON_BRANCH = " "
         ICON_TAG = " "
@@ -42,7 +42,6 @@ BEGIN {
         ICON_AHEAD = ""
         ICON_BEHIND = ""
         ICON_STASH = " "
-        ICON_CONFLICT = "✖"
     } else {
         ICON_BRANCH = ""
         ICON_TAG = "tag:"
