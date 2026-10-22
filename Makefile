@@ -23,13 +23,18 @@ help: ## Display help
 
 .PHONY: references
 references: ## List references
-	@git --no-pager grep -E '^[^a-zA-Z0-9]*Reference: [^<]' | \
-		awk -F: '{ \
-			file = $$1; \
-			sub(/^[^:]+:[[:space:]]*[^a-zA-Z0-9]*Reference:[[:space:]]*/, ""); \
-			printf "\033[36m%s\033[0m \033[90m%s\033[0m\n", $$0, file \
-		}' | \
-		sort -k1,1
+	@{ \
+		git --no-pager grep -E '^[^a-zA-Z0-9]*Reference: [^<]' -- ':!REFERENCES' | \
+			awk -F: '{ \
+				file = $$1; \
+				sub(/^[^:]+:[[:space:]]*[^a-zA-Z0-9]*Reference:[[:space:]]*/, ""); \
+				print $$0 "\t" file \
+			}'; \
+		awk '/^Files:/ { $$1 = ""; files = $$0; next } \
+			/^ / { n = split(files, f); for (i = 1; i <= n; i++) print $$1 "\t" f[i] }' REFERENCES; \
+	} | \
+		sort | \
+		awk -F'\t' '{ printf "\033[36m%s\033[0m \033[90m%s\033[0m\n", $$1, $$2 }'
 
 .PHONY: todo
 todo: ## List to-dos
