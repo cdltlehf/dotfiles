@@ -18,11 +18,18 @@ window-padding-y = 6
 
 font-family = "JetBrains Mono"
 font-family = "Symbols Nerd Font"
-font-family = "D2Coding"
+font-family = "Pretendard GOV"
 font-family = "JuliaMono"
+font-family-bold = "JetBrains Mono"
+font-family-bold = "Symbols Nerd Font"
+font-family-bold = "Pretendard GOV"
+font-family-bold = "JuliaMono"
+font-style-bold = "ExtraBold"
+# TODO: Decide whether JetBrains Mono Italic replaces Victor Mono, whose
+# heaviest italic (Bold) is lighter than the ExtraBold of the other styles.
 font-family-italic = "Victor Mono"
 font-family-bold-italic = "Victor Mono"
-font-style-italic = "SemiBold Italic"
+font-style-italic = "Medium Italic"
 font-style-bold-italic = "Bold Italic"
 
 # Comprehensive Mathematical & Technical Unicode blocks for JuliaMono
