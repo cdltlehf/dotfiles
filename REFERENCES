@@ -2,15 +2,6 @@ Files: xdg-config-home/agents/AGENTS.md xdg-templates-dir/AGENTS.md
 Reference:
  https://agents.md/
 
-Files: xdg-templates-dir/REFERENCES
-Reference:
- https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-
-Files: xdg-templates-dir/c/dot_clang-format
-Reference:
- https://clang.llvm.org/docs/ClangFormatStyleOptions.html
- https://google.github.io/styleguide/cppguide.html
-
 Files: xdg-templates-dir/c/Makefile.tmpl
 Reference:
  https://github.com/kubernetes-sigs/kubebuilder/blob/master/Makefile
@@ -30,28 +21,6 @@ Reference:
  https://docs.python.org/3/howto/logging.html
  https://docs.python.org/3/library/__main__.html
  https://peps.python.org/pep-0484/
-
-Files: xdg-templates-dir/prek.toml
-Reference:
- https://prek.j178.dev/
-
-Files: xdg-templates-dir/python/prek.toml.tmpl
-Reference:
- https://prek.j178.dev/
- https://github.com/astral-sh/ruff-pre-commit
- https://github.com/astral-sh/uv-pre-commit
-
-Files: xdg-templates-dir/python/pyproject.toml.tmpl
-Reference:
- https://docs.astral.sh/ruff/configuration/
- https://docs.astral.sh/ruff/formatter/
- https://docs.astral.sh/ruff/rules/
- https://docs.pytest.org/en/stable/explanation/goodpractices.html
- https://docs.pytest.org/en/stable/getting-started.html
- https://docs.python.org/3/howto/logging.html
- https://google.github.io/styleguide/pyguide.html
- https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
- https://peps.python.org/pep-0649/
 
 Files: xdg-templates-dir/python/tests/test_{}.py.tmpl
 Reference:

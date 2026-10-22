@@ -1,3 +1,4 @@
 # Reference: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# Reference: https://google.github.io/styleguide/cppguide.html
 
 BasedOnStyle: Google

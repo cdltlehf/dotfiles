@@ -1,4 +1,5 @@
 #:schema https://www.schemastore.org/prek.json
+# Reference: https://prek.j178.dev/
 
 default_install_hook_types = [
   "commit-msg",
