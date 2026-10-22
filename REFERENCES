@@ -2,26 +2,39 @@ Files: xdg-config-home/agents/AGENTS.md xdg-templates-dir/AGENTS.md
 Reference:
  https://agents.md/
 
-Files: xdg-templates-dir/c/Makefile.tmpl
+Files: xdg-templates-dir/*
 Reference:
+ https://editorconfig.org/
+ https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+ https://github.com/koalaman/shellcheck/blob/master/shellcheck.1.md
+ https://google.github.io/styleguide/docguide/style.html
+ https://prek.j178.dev/
+ https://taplo.tamasfe.dev/configuration/file.html
+ https://www.shellcheck.net/wiki/
+ https://yamllint.readthedocs.io/en/stable/configuration.html
+
+Files: xdg-templates-dir/c/**
+Reference:
+ https://clang.llvm.org/docs/ClangFormatStyleOptions.html
  https://github.com/kubernetes-sigs/kubebuilder/blob/master/Makefile
- https://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html
+ https://google.github.io/styleguide/cppguide.html
  https://tech.davis-hansson.com/p/make/
+ https://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html
 
-Files: xdg-templates-dir/python/__main__.py.tmpl
+Files: xdg-templates-dir/python/**
 Reference:
- https://docs.python.org/3/library/__main__.html
-
-Files: xdg-templates-dir/python/__init__.py
-Reference:
- https://docs.python.org/3/tutorial/modules.html
-
-Files: xdg-templates-dir/python/src/{}.py.tmpl
-Reference:
+ https://docs.astral.sh/ruff/configuration/
+ https://docs.astral.sh/ruff/formatter/
+ https://docs.astral.sh/ruff/rules/
+ https://docs.pytest.org/en/stable/explanation/goodpractices.html
+ https://docs.pytest.org/en/stable/getting-started.html
  https://docs.python.org/3/howto/logging.html
  https://docs.python.org/3/library/__main__.html
+ https://docs.python.org/3/tutorial/modules.html
+ https://github.com/astral-sh/ruff-pre-commit
+ https://github.com/astral-sh/uv-pre-commit
+ https://google.github.io/styleguide/pyguide.html
+ https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
  https://peps.python.org/pep-0484/
-
-Files: xdg-templates-dir/python/tests/test_{}.py.tmpl
-Reference:
- https://docs.pytest.org/en/stable/getting-started.html
+ https://peps.python.org/pep-0649/
+ https://prek.j178.dev/

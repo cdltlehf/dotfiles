@@ -1,6 +1,3 @@
-# Reference: https://google.github.io/styleguide/docguide/style.html
-# Reference: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
-
 default: true
 
 MD003:

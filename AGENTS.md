@@ -79,9 +79,11 @@ This section adds to the conventions above, and overrides them where it names a
 rule. The conventions above MUST stay identical to
 `xdg-templates-dir/AGENTS.md`.
 
-*   `REFERENCES` lists the sources of files that cannot carry
-    `Reference:` comments, in
+*   `REFERENCES` lists the sources of templates, which carry no
+    `Reference:` comments, and of files that cannot carry them, in
     [deb822](https://manpages.debian.org/trixie/dpkg-dev/deb822.5.en.html)
     paragraph syntax.
+    Its `Files` patterns follow
+    [gitignore](https://git-scm.com/docs/gitignore#_pattern_format).
     It carries no copyright metadata,
     which overrides the DEP-5 rule above.
