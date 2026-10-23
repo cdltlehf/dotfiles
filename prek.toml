@@ -15,98 +15,118 @@ default_install_hook_types = [
 default_stages = ["pre-commit"]
 
 [[repos]]
-hooks = [
-  { id = "check-added-large-files" },
-  { id = "check-executables-have-shebangs" },
-  { id = "check-json" },
-  { id = "check-merge-conflict" },
-  { id = "check-symlinks" },
-  { id = "destroyed-symlinks" },
-  { id = "end-of-file-fixer" },
-  { id = "trailing-whitespace" },
-  { id = "no-commit-to-branch", args = [
-    "--branch",
-    "main",
-    "--branch",
-    "develop",
-  ] },
-]
-repo = "builtin"
+repo = "local"
+[[repos.hooks]]
+entry = "lua-language-server --check . --checklevel=Information"
+id = "lua-language-server"
+language = "system"
+name = "lua-language-server"
+pass_filenames = false
+types = ["lua"]
 
 [[repos]]
-hooks = [{ id = "shfmt", types_or = ["shell", "bats"] }]
+repo = "local"
+[[repos.hooks]]
+entry = "taplo check"
+id = "taplo-check"
+language = "system"
+name = "taplo check"
+pass_filenames = false
+types = ["toml"]
+[[repos.hooks]]
+entry = "taplo fmt"
+id = "taplo-format"
+language = "system"
+name = "taplo fmt"
+types = ["toml"]
+
+[[repos]]
+repo = "builtin"
+[[repos.hooks]]
+id = "check-added-large-files"
+[[repos.hooks]]
+id = "check-executables-have-shebangs"
+[[repos.hooks]]
+id = "check-json"
+[[repos.hooks]]
+id = "check-merge-conflict"
+[[repos.hooks]]
+id = "check-symlinks"
+[[repos.hooks]]
+id = "destroyed-symlinks"
+[[repos.hooks]]
+id = "end-of-file-fixer"
+[[repos.hooks]]
+id = "trailing-whitespace"
+[[repos.hooks]]
+args = ["--branch", "main", "--branch", "develop"]
+id = "no-commit-to-branch"
+
+[[repos]]
 repo = "https://github.com/scop/pre-commit-shfmt"
 rev = "v3.14.1-1"
+[[repos.hooks]]
+id = "shfmt"
+types_or = ["shell", "bats"]
 
 [[repos]]
-hooks = [
-  { id = "shellcheck", types_or = [
-    "shell",
-    "bats",
-  ], exclude = '\.zsh$' },
-]
 repo = "https://github.com/shellcheck-py/shellcheck-py"
 rev = "v0.11.0.1-1"
+[[repos.hooks]]
+exclude = '\.zsh$'
+id = "shellcheck"
+types_or = ["shell", "bats"]
 
 [[repos]]
-hooks = [{ id = "stylua-github" }]
 repo = "https://github.com/JohnnyMorganz/StyLua"
 rev = "v2.6.0"
+[[repos.hooks]]
+id = "stylua-github"
 
 [[repos]]
-hooks = [{ id = "yamllint" }]
 repo = "https://github.com/adrienverge/yamllint"
 rev = "v1.38.0"
+[[repos.hooks]]
+id = "yamllint"
 
 [[repos]]
-hooks = [{ id = "markdownlint-cli2", args = ["--fix"] }]
 repo = "https://github.com/DavidAnson/markdownlint-cli2"
 rev = "v0.23.3"
+[[repos.hooks]]
+args = ["--fix"]
+id = "markdownlint-cli2"
 
-# TODO: Pin these tools in xdg-config-home/mise/config.toml. On macOS they
-# come from Homebrew unpinned, so their versions differ from Linux.
 [[repos]]
-hooks = [
-  { id = "lua-language-server", name = "lua-language-server", entry = "lua-language-server --check . --checklevel=Information", language = "system", pass_filenames = false, types = [
-    "lua",
-  ] },
-  { id = "taplo-check", name = "taplo check", entry = "taplo check", language = "system", pass_filenames = false, types = [
-    "toml",
-  ] },
-  { id = "taplo-format", name = "taplo fmt", entry = "taplo fmt", language = "system", types = [
-    "toml",
-  ] },
-]
-repo = "local"
-
-# Biome indents continuation lines by 2 spaces, not by the 4 or more of
-# the Google JavaScript Style Guide, and cannot be configured to.
-[[repos]]
-hooks = [
-  { id = "biome-format", additional_dependencies = [
-    "@biomejs/biome@2.5.14",
-  ], types_or = [
-    "javascript",
-    "json",
-    "jsx",
-    "ts",
-    "tsx",
-  ] },
-]
 repo = "https://github.com/biomejs/pre-commit"
 rev = "v2.5.15"
+[[repos.hooks]]
+additional_dependencies = ["@biomejs/biome@2.5.14"]
+id = "biome-format"
+types_or = ["javascript", "json", "jsx", "ts", "tsx"]
 
 [[repos]]
-hooks = [{ id = "gitleaks" }]
 repo = "https://github.com/gitleaks/gitleaks"
 rev = "v8.30.1"
+[[repos.hooks]]
+id = "gitleaks"
 
 [[repos]]
-hooks = [
-  { id = "commitizen" },
-  { id = "commitizen-branch", stages = [
-    "pre-push",
-  ] },
-]
 repo = "https://github.com/commitizen-tools/commitizen"
 rev = "v4.19.2"
+[[repos.hooks]]
+id = "commitizen"
+[[repos.hooks]]
+id = "commitizen-branch"
+stages = ["pre-push"]
+
+[[repos]]
+repo = "https://github.com/vale-cli/vale"
+rev = "v3.25.1"
+[[repos.hooks]]
+args = ["sync"]
+id = "vale"
+name = "vale sync"
+pass_filenames = false
+[[repos.hooks]]
+args = ["--output=line", "--minAlertLevel=error"]
+id = "vale"

@@ -14,11 +14,8 @@ readonly VSCODE_USER_DIR="${HOME}/Library/Application Support/Code/User"
 readonly UBERSICHT_USER_DIR="${HOME}/Library/Application Support/Übersicht"
 readonly SHORTCUTS_DIR="${BASE_DIR}/platforms/darwin/shortcuts"
 readonly PREFERENCES_DIR="${BASE_DIR}/platforms/darwin/preferences"
-readonly SYMBOLIC_HOTKEYS_PLIST="${HOME}/Library/Preferences/com.apple.symbolichotkeys.plist"
 readonly KARABINER_TEMPLATES_DIR="${BASE_DIR}/xdg-config-home/karabiner/templates"
 readonly KARABINER_RULES_DIR="${BASE_DIR}/xdg-config-home/karabiner/assets/complex_modifications"
-readonly HOTKEY_SELECT_PREVIOUS_INPUT_SOURCE=60
-readonly HOTKEY_SELECT_NEXT_INPUT_SOURCE=61
 
 defaults delete com.apple.desktopservices 2>/dev/null || true
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
@@ -87,13 +84,6 @@ fi
 if [ -d "${XDG_CONFIG_HOME}/ubersicht/widgets" ]; then
   mkdir -p "${UBERSICHT_USER_DIR}"
   symlink "${XDG_CONFIG_HOME}/ubersicht/widgets" "${UBERSICHT_USER_DIR}/widgets"
-fi
-
-if [ -f "${SYMBOLIC_HOTKEYS_PLIST}" ]; then
-  for hotkey_id in "${HOTKEY_SELECT_PREVIOUS_INPUT_SOURCE}" "${HOTKEY_SELECT_NEXT_INPUT_SOURCE}"; do
-    plutil -replace "AppleSymbolicHotKeys.${hotkey_id}.enabled" -bool false "${SYMBOLIC_HOTKEYS_PLIST}" 2>/dev/null || true
-  done
-  unset hotkey_id
 fi
 
 if [ -d "${PREFERENCES_DIR}" ]; then

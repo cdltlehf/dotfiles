@@ -1,9 +1,5 @@
 # Reference: https://github.com/Homebrew/homebrew-bundle
 
-# Add a command-line tool to platforms/linux/mise.toml as well.
-# Tools that need the same version on every platform belong in
-# xdg-config-home/mise/config.toml instead.
-
 tap "libkrun/krun", trusted: true
 tap "homebrew-zathura/zathura", trusted: true
 
@@ -59,7 +55,6 @@ brew "zathura"
 brew "zathura-pdf-poppler"
 brew "zoxide"
 cask "fliqlo"
-cask "font-d2coding"
 cask "font-jetbrains-mono"
 cask "font-juliamono"
 cask "font-pretendard-gov"
