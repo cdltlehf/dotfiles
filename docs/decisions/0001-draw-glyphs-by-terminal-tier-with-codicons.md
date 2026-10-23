@@ -8,7 +8,7 @@ How do these programs draw glyphs that every terminal can render?
 
 ## Decision Outcome
 
-Chosen option: "Three glyph tiers, with Codicons in the Nerd Font tier", because the programs then never draw a glyph that the terminal cannot render.
+Chosen option: "Three glyph tiers, with Codicons in the Nerd Font tier," because the programs then never draw a glyph that the terminal cannot render.
 
 * `LC_TERMINAL_GLYPHS` declares the tier of the terminal: `ascii`, `unicode`, or `nerdfont`.
   Programs fall back to `ascii` when it is unset.

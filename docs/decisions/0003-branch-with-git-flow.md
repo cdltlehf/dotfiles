@@ -14,7 +14,7 @@ Which branching model do they follow?
 
 ## Decision Outcome
 
-Chosen option: "Git Flow", because:
+Chosen option: "Git Flow," because:
 
 * this repository already keeps `main` and `develop`;
 * versioned releases with Semantic Versioning fit release branches and tags;

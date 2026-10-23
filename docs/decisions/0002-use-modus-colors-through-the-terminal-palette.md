@@ -7,7 +7,7 @@ Which colors do they use, and where are the colors defined?
 
 ## Decision Outcome
 
-Chosen option: "[Modus Themes](https://protesilaos.com/emacs/modus-themes), defined once in the terminal palette", because every color pair of Modus meets the WCAG AAA contrast ratio of 7:1, and a theme change then touches only the terminal configurations.
+Chosen option: "[Modus Themes](https://protesilaos.com/emacs/modus-themes), defined once in the terminal palette," because every color pair of Modus meets the WCAG AAA contrast ratio of 7:1, and a theme change then touches only the terminal configurations.
 
 * Ghostty, WezTerm, and mintty set the Modus Vivendi palette.
 * Programs in the terminal use the 16 ANSI colors, so they inherit the palette: Vim and Neovim use the `modus16` color scheme, and bat uses the `ansi` theme.
