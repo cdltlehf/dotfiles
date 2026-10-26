@@ -9,7 +9,7 @@
       "src": "https://github.com/github/copilot.vim"
     },
     "fzf": {
-      "rev": "55c122f1a0e1340546c8709682bea5561fe0e8fd",
+      "rev": "26ff936df038b6a62ec42cf18db27b2ea2bb8ec3",
       "src": "https://github.com/junegunn/fzf"
     },
     "fzf.vim": {
@@ -17,11 +17,11 @@
       "src": "https://github.com/junegunn/fzf.vim"
     },
     "gitsigns.nvim": {
-      "rev": "fd780920613e541cbdfac41bf711583ed49f9249",
+      "rev": "d4854fa9a94b5c8b37dd209fb4a19e98e764186f",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "nvim-lspconfig": {
-      "rev": "45a3a444b710511c39abca3b60bb6e23a21e3de5",
+      "rev": "77b7432d4770d23b277d37923e5a08a442d8bb07",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-web-devicons": {
@@ -37,7 +37,7 @@
       "src": "https://github.com/sphamba/smear-cursor.nvim"
     },
     "styleguide": {
-      "rev": "2ac1584cd3c9854760f02418ec24687ec1698fb8",
+      "rev": "c775c0c2f73c110613243520c001577cdbc0034d",
       "src": "https://github.com/google/styleguide",
       "version": "'gh-pages'"
     },
@@ -90,7 +90,7 @@
       "src": "https://github.com/tpope/vim-vinegar"
     },
     "vimtex": {
-      "rev": "79a5fb444147f94a5284b6800030e17eecd18a06",
+      "rev": "02eee260766d031185449c9600f03b933fa0357c",
       "src": "https://github.com/lervag/vimtex"
     },
     "which-key.nvim": {

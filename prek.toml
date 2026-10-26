@@ -61,7 +61,7 @@ rev = "v1.38.0"
 [[repos]]
 hooks = [{ id = "markdownlint-cli2", args = ["--fix"] }]
 repo = "https://github.com/DavidAnson/markdownlint-cli2"
-rev = "v0.23.3"
+rev = "v0.24.0"
 
 # TODO: Pin these tools in xdg-config-home/mise/config.toml. On macOS they
 # come from Homebrew unpinned, so their versions differ from Linux.
@@ -94,7 +94,7 @@ hooks = [
   ] },
 ]
 repo = "https://github.com/biomejs/pre-commit"
-rev = "v2.5.15"
+rev = "v2.6.3"
 
 [[repos]]
 hooks = [{ id = "gitleaks" }]
@@ -109,4 +109,4 @@ hooks = [
   ] },
 ]
 repo = "https://github.com/commitizen-tools/commitizen"
-rev = "v4.19.2"
+rev = "v4.19.3"
