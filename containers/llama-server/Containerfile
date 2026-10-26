@@ -16,5 +16,8 @@ RUN dnf -y install vulkan-loader && dnf clean all
 COPY --from=builder /src/build/bin/ /usr/local/bin/
 ENV LD_LIBRARY_PATH=/usr/local/bin:${LD_LIBRARY_PATH:-}
 
+WORKDIR /models
+VOLUME ["/models"]
+
 EXPOSE 8080
 ENTRYPOINT ["llama-server"]

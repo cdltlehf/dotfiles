@@ -1,4 +1,4 @@
-# Reference: https://github.com/ggerganov/whisper.cpp
+# Reference: https://github.com/ggml-org/whisper.cpp
 # Reference: https://github.com/containers/krunkit
 # Reference: https://quay.io/repository/slopezpa/fedora-vgpu
 
@@ -6,7 +6,7 @@ FROM quay.io/slopezpa/fedora-vgpu:latest AS base
 
 FROM base AS builder
 RUN dnf -y install gcc-c++ cmake ninja-build git vulkan-loader-devel vulkan-headers glslc spirv-headers-devel spirv-tools-devel glslang-devel
-RUN git clone --depth 1 https://github.com/ggerganov/whisper.cpp.git /src
+RUN git clone --depth 1 https://github.com/ggml-org/whisper.cpp.git /src
 WORKDIR /src
 RUN cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DGGML_VULKAN=ON \
     && cmake --build build -j 2 --config Release --target whisper-server
@@ -17,6 +17,9 @@ COPY --from=builder /src/build/bin/ /usr/local/bin/
 COPY --from=builder /src/build/src/ /usr/local/lib/
 COPY --from=builder /src/build/ggml/src/ /usr/local/lib/
 ENV LD_LIBRARY_PATH=/usr/local/lib:/usr/local/bin:${LD_LIBRARY_PATH:-}
+
+WORKDIR /models
+VOLUME ["/models"]
 
 EXPOSE 8080
 ENTRYPOINT ["whisper-server"]

@@ -33,7 +33,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     volumes:
-      - ~/.local/share/models:/models:ro
+      - ~/.local/share/models/text:/models:ro
       - ~/.cache/huggingface:/root/.cache/huggingface:rw
     command: [
       "--host", "0.0.0.0",
@@ -42,7 +42,7 @@ services:
       "-c", "8192",
       "-ub", "2048",
       "-np", "1",
-      "--models-max", "1",
+      "--models-max", "2",
       "--sleep-idle-seconds", "300",
       "-ctk", "q4_0",
       "-ctv", "q4_0",
@@ -63,9 +63,9 @@ services:
     devices:
       - /dev/dri:/dev/dri
     volumes:
-      - ~/.local/share/models:/models:ro
+      - ~/.local/share/models/audio:/models:ro
     command: [
-      "-m", "/models/audio/${AUDIO_MODEL:-audio.bin}",
+      "-m", "/models/${AUDIO_MODEL:-audio.bin}",
       "--host", "0.0.0.0"
     ]
 
@@ -81,9 +81,9 @@ services:
     devices:
       - /dev/dri:/dev/dri
     volumes:
-      - ~/.local/share/models:/models:ro
+      - ~/.local/share/models/image:/models:ro
     command: [
-      "-m", "/models/image/${IMAGE_MODEL:-image.gguf}",
+      "-m", "/models/${IMAGE_MODEL:-image.gguf}",
       "--vae-tiling",
       "--listen-ip", "0.0.0.0",
       "--listen-port", "8080"
