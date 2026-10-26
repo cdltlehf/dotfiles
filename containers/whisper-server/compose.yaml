@@ -1,0 +1,21 @@
+# Reference: https://compose-spec.io/
+
+services:
+  whisper-server:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: local/whisper-server-krunkit:latest
+    container_name: whisper-server
+    restart: unless-stopped
+    profiles:
+      - whisper
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - ~/.local/share/models/audio:/models:ro
+    command: [
+      "--model", "/models/${AUDIO_MODEL:-audio.bin}",
+      "--host", "0.0.0.0",
+      "--port", "8080"
+    ]

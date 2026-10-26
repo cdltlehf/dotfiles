@@ -2,23 +2,52 @@
 
 COMPOSE ?= $(shell command -v podman >/dev/null 2>&1 && echo "podman compose" || echo "docker compose")
 
+COMPOSE_LLAMA_FILES := $(wildcard $(XDG_DATA_HOME)/models/responses/*) $(wildcard $(XDG_DATA_HOME)/models/embeddings/*)
+COMPOSE_AUDIO_FILE  := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/audio/*)))
+COMPOSE_IMAGE_FILE  := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/images/*)))
+
+COMPOSE_PROFILES :=
+COMPOSE_ENV :=
+
+ifneq ($(strip $(COMPOSE_LLAMA_FILES)),)
+  COMPOSE_PROFILES += --profile llama
+endif
+
+ifneq ($(COMPOSE_AUDIO_FILE),)
+  COMPOSE_PROFILES += --profile whisper
+  COMPOSE_ENV += AUDIO_MODEL="$(COMPOSE_AUDIO_FILE)"
+endif
+
+ifneq ($(COMPOSE_IMAGE_FILE),)
+  COMPOSE_PROFILES += --profile sd
+  COMPOSE_ENV += IMAGE_MODEL="$(COMPOSE_IMAGE_FILE)"
+endif
+
 .PHONY: compose-up up
 compose-up: ## Start services (alias: up)
-	@$(COMPOSE) up -d
+	@$(COMPOSE_ENV) $(COMPOSE) $(COMPOSE_PROFILES) up -d
 up: compose-up
 
 .PHONY: compose-down down
 compose-down: ## Stop services (alias: down)
-	@$(COMPOSE) down
+	@$(COMPOSE) $(COMPOSE_PROFILES) down
 down: compose-down
+
+.PHONY: compose-build
+compose-build: ## Build services (SERVICE=...)
+	@$(COMPOSE) $(COMPOSE_PROFILES) build $(SERVICE)
+
+.PHONY: compose-rebuild
+compose-rebuild: ## Rebuild services ignoring layer cache (SERVICE=...)
+	@$(COMPOSE) $(COMPOSE_PROFILES) build --no-cache $(SERVICE)
 
 .PHONY: compose-ps
 compose-ps: ## Status of services
-	@$(COMPOSE) ps
+	@$(COMPOSE) $(COMPOSE_PROFILES) ps
 
 .PHONY: compose-logs logs
 compose-logs: ## Follow service logs (alias: logs)
-	@$(COMPOSE) logs -f
+	@$(COMPOSE) $(COMPOSE_PROFILES) logs -f
 logs: compose-logs
 
 .PHONY: models-download

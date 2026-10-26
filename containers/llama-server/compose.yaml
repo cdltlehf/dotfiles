@@ -1,0 +1,30 @@
+services:
+  llama-server:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: local/llama-server-krunkit:latest
+    container_name: llama-server
+    restart: unless-stopped
+    profiles:
+      - llama
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - ~/.local/share/models/responses:/models/responses:ro
+      - ~/.local/share/models/embeddings:/models/embeddings:ro
+    command: [
+      "--host", "0.0.0.0",
+      "--port", "8080",
+      "--models-dir", "/models",
+      "--models-max", "2",
+      "--ctx-size", "8192",
+      "--ubatch-size", "2048",
+      "--parallel", "1",
+      "--cache-type-k", "q4_0",
+      "--cache-type-v", "q4_0",
+      "--sleep-idle-seconds", "300",
+      "--embeddings",
+      "--ui-mcp-proxy",
+      "--tools", "all",
+    ]

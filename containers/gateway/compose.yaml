@@ -1,0 +1,21 @@
+# Reference: https://compose-spec.io/
+
+services:
+  gateway:
+    image: docker.io/library/caddy:alpine
+    container_name: gateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      llama-server:
+        condition: service_started
+        required: false
+      whisper-server:
+        condition: service_started
+        required: false
+      sd-server:
+        condition: service_started
+        required: false
