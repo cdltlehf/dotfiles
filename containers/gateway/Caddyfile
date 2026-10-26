@@ -2,6 +2,10 @@
 # Reference: https://platform.openai.com/docs/api-reference
 
 :8080 {
+	handle /v1/embeddings* {
+		reverse_proxy llama-embedding-server:8080
+	}
+
 	handle /v1/audio/* {
 		rewrite /v1/audio/transcriptions /inference
 		reverse_proxy whisper-server:8080

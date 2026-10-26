@@ -9,6 +9,7 @@ services:
     container_name: whisper-server
     restart: unless-stopped
     profiles:
+      - audio
       - whisper
     devices:
       - /dev/dri:/dev/dri

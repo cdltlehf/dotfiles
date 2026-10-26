@@ -39,8 +39,12 @@ if [ -z "${REPO}" ]; then
   exit 0
 fi
 
-if ! command -v huggingface-cli >/dev/null 2>&1; then
-  error "huggingface-cli is not installed."
+if command -v hf >/dev/null 2>&1; then
+  HF_CMD="hf download"
+elif command -v huggingface-cli >/dev/null 2>&1; then
+  HF_CMD="huggingface-cli download"
+else
+  error "Neither 'hf' nor 'huggingface-cli' is installed."
   echo "Install it via your package manager, mise, or pip (e.g. brew install huggingface-cli)" >&2
   exit 1
 fi
@@ -56,23 +60,14 @@ esac
 MODELS_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}/models/${DEST}"
 mkdir -p "${MODELS_DIR}"
 
-if [ "${DEST}" = "responses" ] || [ "${DEST}" = "embeddings" ]; then
-  REPO_NAME="$(basename "${REPO}")"
-  TARGET_DIR="${MODELS_DIR}/${REPO_NAME}"
-  mkdir -p "${TARGET_DIR}"
-else
-  TARGET_DIR="${MODELS_DIR}"
-fi
+TARGET_DIR="${MODELS_DIR}"
 
 printf "Downloading from %s (%s) into %s ...\n" "${REPO}" "${PATTERN:-*.*}" "${TARGET_DIR}"
 
 if [ -n "${PATTERN}" ]; then
-  huggingface-cli download "${REPO}" \
-    --include "${PATTERN}" \
-    --local-dir "${TARGET_DIR}" \
-    --local-dir-use-symlinks False
+  # shellcheck disable=SC2086
+  ${HF_CMD} "${REPO}" --include "${PATTERN}" --local-dir "${TARGET_DIR}"
 else
-  huggingface-cli download "${REPO}" \
-    --local-dir "${TARGET_DIR}" \
-    --local-dir-use-symlinks False
+  # shellcheck disable=SC2086
+  ${HF_CMD} "${REPO}" --local-dir "${TARGET_DIR}"
 fi

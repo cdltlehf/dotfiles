@@ -7,6 +7,7 @@ services:
     container_name: sd-server
     restart: unless-stopped
     profiles:
+      - images
       - sd
     devices:
       - /dev/dri:/dev/dri
