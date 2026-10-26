@@ -55,6 +55,10 @@ mkdir -p "${XDG_CONFIG_HOME}"
 mkdir -p "${XDG_STATE_HOME}"
 mkdir -p "${XDG_CACHE_HOME}"
 mkdir -p "${BIN_DIR}"
+mkdir -p "${XDG_DATA_HOME}/models/responses"
+mkdir -p "${XDG_DATA_HOME}/models/embeddings"
+mkdir -p "${XDG_DATA_HOME}/models/audio"
+mkdir -p "${XDG_DATA_HOME}/models/images"
 
 run_hook pre-setup
 

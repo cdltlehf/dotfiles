@@ -13,7 +13,7 @@ services:
     depends_on:
       llama-server:
         condition: service_started
-        required: false
+        required: true
       whisper-server:
         condition: service_started
         required: false
@@ -28,12 +28,11 @@ services:
     image: local/llama-server-krunkit:latest
     container_name: llama-server
     restart: unless-stopped
-    profiles:
-      - llama
     devices:
       - /dev/dri:/dev/dri
     volumes:
-      - ~/.local/share/models/text:/models:ro
+      - ~/.local/share/models/responses:/models/responses:ro
+      - ~/.local/share/models/embeddings:/models/embeddings:ro
       - ~/.cache/huggingface:/root/.cache/huggingface:rw
     command: [
       "--host", "0.0.0.0",
@@ -81,7 +80,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     volumes:
-      - ~/.local/share/models/image:/models:ro
+      - ~/.local/share/models/images:/models:ro
     command: [
       "-m", "/models/${IMAGE_MODEL:-image.gguf}",
       "--vae-tiling",

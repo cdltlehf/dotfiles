@@ -20,3 +20,7 @@ compose-ps: ## Status of services
 compose-logs: ## Follow service logs (alias: logs)
 	@$(COMPOSE) logs -f
 logs: compose-logs
+
+.PHONY: models-download
+models-download: ## Download a model from Hugging Face into ~/.local/share/models (REPO=... PATTERN=... DEST=...)
+	@./scripts/models-download "$(REPO)" "$(PATTERN)" "$(DEST)"
