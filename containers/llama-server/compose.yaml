@@ -26,6 +26,7 @@ services:
       "--sleep-idle-seconds", "300",
       "--ui-mcp-proxy",
       "--tools", "all",
+      "--metrics",
     ]
 
   llama-embedding-server:
