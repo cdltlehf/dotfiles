@@ -18,7 +18,7 @@ services:
       "--port", "8080",
       "--models-dir", "/models",
       "--models-max", "1",
-      "--ctx-size", "8192",
+      "--ctx-size", "32768",
       "--ubatch-size", "2048",
       "--parallel", "1",
       "--cache-type-k", "q4_0",

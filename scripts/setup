@@ -129,6 +129,7 @@ for item in "${BASE_DIR}/xdg-templates-dir"/*; do
   symlink "${item}" "${XDG_TEMPLATES_DIR}/${name}"
 done
 unset item name
+
 # Biome rejects a biome.json in xdg-templates-dir as a nested root
 # configuration beside the root .biome.json.
 symlink "${BASE_DIR}/xdg-templates-dir/dot_biome.json" "${XDG_TEMPLATES_DIR}/biome.json"
@@ -149,6 +150,12 @@ fi
 
 if command -v codex >/dev/null; then
   symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${CODEX_HOME:-${HOME}/.codex}/AGENTS.md"
+fi
+
+if command -v pi >/dev/null; then
+  mkdir -p "${HOME}/.pi/agent"
+  symlink "${XDG_CONFIG_HOME}/pi/agent/settings.json" "${HOME}/.pi/agent/settings.json"
+  symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.pi/agent/AGENTS.md"
 fi
 
 if ! command -v mise >/dev/null; then
