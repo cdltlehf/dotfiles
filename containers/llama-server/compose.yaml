@@ -11,6 +11,8 @@ services:
       - llama
     devices:
       - /dev/dri:/dev/dri
+    environment:
+      - LLAMA_API_KEY=${API_KEY:-}
     volumes:
       - ~/.local/share/models/responses:/models:ro
     command: [
@@ -24,9 +26,9 @@ services:
       "--cache-type-k", "q8_0",
       "--cache-type-v", "q8_0",
       "--sleep-idle-seconds", "300",
-      "--ui-mcp-proxy",
-      "--tools", "all",
       "--metrics",
+      "--ui-mcp-proxy",
+      "--cors-origins", "*",
     ]
 
   llama-embedding-server:
@@ -38,6 +40,8 @@ services:
       - llama-embedding
     devices:
       - /dev/dri:/dev/dri
+    environment:
+      - LLAMA_API_KEY=${API_KEY:-}
     volumes:
       - ~/.local/share/models/embeddings:/models:ro
     command: [

@@ -48,6 +48,11 @@ id = "shellcheck"
 types_or = ["shell", "bats"]
 
 [[repos]]
+hooks = [{ id = "ruff-check", args = ["--fix"] }, { id = "ruff-format" }]
+repo = "https://github.com/astral-sh/ruff-pre-commit"
+rev = "v0.17.1"
+
+[[repos]]
 hooks = [{ id = "stylua-github" }]
 repo = "https://github.com/JohnnyMorganz/StyLua"
 rev = "v2.6.0"
@@ -89,6 +94,13 @@ id = "taplo-format"
 language = "system"
 name = "taplo fmt"
 types = ["toml"]
+
+[[repos.hooks]]
+entry = "uv check --preview --script"
+files = '^containers/mcp-server/server\.py$'
+id = "uv-check"
+language = "system"
+name = "uv check"
 
 # Biome indents continuation lines by 2 spaces, not by the 4 or more of
 # the Google JavaScript Style Guide, and cannot be configured to.

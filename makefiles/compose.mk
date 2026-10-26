@@ -11,7 +11,7 @@ COMPOSE_PROFILES :=
 COMPOSE_ENV :=
 
 ifneq ($(strip $(COMPOSE_RESPONSES_FILES)),)
-  COMPOSE_PROFILES += --profile responses
+  COMPOSE_PROFILES += --profile responses --profile mcp
 endif
 
 ifneq ($(strip $(COMPOSE_EMBEDDINGS_FILES)),)

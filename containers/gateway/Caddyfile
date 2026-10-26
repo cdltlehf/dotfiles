@@ -1,7 +1,16 @@
 # Reference: https://caddyserver.com/docs/caddyfile
 # Reference: https://platform.openai.com/docs/api-reference
 
-:8080 {
+:8000 {
+	@unauthorized {
+		path /v1/*
+		expression `"{$API_KEY}" != ""`
+		not header Authorization "Bearer {$API_KEY}"
+	}
+	handle @unauthorized {
+		respond 401
+	}
+
 	handle /v1/embeddings* {
 		reverse_proxy llama-embedding-server:8080
 	}
@@ -15,26 +24,24 @@
 		reverse_proxy sd-server:8080
 	}
 
-	handle /sse* {
-		reverse_proxy mcp-server:8080 {
-			flush_interval -1
-		}
+	handle {
+		reverse_proxy llama-server:8080
 	}
+}
 
-	handle /messages* {
-		reverse_proxy mcp-server:8080 {
-			flush_interval -1
-		}
+:3001 {
+	@unauthorized {
+		expression `"{$API_KEY}" != ""`
+		not header Authorization "Bearer {$API_KEY}"
+		not query api_key={$API_KEY}
 	}
-
-	handle /mcp* {
-		uri strip_prefix /mcp
-		reverse_proxy mcp-server:8080 {
-			flush_interval -1
-		}
+	handle @unauthorized {
+		respond 401
 	}
 
 	handle {
-		reverse_proxy llama-server:8080
+		reverse_proxy mcp-server:8080 {
+			flush_interval -1
+		}
 	}
 }
