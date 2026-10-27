@@ -84,6 +84,7 @@ precmd() {
   local sep="%F{8} . %f"
   local err_icon="!"
   local job_icon="&"
+  local host_icon="@"
   if [[ "${glyphs}" != "ascii" ]]; then
     sep="%F{8} · %f"
   fi
@@ -92,6 +93,7 @@ precmd() {
   elif [[ "${glyphs}" == "nerdfont" ]]; then
     err_icon=""
     job_icon=""
+    host_icon=" "
   fi
 
   local git_root
@@ -111,7 +113,7 @@ precmd() {
   local jobs_part="%(1j|${sep}%F{8}${job_icon} %j%f|)"
   local host_part=""
   if [[ -n "${SSH_TTY}" ]]; then
-    host_part="${sep}%F{8}%m%f"
+    host_part="${sep}%F{8}${host_icon}%m%f"
   fi
   local user_part=""
   if [[ "${USER}" == "root" ]]; then

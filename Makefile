@@ -85,6 +85,9 @@ clean: ## Clean dangling symlinks and cache
 	@find "$(HOME)" -maxdepth 1 \( -type f -o -type l \) -name ".*.bak" -delete
 	@rm -rf "$(XDG_CACHE_HOME)/evalcache"
 
+.PHONY: distclean
+distclean: clean compose-down ## Clean all artifacts, caches, and running containers
+
 .PHONY: installcheck
 installcheck: brew-check mise-check nvim-lsp-check ## Check that declared packages and language servers are installed
 

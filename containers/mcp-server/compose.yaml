@@ -1,0 +1,19 @@
+# Reference: https://compose-spec.io/
+
+services:
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: local/mcp-server:latest
+    container_name: mcp-server
+    restart: unless-stopped
+    profiles:
+      - mcp
+    depends_on:
+      sd-server:
+        condition: service_started
+        required: false
+      whisper-server:
+        condition: service_started
+        required: false

@@ -1,0 +1,21 @@
+services:
+  sd-server:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: local/sd-server-krunkit:latest
+    container_name: sd-server
+    restart: unless-stopped
+    profiles:
+      - images
+      - sd
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - ~/.local/share/models/images:/models:ro
+    command: [
+      "--model", "/models/${IMAGE_MODEL:-image.gguf}",
+      "--vae-tiling",
+      "--listen-ip", "0.0.0.0",
+      "--listen-port", "8080"
+    ]

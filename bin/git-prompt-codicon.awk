@@ -21,7 +21,7 @@ BEGIN {
     C_GRAY = "\033[90m"
 
     if (charset == "unicode") {
-        ICON_BRANCH = ""
+        ICON_BRANCH = "branch:"
         ICON_TAG = "tag:"
         ICON_MERGE = ""
         ICON_COMPARE = ""
@@ -43,7 +43,7 @@ BEGIN {
         ICON_BEHIND = ""
         ICON_STASH = " "
     } else {
-        ICON_BRANCH = ""
+        ICON_BRANCH = "branch:"
         ICON_TAG = "tag:"
         ICON_MERGE = ""
         ICON_COMPARE = ""

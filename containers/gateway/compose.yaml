@@ -1,0 +1,30 @@
+# Reference: https://compose-spec.io/
+
+services:
+  gateway:
+    image: docker.io/library/caddy:alpine
+    container_name: gateway
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+      - "3001:3001"
+    environment:
+      - API_KEY=${API_KEY:-}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      llama-server:
+        condition: service_started
+        required: false
+      llama-embedding-server:
+        condition: service_started
+        required: false
+      whisper-server:
+        condition: service_started
+        required: false
+      sd-server:
+        condition: service_started
+        required: false
+      mcp-server:
+        condition: service_started
+        required: false

@@ -45,6 +45,7 @@ export PKG_CONFIG_PATH
 export EDITOR="${EDITOR:-nvim}"
 export PAGER="${PAGER:-less}"
 export HOMEBREW_NO_ENV_HINTS=1
+export LLAMA_BASE_URL="${LLAMA_BASE_URL:-http://127.0.0.1:8080}"
 export PODMAN_COMPOSE_WARNING_LOGS=false
 
 export CYGWIN=winsymlinks:nativestrict

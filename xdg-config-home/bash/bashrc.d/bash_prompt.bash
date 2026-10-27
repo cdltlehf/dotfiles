@@ -56,6 +56,7 @@ __prompt_command() {
   local sep="\[\e[90m\] . \[\e[0m\]"
   local err_icon="!"
   local job_icon="&"
+  local host_icon="@"
   local prompt_char="> "
   if [[ "${glyphs}" != "ascii" ]]; then
     sep="\[\e[90m\] · \[\e[0m\]"
@@ -66,6 +67,7 @@ __prompt_command() {
   elif [[ "${glyphs}" == "nerdfont" ]]; then
     err_icon=""
     job_icon=""
+    host_icon=" "
     prompt_char=" "
   fi
 
@@ -117,7 +119,7 @@ __prompt_command() {
 
   # Remote host (only on SSH, before timestamp)
   if [[ -n "${SSH_TTY}" ]]; then
-    PS1+="${sep}\[\e[90m\]\h\[\e[0m\]"
+    PS1+="${sep}\[\e[90m\]${host_icon}\h\[\e[0m\]"
   fi
 
   # Timestamp

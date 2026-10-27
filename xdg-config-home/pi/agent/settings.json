@@ -1,0 +1,9 @@
+{
+  "theme": "dark",
+  "lastChangelogVersion": "1.4.0",
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 2048,
+    "keepRecentTokens": 2048
+  }
+}

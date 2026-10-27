@@ -24,7 +24,7 @@ set-option -gu status-format
 # for other windows, bell > activity > silence > last.
 %if "#{==:$LC_TERMINAL_GLYPHS,ascii}"
 set-option -g  status-left-length 50
-set-option -g  status-left "#[fg=default]#{session_name}"
+set-option -g  status-left "#[fg=default][#{session_name}]"
 set-option -ag status-left "#{?client_prefix, #[fg=brightblack]. #[fg=default]prefix#[default],}"
 
 # Use the window flags of tmux (*, -, #, !, ~, M, and Z), and S for synchronized panes.
@@ -41,7 +41,7 @@ set-option -g  status-right-length 30
 set-option -g  status-right "#[fg=brightblack]%a %b %d . %H:%M"
 %elif "#{==:$LC_TERMINAL_GLYPHS,unicode}"
 set-option -g  status-left-length 50
-set-option -g  status-left "#[fg=default]#{session_name}"
+set-option -g  status-left "#[fg=default][#{session_name}]"
 set-option -ag status-left "#{?client_prefix, #[fg=brightblack]· #[fg=default]prefix#[default],}"
 
 set-option -g window-status-current-style "bg=default,fg=default,none"

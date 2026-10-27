@@ -1,0 +1,56 @@
+services:
+  llama-server:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: local/llama-server-krunkit:latest
+    container_name: llama-server
+    restart: unless-stopped
+    profiles:
+      - responses
+      - llama
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      - LLAMA_API_KEY=${API_KEY:-}
+    volumes:
+      - ~/.local/share/models/responses:/models:ro
+    command: [
+      "--host", "0.0.0.0",
+      "--port", "8080",
+      "--models-dir", "/models",
+      "--models-max", "1",
+      "--ctx-size", "8192",
+      "--ubatch-size", "512",
+      "--parallel", "1",
+      "--cache-type-k", "q8_0",
+      "--cache-type-v", "q8_0",
+      "--sleep-idle-seconds", "300",
+      "--metrics",
+      "--ui-mcp-proxy",
+      "--cors-origins", "*",
+    ]
+
+  llama-embedding-server:
+    image: local/llama-server-krunkit:latest
+    container_name: llama-embedding-server
+    restart: unless-stopped
+    profiles:
+      - embeddings
+      - llama-embedding
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      - LLAMA_API_KEY=${API_KEY:-}
+    volumes:
+      - ~/.local/share/models/embeddings:/models:ro
+    command: [
+      "--host", "0.0.0.0",
+      "--port", "8080",
+      "--models-dir", "/models",
+      "--models-max", "1",
+      "--ctx-size", "2048",
+      "--ubatch-size", "2048",
+      "--sleep-idle-seconds", "300",
+      "--embeddings",
+    ]
