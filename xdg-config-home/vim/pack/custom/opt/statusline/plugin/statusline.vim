@@ -127,7 +127,8 @@ function! StatusLineRender() abort
   let l:target_string = '%#StatusLineText#' . l:buf_name
   let l:branch = exists('b:statusline_branch') ? b:statusline_branch : (exists('*FugitiveHead') ? FugitiveHead() : '')
   if !empty(l:branch)
-    let l:target_string .= l:sep . '%#StatusLineText#' . l:branch
+    let l:branch_icon = (l:glyphs ==# 'nerdfont') ? "\uec6f " : 'branch:'
+    let l:target_string .= l:sep . '%#StatusLineText#' . l:branch_icon . l:branch
   endif
 
   if &readonly
