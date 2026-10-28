@@ -135,13 +135,11 @@ if command -v brew >/dev/null && brew list zathura >/dev/null 2>&1; then
 fi
 
 if command -v erb >/dev/null && [ -d "${KARABINER_TEMPLATES_DIR}" ]; then
+  mkdir -p "${KARABINER_RULES_DIR}"
   for template in "${KARABINER_TEMPLATES_DIR}"/*.erb; do
     [ -f "${template}" ] || continue
     target="${KARABINER_RULES_DIR}/$(basename "${template}" .erb)"
-    if [ ! -f "${target}" ]; then
-      mkdir -p "${KARABINER_RULES_DIR}"
-      erb "${template}" >"${target}"
-    fi
+    erb "${template}" >"${target}"
   done
   unset template target
 fi
