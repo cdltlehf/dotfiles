@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# Reference: https://keith.github.io/xcode-man-pages/defaults.1.html
+
+set -o nounset
+set -o errexit
+
+BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+readonly BASE_DIR
+readonly DEFAULTS_DIR="${BASE_DIR}/platforms/darwin/defaults"
+
+command -v defaults >/dev/null || exit 0
+[ -d "${DEFAULTS_DIR}" ] || exit 0
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "${tmpdir}"' EXIT
+mkdir "${tmpdir}/bin"
+
+cat >"${tmpdir}/bin/defaults" <<EOF
+#!/bin/sh
+action="\$1"
+desired="${tmpdir}/\$2.desired.plist"
+shift 2
+case "\${action}" in
+delete) rm -f "\${desired}" ;;
+write) /usr/bin/defaults write "\${desired}" "\$@" ;;
+*) exit 1 ;;
+esac
+EOF
+chmod +x "${tmpdir}/bin/defaults"
+
+for script in "${DEFAULTS_DIR}"/*.sh; do
+  [ -f "${script}" ] || continue
+  domain="$(basename "${script}" .sh)"
+  current="${tmpdir}/${domain}.current.plist"
+  desired="${tmpdir}/${domain}.desired.plist"
+  defaults export "${domain}" "${current}" 2>/dev/null ||
+    plutil -create xml1 "${current}"
+  cp "${current}" "${desired}"
+  PATH="${tmpdir}/bin:${PATH}" "${script}" >/dev/null
+  [ -f "${desired}" ] || plutil -create xml1 "${desired}"
+  plutil -convert xml1 "${current}"
+  plutil -convert xml1 "${desired}"
+  diff -u --color=auto \
+    --label "${domain} (current)" --label "${domain} (desired)" \
+    "${current}" "${desired}" || true
+done

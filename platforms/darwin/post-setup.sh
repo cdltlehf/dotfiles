@@ -12,49 +12,21 @@ readonly ZATHURA_APP_CONVERT_URL="https://raw.githubusercontent.com/homebrew-zat
 readonly SPOONS_DIR="${XDG_CONFIG_HOME}/hammerspoon/Spoons"
 readonly VSCODE_USER_DIR="${HOME}/Library/Application Support/Code/User"
 readonly UBERSICHT_USER_DIR="${HOME}/Library/Application Support/Übersicht"
+readonly DEFAULTS_DIR="${BASE_DIR}/platforms/darwin/defaults"
 readonly SHORTCUTS_DIR="${BASE_DIR}/platforms/darwin/shortcuts"
 readonly KARABINER_TEMPLATES_DIR="${BASE_DIR}/xdg-config-home/karabiner/templates"
 readonly KARABINER_RULES_DIR="${BASE_DIR}/xdg-config-home/karabiner/assets/complex_modifications"
 
-defaults delete com.apple.desktopservices 2>/dev/null || true
-defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-
-defaults delete com.apple.screencapture 2>/dev/null || true
-defaults write com.apple.screencapture disable-shadow -bool true
-
-defaults delete com.apple.finder 2>/dev/null || true
-defaults write com.apple.finder AppleShowAllFiles -bool true
-defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
-defaults write com.apple.finder ShowPathbar -bool true
-defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
-defaults write com.apple.finder ShowStatusBar -bool true
-
-defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
-defaults write NSGlobalDomain AppleLanguages -array "en-US" "ko-KR"
-defaults write NSGlobalDomain AppleLocale -string "en_KR"
-
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
-defaults write NSGlobalDomain NSUserDictionaryReplacementItems -array '()'
-
-defaults delete com.apple.dock 2>/dev/null || true
-defaults write com.apple.dock "autohide-delay" -float "0"
-defaults write com.apple.dock autohide -bool true
-defaults write com.apple.dock mineffect -string "scale"
-defaults write com.apple.dock minimize-to-application -bool true
-defaults write com.apple.dock persistent-apps -array '()'
-defaults write com.apple.dock persistent-others -array '()'
-defaults write com.apple.dock show-recents -bool false
-defaults write com.apple.dock showhidden -bool true
-defaults write com.apple.dock static-only -bool true
+for script in "${DEFAULTS_DIR}"/*.sh; do
+  [ -f "${script}" ] || continue
+  "${script}"
+done
+unset script
 
 defaults write org.hammerspoon.Hammerspoon \
   MJConfigFile "${XDG_CONFIG_HOME}/hammerspoon/init.lua"
 
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 for app in "Finder" "Dock" "SystemUIServer"; do
   killall "${app}" >/dev/null 2>&1 || true
 done
@@ -84,8 +56,6 @@ if [ -d "${XDG_CONFIG_HOME}/ubersicht/widgets" ]; then
   mkdir -p "${UBERSICHT_USER_DIR}"
   symlink "${XDG_CONFIG_HOME}/ubersicht/widgets" "${UBERSICHT_USER_DIR}/widgets"
 fi
-
-"${BASE_DIR}/scripts/preferences" apply || true
 
 if command -v shortcuts >/dev/null; then
   if ! (shortcuts list 2>/dev/null || true) |
