@@ -109,7 +109,7 @@ repo = "https://github.com/biomejs/pre-commit"
 rev = "v2.6.3"
 
 [[repos.hooks]]
-additional_dependencies = ["@biomejs/biome@2.5.14"]
+additional_dependencies = ["@biomejs/biome@2.6.3"]
 id = "biome-format"
 types_or = ["javascript", "json", "jsx", "ts", "tsx"]
 
