@@ -23,9 +23,6 @@ for script in "${DEFAULTS_DIR}"/*.sh; do
 done
 unset script
 
-defaults write org.hammerspoon.Hammerspoon \
-  MJConfigFile "${XDG_CONFIG_HOME}/hammerspoon/init.lua"
-
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 for app in "Finder" "Dock" "SystemUIServer"; do
   killall "${app}" >/dev/null 2>&1 || true

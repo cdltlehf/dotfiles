@@ -60,6 +60,10 @@ mkdir -p "${XDG_DATA_HOME}/models/embeddings"
 mkdir -p "${XDG_DATA_HOME}/models/audio"
 mkdir -p "${XDG_DATA_HOME}/models/images"
 
+mkdir -p "${XDG_STATE_HOME}/dotfiles"
+export __DOTFILES_LINKS="${XDG_STATE_HOME}/dotfiles/links"
+: >"${__DOTFILES_LINKS}"
+
 run_hook pre-setup
 
 for item in "${BASE_DIR}/xdg-config-home"/*; do

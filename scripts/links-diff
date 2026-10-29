@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -o nounset
+set -o errexit
+
+readonly LINKS="${XDG_STATE_HOME:-${HOME}/.local/state}/dotfiles/links"
+
+if [ ! -f "${LINKS}" ]; then
+  echo "${LINKS} is missing. Run make install to record the links." >&2
+  exit 0
+fi
+
+tab="$(printf '\t')"
+while IFS="${tab}" read -r src dest; do
+  target="$(readlink "${dest}" 2>/dev/null || true)"
+  if [ "${target}" = "${src}" ]; then
+    continue
+  fi
+  case "${src}" in
+  /*) resolved="${src}" ;;
+  *) resolved="$(dirname "${dest}")/${src}" ;;
+  esac
+  if [ -L "${dest}" ]; then
+    echo "${dest} links to ${target}, not ${src}"
+  elif [ -f "${dest}" ] && [ -f "${resolved}" ]; then
+    diff -u --color=auto \
+      --label "${src} (repository)" --label "${dest} (current)" \
+      "${resolved}" "${dest}" || true
+  elif [ -e "${dest}" ]; then
+    echo "${dest} is not a link to ${src}"
+  else
+    echo "${dest} is missing; it should link to ${src}"
+  fi
+done <"${LINKS}"

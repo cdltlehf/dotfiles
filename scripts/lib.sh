@@ -105,6 +105,9 @@ run_hook() {
 symlink() {
   _src="$1"
   _dest="$2"
+  if [ -n "${__DOTFILES_LINKS:-}" ]; then
+    printf '%s\t%s\n' "${_src}" "${_dest}" >>"${__DOTFILES_LINKS}"
+  fi
   if [ "$(readlink "${_dest}" 2>/dev/null || true)" = "${_src}" ]; then
     unset _src _dest
     return 0

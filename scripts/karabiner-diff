@@ -1,0 +1,48 @@
+#!/bin/sh
+#
+# Reference: https://karabiner-elements.pqrs.org/docs/json/root-data-structure/
+
+set -o nounset
+set -o errexit
+
+BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+readonly BASE_DIR
+readonly KARABINER_DIR="${BASE_DIR}/xdg-config-home/karabiner"
+readonly CONFIG="${KARABINER_DIR}/karabiner.json"
+readonly RULES_DIR="${KARABINER_DIR}/assets/complex_modifications"
+
+[ -f "${CONFIG}" ] || exit 0
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "${tmpdir}"' EXIT
+
+jq '[.profiles[] | select(.selected) | .complex_modifications.rules[]?]' \
+  "${CONFIG}" >"${tmpdir}/current.json"
+jq -s '[.[].rules[]]' "${RULES_DIR}"/*.json >"${tmpdir}/desired.json"
+
+descriptions() {
+  jq -r '.[].description' "$1" | sort -u
+}
+
+descriptions "${tmpdir}/current.json" >"${tmpdir}/current.txt"
+descriptions "${tmpdir}/desired.json" >"${tmpdir}/desired.txt"
+
+comm -13 "${tmpdir}/current.txt" "${tmpdir}/desired.txt" |
+  while IFS= read -r description; do
+    echo "Missing from karabiner.json: ${description}"
+  done
+comm -23 "${tmpdir}/current.txt" "${tmpdir}/desired.txt" |
+  while IFS= read -r description; do
+    echo "Missing from the repository: ${description}"
+  done
+comm -12 "${tmpdir}/current.txt" "${tmpdir}/desired.txt" |
+  while IFS= read -r description; do
+    for side in current desired; do
+      jq -S --arg d "${description}" '.[] | select(.description == $d)' \
+        "${tmpdir}/${side}.json" >"${tmpdir}/rule.${side}.json"
+    done
+    diff -u --color=auto \
+      --label "${description} (karabiner.json)" \
+      --label "${description} (repository)" \
+      "${tmpdir}/rule.current.json" "${tmpdir}/rule.desired.json" || true
+  done
