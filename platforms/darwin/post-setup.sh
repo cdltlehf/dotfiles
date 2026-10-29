@@ -13,7 +13,6 @@ readonly SPOONS_DIR="${XDG_CONFIG_HOME}/hammerspoon/Spoons"
 readonly VSCODE_USER_DIR="${HOME}/Library/Application Support/Code/User"
 readonly UBERSICHT_USER_DIR="${HOME}/Library/Application Support/Übersicht"
 readonly SHORTCUTS_DIR="${BASE_DIR}/platforms/darwin/shortcuts"
-readonly PREFERENCES_DIR="${BASE_DIR}/platforms/darwin/preferences"
 readonly KARABINER_TEMPLATES_DIR="${BASE_DIR}/xdg-config-home/karabiner/templates"
 readonly KARABINER_RULES_DIR="${BASE_DIR}/xdg-config-home/karabiner/assets/complex_modifications"
 
@@ -86,14 +85,7 @@ if [ -d "${XDG_CONFIG_HOME}/ubersicht/widgets" ]; then
   symlink "${XDG_CONFIG_HOME}/ubersicht/widgets" "${UBERSICHT_USER_DIR}/widgets"
 fi
 
-if [ -d "${PREFERENCES_DIR}" ]; then
-  for plist in "${PREFERENCES_DIR}"/*.plist; do
-    [ -f "${plist}" ] || continue
-    domain="$(basename "${plist}" .plist)"
-    defaults import "${domain}" "${plist}" 2>/dev/null || true
-  done
-  unset plist domain
-fi
+"${BASE_DIR}/scripts/preferences" apply || true
 
 if command -v shortcuts >/dev/null; then
   if ! (shortcuts list 2>/dev/null || true) |

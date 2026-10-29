@@ -1,0 +1,65 @@
+#!/bin/sh
+#
+# Reference: https://keith.github.io/xcode-man-pages/plutil.1.html
+
+set -o nounset
+set -o errexit
+
+BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+readonly BASE_DIR
+readonly PREFERENCES_DIR="${BASE_DIR}/platforms/darwin/preferences"
+
+usage() {
+  echo "Usage: $0 apply|diff" >&2
+  exit 2
+}
+
+declared_keys() {
+  plutil -convert json -o - "$1" | jq -r 'keys[]'
+}
+
+overlay_declared_keys() {
+  _declared="$1"
+  _target="$2"
+  for _key in $(declared_keys "${_declared}"); do
+    _value="$(plutil -extract "${_key}" xml1 -o - "${_declared}")"
+    plutil -replace "${_key}" -xml "${_value}" "${_target}"
+  done
+  unset _declared _target _key _value
+}
+
+to_sorted_json() {
+  plutil -convert json -o - "$1" | jq -S .
+}
+
+[ "$#" -eq 1 ] || usage
+action="$1"
+case "${action}" in
+apply | diff) ;;
+*) usage ;;
+esac
+command -v defaults >/dev/null || exit 0
+[ -d "${PREFERENCES_DIR}" ] || exit 0
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "${tmpdir}"' EXIT
+current="${tmpdir}/current.plist"
+desired="${tmpdir}/desired.plist"
+
+for declared in "${PREFERENCES_DIR}"/*.plist; do
+  [ -f "${declared}" ] || continue
+  domain="$(basename "${declared}" .plist)"
+  defaults export "${domain}" "${current}"
+  cp "${current}" "${desired}"
+  overlay_declared_keys "${declared}" "${desired}"
+
+  if [ "${action}" = "apply" ]; then
+    defaults import "${domain}" "${desired}"
+  else
+    to_sorted_json "${current}" >"${current}.json"
+    to_sorted_json "${desired}" >"${desired}.json"
+    diff -u --color=auto \
+      --label "${domain} (current)" --label "${domain} (desired)" \
+      "${current}.json" "${desired}.json" || true
+  fi
+done

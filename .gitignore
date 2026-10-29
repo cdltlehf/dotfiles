@@ -5,10 +5,8 @@ xdg-config-home/karabiner/assets/complex_modifications/*.json
 xdg-config-home/karabiner/automatic_backups
 xdg-config-home/karabiner/karabiner.json
 xdg-config-home/vim/autoload/plug.vim
-xdg-config-home/zsh/.zcompdump
 xdg-config-home/zsh/.zprofile
 xdg-config-home/zsh/.zsh_history
-xdg-config-home/zsh/.zsh_sessions
 xdg-config-home/zsh/.zshenv
 xdg-config-home/zsh/.zshrc
 xdg-templates-dir/c/include/{}.hpp.tmpl

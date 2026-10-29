@@ -130,10 +130,6 @@ for item in "${BASE_DIR}/xdg-templates-dir"/*; do
 done
 unset item name
 
-# Biome rejects a biome.json in xdg-templates-dir as a nested root
-# configuration beside the root .biome.json.
-symlink "${BASE_DIR}/xdg-templates-dir/dot_biome.json" "${XDG_TEMPLATES_DIR}/biome.json"
-
 # Agents read their global instructions only from fixed paths in $HOME.
 # Link them to one tracked file, so that a tool writing into them shows up
 # in `git diff`. Moving the whole directory with a variable such as
