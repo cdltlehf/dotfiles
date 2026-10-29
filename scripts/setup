@@ -29,6 +29,10 @@ __pathmunge "${BIN_DIR}"
 : "${XDG_STATE_HOME:="${HOME}/.local/state"}"
 export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME
 
+: "${CARGO_HOME:="${XDG_DATA_HOME}/cargo"}"
+: "${RUSTUP_HOME:="${XDG_DATA_HOME}/rustup"}"
+export CARGO_HOME RUSTUP_HOME
+
 readonly BOLD_ITALICS_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/bold-italics.pl"
 readonly COLOR_256_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/256colors2.pl"
 readonly COLOR_SPACES_URL="https://raw.githubusercontent.com/robertknight/konsole/master/tests/color-spaces.pl"
@@ -45,6 +49,7 @@ readonly QUERY_FONTS_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-s
 readonly TEST_FONTS_URL="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/bin/scripts/test-fonts.sh"
 readonly WEZTERM_SHELL_INTEGRATION_DIR="${XDG_DATA_HOME}/wezterm/shell-integration"
 readonly WEZTERM_SHELL_INTEGRATION_URL="https://raw.githubusercontent.com/wezterm/wezterm/main/assets/shell-integration/wezterm.sh"
+readonly ZSH_COMPLETION_DIR="${XDG_DATA_HOME}/zsh/site-functions"
 
 OS="$(detect_os)"
 ARCH="$(detect_arch)"
@@ -164,8 +169,31 @@ if ! command -v mise >/dev/null; then
   unset tmpdir
 fi
 
+zsh_completion() {
+  _name="$1"
+  shift
+  if mise exec -- "$@" >"${ZSH_COMPLETION_DIR}/_${_name}.tmp" 2>/dev/null; then
+    mv "${ZSH_COMPLETION_DIR}/_${_name}.tmp" "${ZSH_COMPLETION_DIR}/_${_name}"
+  fi
+  rm -f "${ZSH_COMPLETION_DIR}/_${_name}.tmp"
+  unset _name
+}
+
 if command -v mise >/dev/null; then
   mise install --yes || true
+  mkdir -p "${ZSH_COMPLETION_DIR}"
+  zsh_completion bat bat --completion zsh
+  zsh_completion bun bun completions
+  zsh_completion cargo rustup completions zsh cargo
+  zsh_completion deno deno completions zsh
+  zsh_completion fd fd --gen-completions zsh
+  zsh_completion gh gh completion -s zsh
+  zsh_completion rg rg --generate complete-zsh
+  zsh_completion ruff ruff generate-shell-completion zsh
+  zsh_completion rustup rustup completions zsh rustup
+  zsh_completion taplo taplo completions zsh
+  zsh_completion uv uv generate-shell-completion zsh
+  zsh_completion uvx uvx --generate-shell-completion zsh
 fi
 
 run_hook post-setup
