@@ -2,9 +2,9 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "anyio>=4.15.1",
-#     "httpx>=0.28.1",
-#     "mcp[cli]>=2.3.0",
+#     'anyio>=4.15.1',
+#     'httpx>=0.28.1',
+#     'mcp[cli]>=2.3.0',
 # ]
 # ///
 
@@ -58,8 +58,8 @@ async def generate_image(
     """Generate an image from descriptive tags.
 
     Args:
-        tags: Descriptive keywords (e.g. ['cat', 'sunny room']).
-        negative_tags: Elements to avoid (e.g. ['blurry']).
+        tags: Descriptive keywords (for example, ['cat', 'sunny room']).
+        negative_tags: Elements to avoid (for example, ['blurry']).
         size: Output image dimensions.
 
     Returns:

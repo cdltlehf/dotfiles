@@ -8,7 +8,7 @@ How does this repository provide a consistent environment across different users
 
 ## Decision Outcome
 
-Chosen option: "Isolate personal identity and local overrides outside the repository, follow standard directory specifications, and discover local resources dynamically", because any user can clone and run the repository without modification, and no private data leaks into revision control.
+Chosen option: "Isolate personal identity and local overrides outside the repository, follow standard directory specifications, and discover local resources dynamically," because any user can clone and run the repository without modification, and no private data leaks into revision control.
 
 * All paths adhere to the [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/latest/) and standard POSIX environment variables, avoiding hardcoded user names, user identifiers, or absolute home directory paths.
 * Tracked configurations link into `XDG_CONFIG_HOME`, while personal identities, credentials, and machine-local overrides reside outside the repository in `$HOME/.<tool>.local` (such as `~/.gitconfig.local` and `~/.profile.local`) so that local changes cannot be committed by mistake.
