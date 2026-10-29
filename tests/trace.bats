@@ -83,11 +83,11 @@ assert_subsequence() {
   fi
 
   local expected="${HOME}/.local/bin"
-  if [[ -n "${brew_prefix}" ]]; then
-    expected="${expected}:${brew_prefix}/bin"
-  fi
   if [[ -d "${HOME}/.local/share/mise/shims" ]]; then
     expected="${expected}:${HOME}/.local/share/mise/shims"
+  fi
+  if [[ -n "${brew_prefix}" ]]; then
+    expected="${expected}:${brew_prefix}/bin"
   fi
   expected="${expected}:/usr/bin"
 
@@ -103,11 +103,11 @@ assert_subsequence() {
   fi
 
   local expected="${HOME}/.local/bin"
-  if [[ -n "${brew_prefix}" ]]; then
-    expected="${expected}:${brew_prefix}/bin"
-  fi
   if [[ -d "${HOME}/.local/share/mise/shims" ]]; then
     expected="${expected}:${HOME}/.local/share/mise/shims"
+  fi
+  if [[ -n "${brew_prefix}" ]]; then
+    expected="${expected}:${brew_prefix}/bin"
   fi
   expected="${expected}:/usr/bin"
 
