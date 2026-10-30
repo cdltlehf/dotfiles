@@ -1,27 +1,14 @@
 # Reference: https://github.com/tmux/tmux/wiki/Advanced-Use-Cases
 
-# C-a to disable outmost tmux, C-b C-a to enable it.
-%if "#{==:$LC_TERMINAL_GLYPHS,ascii}"
 bind-key D \
   set-option key-table disabled\; \
   set-option prefix None\; \
   \
   set-option status-style "bg=default,fg=brightblack,none"\; \
-  set-option status-left "#[fg=brightblack]#{session_id}:#{session_name} . disabled#{?#{==:#{client_key_table},enable_pending}, . #[fg=terminal]prefix#[fg=brightblack],}"\; \
+  set-option status-left "#[fg=brightblack]#{E:@disabled_session_label} #{@separator} disabled#{?#{==:#{client_key_table},enable_pending}, #{@separator} #[fg=default]prefix#[fg=brightblack],}"\; \
   set-option status-right "#[fg=brightblack]Press C-b C-b to enable"\; \
   set-option window-status-current-style "bg=default,fg=brightblack,none"\; \
   set-option window-status-style "bg=default,fg=brightblack,none"
-%else
-bind-key D \
-  set-option key-table disabled\; \
-  set-option prefix None\; \
-  \
-  set-option status-style "bg=default,fg=brightblack,none"\; \
-  set-option status-left "#[fg=brightblack]#{session_id}:#{session_name} · disabled#{?#{==:#{client_key_table},enable_pending}, · #[fg=terminal]prefix#[fg=brightblack],}"\; \
-  set-option status-right "#[fg=brightblack]Press C-b C-b to enable"\; \
-  set-option window-status-current-style "bg=default,fg=brightblack,none"\; \
-  set-option window-status-style "bg=default,fg=brightblack,none"
-%endif
 
 bind-key -T disabled C-b \
   set-option key-table enable_pending
