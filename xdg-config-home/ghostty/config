@@ -1,7 +1,6 @@
 # Reference: https://ghostty.org/docs/config/reference
 # Reference: https://juliamono.netlify.app/glyphs/
 
-# window-colorspace = display-p3
 adjust-cell-height = 20%
 auto-update = off
 background-blur = macos-glass-regular
@@ -24,48 +23,28 @@ font-family-bold = "JetBrains Mono"
 font-family-bold = "Symbols Nerd Font"
 font-family-bold = "Pretendard GOV"
 font-family-bold = "JuliaMono"
-font-style-bold = "ExtraBold"
-# TODO: Decide whether JetBrains Mono Italic replaces Victor Mono, whose
-# heaviest italic (Bold) is lighter than the ExtraBold of the other styles.
+font-style-bold = "Bold"
 font-family-italic = "Victor Mono"
 font-family-bold-italic = "Victor Mono"
 font-style-italic = "Medium Italic"
 font-style-bold-italic = "Bold Italic"
 
-# Comprehensive Mathematical & Technical Unicode blocks for JuliaMono
-# Greek and Coptic
 font-codepoint-map = U+0370-U+03FF=JuliaMono
-# Superscripts and Subscripts
 font-codepoint-map = U+2070-U+209F=JuliaMono
-# Letterlike Symbols
 font-codepoint-map = U+2100-U+214F=JuliaMono
-# Number Forms
 font-codepoint-map = U+2150-U+218F=JuliaMono
-# Arrows
 font-codepoint-map = U+2190-U+21FF=JuliaMono
-# Mathematical Operators
 font-codepoint-map = U+2200-U+22FF=JuliaMono
-# Miscellaneous Technical
 font-codepoint-map = U+2300-U+23FF=JuliaMono
-# Enclosed Alphanumerics
 font-codepoint-map = U+2460-U+24FF=JuliaMono
-# Geometric Shapes
 font-codepoint-map = U+25A0-U+25FF=JuliaMono
-# Miscellaneous Mathematical Symbols-A
 font-codepoint-map = U+27C0-U+27EF=JuliaMono
-# Supplemental Arrows-A
 font-codepoint-map = U+27F0-U+27FF=JuliaMono
-# Braille Patterns
 font-codepoint-map = U+2800-U+28FF=JuliaMono
-# Supplemental Arrows-B
 font-codepoint-map = U+2900-U+297F=JuliaMono
-# Miscellaneous Mathematical Symbols-B
 font-codepoint-map = U+2980-U+29FF=JuliaMono
-# Supplemental Mathematical Operators
 font-codepoint-map = U+2A00-U+2AFF=JuliaMono
-# Miscellaneous Symbols and Arrows
 font-codepoint-map = U+2B00-U+2BFF=JuliaMono
-# Mathematical Alphanumeric Symbols
 font-codepoint-map = U+1D400-U+1D7FF=JuliaMono
 
 env = LC_TERMINAL_GLYPHS=nerdfont
