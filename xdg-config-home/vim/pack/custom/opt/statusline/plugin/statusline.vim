@@ -61,7 +61,7 @@ function! s:format_smart_path(raw_path) abort
     endif
   else
     let l:full_path = fnamemodify(a:raw_path, ':~:.')
-    let l:is_home = l:full_path =~# '^~/'
+    let l:is_home = l:full_path =~# '^\~/'
     let l:parts = split(l:is_home ? strpart(l:full_path, 2) : l:full_path, '/')
     if len(l:parts) > 2
       return printf('%s%s/%s/%s', l:is_home ? '~/' : '/', l:ellipsis, l:parts[-2], l:parts[-1])
