@@ -60,14 +60,12 @@ esac
 MODELS_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}/models/${DEST}"
 mkdir -p "${MODELS_DIR}"
 
-TARGET_DIR="${MODELS_DIR}"
-
-printf "Downloading from %s (%s) into %s ...\n" "${REPO}" "${PATTERN:-*.*}" "${TARGET_DIR}"
+printf "Downloading from %s (%s) into %s ...\n" "${REPO}" "${PATTERN:-*.*}" "${MODELS_DIR}"
 
 if [ -n "${PATTERN}" ]; then
   # shellcheck disable=SC2086
-  ${HF_CMD} "${REPO}" --include "${PATTERN}" --local-dir "${TARGET_DIR}"
+  ${HF_CMD} "${REPO}" --include "${PATTERN}" --local-dir "${MODELS_DIR}"
 else
   # shellcheck disable=SC2086
-  ${HF_CMD} "${REPO}" --local-dir "${TARGET_DIR}"
+  ${HF_CMD} "${REPO}" --local-dir "${MODELS_DIR}"
 fi

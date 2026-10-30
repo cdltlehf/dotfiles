@@ -4,48 +4,36 @@
 
 __prompt_pretty_path() {
   local git_root="$1"
-  local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
   local ellipsis="..."
-  [[ "${glyphs}" != "ascii" ]] && ellipsis="…"
+  [[ "${LC_TERMINAL_GLYPHS:-ascii}" != "ascii" ]] && ellipsis="…"
 
-  local subpath
+  local prefix subpath
   if [[ -n "${git_root}" ]]; then
-    local repo_name="${git_root##*/}"
+    prefix="${git_root##*/}"
     subpath="${PWD#"${git_root}"}"
     subpath="${subpath#/}"
     if [[ -z "${subpath}" ]]; then
-      printf "%s" "${repo_name}"
-    else
-      IFS='/' read -r -a parts <<<"${subpath}"
-      local len=${#parts[@]}
-      if [[ ${len} -gt 2 ]]; then
-        printf "%s/%s/%s/%s" "${repo_name}" "${ellipsis}" "${parts[len - 2]}" "${parts[len - 1]}"
-      else
-        printf "%s/%s" "${repo_name}" "${subpath}"
-      fi
+      printf "%s" "${prefix}"
+      return
     fi
+  elif [[ "${PWD}" == "${HOME}" ]]; then
+    printf "%s" "${HOME}"
+    return
+  elif [[ "${PWD}" == "${HOME}"/* ]]; then
+    prefix="~"
+    subpath="${PWD#"${HOME}"/}"
   else
-    if [[ "${PWD}" == "${HOME}" ]]; then
-      printf "%s" "${HOME}"
-    elif [[ "${PWD}" == "${HOME}"/* ]]; then
-      local home_subpath="${PWD#"${HOME}"/}"
-      IFS='/' read -r -a parts <<<"${home_subpath}"
-      local len=${#parts[@]}
-      if [[ ${len} -gt 2 ]]; then
-        printf "%s/%s/%s/%s" "~" "${ellipsis}" "${parts[len - 2]}" "${parts[len - 1]}"
-      else
-        printf "%s/%s" "~" "${home_subpath}"
-      fi
-    else
-      local sys_subpath="${PWD#/}"
-      IFS='/' read -r -a parts <<<"${sys_subpath}"
-      local len=${#parts[@]}
-      if [[ ${len} -gt 2 ]]; then
-        printf "/%s/%s/%s" "${ellipsis}" "${parts[len - 2]}" "${parts[len - 1]}"
-      else
-        printf "%s" "${PWD}"
-      fi
-    fi
+    prefix=""
+    subpath="${PWD#/}"
+  fi
+
+  local -a parts
+  IFS='/' read -r -a parts <<<"${subpath}"
+  local len=${#parts[@]}
+  if [[ ${len} -gt 2 ]]; then
+    printf "%s/%s/%s/%s" "${prefix}" "${ellipsis}" "${parts[len - 2]}" "${parts[len - 1]}"
+  else
+    printf "%s/%s" "${prefix}" "${subpath}"
   fi
 }
 
@@ -57,18 +45,18 @@ __prompt_command() {
   local err_icon="!"
   local job_icon="&"
   local host_icon="@"
-  local prompt_char="> "
+  local prompt_symbol=">"
   if [[ "${glyphs}" != "ascii" ]]; then
     sep="\[\e[90m\] · \[\e[0m\]"
   fi
   if [[ "${glyphs}" == "unicode" ]]; then
     err_icon="×"
-    prompt_char="› "
+    prompt_symbol="›"
   elif [[ "${glyphs}" == "nerdfont" ]]; then
     err_icon=""
     job_icon=""
     host_icon=" "
-    prompt_char=" "
+    prompt_symbol=""
   fi
 
   local git_root
@@ -94,49 +82,36 @@ __prompt_command() {
   local osc_b=$'\[\e]133;B\a\]'
   PS1=$'\n'"${osc_a}"
 
-  # Username (only when root/sudo)
   if [[ "${USER}" == "root" ]]; then
     PS1+="\[\e[31m\]\u\[\e[0m\]${sep}"
   fi
-
-  # Smart path
   PS1+="\[\e[34m\]$(__prompt_pretty_path "${git_root}")\[\e[0m\]"
-
-  # Git prompt
-  if [[ -n "${git_part}" ]]; then
-    PS1+="${git_part}"
-  fi
-
-  # Environment
+  PS1+="${git_part}"
   if [[ -n "${VIRTUAL_ENV}" ]]; then
     PS1+="${sep}\[\e[90m\]${VIRTUAL_ENV##*/}\[\e[0m\]"
   fi
-
-  # Background jobs
-  if [[ -n "${jobs_part}" ]]; then
-    PS1+="${jobs_part}"
-  fi
-
-  # Remote host (only on SSH, before timestamp)
+  PS1+="${jobs_part}"
   if [[ -n "${SSH_TTY}" ]]; then
     PS1+="${sep}\[\e[90m\]${host_icon}\h\[\e[0m\]"
   fi
-
-  # Timestamp
   PS1+="${sep}\[\e[90m\]\t\[\e[0m\]\n"
 
-  # Return with error code on 2nd line if failed
   if [[ "${exit_code}" -ne 0 ]]; then
     PS1+="\[\e[31m\]${err_icon} ${exit_code} \[\e[0m\]"
   fi
   if [[ "${USER}" == "root" ]]; then
-    PS1+="# "
-  else
-    PS1+="${prompt_char}"
+    prompt_symbol="#"
   fi
-  PS1+="${osc_b}"
+  local count=$((SHLVL - ${__LOGIN_SHLVL:-${SHLVL}} + 1))
+  if ((count < 1)); then
+    PS1+="?"
+    count=1
+  fi
+  for (( ; count > 0; count--)); do
+    PS1+="${prompt_symbol}"
+  done
+  PS1+=" ${osc_b}"
 
-  # Continued prompt & command start marker
   PS0=$'\[\e]133;C\a\]'
   PS2=$'\[\e]133;A;k=s\a\]\[\e[90m\]> \[\e[0m\]\[\e]133;B\a\]'
 }

@@ -11,4 +11,4 @@ COPY . .
 
 RUN make
 RUN make doctor
-RUN make test
+RUN make check

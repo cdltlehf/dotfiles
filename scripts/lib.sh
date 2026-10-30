@@ -4,21 +4,8 @@
 # Reference: https://no-color.org/
 # Reference: https://protesilaos.com/emacs/modus-themes-colors
 
-_scripts_base_dir="${BASE_DIR:-}"
-if [ -z "${_scripts_base_dir}" ]; then
-  if [ -f "./xdg-config-home/sh/lib.sh" ]; then
-    _scripts_base_dir="$(pwd)"
-  elif [ -f "../xdg-config-home/sh/lib.sh" ]; then
-    _scripts_base_dir="$(cd .. && pwd)"
-  else
-    _scripts_base_dir="$(cd "$(dirname "$0")/.." && pwd)"
-  fi
-fi
 # shellcheck source=xdg-config-home/sh/lib.sh
-if [ -f "${_scripts_base_dir}/xdg-config-home/sh/lib.sh" ]; then
-  . "${_scripts_base_dir}/xdg-config-home/sh/lib.sh"
-fi
-unset _scripts_base_dir
+. "${BASE_DIR:?}/xdg-config-home/sh/lib.sh"
 
 _c_red=''
 _c_yellow=''
@@ -88,18 +75,12 @@ detect_arch() {
 }
 
 run_hook() {
-  _phase="$1"
-  _base_dir="${BASE_DIR:-}"
-  _os="${OS:-$(detect_os)}"
-
-  if [ -n "${_base_dir}" ] && [ -n "${_os}" ]; then
-    if [ -f "${_base_dir}/platforms/${_os}/${_phase}.sh" ]; then
-      # shellcheck source=/dev/null
-      . "${_base_dir}/platforms/${_os}/${_phase}.sh"
-    fi
+  _hook="${BASE_DIR}/platforms/${OS:-$(detect_os)}/$1.sh"
+  if [ -f "${_hook}" ]; then
+    # shellcheck source=/dev/null
+    . "${_hook}"
   fi
-
-  unset _phase _base_dir _os
+  unset _hook
 }
 
 symlink() {
@@ -108,15 +89,13 @@ symlink() {
   if [ -n "${__DOTFILES_LINKS:-}" ]; then
     printf '%s\t%s\n' "${_src}" "${_dest}" >>"${__DOTFILES_LINKS}"
   fi
-  if [ "$(readlink "${_dest}" 2>/dev/null || true)" = "${_src}" ]; then
-    unset _src _dest
-    return 0
+  if [ "$(readlink "${_dest}" 2>/dev/null || true)" != "${_src}" ]; then
+    if [ -e "${_dest}" ] || [ -L "${_dest}" ]; then
+      mv -f "${_dest}" "${_dest}.$(date +%Y%m%d%H%M%S || true).bak"
+    fi
+    mkdir -p "$(dirname "${_dest}")"
+    ln -s "${_src}" "${_dest}"
   fi
-  if [ -e "${_dest}" ] || [ -L "${_dest}" ]; then
-    mv -f "${_dest}" "${_dest}.$(date +%Y%m%d%H%M%S || true).bak"
-  fi
-  mkdir -p "$(dirname "${_dest}")"
-  ln -s "${_src}" "${_dest}"
   unset _src _dest
 }
 
@@ -124,38 +103,35 @@ download() {
   _url="$1"
   _dest="${2:--}"
   _mode="${3:-}"
+  _out="-"
+  _failure=""
 
   if [ "${_dest}" != "-" ]; then
-    if [ -e "${_dest}" ]; then
-      unset _url _dest _mode
+    if [ -n "${__DOTFILES_DOWNLOADS:-}" ]; then
+      printf '%s\t%s\t%s\n' "${_url}" "${_dest}" "${_mode}" >>"${__DOTFILES_DOWNLOADS}"
+    fi
+    if [ -e "${_dest}" ] && [ -z "${__DOTFILES_REFRESH:-}" ]; then
+      unset _url _dest _mode _out _failure
       return 0
     fi
     mkdir -p "$(dirname "${_dest}")"
+    _out="${_dest}.tmp"
   fi
 
   if command -v curl >/dev/null; then
-    if ! curl -fsSL "${_url}" -o "${_dest}"; then
-      warning "Failed to download ${_url}"
-      [ "${_dest}" = "-" ] || rm -f "${_dest}"
-      unset _url _dest _mode
-      return 0
-    fi
+    curl -fsSL "${_url}" -o "${_out}" || _failure="Failed to download ${_url}"
   elif command -v wget >/dev/null; then
-    if ! wget -q -O "${_dest}" "${_url}"; then
-      warning "Failed to download ${_url}"
-      [ "${_dest}" = "-" ] || rm -f "${_dest}"
-      unset _url _dest _mode
-      return 0
-    fi
+    wget -q -O "${_out}" "${_url}" || _failure="Failed to download ${_url}"
   else
-    warning "Neither curl nor wget is available to download ${_url}"
-    [ "${_dest}" = "-" ] || rm -f "${_dest}"
-    unset _url _dest _mode
-    return 0
+    _failure="Neither curl nor wget is available to download ${_url}"
   fi
 
-  if [ "${_dest}" != "-" ] && [ -n "${_mode}" ]; then
-    chmod "${_mode}" "${_dest}"
+  if [ -n "${_failure}" ]; then
+    warning "${_failure}"
+    [ "${_out}" = "-" ] || rm -f "${_out}"
+  elif [ "${_out}" != "-" ]; then
+    [ -z "${_mode}" ] || chmod "${_mode}" "${_out}"
+    mv -f "${_out}" "${_dest}"
   fi
-  unset _url _dest _mode
+  unset _url _dest _mode _out _failure
 }

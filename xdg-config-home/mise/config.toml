@@ -1,8 +1,5 @@
 # Reference: https://mise.jdx.dev/configuration.html
 
-# The command-line tools of every platform. Homebrew keeps the tools that
-# mise does not provide.
-
 [tools]
 "aqua:mattn/efm-langserver" = "0.0.57"
 "aqua:tmux/tmux-builds" = "3.7c"

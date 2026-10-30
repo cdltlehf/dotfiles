@@ -10,18 +10,12 @@ function! TabLine() abort
     return BufferLine()
   else
     let l:s = ''
-    let l:tabls = range(1, tabpagenr('$'))
-
-    for l:i in l:tabls
-
-      let l:bufname = l:i
-
+    for l:i in range(1, tabpagenr('$'))
       if l:i != tabpagenr()
         let l:s .= '%#TabLine# ' . l:i . ' '
       else
         let l:s .= '%#TabLineSelNr# ' . l:i . ' '
       endif
-
     endfor
 
     let l:s .= '%#TabLineFill#'
@@ -31,15 +25,12 @@ endfunction
 
 function! BufferLine() abort
   let l:s = ''
-  let l:bufls = filter(range(1, bufnr('$')), 'buflisted(v:val)')
-
-  for l:i in l:bufls
-
+  for l:i in filter(range(1, bufnr('$')), 'buflisted(v:val)')
     let l:bufname = bufname(l:i)
     if empty(l:bufname)
       let l:bufname = '[No Name]'
     else
-      let l:bufname = fnamemodify(bufname(l:i), ":p:~:.")
+      let l:bufname = fnamemodify(l:bufname, ":p:~:.")
       let l:bufname = substitute(
             \ l:bufname, '\(\.[^/]\|[^/]\)[^/]*/', '\1/', 'g')
       if l:i != bufnr('%')

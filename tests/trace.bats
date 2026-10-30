@@ -8,9 +8,6 @@ setup() {
   export TRACE_SCRIPT="${BATS_TEST_DIRNAME:-.}/../scripts/trace"
 }
 
-# Asserts that the first colon-separated list contains the second colon-separated list
-# as a subsequence. Subsequence matching is required because machine-specific directories
-# and system files vary, whereas the dotfiles ordering contract MUST remain invariant.
 assert_subsequence() {
   local -a actual wanted
   IFS=":" read -ra actual <<<"$1"
@@ -21,6 +18,22 @@ assert_subsequence() {
     [[ $# -eq 0 ]] && break
   done
   [[ $# -eq 0 ]]
+}
+
+expected_path() {
+  local brew_prefix="${HOMEBREW_PREFIX:-}"
+  if [[ -z "${brew_prefix}" ]] && command -v brew >/dev/null 2>&1; then
+    brew_prefix="$(brew --prefix)"
+  fi
+
+  local expected="${HOME}/.local/bin"
+  if [[ -d "${HOME}/.local/share/mise/shims" ]]; then
+    expected="${expected}:${HOME}/.local/share/mise/shims"
+  fi
+  if [[ -n "${brew_prefix}" ]]; then
+    expected="${expected}:${brew_prefix}/bin"
+  fi
+  printf '%s\n' "${expected}:/usr/bin"
 }
 
 @test "trace: bash login" {
@@ -77,40 +90,16 @@ assert_subsequence() {
 }
 
 @test "trace: bash path" {
-  local brew_prefix="${HOMEBREW_PREFIX:-}"
-  if [[ -z "${brew_prefix}" ]] && command -v brew >/dev/null 2>&1; then
-    brew_prefix="$(brew --prefix)"
-  fi
-
-  local expected="${HOME}/.local/bin"
-  if [[ -d "${HOME}/.local/share/mise/shims" ]]; then
-    expected="${expected}:${HOME}/.local/share/mise/shims"
-  fi
-  if [[ -n "${brew_prefix}" ]]; then
-    expected="${expected}:${brew_prefix}/bin"
-  fi
-  expected="${expected}:/usr/bin"
-
+  local expected
+  expected="$(expected_path)"
   local path_out
   path_out="$(bash -l -c 'echo "${PATH}"')"
   assert_subsequence "${path_out}" "${expected}"
 }
 
 @test "trace: zsh path" {
-  local brew_prefix="${HOMEBREW_PREFIX:-}"
-  if [[ -z "${brew_prefix}" ]] && command -v brew >/dev/null 2>&1; then
-    brew_prefix="$(brew --prefix)"
-  fi
-
-  local expected="${HOME}/.local/bin"
-  if [[ -d "${HOME}/.local/share/mise/shims" ]]; then
-    expected="${expected}:${HOME}/.local/share/mise/shims"
-  fi
-  if [[ -n "${brew_prefix}" ]]; then
-    expected="${expected}:${brew_prefix}/bin"
-  fi
-  expected="${expected}:/usr/bin"
-
+  local expected
+  expected="$(expected_path)"
   local path_out
   path_out="$(zsh -l -c 'echo "${PATH}"')"
   assert_subsequence "${path_out}" "${expected}"

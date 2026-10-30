@@ -13,7 +13,6 @@ Ligatures=2
 Locale=ko_KR
 Charset=UTF-8
 
-# Modus Vivendi (Dark) ANSI 16 Palette
 ForegroundColour=255,255,255
 BackgroundColour=0,0,0
 CursorColour=255,255,255

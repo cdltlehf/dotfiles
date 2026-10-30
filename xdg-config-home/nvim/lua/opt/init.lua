@@ -40,7 +40,6 @@ if glyphs == "ascii" then
     foldopen = "-",
     foldclose = "+",
   })
-elseif glyphs == "unicode" then
 elseif glyphs == "nerdfont" then
   opt.fillchars:append({ foldopen = "", foldclose = "" })
 end

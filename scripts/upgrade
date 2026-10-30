@@ -31,16 +31,34 @@ if command -v mise >/dev/null; then
   mise upgrade --bump
 fi
 
+prek_update_projection() {
+  _dir="$(mktemp -d)"
+  _config="${_dir}/prek.toml"
+  sed -e 's/{open}/{/g' -e 's/{close}/}/g' "$1" >"${_config}"
+  prek update -c "${_config}"
+  sed -e 's/{/@OPEN@/g' -e 's/}/@CLOSE@/g' \
+    -e 's/@OPEN@/{open}/g' -e 's/@CLOSE@/{close}/g' "${_config}" >"$1"
+  rm -rf "${_dir}"
+}
+
 if command -v prek >/dev/null; then
   prek update
-  # TODO: Also update xdg-templates-dir/prek.toml and
-  # xdg-templates-dir/python/prek.toml.tmpl, which this leaves behind.
+  prek update -c "${BASE_DIR}/xdg-templates-dir/prek.toml"
+  prek_update_projection "${BASE_DIR}/xdg-templates-dir/python/prek.toml.tmpl"
 fi
 
 if command -v nvim >/dev/null; then
   nvim --headless \
     -c "lua vim.pack.update(nil, { force = true })" \
     -c "qall!"
+fi
+
+readonly DOWNLOADS="${XDG_STATE_HOME:-${HOME}/.local/state}/dotfiles/downloads"
+if [ -f "${DOWNLOADS}" ]; then
+  tab="$(printf '\t')"
+  while IFS="${tab}" read -r url dest mode; do
+    __DOTFILES_REFRESH=1 download "${url}" "${dest}" "${mode}"
+  done <"${DOWNLOADS}"
 fi
 
 run_hook post-upgrade

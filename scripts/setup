@@ -55,19 +55,22 @@ OS="$(detect_os)"
 ARCH="$(detect_arch)"
 export OS ARCH
 readonly OS ARCH
-mkdir -p "${XDG_DATA_HOME}"
-mkdir -p "${XDG_CONFIG_HOME}"
-mkdir -p "${XDG_STATE_HOME}"
-mkdir -p "${XDG_CACHE_HOME}"
-mkdir -p "${BIN_DIR}"
-mkdir -p "${XDG_DATA_HOME}/models/responses"
-mkdir -p "${XDG_DATA_HOME}/models/embeddings"
-mkdir -p "${XDG_DATA_HOME}/models/audio"
-mkdir -p "${XDG_DATA_HOME}/models/images"
+mkdir -p \
+  "${XDG_DATA_HOME}" \
+  "${XDG_CONFIG_HOME}" \
+  "${XDG_STATE_HOME}" \
+  "${XDG_CACHE_HOME}" \
+  "${BIN_DIR}" \
+  "${XDG_DATA_HOME}/models/responses" \
+  "${XDG_DATA_HOME}/models/embeddings" \
+  "${XDG_DATA_HOME}/models/audio" \
+  "${XDG_DATA_HOME}/models/images" \
+  "${XDG_STATE_HOME}/dotfiles"
 
-mkdir -p "${XDG_STATE_HOME}/dotfiles"
 export __DOTFILES_LINKS="${XDG_STATE_HOME}/dotfiles/links"
 : >"${__DOTFILES_LINKS}"
+export __DOTFILES_DOWNLOADS="${XDG_STATE_HOME}/dotfiles/downloads"
+: >"${__DOTFILES_DOWNLOADS}"
 
 run_hook pre-setup
 
@@ -75,20 +78,16 @@ for item in "${BASE_DIR}/xdg-config-home"/*; do
   [ -e "${item}" ] || continue
   symlink "${item}" "${XDG_CONFIG_HOME}/$(basename "${item}")"
 done
-unset item
 
 # shellcheck source=/dev/null
 [ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ] && . "${XDG_CONFIG_HOME}/user-dirs.dirs"
 : "${XDG_TEMPLATES_DIR:="${HOME}/Templates"}"
 export XDG_TEMPLATES_DIR
 
-# These shells read only fixed paths in $HOME.
-# Revisit each link when its shell reads XDG_CONFIG_HOME.
 symlink "${XDG_CONFIG_HOME}/sh/dot_profile" "${HOME}/.profile"
 symlink "${XDG_CONFIG_HOME}/bash/dot_bash_profile" "${HOME}/.bash_profile"
 symlink "${XDG_CONFIG_HOME}/bash/dot_bashrc" "${HOME}/.bashrc"
 symlink "${XDG_CONFIG_HOME}/zsh/dot_zshenv" "${HOME}/.zshenv"
-# The existence of "${XDG_CONFIG_HOME}/zsh/.z{shrc,zprofile}" is guaranteed by the above symlink command.
 symlink "dot_zprofile" "${XDG_CONFIG_HOME}/zsh/.zprofile"
 symlink "dot_zshrc" "${XDG_CONFIG_HOME}/zsh/.zshrc"
 
@@ -96,7 +95,6 @@ for script in "${BASE_DIR}/bin"/*; do
   [ -e "${script}" ] || continue
   symlink "${script}" "${BIN_DIR}/$(basename "${script}")"
 done
-unset script
 
 download "${BOLD_ITALICS_URL}" "${BIN_DIR}/bold-italics" "+x"
 download "${COLOR_256_URL}" "${BIN_DIR}/256colors2" "+x"
@@ -122,7 +120,6 @@ readonly MADR_FILES=".markdownlint.yml \
 for file in ${MADR_FILES}; do
   download "${MADR_TEMPLATE_URL}/${file}" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/${file}"
 done
-unset file
 symlink "adr-template-minimal.md" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/{}.md"
 symlink "{}.h.tmpl" "${BASE_DIR}/xdg-templates-dir/c/include/{}.hpp.tmpl"
 
@@ -137,13 +134,7 @@ for item in "${BASE_DIR}/xdg-templates-dir"/*; do
   esac
   symlink "${item}" "${XDG_TEMPLATES_DIR}/${name}"
 done
-unset item name
 
-# Agents read their global instructions only from fixed paths in $HOME.
-# Link them to one tracked file, so that a tool writing into them shows up
-# in `git diff`. Moving the whole directory with a variable such as
-# CODEX_HOME would also move data, state, and cache into XDG_CONFIG_HOME.
-# Revisit each link when its agent separates configuration from data.
 if command -v claude >/dev/null; then
   symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.claude/CLAUDE.md"
 fi
@@ -165,12 +156,9 @@ fi
 
 if ! command -v mise >/dev/null; then
   tmpdir="$(mktemp -d)"
-  if [ -n "${tmpdir}" ] && [ -d "${tmpdir}" ]; then
-    download "${MISE_INSTALL_URL}" "${tmpdir}/install.sh"
-    sh "${tmpdir}/install.sh" 2>/dev/null || true
-    rm -rf "${tmpdir}"
-  fi
-  unset tmpdir
+  download "${MISE_INSTALL_URL}" >"${tmpdir}/install.sh"
+  sh "${tmpdir}/install.sh" 2>/dev/null || true
+  rm -rf "${tmpdir}"
 fi
 
 zsh_completion() {

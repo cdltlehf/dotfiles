@@ -1,5 +1,3 @@
--- Reports the language servers whose command is not executable.
-
 vim.opt.rtp:prepend(vim.fn.stdpath("config"))
 
 local missing = {}

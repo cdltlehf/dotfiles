@@ -5,26 +5,19 @@ if exists('g:loaded_sensible') || &compatible
 endif
 let g:loaded_sensible = 1
 
-" 1. Filetype detection
-" 2. Using filetype plugin files
-" 3. Using indent files
 if has('autocmd')
   filetype plugin indent on
 endif
 
-" source $VIMRUNTIME/syntax/syntax.vim
 if has('syntax') && !exists('g:syntax_on')
   syntax enable
 endif
 
 set autoindent
 set backspace=indent,eol,start
-" i: scan current and included files
 set complete-=i
 set smarttab
 
-" octal: If included, numbers starting with a zero
-" will be considered to be octal
 set nrformats-=octal
 
 set incsearch
@@ -42,8 +35,6 @@ if !&sidescrolloff
   set sidescrolloff=5
 endif
 
-" lastline: When included as much as possible of the last line
-" in a window will be displayed
 set display+=lastline
 
 if &encoding==# 'latin1' && has('gui_running')
@@ -55,7 +46,6 @@ if &listchars ==# 'eol:$'
 endif
 
 if v:version > 703 || v:version ==# 703 && has("patch541")
-  " Delete comment character when joining commented lines
   set formatoptions+=j
 endif
 

@@ -7,7 +7,6 @@ config.set_environment_variables = {
   LC_TERMINAL_GLYPHS = "nerdfont",
 }
 
--- OSX liquid glass material thick
 config.window_background_opacity = 0.9
 config.macos_window_background_blur = 999
 config.hide_tab_bar_if_only_one_tab = true
@@ -27,7 +26,6 @@ config.color_scheme_dirs = {
   os.getenv("HOME") .. "/.local/state/wezterm/colorschemes",
 }
 
-config.automatically_reload_config = true
 local colors_path = os.getenv("HOME") .. "/.local/state/wezterm/colorschemes/colors.toml"
 wezterm.add_to_config_reload_watch_list(colors_path)
 local f = io.open(colors_path, "r")

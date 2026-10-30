@@ -48,7 +48,7 @@ set smarttab
 set nostartofline
 if has('nvim') | set switchbuf=uselast | endif
 set tabpagemax=50
-set tags=./tags;,tags " :help file-searching
+set tags=./tags;,tags
 set ttimeoutlen=50
 if has('persistent_undo') | set undodir=~/.local/state/vim/undo | endif
 if has('mksession') | set viewoptions+=unix,slash viewoptions-=options | endif
@@ -64,15 +64,12 @@ if !isdirectory(&directory) | call mkdir(&directory, 'p') | endif
 if !isdirectory(&undodir) | call mkdir(&undodir, 'p') | endif
 
 nnoremap Y y$
-" :help <cmd>
 nnoremap <c-l> <cmd>nohlsearch<bar>diffupdate<bar>normal! <c-l><cr>
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
-" :help /\V
 xnoremap * y/\V<c-r>"<cr>
 xnoremap # y?\V<c-r>"<cr>
 nnoremap & :&&<cr>
 
-" In nvim, `Q` replays the last recorded macro.
 nnoremap Q @@
 nnoremap gQ Q

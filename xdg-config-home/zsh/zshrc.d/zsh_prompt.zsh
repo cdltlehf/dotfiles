@@ -6,75 +6,68 @@ ZLE_RPROMPT_INDENT=0
 
 __prompt_pretty_path() {
   local git_root="$1"
-  local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
   local ellipsis="..."
-  [[ "${glyphs}" != "ascii" ]] && ellipsis="…"
+  [[ "${LC_TERMINAL_GLYPHS:-ascii}" != "ascii" ]] && ellipsis="…"
 
-  local subpath
+  local prefix subpath
   if [[ -n "${git_root}" ]]; then
-    local repo_name="${git_root:t}"
+    prefix="${git_root:t}"
     subpath="${PWD#${git_root}}"
     subpath="${subpath#/}"
     if [[ -z "${subpath}" ]]; then
-      print -n "${repo_name}"
-    else
-      local -a parts=(${(s:/:)subpath})
-      if ((${#parts} > 2)); then
-        print -n "${repo_name}/${ellipsis}/${parts[-2]}/${parts[-1]}"
-      else
-        print -n "${repo_name}/${subpath}"
-      fi
+      print -n "${prefix}"
+      return
     fi
+  elif [[ "${PWD}" == "${HOME}" ]]; then
+    print -n "${HOME}"
+    return
+  elif [[ "${PWD}" == "${HOME}"/* ]]; then
+    prefix="~"
+    subpath="${PWD#${HOME}/}"
   else
-    if [[ "${PWD}" == "${HOME}" ]]; then
-      print -n "${HOME}"
-    elif [[ "${PWD}" == "${HOME}"/* ]]; then
-      local home_subpath="${PWD#${HOME}/}"
-      local -a parts=(${(s:/:)home_subpath})
-      if ((${#parts} > 2)); then
-        print -n "~/${ellipsis}/${parts[-2]}/${parts[-1]}"
-      else
-        print -n "~/${home_subpath}"
-      fi
-    else
-      local sys_subpath="${PWD#/}"
-      local -a parts=(${(s:/:)sys_subpath})
-      if ((${#parts} > 2)); then
-        print -n "/${ellipsis}/${parts[-2]}/${parts[-1]}"
-      else
-        print -n "${PWD}"
-      fi
-    fi
+    prefix=""
+    subpath="${PWD#/}"
+  fi
+
+  local -a parts=(${(s:/:)subpath})
+  if ((${#parts} > 2)); then
+    print -n "${prefix}/${ellipsis}/${parts[-2]}/${parts[-1]}"
+  else
+    print -n "${prefix}/${subpath}"
   fi
 }
 
 __prompt_char() {
   local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
+  local symbol
   if [[ "${USER}" == "root" ]]; then
-    print -n "# "
-    return
+    symbol="#"
+  else
+    case ${KEYMAP} in
+    vicmd | viopp)
+      case "${glyphs}" in
+      unicode) symbol="‹" ;;
+      nerdfont) symbol="" ;;
+      *) symbol="<" ;;
+      esac
+      ;;
+    *)
+      case "${glyphs}" in
+      unicode) symbol="›" ;;
+      nerdfont) symbol="" ;;
+      *) symbol=">" ;;
+      esac
+      ;;
+    esac
   fi
 
-  case ${KEYMAP} in
-  vicmd | viopp)
-    if [[ "${glyphs}" == "unicode" ]]; then
-      print -n "‹ "
-    elif [[ "${glyphs}" == "nerdfont" ]]; then
-      print -n " "
-    else
-      print -n "< "
-    fi
-    ;;
-  *)
-    if [[ "${glyphs}" == "unicode" ]]; then
-      print -n "› "
-    elif [[ "${glyphs}" == "nerdfont" ]]; then
-      print -n " "
-    else
-      print -n "> "
-    fi
-    ;;
-  esac
+  local count=$((SHLVL - ${__LOGIN_SHLVL:-${SHLVL}} + 1))
+  if ((count < 1)); then
+    print -n "?"
+    count=1
+  fi
+  repeat ${count} print -n -- "${symbol}"
+  print -n " "
 }
 
 precmd() {

@@ -1,0 +1,9 @@
+#!/bin/sh
+#
+# Reference: https://github.com/gittower/git-flow-next
+
+set -o nounset
+set -o errexit
+
+top="$(git rev-parse --show-toplevel)"
+exec make -C "${top}" installcheck

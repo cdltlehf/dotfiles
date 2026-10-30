@@ -4,5 +4,4 @@ ignore: |
   **/docs/decisions/.markdownlint.yml
 
 rules:
-  # A single-document file needs no `---` marker.
   document-start: disable
