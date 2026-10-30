@@ -33,7 +33,7 @@ fi
 
 if [ ! -d "${SPOONS_DIR}/SpoonInstall.spoon" ]; then
   tmpdir="$(mktemp -d)"
-  download "${SPOON_INSTALL_URL}" "${tmpdir}/SpoonInstall.zip"
+  download "${SPOON_INSTALL_URL}" >"${tmpdir}/SpoonInstall.zip"
   unzip -q "${tmpdir}/SpoonInstall.zip" -d "${SPOONS_DIR}"
   rm -rf "${tmpdir}"
 fi

@@ -103,29 +103,35 @@ download() {
   _url="$1"
   _dest="${2:--}"
   _mode="${3:-}"
+  _out="-"
   _failure=""
 
   if [ "${_dest}" != "-" ]; then
-    if [ -e "${_dest}" ]; then
-      unset _url _dest _mode _failure
+    if [ -n "${__DOTFILES_DOWNLOADS:-}" ]; then
+      printf '%s\t%s\t%s\n' "${_url}" "${_dest}" "${_mode}" >>"${__DOTFILES_DOWNLOADS}"
+    fi
+    if [ -e "${_dest}" ] && [ -z "${__DOTFILES_REFRESH:-}" ]; then
+      unset _url _dest _mode _out _failure
       return 0
     fi
     mkdir -p "$(dirname "${_dest}")"
+    _out="${_dest}.tmp"
   fi
 
   if command -v curl >/dev/null; then
-    curl -fsSL "${_url}" -o "${_dest}" || _failure="Failed to download ${_url}"
+    curl -fsSL "${_url}" -o "${_out}" || _failure="Failed to download ${_url}"
   elif command -v wget >/dev/null; then
-    wget -q -O "${_dest}" "${_url}" || _failure="Failed to download ${_url}"
+    wget -q -O "${_out}" "${_url}" || _failure="Failed to download ${_url}"
   else
     _failure="Neither curl nor wget is available to download ${_url}"
   fi
 
   if [ -n "${_failure}" ]; then
     warning "${_failure}"
-    [ "${_dest}" = "-" ] || rm -f "${_dest}"
-  elif [ "${_dest}" != "-" ] && [ -n "${_mode}" ]; then
-    chmod "${_mode}" "${_dest}"
+    [ "${_out}" = "-" ] || rm -f "${_out}"
+  elif [ "${_out}" != "-" ]; then
+    [ -z "${_mode}" ] || chmod "${_mode}" "${_out}"
+    mv -f "${_out}" "${_dest}"
   fi
-  unset _url _dest _mode _failure
+  unset _url _dest _mode _out _failure
 }

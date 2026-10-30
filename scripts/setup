@@ -69,6 +69,8 @@ mkdir -p \
 
 export __DOTFILES_LINKS="${XDG_STATE_HOME}/dotfiles/links"
 : >"${__DOTFILES_LINKS}"
+export __DOTFILES_DOWNLOADS="${XDG_STATE_HOME}/dotfiles/downloads"
+: >"${__DOTFILES_DOWNLOADS}"
 
 run_hook pre-setup
 
@@ -154,7 +156,7 @@ fi
 
 if ! command -v mise >/dev/null; then
   tmpdir="$(mktemp -d)"
-  download "${MISE_INSTALL_URL}" "${tmpdir}/install.sh"
+  download "${MISE_INSTALL_URL}" >"${tmpdir}/install.sh"
   sh "${tmpdir}/install.sh" 2>/dev/null || true
   rm -rf "${tmpdir}"
 fi
