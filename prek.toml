@@ -67,8 +67,6 @@ hooks = [{ id = "markdownlint-cli2", args = ["--fix"] }]
 repo = "https://github.com/DavidAnson/markdownlint-cli2"
 rev = "v0.24.0"
 
-# TODO: Pin these tools in xdg-config-home/mise/config.toml. On macOS they
-# come from Homebrew unpinned, so their versions differ from Linux.
 [[repos]]
 repo = "local"
 
@@ -102,8 +100,6 @@ id = "uv-check"
 language = "system"
 name = "uv check"
 
-# Biome indents continuation lines by 2 spaces, not by the 4 or more of
-# the Google JavaScript Style Guide, and cannot be configured to.
 [[repos]]
 repo = "https://github.com/biomejs/pre-commit"
 rev = "v2.6.3"

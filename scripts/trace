@@ -34,7 +34,6 @@ else
     esac
     shift
   done
-  unset _a
 fi
 
 case "${shell_name}" in

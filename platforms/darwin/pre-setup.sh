@@ -29,7 +29,6 @@ if [ -z "${_brew_prefix}" ]; then
 fi
 
 BREW_BIN="${_brew_prefix}/bin/brew"
-unset _brew_prefix
 
 if [ -x "${BREW_BIN}" ]; then
   __cached "${BREW_BIN}" shellenv
@@ -39,11 +38,9 @@ xcode-select --install 2>/dev/null || true
 
 if ! command -v brew >/dev/null; then
   download "${HOMEBREW_INSTALL_URL}" | /bin/bash
-  if [ -n "${BREW_BIN:-}" ] && [ -x "${BREW_BIN}" ]; then
+  if [ -x "${BREW_BIN}" ]; then
     __cached "${BREW_BIN}" shellenv
   fi
 fi
 
 brew bundle --file "${BASE_DIR}/platforms/darwin/Brewfile"
-
-unset BREW_BIN

@@ -2,7 +2,6 @@
 #
 # Reference: https://www.gnu.org/software/bash/manual/html_node/Is-this-Shell-Interactive_003f.html
 
-# If not running interactively, don't do anything
 case "$-" in
   *i*) ;;
   *) return 0 2>/dev/null || exit 0 ;;
@@ -26,7 +25,5 @@ if [[ -d "${BASHRCDIR}" ]]; then
 fi
 unset -v SHRC BASHRCDIR
 
-# ~/.bashrc.local is in $HOME, not in XDG_CONFIG_HOME, which links into the
-# dotfiles working tree, so that it cannot be committed by mistake.
 # shellcheck source=/dev/null
 [[ -f "${HOME}/.bashrc.local" ]] && source "${HOME}/.bashrc.local" 2>/dev/null || true

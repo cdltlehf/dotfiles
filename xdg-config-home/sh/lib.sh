@@ -6,7 +6,6 @@
 __pathmunge() {
   [ -d "$1" ] || return 0
 
-  # Remove existing occurrences of $1 from PATH
   _clean_p=":${PATH}:"
   while true; do
     case "${_clean_p}" in
@@ -26,8 +25,7 @@ __pathmunge() {
 }
 
 __cached() {
-  command -v "$1" >/dev/null 2>&1 || return 0
-  _bin="$(command -v "$1" 2>/dev/null)"
+  _bin="$(command -v "$1" 2>/dev/null)" || return 0
   _sum="$(printf '%s' "$*" | cksum)"
   _cache="${XDG_CACHE_HOME:-${HOME}/.cache}/evalcache/${1##*/}-${_sum%% *}.sh"
 

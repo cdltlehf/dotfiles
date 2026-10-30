@@ -63,10 +63,9 @@ local function get_buffer_info(ellipsis)
   if buftype == "" and scheme then
     buftype = scheme
   end
-  path = shorten(path, ellipsis)
   return {
     buftype = buftype,
-    name = path,
+    name = shorten(path, ellipsis),
     modified = vim.bo.modified,
     readonly = vim.bo.readonly,
   }

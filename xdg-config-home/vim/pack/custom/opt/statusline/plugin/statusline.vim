@@ -61,23 +61,12 @@ function! s:format_smart_path(raw_path) abort
     endif
   else
     let l:full_path = fnamemodify(a:raw_path, ':~:.')
-    if l:full_path =~# '^~/'
-      let l:home_subpath = strpart(l:full_path, 2)
-      let l:parts = split(l:home_subpath, '/')
-      if len(l:parts) > 2
-        return printf('~/%s/%s/%s', l:ellipsis, l:parts[-2], l:parts[-1])
-      else
-        return l:full_path
-      endif
-    else
-      let l:sys_subpath = (l:full_path =~# '^/') ? strpart(l:full_path, 1) : l:full_path
-      let l:parts = split(l:sys_subpath, '/')
-      if len(l:parts) > 2
-        return printf('/%s/%s/%s', l:ellipsis, l:parts[-2], l:parts[-1])
-      else
-        return l:full_path
-      endif
+    let l:is_home = l:full_path =~# '^~/'
+    let l:parts = split(l:is_home ? strpart(l:full_path, 2) : l:full_path, '/')
+    if len(l:parts) > 2
+      return printf('%s%s/%s/%s', l:is_home ? '~/' : '/', l:ellipsis, l:parts[-2], l:parts[-1])
     endif
+    return l:full_path
   endif
 endfunction
 

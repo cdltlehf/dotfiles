@@ -1,5 +1,4 @@
 " Reference: https://github.com/airblade/vim-gitgutter
-" :help gitgutter.txt
 
 augroup gitgutter_listener
   autocmd!

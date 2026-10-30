@@ -12,7 +12,6 @@ BEGIN {
     conflicted = 0
     stash = 0
 
-    # ANSI Color Codes
     C_RESET = "\033[0m"
     C_OK = ""
     C_CHANGED = "\033[33m"
@@ -55,6 +54,10 @@ BEGIN {
     }
 }
 
+function join(a, b) {
+    return a == "" ? b : a " " b
+}
+
 $1 == "#" && $2 == "branch.oid" { oid = substr($3, 1, 7) }
 $1 == "#" && $2 == "branch.head" { branch = $3; if (branch == "(detached)") is_detached = 1 }
 $1 == "#" && $2 == "branch.upstream" { upstream = $3 }
@@ -71,9 +74,7 @@ $1 == "u" { conflicted++ }
 END {
     if (branch == "") exit
 
-    if (op != "") {
-        op = tolower(op)
-    }
+    op = tolower(op)
 
     if (is_detached) {
         if (op_branch != "") {
@@ -126,20 +127,20 @@ END {
 
     if (upstream != "" || is_detached) {
         if (behind > 0) {
-            status_str = (status_str == "" ? "" : status_str " ") C_BAD behind ICON_BEHIND C_RESET
+            status_str = join(status_str, C_BAD behind ICON_BEHIND C_RESET)
         }
         if (ahead > 0) {
-            status_str = (status_str == "" ? "" : status_str " ") C_STAGED ahead ICON_AHEAD C_RESET
+            status_str = join(status_str, C_STAGED ahead ICON_AHEAD C_RESET)
         }
     }
 
     if (stash > 0) {
-        status_str = (status_str == "" ? "" : status_str " ") C_GRAY ICON_STASH stash C_RESET
+        status_str = join(status_str, C_GRAY ICON_STASH stash C_RESET)
     }
 
     if (charset == "nerdfont") {
         if (staged > 0 && (unstaged > 0 || untracked > 0)) {
-            status_str = (status_str == "" ? "" : status_str " ") C_OK "+" C_RESET
+            status_str = join(status_str, C_OK "+" C_RESET)
         }
     } else {
         flags = ""
@@ -157,7 +158,7 @@ END {
         }
 
         if (flags != "") {
-            status_str = (status_str == "" ? "" : status_str " ") flags
+            status_str = join(status_str, flags)
         }
     }
 

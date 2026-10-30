@@ -1,5 +1,4 @@
 -- Reference: https://neovim.io/doc/user/lsp.html#lsp-defaults
--- :help vim.lsp.config()
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)

@@ -1,9 +1,6 @@
-" ~/.vim/vimrc
-" :help :help
 " Reference: https://learnvimscriptthehardway.stevelosh.com/
 " Reference: https://learnvim.irian.to/
 
-" :help xdg-base-dir
 if empty("$XDG_CACHE_HOME") | let $XDG_CACHE_HOME="$HOME/.cache" | endif
 if empty("$XDG_CONFIG_HOME") | let $XDG_CONFIG_HOME="$HOME/.config" | endif
 if empty("$XDG_DATA_HOME") | let $XDG_DATA_HOME="$HOME/.local/share" | endif
@@ -77,25 +74,18 @@ packadd! vim-numbertoggle
 
 silent! colorscheme modus16
 
-" :help mapleader
 let mapleader = "\<space>"
 
-" Source files in vimrc.d
 for s:f in split(glob('$XDG_CONFIG_HOME/vim/vimrc.d/*.vim'), '\n')
   execute 'source ' . s:f
 endfor
 
-" :help 'termguicolors'
-" if has('termguicolors') | set termguicolors | endif
-
-" :help xterm-true-color
 let &t_8f="\<esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<esc>[48;2;%lu;%lu;%lum"
 
-" :help termcap-cursor-shape
-let &t_SI="\<esc>[5 q" " blinking bar
-let &t_SR="\<esc>[3 q" " blinking underline
-let &t_EI="\<esc>[2 q" " steady block
+let &t_SI="\<esc>[5 q"
+let &t_SR="\<esc>[3 q"
+let &t_EI="\<esc>[2 q"
 
 augroup termcap_cursor_shape
   autocmd!
@@ -105,7 +95,6 @@ augroup termcap_cursor_shape
   endif
 augroup END
 
-" :help checktime
 augroup checktime
   autocmd!
   if exists('##VimResume')
@@ -117,18 +106,12 @@ augroup END
 set ttimeout
 set ttimeoutlen=100
 
-" :help section
 map [[ ?{<cr>w99[{
-  map ][ /{<cr>b99[{
-  map ]] j0[[%/{<cr>
+map ][ /{<cr>b99[{
+map ]] j0[[%/{<cr>
 map [] k$][%?}<cr>
 
-" :help 'colorcolumn'
 if exists('&colorcolumn') | set colorcolumn=+2 | endif
-
-" :help :helptags
-" XXX: Long startup time
-" silent! helptags ALL
 
 set number
 set relativenumber
@@ -139,7 +122,6 @@ set visualbell
 set nowrap
 set foldlevel=99
 
-" :help xdg-base-dir
 if !has('nvim')
   set backupdir=$XDG_STATE_HOME/vim/backup
   set directory=$XDG_STATE_HOME/vim/swap
@@ -154,8 +136,6 @@ endif
 if has('persistent_undo') | set undofile | endif
 if has('syntax') | set spell | endif
 
-" :help g:netrw_home
-" :help .netrwhist
 let g:netrw_home = expand('$XDG_STATE_HOME/vim/netrw')
 
 let g:template_dir = !empty($XDG_TEMPLATES_DIR) ? expand('$XDG_TEMPLATES_DIR') : expand('$HOME/Templates')
@@ -190,21 +170,8 @@ endif
 let s:vimrc_local = expand('$HOME/.vimrc.local')
 if filereadable(s:vimrc_local) | execute "source " . s:vimrc_local | endif
 
-" :help wildmode
 set wildmode=longest,full
 
-" :help 'pastetoggle'
-" set pastetoggle=<f11>
-" map <f10> :set paste<cr>
-" map <f11> :set nopaste<cr>
-" imap <f10> <c-o>:set paste<cr>
-" imap <f11> <nop>
-
-" :help <leader>
-" See more
-" ~/.vim/vimrc.d/recommendations.vim
-" ~/.vim/vimrc.d/fzf.vim
-" ~/.vim/vimrc.d/vim-oscyank.vim
 nnoremap <silent> <leader>= mzHmygg=G'yz<cr>`z
 nnoremap <leader>mm :<c-u>make!<cr>
 nnoremap <leader>ma :<c-u>make! all<cr>
@@ -213,26 +180,20 @@ nnoremap <leader>mr :<c-u>make! run<cr>
 nnoremap <leader>mi :<c-u>make! install<cr>
 nnoremap <leader>m<space> :<c-u>make!<space>
 
-" nnoremap <leader>cc :<c-u>cclose<cr>
-" nnoremap <leader>hc :<c-u>helpclose<cr>
-
 nnoremap <leader>vv :<c-u>edit $MYVIMRC<cr>
 nnoremap <leader>vV :<c-u>execute 'edit ' . fnamemodify($MYVIMRC, ':h')<cr>
 nnoremap <leader>vd :<c-u>edit $MYVIMRC.d<cr>
 nnoremap <leader>vr :<c-u>Reload<cr>
 
-" :help 'completeopt'
 set completeopt+=menuone,noinsert
 
-" :help listchars
-" https://en.wikipedia.org/wiki/Non-printing_character_in_word_processors
+" Reference: https://en.wikipedia.org/wiki/Non-printing_character_in_word_processors
 if getenv('LC_TERMINAL_GLYPHS') ==# 'ascii' || empty(getenv('LC_TERMINAL_GLYPHS'))
   set listchars+=tab:>\ ,trail:.,extends:>,precedes:<,nbsp:_
 else
   set listchars+=tab:→\ ,trail:·,extends:»,precedes:«,nbsp:°
 endif
 
-" :help last-pattern
 let @/ = ""
 
 autocmd BufWinEnter *

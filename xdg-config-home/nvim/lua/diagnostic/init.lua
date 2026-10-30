@@ -1,6 +1,4 @@
 -- Reference: https://neovim.io/doc/user/diagnostic.html
--- :help vim.diagnostic.config
--- :help g:lsp_diagnostics_signs_enabled
 
 local glyphs = vim.env.LC_TERMINAL_GLYPHS or "ascii"
 local diagnostic_signs = ({

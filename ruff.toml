@@ -12,8 +12,6 @@ docstring-code-line-length = 80
 
 [lint]
 ignore = [
-  # Conflict with the Ruff formatter:
-  # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
   "avoidable-escaped-quote",
   "bad-quotes-docstring",
   "bad-quotes-inline-string",
@@ -28,33 +26,24 @@ ignore = [
   "tab-indentation",
   "triple-single-quotes",
   "unnecessary-escaped-quote",
-  # Python 3.14 evaluates annotations lazily (PEP 649).
   "future-required-type-annotation",
   "future-rewritable-type-annotation",
   "typing-only-first-party-import",
   "typing-only-standard-library-import",
   "typing-only-third-party-import",
-  # Google 3.8.3 allows one-line docstrings without Returns, Yields, or
-  # Raises. Revisit when Ruff skips one-line docstrings.
   "docstring-missing-exception",
   "docstring-missing-returns",
   "docstring-missing-yields",
-  # Google 3.12 allows TODO comments with a link and avoids naming people.
-  # Revisit missing-todo-link when Ruff accepts a link in the parentheses.
   "line-contains-todo",
   "missing-todo-author",
   "missing-todo-link",
-  # Google raises exceptions with f-string messages in its examples.
   "f-string-in-exception",
   "raise-vanilla-args",
   "raw-string-in-exception",
-  # Google uses print in its examples and does not forbid it.
   "print",
 ]
 select = ["ALL"]
 
-# Google 3.8.2 requires license boilerplate in every file. The SPDX line
-# serves as the boilerplate, so no year or author has to be filled in.
 [lint.flake8-copyright]
 notice-rgx = "SPDX-License-Identifier: "
 

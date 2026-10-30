@@ -12,10 +12,10 @@ local INDICATOR_DELAY = 1
 local HIDE_BOXES_DELAY = 0.2
 local SHOW_BOX_DELAY = 0.2
 
-local MISSION_CONTROL_DELAY = 0.3 -- Mission Control animation delay
+local MISSION_CONTROL_DELAY = 0.3
 
 local function getFrameWithRatio(screen, x, y, w, h, padding)
-  local padding = padding or 0
+  padding = padding or 0
 
   local screen_frame = screen:frame()
 
@@ -26,14 +26,12 @@ local function getFrameWithRatio(screen, x, y, w, h, padding)
     h = screen_frame.h - padding,
   }
 
-  local frame = {
+  return {
     x = inner_screen_frame.x + x * inner_screen_frame.w + padding,
     y = inner_screen_frame.y + y * inner_screen_frame.h + padding,
     w = w * (inner_screen_frame.w - padding) - padding,
     h = h * (inner_screen_frame.h - padding) - padding,
   }
-
-  return frame
 end
 
 local function getNextSpace()
@@ -61,85 +59,85 @@ local function getPrevSpace()
 end
 
 local WindowManager = { keymap = {} }
-WindowManager.keymap[""] = { -- Default
+WindowManager.keymap[""] = {
   { 0.25, 0.25, 0.5, 0.5 },
   ["h"] = "h",
   ["l"] = "l",
 }
 
-WindowManager.keymap["h"] = { -- Left Half
+WindowManager.keymap["h"] = {
   { 0, 0, 0.5, 1 },
   ["k"] = "hk",
   ["j"] = "hj",
   ["l"] = "hl",
   ["h"] = "hh",
 }
-WindowManager.keymap["hh"] = { -- Left Third
+WindowManager.keymap["hh"] = {
   { 0, 0, 0.3, 1 },
   ["k"] = "hk",
   ["j"] = "hj",
   ["l"] = "l",
 }
-WindowManager.keymap["hl"] = { -- Left Two Thirds
+WindowManager.keymap["hl"] = {
   { 0, 0, 0.7, 1 },
   ["k"] = "hk",
   ["j"] = "hj",
   ["l"] = "l",
 }
 
-WindowManager.keymap["j"] = { -- Bottom Half
+WindowManager.keymap["j"] = {
   { 0, 0.5, 1, 0.5 },
   ["k"] = "kk",
   ["h"] = "hj",
   ["l"] = "lj",
 }
-WindowManager.keymap["k"] = { -- Full
+WindowManager.keymap["k"] = {
   { 0, 0, 1, 1 },
   ["k"] = "kk",
   ["j"] = "j",
 }
 
-WindowManager.keymap["l"] = { -- Right Half
+WindowManager.keymap["l"] = {
   { 0.5, 0, 0.5, 1 },
   ["k"] = "lk",
   ["j"] = "lj",
   ["h"] = "lh",
   ["l"] = "ll",
 }
-WindowManager.keymap["ll"] = { -- Right Third
+WindowManager.keymap["ll"] = {
   { 0.7, 0, 0.3, 1 },
   ["k"] = "hk",
   ["j"] = "hj",
   ["l"] = "l",
 }
-WindowManager.keymap["lh"] = { -- Right Two Thirds
+WindowManager.keymap["lh"] = {
   { 0.3, 0, 0.7, 1 },
   ["k"] = "hk",
   ["j"] = "hj",
   ["l"] = "l",
 }
 
-WindowManager.keymap["hj"] = { -- Left-down
+WindowManager.keymap["hj"] = {
   { 0, 0.5, 0.5, 0.5 },
   ["k"] = "hk",
   ["l"] = "lj",
 }
-WindowManager.keymap["hk"] = { -- Left-up
+WindowManager.keymap["hk"] = {
   { 0, 0, 0.5, 0.5 },
   ["j"] = "hj",
   ["l"] = "lk",
 }
-WindowManager.keymap["lj"] = { -- Right-down
+WindowManager.keymap["lj"] = {
   { 0.5, 0.5, 0.5, 0.5 },
   ["h"] = "hj",
   ["k"] = "lk",
 }
-WindowManager.keymap["lk"] = { -- Right-up
+WindowManager.keymap["lk"] = {
   { 0.5, 0, 0.5, 0.5 },
   ["h"] = "hk",
   ["j"] = "lj",
 }
-WindowManager.keymap["kk"] = { -- Up
+WindowManager.keymap["kk"] = {
   { 0, 0, 1, 0.5 },
   ["h"] = "hk",
   ["l"] = "lk",
@@ -231,18 +229,15 @@ function WindowManager:_initialize_modal(leader)
         self.draw_timer:start()
       end
 
-      -- Do nothing if there is no target window
       if not self.target_window then
         return
       end
 
-      -- Do nothing if the target window is not in focused space
       local focused_space = spaces.focusedSpace()
       if spaces.windowSpaces(self.target_window)[1] ~= focused_space then
         return
       end
 
-      -- Exceptional cases, which change space of the window
       local is_space_changed = false
       if self.state == "ll" and key == "l" then
         local next_space = getNextSpace()
@@ -262,13 +257,10 @@ function WindowManager:_initialize_modal(leader)
         end
       end
 
-      -- Update state
-      -- If the next state is not explicitly defined, key is the next state
       if not is_space_changed then
         self.state = WindowManager.keymap[self.state or ""][key] or key
       end
 
-      -- Update window based on the state
       local ratio = WindowManager.keymap[self.state][1]
       local f = getFrameWithRatio(self.target_window:screen(), ratio[1], ratio[2], ratio[3], ratio[4], self.padding)
       self.target_window:setFrame(f, DURATION)
@@ -318,11 +310,9 @@ function WindowManager:_initialize_modal(leader)
   self.modal:bind(leader, "x", function()
     local focused_space = spaces.focusedSpace()
     local next_space = getNextSpace()
-    -- If there is an next space, go to the space
     if next_space then
       spaces.gotoSpace(next_space)
     else
-      -- Else if there is an previous space, go to the space
       local prev_space = getPrevSpace()
       if prev_space then
         spaces.gotoSpace(prev_space)
@@ -362,13 +352,6 @@ function WindowManager:showBox(f, text, delay, textSize)
   text = text or ""
   delay = delay or 0
   textSize = textSize or 150
-  local padding = 0
-  local f = {
-    x = f.x + padding,
-    y = f.y + padding,
-    w = f.w - padding * 2,
-    h = f.h - padding * 2,
-  }
   self.boxes[#self.boxes + 1] = canvas
     .new(f)
     :appendElements({
@@ -393,7 +376,7 @@ function WindowManager:showBox(f, text, delay, textSize)
 end
 
 function WindowManager:hideBoxes(delay)
-  local delay = delay or 0
+  delay = delay or 0
   for i = 1, #self.boxes do
     self.boxes[i]:hide(delay)
     self.boxes[i] = nil
