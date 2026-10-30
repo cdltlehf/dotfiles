@@ -57,18 +57,18 @@ __prompt_command() {
   local err_icon="!"
   local job_icon="&"
   local host_icon="@"
-  local prompt_char="> "
+  local prompt_symbol=">"
   if [[ "${glyphs}" != "ascii" ]]; then
     sep="\[\e[90m\] · \[\e[0m\]"
   fi
   if [[ "${glyphs}" == "unicode" ]]; then
     err_icon="×"
-    prompt_char="› "
+    prompt_symbol="›"
   elif [[ "${glyphs}" == "nerdfont" ]]; then
     err_icon=""
     job_icon=""
     host_icon=" "
-    prompt_char=" "
+    prompt_symbol=""
   fi
 
   local git_root
@@ -130,10 +130,17 @@ __prompt_command() {
     PS1+="\[\e[31m\]${err_icon} ${exit_code} \[\e[0m\]"
   fi
   if [[ "${USER}" == "root" ]]; then
-    PS1+="# "
-  else
-    PS1+="${prompt_char}"
+    prompt_symbol="#"
   fi
+  local count=$((SHLVL - ${__LOGIN_SHLVL:-${SHLVL}} + 1))
+  if ((count < 1)); then
+    PS1+="?"
+    count=1
+  fi
+  for (( ; count > 0; count--)); do
+    PS1+="${prompt_symbol}"
+  done
+  PS1+=" "
   PS1+="${osc_b}"
 
   # Continued prompt & command start marker

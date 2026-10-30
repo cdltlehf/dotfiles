@@ -5,6 +5,8 @@
 # shellcheck source=/dev/null
 [[ -e "${HOME}/.profile" ]] && source "${HOME}/.profile"
 
+export __LOGIN_SHLVL="${SHLVL}"
+
 for _brew_prefix in "${HOMEBREW_PREFIX:-}" /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
   if [[ -n "${_brew_prefix}" && -x "${_brew_prefix}/bin/brew" ]]; then
     __cached "${_brew_prefix}/bin/brew" shellenv

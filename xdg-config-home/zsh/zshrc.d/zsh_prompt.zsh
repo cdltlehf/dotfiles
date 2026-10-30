@@ -50,31 +50,35 @@ __prompt_pretty_path() {
 
 __prompt_char() {
   local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
+  local symbol
   if [[ "${USER}" == "root" ]]; then
-    print -n "# "
-    return
+    symbol="#"
+  else
+    case ${KEYMAP} in
+    vicmd | viopp)
+      case "${glyphs}" in
+      unicode) symbol="‹" ;;
+      nerdfont) symbol="" ;;
+      *) symbol="<" ;;
+      esac
+      ;;
+    *)
+      case "${glyphs}" in
+      unicode) symbol="›" ;;
+      nerdfont) symbol="" ;;
+      *) symbol=">" ;;
+      esac
+      ;;
+    esac
   fi
 
-  case ${KEYMAP} in
-  vicmd | viopp)
-    if [[ "${glyphs}" == "unicode" ]]; then
-      print -n "‹ "
-    elif [[ "${glyphs}" == "nerdfont" ]]; then
-      print -n " "
-    else
-      print -n "< "
-    fi
-    ;;
-  *)
-    if [[ "${glyphs}" == "unicode" ]]; then
-      print -n "› "
-    elif [[ "${glyphs}" == "nerdfont" ]]; then
-      print -n " "
-    else
-      print -n "> "
-    fi
-    ;;
-  esac
+  local count=$((SHLVL - ${__LOGIN_SHLVL:-${SHLVL}} + 1))
+  if ((count < 1)); then
+    print -n "?"
+    count=1
+  fi
+  repeat ${count} print -n -- "${symbol}"
+  print -n " "
 }
 
 precmd() {
