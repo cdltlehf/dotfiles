@@ -8,4 +8,4 @@ brew-diff: ## Diff Brewfile
 
 .PHONY: brew-check
 brew-check: ## Check Brewfile
-	@brew bundle check --file=$(BREWFILE)
+	@brew bundle check --no-upgrade --file=$(BREWFILE)
