@@ -8,8 +8,6 @@ setup() {
   export TRACE_SCRIPT="${BATS_TEST_DIRNAME:-.}/../scripts/trace"
 }
 
-# Subsequence matching is required because machine-specific directories
-# and system files vary, whereas the dotfiles ordering contract MUST remain invariant.
 assert_subsequence() {
   local -a actual wanted
   IFS=":" read -ra actual <<<"$1"

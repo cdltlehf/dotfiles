@@ -71,6 +71,5 @@ xnoremap * y/\V<c-r>"<cr>
 xnoremap # y?\V<c-r>"<cr>
 nnoremap & :&&<cr>
 
-" In nvim, `Q` replays the last recorded macro.
 nnoremap Q @@
 nnoremap gQ Q

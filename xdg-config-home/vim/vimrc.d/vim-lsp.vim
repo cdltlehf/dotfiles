@@ -1,12 +1,12 @@
 " Reference: https://github.com/prabirshrestha/vim-lsp
 " Reference: https://clang.llvm.org/docs/ClangFormat.html#vim-integration
+" Reference: https://neovim.io/doc/user/lsp.html#lsp-defaults
 
 if !has('nvim')
   let g:lsp_use_native_client = 1
   let g:lsp_format_sync_timeout = 1000
 endif
 
-" Also see: https://neovim.io/doc/user/lsp.html#lsp-defaults
 function! s:on_lsp_buffer_enabled() abort
   setlocal omnifunc=lsp#complete
   setlocal signcolumn=yes
@@ -38,10 +38,6 @@ function! s:on_lsp_buffer_enabled() abort
   nnoremap <buffer> gra <plug>(lsp-code-action)
   nnoremap <buffer> grr <plug>(lsp-references)
   inoremap <buffer> <c-s> <c-o>:LspSignatureHelp<CR>
-
-  set foldmethod=expr
-  " foldexpr stays unset because lsp#ui#vim#folding#foldexpr() makes Vim very slow.
-  set foldtext=lsp#ui#vim#folding#foldtext()
 
   nnoremap <buffer> [g <plug>(lsp-previous-diagnostic)
   nnoremap <buffer> ]g <plug>(lsp-next-diagnostic)

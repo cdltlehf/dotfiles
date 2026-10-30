@@ -102,7 +102,7 @@ augroup checktime
   endif
 augroup END
 
-" https://github.com/vim/vim/commit/e07e797db0c5ef1aafc650d8bb0d39fb052cf1e1
+" Reference: https://github.com/vim/vim/commit/e07e797db0c5ef1aafc650d8bb0d39fb052cf1e1
 set ttimeout
 set ttimeoutlen=100
 
@@ -165,8 +165,6 @@ if !has('nvim') && exists('*TerminalWinOpen')
   augroup end
 endif
 
-" ~/.vimrc.local is in $HOME, not in XDG_CONFIG_HOME, which links into the
-" dotfiles working tree, so that it cannot be committed by mistake.
 let s:vimrc_local = expand('$HOME/.vimrc.local')
 if filereadable(s:vimrc_local) | execute "source " . s:vimrc_local | endif
 

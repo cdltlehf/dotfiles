@@ -1,6 +1,4 @@
 # Reference: https://mise.jdx.dev/configuration.html
 
-# The tools that macOS provides itself.
-
 [tools]
 vim = "9.2.1169"

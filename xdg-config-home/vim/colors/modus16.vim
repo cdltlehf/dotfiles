@@ -1,5 +1,4 @@
-" Modus Themes (modus-vivendi16 / modus16) ANSI 16 cterm colorscheme
-" Compliant with GNU Emacs Modus Themes (Protesilaos Stavrou) semantics
+" Reference: https://protesilaos.com/emacs/modus-themes
 
 set background=dark
 set notermguicolors
@@ -12,7 +11,6 @@ let g:colors_name = 'modus16'
 
 let &t_Co=16
 
-" Standard Syntax Groups (:help group-name) {{{
 highlight Comment ctermfg=8 ctermbg=none cterm=none
 
 highlight Constant ctermfg=darkcyan ctermbg=none cterm=none
@@ -56,9 +54,7 @@ highlight Ignore cterm=none ctermbg=none cterm=none
 
 highlight Error ctermfg=darkred ctermbg=none cterm=none
 highlight Todo ctermfg=darkyellow ctermbg=none cterm=bold
-" }}}
 
-" UI Highlight Groups (:help highlight-groups) {{{
 highlight ColorColumn ctermfg=none ctermbg=darkgrey cterm=none
 highlight Conceal ctermfg=darkcyan ctermbg=none cterm=none
 
@@ -129,7 +125,6 @@ highlight! link Substitute CurSearch
 highlight SpecialKey ctermfg=darkmagenta ctermbg=none cterm=none
 highlight SpellBad ctermfg=none ctermbg=none cterm=undercurl guisp=#ff5f59
 highlight SpellCap ctermfg=none ctermbg=none cterm=undercurl guisp=#d0bc00
-" Neovim has no ctermul; it applies guisp to cterm attributes instead.
 if !has('nvim')
   highlight SpellBad ctermul=darkred
   highlight SpellCap ctermul=darkyellow
@@ -158,10 +153,8 @@ highlight! link MsgArea Normal
 highlight! link MsgSeparator VertSplit
 highlight WildMenu ctermfg=darkblue ctermbg=none cterm=bold,inverse
 highlight! link TermCursor Cursor
-" }}}
 
 if has('nvim')
-  " Neovim Treesitter Mappings (Modus Semantics) {{{
   highlight! link @variable.builtin Statement
   highlight! link @constant.builtin Statement
   highlight! link @constant.macro PreProc
@@ -185,5 +178,4 @@ if has('nvim')
 
   highlight! link @markup.raw String
   highlight! link @markup.list Special
-  " }}}
 endif

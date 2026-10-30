@@ -309,16 +309,11 @@ function WindowManager:_initialize_modal(leader)
 
   self.modal:bind(leader, "x", function()
     local focused_space = spaces.focusedSpace()
-    local next_space = getNextSpace()
-    if next_space then
-      spaces.gotoSpace(next_space)
-    else
-      local prev_space = getPrevSpace()
-      if prev_space then
-        spaces.gotoSpace(prev_space)
-      end
+    local target_space = getNextSpace() or getPrevSpace()
+    if not target_space then
+      return
     end
-    -- If there is no space to go, the following function fails
+    spaces.gotoSpace(target_space)
     self.draw_timer:start()
     timer.doAfter(MISSION_CONTROL_DELAY, function()
       spaces.removeSpace(focused_space)
