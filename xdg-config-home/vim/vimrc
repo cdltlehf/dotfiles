@@ -1,13 +1,14 @@
 " Reference: https://learnvimscriptthehardway.stevelosh.com/
 " Reference: https://learnvim.irian.to/
 
-if empty("$XDG_CACHE_HOME") | let $XDG_CACHE_HOME="$HOME/.cache" | endif
-if empty("$XDG_CONFIG_HOME") | let $XDG_CONFIG_HOME="$HOME/.config" | endif
-if empty("$XDG_DATA_HOME") | let $XDG_DATA_HOME="$HOME/.local/share" | endif
-if empty("$XDG_STATE_HOME") | let $XDG_STATE_HOME="$HOME/.local/state" | endif
+if empty($XDG_CACHE_HOME) | let $XDG_CACHE_HOME = $HOME . '/.cache' | endif
+if empty($XDG_CONFIG_HOME) | let $XDG_CONFIG_HOME = $HOME . '/.config' | endif
+if empty($XDG_DATA_HOME) | let $XDG_DATA_HOME = $HOME . '/.local/share' | endif
+if empty($XDG_STATE_HOME) | let $XDG_STATE_HOME = $HOME . '/.local/state' | endif
 
 set runtimepath=$HOME/.vim
 set runtimepath+=$XDG_CONFIG_HOME/vim
+set runtimepath+=$XDG_DATA_HOME/vim
 set runtimepath+=$VIM/vimfiles
 set runtimepath+=$VIMRUNTIME
 set runtimepath+=$VIM/vimfiles/after
@@ -24,12 +25,10 @@ set packpath+=$HOME/.vim/after
 
 let $MYVIMRC = $XDG_CONFIG_HOME . '/vim/vimrc'
 
-if empty(glob($XDG_CONFIG_HOME . '/vim/autoload/plug.vim'))
-  silent execute '!curl -fLo '
-        \.$XDG_CONFIG_HOME
-        \.'/vim/autoload/plug.vim '
-        \.'--create-dirs '
-        \.'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+let s:plug = $XDG_DATA_HOME . '/vim/autoload/plug.vim'
+if empty(glob(s:plug))
+  silent execute '!curl -fLo ' . s:plug . ' --create-dirs '
+        \ . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
