@@ -58,7 +58,7 @@ rev = "v1.38.0"
 [[repos]]
 hooks = [{ id = "markdownlint-cli2", args = ["--fix"] }]
 repo = "https://github.com/DavidAnson/markdownlint-cli2"
-rev = "v0.23.3"
+rev = "v0.24.0"
 
 # Biome indents continuation lines by 2 spaces, not by the 4 or more of
 # the Google JavaScript Style Guide, and cannot be configured to.
@@ -75,7 +75,7 @@ hooks = [
   ] },
 ]
 repo = "https://github.com/biomejs/pre-commit"
-rev = "v2.5.15"
+rev = "v2.6.4"
 
 [[repos]]
 hooks = [{ id = "gitleaks" }]
@@ -90,4 +90,4 @@ hooks = [
   ] },
 ]
 repo = "https://github.com/commitizen-tools/commitizen"
-rev = "v4.19.2"
+rev = "v4.19.3"

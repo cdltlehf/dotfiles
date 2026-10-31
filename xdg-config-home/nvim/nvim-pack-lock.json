@@ -17,7 +17,7 @@
       "src": "https://github.com/junegunn/fzf.vim"
     },
     "gitsigns.nvim": {
-      "rev": "d4854fa9a94b5c8b37dd209fb4a19e98e764186f",
+      "rev": "1e9d0fbfe7ff848bc402d2c2e2854fb4eff2dce7",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "oil.nvim": {
@@ -25,7 +25,7 @@
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "styleguide": {
-      "rev": "c775c0c2f73c110613243520c001577cdbc0034d",
+      "rev": "70d70c93c9cc6dd18c66a37ed72de3c7642722bd",
       "src": "https://github.com/google/styleguide",
       "version": "'gh-pages'"
     },
@@ -66,7 +66,7 @@
       "src": "https://github.com/tpope/vim-unimpaired"
     },
     "vimtex": {
-      "rev": "02eee260766d031185449c9600f03b933fa0357c",
+      "rev": "3f96503904db6acdb7108cd93a9580dd41e88555",
       "src": "https://github.com/lervag/vimtex"
     },
     "wgsl.vim": {

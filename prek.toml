@@ -50,7 +50,7 @@ types_or = ["shell", "bats"]
 [[repos]]
 hooks = [{ id = "ruff-check", args = ["--fix"] }, { id = "ruff-format" }]
 repo = "https://github.com/astral-sh/ruff-pre-commit"
-rev = "v0.17.1"
+rev = "v0.17.3"
 
 [[repos]]
 hooks = [{ id = "stylua-github" }]
@@ -102,7 +102,7 @@ name = "uv check"
 
 [[repos]]
 repo = "https://github.com/biomejs/pre-commit"
-rev = "v2.6.3"
+rev = "v2.6.4"
 
 [[repos.hooks]]
 additional_dependencies = ["@biomejs/biome@2.6.3"]

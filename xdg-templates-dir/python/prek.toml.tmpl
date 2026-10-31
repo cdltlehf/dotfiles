@@ -24,12 +24,12 @@ hooks = [
 
 [[repos]]
 repo = "https://github.com/astral-sh/ruff-pre-commit"
-rev = "v0.17.1"
+rev = "v0.17.3"
 hooks = [{open} id = "ruff-check", args = ["--fix"] {close}, {open} id = "ruff-format" {close}]
 
 [[repos]]
 repo = "https://github.com/astral-sh/uv-pre-commit"
-rev = "0.13.1"
+rev = "0.13.6"
 hooks = [{open} id = "uv-lock" {close}, {open} id = "uv-export" {close}]
 
 [[repos]]
@@ -40,7 +40,7 @@ hooks = [
 
 [[repos]]
 repo = "https://github.com/commitizen-tools/commitizen"
-rev = "v4.19.2"
+rev = "v4.19.3"
 hooks = [
   {open} id = "commitizen" {close},
   {open} id = "commitizen-branch", stages = ["pre-push"] {close},
