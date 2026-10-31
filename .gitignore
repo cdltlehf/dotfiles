@@ -1,6 +1,5 @@
 .DS_Store
 .env
-xdg-config-home/hammerspoon/Spoons
 xdg-config-home/karabiner/assets/complex_modifications/*.json
 xdg-config-home/karabiner/automatic_backups
 xdg-config-home/karabiner/karabiner.json

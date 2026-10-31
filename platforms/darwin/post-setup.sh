@@ -7,9 +7,7 @@ set -o errexit
 : "${XDG_CONFIG_HOME:?Do not run directly}"
 : "${BASE_DIR:?Do not run directly}"
 
-readonly SPOON_INSTALL_URL="https://github.com/Hammerspoon/Spoons/raw/master/Spoons/SpoonInstall.spoon.zip"
 readonly ZATHURA_APP_CONVERT_URL="https://raw.githubusercontent.com/homebrew-zathura/homebrew-zathura/refs/heads/master/convert-into-app.sh"
-readonly SPOONS_DIR="${XDG_CONFIG_HOME}/hammerspoon/Spoons"
 readonly VSCODE_USER_DIR="${HOME}/Library/Application Support/Code/User"
 readonly UBERSICHT_USER_DIR="${HOME}/Library/Application Support/Übersicht"
 readonly DEFAULTS_DIR="${BASE_DIR}/platforms/darwin/defaults"
@@ -29,13 +27,6 @@ done
 
 if [ -d "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" ]; then
   symlink "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/iCloud"
-fi
-
-if [ ! -d "${SPOONS_DIR}/SpoonInstall.spoon" ]; then
-  tmpdir="$(mktemp -d)"
-  download "${SPOON_INSTALL_URL}" >"${tmpdir}/SpoonInstall.zip"
-  unzip -q "${tmpdir}/SpoonInstall.zip" -d "${SPOONS_DIR}"
-  rm -rf "${tmpdir}"
 fi
 
 if [ -d "${VSCODE_USER_DIR}" ] || command -v code >/dev/null; then
