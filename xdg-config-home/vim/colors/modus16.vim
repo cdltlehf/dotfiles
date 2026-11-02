@@ -1,4 +1,5 @@
 " Reference: https://protesilaos.com/emacs/modus-themes
+" Reference: https://neovim.io/doc/user/syntax.html#cterm-colors
 
 set background=dark
 set notermguicolors
@@ -9,54 +10,53 @@ if exists("syntax_on")
 endif
 let g:colors_name = 'modus16'
 
-let &t_Co=16
-
 highlight Comment ctermfg=8 ctermbg=none cterm=none
 
-highlight Constant ctermfg=darkcyan ctermbg=none cterm=none
-highlight String ctermfg=darkgreen ctermbg=none cterm=none
-highlight Character ctermfg=darkgreen ctermbg=none cterm=none
-highlight Number ctermfg=darkcyan ctermbg=none cterm=none
-highlight Boolean ctermfg=darkcyan ctermbg=none cterm=none
-highlight Float ctermfg=darkcyan ctermbg=none cterm=none
+highlight Constant ctermfg=6 ctermbg=none cterm=none
+highlight String ctermfg=2 ctermbg=none cterm=none
+highlight Character ctermfg=2 ctermbg=none cterm=none
+highlight Number ctermfg=6 ctermbg=none cterm=none
+highlight Boolean ctermfg=6 ctermbg=none cterm=none
+highlight Float ctermfg=6 ctermbg=none cterm=none
 
 highlight Identifier ctermfg=none ctermbg=none cterm=none
-highlight Function ctermfg=darkblue ctermbg=none cterm=none
+highlight Function ctermfg=4 ctermbg=none cterm=none
 
-highlight Statement ctermfg=darkmagenta ctermbg=none cterm=none
-highlight Conditional ctermfg=darkmagenta ctermbg=none cterm=none
-highlight Repeat ctermfg=darkmagenta ctermbg=none cterm=none
-highlight Label ctermfg=darkmagenta ctermbg=none cterm=none
+highlight Statement ctermfg=5 ctermbg=none cterm=none
+highlight Conditional ctermfg=5 ctermbg=none cterm=none
+highlight Repeat ctermfg=5 ctermbg=none cterm=none
+highlight Label ctermfg=5 ctermbg=none cterm=none
 highlight Operator ctermfg=none ctermbg=none cterm=none
-highlight Keyword ctermfg=darkmagenta ctermbg=none cterm=none
-highlight Exception ctermfg=darkmagenta ctermbg=none cterm=none
+highlight Keyword ctermfg=5 ctermbg=none cterm=none
+highlight Exception ctermfg=5 ctermbg=none cterm=none
 
-highlight PreProc ctermfg=darkmagenta ctermbg=none cterm=none
-highlight Include ctermfg=darkmagenta ctermbg=none cterm=none
-highlight Define ctermfg=darkmagenta ctermbg=none cterm=none
-highlight Macro ctermfg=darkmagenta ctermbg=none cterm=none
-highlight PreCondit ctermfg=darkmagenta ctermbg=none cterm=none
+highlight PreProc ctermfg=5 ctermbg=none cterm=none
+highlight Include ctermfg=5 ctermbg=none cterm=none
+highlight Define ctermfg=5 ctermbg=none cterm=none
+highlight Macro ctermfg=5 ctermbg=none cterm=none
+highlight PreCondit ctermfg=5 ctermbg=none cterm=none
 
-highlight Type ctermfg=darkcyan ctermbg=none cterm=none
-highlight StorageClass ctermfg=darkmagenta ctermbg=none cterm=none
-highlight Structure ctermfg=darkmagenta ctermbg=none cterm=none
-highlight Typedef ctermfg=darkmagenta ctermbg=none cterm=none
+highlight Type ctermfg=6 ctermbg=none cterm=none
+highlight StorageClass ctermfg=5 ctermbg=none cterm=none
+highlight Structure ctermfg=5 ctermbg=none cterm=none
+highlight Typedef ctermfg=5 ctermbg=none cterm=none
 
-highlight Special ctermfg=darkcyan ctermbg=none cterm=none
-highlight SpecialChar ctermfg=darkcyan ctermbg=none cterm=none
-highlight Tag ctermfg=darkblue ctermbg=none cterm=none
-highlight Delimiter ctermfg=darkgrey ctermbg=none cterm=none
-highlight SpecialComment ctermfg=darkgrey ctermbg=none cterm=none
-highlight Debug ctermfg=darkmagenta ctermbg=none cterm=none
+highlight Special ctermfg=6 ctermbg=none cterm=none
+highlight SpecialChar ctermfg=6 ctermbg=none cterm=none
+highlight Tag ctermfg=4 ctermbg=none cterm=none
+highlight Delimiter ctermfg=8 ctermbg=none cterm=none
+highlight SpecialComment ctermfg=8 ctermbg=none cterm=none
+highlight Debug ctermfg=5 ctermbg=none cterm=none
 
 highlight Underlined ctermfg=none ctermbg=none cterm=underline
 highlight Ignore cterm=none ctermbg=none cterm=none
 
-highlight Error ctermfg=darkred ctermbg=none cterm=none
-highlight Todo ctermfg=darkyellow ctermbg=none cterm=bold
+highlight Error ctermfg=1 ctermbg=none cterm=none
+highlight Todo ctermfg=3 ctermbg=none cterm=bold
 
-highlight ColorColumn ctermfg=none ctermbg=darkgrey cterm=none
-highlight Conceal ctermfg=darkcyan ctermbg=none cterm=none
+highlight ColorColumn ctermfg=none ctermbg=8 cterm=none
+highlight CursorColumn ctermfg=none ctermbg=0 cterm=none
+highlight Conceal ctermfg=6 ctermbg=none cterm=none
 
 highlight Cursor ctermfg=none ctermbg=none cterm=none
 highlight! link lCursor Cursor
@@ -64,34 +64,38 @@ highlight! link CursorIM Cursor
 highlight! link CursorColumn ColorColumn
 highlight! link CursorLine CursorColumn
 
-highlight Directory ctermfg=darkblue ctermbg=none cterm=bold
+highlight Directory ctermfg=4 ctermbg=none cterm=bold
 
 highlight DiffAdd ctermfg=0 ctermbg=10 cterm=none
-highlight DiffChange ctermfg=none ctermbg=darkgrey cterm=none
+highlight DiffChange ctermfg=none ctermbg=8 cterm=none
 highlight DiffDelete ctermfg=0 ctermbg=9 cterm=none
 highlight DiffText ctermfg=0 ctermbg=14 cterm=none
+highlight Added ctermfg=10 ctermbg=none cterm=none
+highlight Changed ctermfg=14 ctermbg=none cterm=none
+highlight Removed ctermfg=9 ctermbg=none cterm=none
 
 highlight! link ErrorMsg Error
 
-highlight VertSplit ctermfg=darkgrey ctermbg=none cterm=none
+highlight VertSplit ctermfg=8 ctermbg=none cterm=none
 highlight! link WinSeparator VertSplit
 highlight! link WinBar StatusLine
 highlight! link WinBarNC StatusLineNC
 highlight! link NormalNC Normal
 
-highlight Folded ctermfg=darkgrey ctermbg=black cterm=none
-highlight FoldColumn ctermfg=darkgrey ctermbg=none cterm=none
+highlight Folded ctermfg=8 ctermbg=0 cterm=none
+highlight FoldColumn ctermfg=8 ctermbg=none cterm=none
+highlight SignColumn ctermfg=8 ctermbg=none cterm=none
 
-highlight LineNr ctermfg=darkgrey ctermbg=none cterm=none
+highlight LineNr ctermfg=8 ctermbg=none cterm=none
 
-highlight CursorLineNr ctermfg=darkyellow ctermbg=black cterm=none
+highlight CursorLineNr ctermfg=3 ctermbg=0 cterm=none
 
-highlight MatchParen ctermfg=darkcyan ctermbg=none cterm=underline
+highlight MatchParen ctermfg=6 ctermbg=none cterm=underline
 
 highlight! link MessageWindow WarningMsg
 highlight! link ModeMsg Normal
 highlight MoreMsg ctermfg=none ctermbg=none cterm=bold
-highlight NonText ctermfg=darkgrey ctermbg=none cterm=none
+highlight NonText ctermfg=8 ctermbg=none cterm=none
 
 highlight Normal ctermfg=none ctermbg=none cterm=none
 highlight! link NormalFloat Pmenu
@@ -99,8 +103,8 @@ highlight! link FloatBorder VertSplit
 highlight! link FloatShadow Pmenu
 highlight! link FloatShadowThrough Pmenu
 
-highlight Pmenu ctermfg=none ctermbg=black cterm=none
-highlight PmenuSel ctermfg=darkblue ctermbg=none cterm=bold,inverse
+highlight Pmenu ctermfg=none ctermbg=0 cterm=none
+highlight PmenuSel ctermfg=4 ctermbg=none cterm=bold,inverse
 highlight! link PmenuKind Pmenu
 highlight! link PmenuKindSel PmenuSel
 highlight! link PmenuExtra Pmenu
@@ -111,47 +115,51 @@ highlight! link PmenuMatchSel Search
 highlight! link PmenuShadow Pmenu
 highlight! link PmenuShadowThrough Pmenu
 highlight! link PmenuSbar Pmenu
-highlight PmenuThumb ctermfg=none ctermbg=white cterm=none
+highlight PmenuSbar ctermfg=none ctermbg=8 cterm=none
+highlight PmenuThumb ctermfg=none ctermbg=15 cterm=none
 
 highlight! link PopupNotification WarningMsg
 
 highlight Question ctermfg=none ctermbg=none cterm=bold
 highlight! link QuickFixLine PmenuSel
 
-highlight Search ctermfg=darkgreen ctermbg=none cterm=inverse
-highlight CurSearch ctermfg=darkyellow ctermbg=none cterm=inverse
+highlight Search ctermfg=2 ctermbg=none cterm=inverse
+highlight CurSearch ctermfg=3 ctermbg=none cterm=inverse
 highlight! link Substitute CurSearch
 
-highlight SpecialKey ctermfg=darkmagenta ctermbg=none cterm=none
+highlight SpecialKey ctermfg=5 ctermbg=none cterm=none
 highlight SpellBad ctermfg=none ctermbg=none cterm=undercurl guisp=#ff5f59
 highlight SpellCap ctermfg=none ctermbg=none cterm=undercurl guisp=#d0bc00
 if !has('nvim')
-  highlight SpellBad ctermul=darkred
-  highlight SpellCap ctermul=darkyellow
+  highlight SpellBad ctermul=1
+  highlight SpellCap ctermul=3
 endif
 highlight! link SpellLocal SpellCap
 highlight! link SpellRare SpellCap
 
-highlight StatusLine ctermfg=none ctermbg=black cterm=none
-highlight StatusLineNC ctermfg=darkgrey ctermbg=black cterm=none
+highlight StatusLine ctermfg=none ctermbg=0 cterm=none
+highlight StatusLineNC ctermfg=8 ctermbg=0 cterm=none
+highlight StatusLineTerm ctermfg=none ctermbg=0 cterm=none
+highlight StatusLineTermNC ctermfg=8 ctermbg=0 cterm=none
 highlight! link StatusLineTerm StatusLine
 highlight! link StatusLineTermNC StatusLineNC
 
-highlight TabLine ctermfg=none ctermbg=black cterm=none
+highlight TabLine ctermfg=none ctermbg=0 cterm=none
+highlight ToolbarLine ctermfg=none ctermbg=0 cterm=none
 highlight! link TabLineFill TabLine
-highlight TabLineSel ctermfg=darkblue ctermbg=black cterm=inverse
+highlight TabLineSel ctermfg=4 ctermbg=0 cterm=inverse
 
-highlight Title ctermfg=darkblue ctermbg=none cterm=bold
-highlight Visual ctermfg=white ctermbg=darkgrey cterm=none
+highlight Title ctermfg=4 ctermbg=none cterm=bold
+highlight Visual ctermfg=15 ctermbg=8 cterm=none
 highlight! link SnippetTabstop Visual
 highlight! link SnippetTabstopActive CurSearch
 
-highlight WarningMsg ctermfg=darkyellow ctermbg=none cterm=inverse
+highlight WarningMsg ctermfg=3 ctermbg=none cterm=inverse
 highlight! link StderrMsg ErrorMsg
 highlight! link StdoutMsg Normal
 highlight! link MsgArea Normal
 highlight! link MsgSeparator VertSplit
-highlight WildMenu ctermfg=darkblue ctermbg=none cterm=bold,inverse
+highlight WildMenu ctermfg=4 ctermbg=none cterm=bold,inverse
 highlight! link TermCursor Cursor
 
 if has('nvim')
