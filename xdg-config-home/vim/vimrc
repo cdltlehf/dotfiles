@@ -40,7 +40,10 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 
 Plug 'prabirshrestha/vim-lsp'
@@ -51,13 +54,12 @@ Plug 'junegunn/fzf', {'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'airblade/vim-gitgutter'
-Plug 'airblade/vim-rooter'
 
 Plug 'DingDean/wgsl.vim'
 Plug 'bullets-vim/bullets.vim'
 Plug 'google/styleguide', { 'branch': 'gh-pages' }
 Plug 'github/copilot.vim'
-Plug 'rhysd/vim-healthcheck'
+Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'lervag/vimtex'
 Plug 'ojroques/vim-oscyank'
 
@@ -65,11 +67,7 @@ call plug#end()
 
 packadd! bufferline
 packadd! editorconfig
-packadd! sensible
 packadd! statusline
-packadd! unimpaired
-packadd! vim-scriptease
-packadd! vim-numbertoggle
 
 silent! colorscheme modus16
 
