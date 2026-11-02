@@ -2,7 +2,7 @@
 
 ## Requirements
 
-sh (POSIX-compliant), curl (or wget)
+sh (POSIX-compliant), curl (or wget), git, make
 
 ## Layout
 
@@ -15,7 +15,7 @@ sh (POSIX-compliant), curl (or wget)
 git clone https://github.com/cdltlehf/dotfiles.git --depth 1 && cd dotfiles && make
 ```
 
-Run `make test` to verify.
+Run `make check` to verify.
 
 ## References
 
