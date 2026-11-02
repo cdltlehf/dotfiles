@@ -79,11 +79,11 @@ clean: ## Clean dangling symlinks and cache
 	@for d in $(TARGET_DIRS); do \
 		[[ -d "$$d" ]] || continue; \
 		symlinks -dr "$$d" | grep -v '^absolute:' || true; \
-		find "$$d" \( -type f -o -type l \) \
-			\( -name "*.bak" -o -name ".*.bak" \) -delete; \
+		find "$$d" \( -name "*.bak" -o -name ".*.bak" \) -prune \
+			-exec rm -rf {} +; \
 	done
 	@symlinks -d "$(HOME)" | grep -v '^absolute:' || true
-	@find "$(HOME)" -maxdepth 1 \( -type f -o -type l \) -name ".*.bak" -delete
+	@find "$(HOME)" -maxdepth 1 -name ".*.bak" -exec rm -rf {} +
 	@rm -rf "$(XDG_CACHE_HOME)/evalcache"
 
 .PHONY: distclean
