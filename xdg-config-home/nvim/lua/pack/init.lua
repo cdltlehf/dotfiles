@@ -12,15 +12,16 @@ vim.pack.add({
   gh("tpope/vim-repeat"),
   gh("tpope/vim-abolish"),
   gh("tpope/vim-unimpaired"),
-  gh("nvim-tree/nvim-web-devicons"),
+  gh("tpope/vim-scriptease"),
+  gh("jeffkreeftmeijer/vim-numbertoggle"),
   gh("stevearc/oil.nvim"),
   gh("tpope/vim-projectionist"),
   gh("github/copilot.vim"),
   gh("bullets-vim/bullets.vim"),
+  gh("DingDean/wgsl.vim"),
   { src = gh("google/styleguide"), version = "gh-pages" },
   gh("lervag/vimtex"),
   gh("folke/which-key.nvim"),
-  gh("sphamba/smear-cursor.nvim"),
 })
 
 require("pack.fzf")
@@ -31,4 +32,3 @@ require("pack.vimtex")
 require("pack.oil")
 require("pack.projectionist")
 require("pack.which_key")
-require("pack.smear_cursor")

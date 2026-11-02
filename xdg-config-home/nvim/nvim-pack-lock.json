@@ -20,21 +20,9 @@
       "rev": "d4854fa9a94b5c8b37dd209fb4a19e98e764186f",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
-    "nvim-lspconfig": {
-      "rev": "77b7432d4770d23b277d37923e5a08a442d8bb07",
-      "src": "https://github.com/neovim/nvim-lspconfig"
-    },
-    "nvim-web-devicons": {
-      "rev": "ec309a0eaff6ea967e58c275996155ab5c16938d",
-      "src": "https://github.com/nvim-tree/nvim-web-devicons"
-    },
     "oil.nvim": {
       "rev": "d3733d933833a0e59b813ecec99341527adf0c28",
       "src": "https://github.com/stevearc/oil.nvim"
-    },
-    "smear-cursor.nvim": {
-      "rev": "f6cb57c342268177f719acc3968b9d8de3ecc969",
-      "src": "https://github.com/sphamba/smear-cursor.nvim"
     },
     "styleguide": {
       "rev": "c775c0c2f73c110613243520c001577cdbc0034d",
@@ -49,10 +37,6 @@
       "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
       "src": "https://github.com/tpope/vim-fugitive"
     },
-    "vim-gitgutter": {
-      "rev": "90b75207bd9b55d8ac4af15f72b4e935462014d0",
-      "src": "https://github.com/airblade/vim-gitgutter"
-    },
     "vim-numbertoggle": {
       "rev": "075b7478777e694fbac330ee34a74590dad0fee1",
       "src": "https://github.com/jeffkreeftmeijer/vim-numbertoggle"
@@ -60,10 +44,6 @@
     "vim-obsession": {
       "rev": "dad3b5a1f9b661e27cb77fc69308287349d3cf30",
       "src": "https://github.com/tpope/vim-obsession"
-    },
-    "vim-oscyank": {
-      "rev": "d67d76b2f19b868b70a1cf33a779d71dc092cb30",
-      "src": "https://github.com/ojroques/vim-oscyank"
     },
     "vim-projectionist": {
       "rev": "5ff7bf79a6ef741036d2038a226bcb5f8b1cd296",
@@ -85,13 +65,13 @@
       "rev": "db65482581a28e4ccf355be297f1864a4e66985c",
       "src": "https://github.com/tpope/vim-unimpaired"
     },
-    "vim-vinegar": {
-      "rev": "bb1bcddf43cfebe05eb565a84ab069b357d0b3d6",
-      "src": "https://github.com/tpope/vim-vinegar"
-    },
     "vimtex": {
       "rev": "02eee260766d031185449c9600f03b933fa0357c",
       "src": "https://github.com/lervag/vimtex"
+    },
+    "wgsl.vim": {
+      "rev": "bb6516e0356e81cc10a885e63273ef1d63cc74b1",
+      "src": "https://github.com/DingDean/wgsl.vim"
     },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
