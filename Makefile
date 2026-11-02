@@ -10,6 +10,7 @@ export XDG_DATA_HOME ?= $(HOME)/.local/share
 export XDG_STATE_HOME ?= $(HOME)/.local/state
 export XDG_CACHE_HOME ?= $(HOME)/.cache
 export BIN_DIR ?= $(HOME)/.local/bin
+export XDG_TEMPLATES_DIR ?= $(HOME)/Templates
 
 ##@ General
 
@@ -73,7 +74,7 @@ upgrade: ## Upgrade tools
 	@./scripts/upgrade
 
 .PHONY: clean
-clean: TARGET_DIRS := $(XDG_CONFIG_HOME) $(BIN_DIR) $(CURDIR)
+clean: TARGET_DIRS := $(XDG_CONFIG_HOME) $(XDG_TEMPLATES_DIR) $(BIN_DIR) $(CURDIR)
 clean: ## Clean dangling symlinks and cache
 	@for d in $(TARGET_DIRS); do \
 		[[ -d "$$d" ]] || continue; \

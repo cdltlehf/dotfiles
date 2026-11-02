@@ -1,6 +1,6 @@
 ---
-status: proposed
-date: 2026-10-30
+status: accepted
+date: 2026-11-02
 ---
 
 # Install prebuilt tools with mise
