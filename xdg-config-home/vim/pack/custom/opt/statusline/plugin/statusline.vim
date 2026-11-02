@@ -136,8 +136,10 @@ function! StatusLineRender() abort
     call add(l:center_parts, '%#StatusLineText#modified')
   endif
 
-  if l:mode_code !~# '^[iR]' && exists('*lsp#get_buffer_diagnostics_counts')
-    let l:counts = lsp#get_buffer_diagnostics_counts()
+  if l:mode_code !~# '^[iR]' && (has('nvim') || exists('*lsp#get_buffer_diagnostics_counts'))
+    let l:counts = has('nvim')
+          \ ? luaeval('{ error = vim.diagnostic.count(0)[vim.diagnostic.severity.ERROR], warning = vim.diagnostic.count(0)[vim.diagnostic.severity.WARN] }')
+          \ : lsp#get_buffer_diagnostics_counts()
     let l:err = get(l:counts, 'error', 0)
     let l:warn = get(l:counts, 'warning', 0)
     if l:err > 0

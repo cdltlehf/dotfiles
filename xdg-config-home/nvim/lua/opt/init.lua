@@ -44,4 +44,5 @@ elseif glyphs == "nerdfont" then
   opt.fillchars:append({ foldopen = "", foldclose = "" })
 end
 
-require("opt.statusline")
+opt.packpath:append(vim.fn.expand("$XDG_CONFIG_HOME/vim"))
+vim.cmd.packadd("statusline")
