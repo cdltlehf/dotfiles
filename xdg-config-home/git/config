@@ -2,6 +2,7 @@
 ; Reference: https://blog.gitbutler.com/how-git-core-devs-configure-git/
 ; Reference: https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
 ; Reference: https://stackoverflow.com/questions/1057564/pretty-git-branch-graphs
+; Reference: https://cli.github.com/manual/gh_auth_setup-git
 
 [alias]
 	sw = switch
@@ -77,6 +78,13 @@
 
 [user]
 	useConfigOnly = true
+
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
 
 [include]
 	path = "~/.gitconfig.local"
