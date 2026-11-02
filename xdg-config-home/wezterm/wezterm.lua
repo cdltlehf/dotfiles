@@ -33,7 +33,7 @@ if f then
   f:close()
   config.color_scheme = "colors"
 else
-  config.color_scheme = "Modus Vivendi"
+  config.color_scheme = "Modus-Vivendi"
 end
 
 return config
