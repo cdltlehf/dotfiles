@@ -6,13 +6,8 @@ sh (POSIX-compliant), curl (or wget), git, make
 
 ## Layout
 
-*   `xdg-config-home/`: configurations for the user, linked into `XDG_CONFIG_HOME`
-    *   `vim/`: runtime files that Vim and Neovim share, such as `colors/`,
-        `after/`, and `pack/custom/`.
-        Only `vimrc` and `vimrc.d/` are Vim-only,
-        and `vimrc.d/neovim.vim` sets the Neovim defaults in Vim.
-    *   `nvim/`: configuration that only Neovim uses
-*   `xdg-templates-dir/`: templates for projects, linked into `XDG_TEMPLATES_DIR`
+* `xdg-config-home/`: configurations for the user, linked into `XDG_CONFIG_HOME`
+* `xdg-templates-dir/`: templates for projects, linked into `XDG_TEMPLATES_DIR`
 
 ## Installation
 
