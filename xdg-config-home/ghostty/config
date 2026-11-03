@@ -10,7 +10,7 @@ keybind = shift+space=ignore
 macos-titlebar-style = tabs
 mouse-hide-while-typing = true
 shell-integration-features = no-title
-theme = "flavours,Modus Vivendi"
+theme = "Modus Vivendi"
 title = ""
 
 font-family = "JetBrains Mono"
