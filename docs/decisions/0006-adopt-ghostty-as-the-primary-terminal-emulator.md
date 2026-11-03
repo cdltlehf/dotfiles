@@ -13,7 +13,7 @@ Chosen option: "Ghostty," because its native Swift/AppKit user interface provide
   * Primary font: JetBrains Mono at 13 pt with 1.2 cell height.
   * Italic style: Victor Mono (Medium Italic and Bold Italic).
   * Fallbacks: Pretendard GOV for Korean, Symbols Nerd Font for icons, and JuliaMono for mathematical and technical Unicode blocks.
-  * Window appearance: Native tabs, background opacity of 0.9, and macOS regular glass blur.
+  * Window appearance: native tabs, background opacity of 0.9, and macOS regular glass blur.
   * Palette: Modus Vivendi, with dynamic Base16 integration through `flavours`.
 * Other terminal emulators (WezTerm, Kitty, Alacritty, and iTerm2) are uninstalled and their configurations removed to keep the dotfiles minimal and maintainable.
 

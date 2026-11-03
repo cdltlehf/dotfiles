@@ -41,14 +41,13 @@ repo = "https://github.com/scop/pre-commit-shfmt"
 rev = "v3.14.1-1"
 
 [[repos]]
-hooks = [
-  { id = "shellcheck", types_or = [
-    "shell",
-    "bats",
-  ], exclude = '\.zsh$' },
-]
 repo = "https://github.com/shellcheck-py/shellcheck-py"
 rev = "v0.11.0.1-1"
+
+[[repos.hooks]]
+exclude = '\.zsh$'
+id = "shellcheck"
+types_or = ["shell", "bats"]
 
 [[repos]]
 hooks = [{ id = "yamllint" }]
@@ -60,22 +59,14 @@ hooks = [{ id = "markdownlint-cli2", args = ["--fix"] }]
 repo = "https://github.com/DavidAnson/markdownlint-cli2"
 rev = "v0.24.0"
 
-# Biome indents continuation lines by 2 spaces, not by the 4 or more of
-# the Google JavaScript Style Guide, and cannot be configured to.
 [[repos]]
-hooks = [
-  { id = "biome-format", additional_dependencies = [
-    "@biomejs/biome@2.5.14",
-  ], types_or = [
-    "javascript",
-    "json",
-    "jsx",
-    "ts",
-    "tsx",
-  ] },
-]
 repo = "https://github.com/biomejs/pre-commit"
 rev = "v2.6.4"
+
+[[repos.hooks]]
+additional_dependencies = ["@biomejs/biome@2.6.4"]
+id = "biome-format"
+types_or = ["javascript", "json", "jsx", "ts", "tsx"]
 
 [[repos]]
 hooks = [{ id = "gitleaks" }]
@@ -91,3 +82,17 @@ hooks = [
 ]
 repo = "https://github.com/commitizen-tools/commitizen"
 rev = "v4.19.3"
+
+[[repos]]
+repo = "https://github.com/vale-cli/vale"
+rev = "v3.26.0"
+
+[[repos.hooks]]
+args = ["sync"]
+id = "vale"
+name = "vale sync"
+pass_filenames = false
+
+[[repos.hooks]]
+args = ["--output=line"]
+id = "vale"

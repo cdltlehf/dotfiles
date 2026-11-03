@@ -75,8 +75,8 @@ One decision record MAY state the reasons for several deviations.
 
 ## This repository
 
-This section adds to the conventions above, and overrides them where it names a
-rule. The conventions above MUST stay identical to
+This section adds to the preceding conventions, and overrides them where it
+names a rule. The preceding conventions MUST stay identical to
 `xdg-templates-dir/AGENTS.md`.
 
 *   `REFERENCES` lists the sources of templates, which carry no
@@ -86,4 +86,4 @@ rule. The conventions above MUST stay identical to
     Its `Files` patterns follow
     [gitignore](https://git-scm.com/docs/gitignore#_pattern_format).
     It carries no copyright metadata,
-    which overrides the DEP-5 rule above.
+    which overrides the preceding DEP-5 rule.

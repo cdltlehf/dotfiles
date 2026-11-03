@@ -138,12 +138,17 @@ function! s:register_servers() abort
         \     ],
         \   },
         \   {'name': 'rust-analyzer', 'cmd': ['rust-analyzer'], 'allowlist': ['rust']},
-        \   {'name': 'glasgow', 'cmd': ['glasgow'], 'allowlist': ['wgsl']},
+        \   {'name': 'stylua', 'cmd': ['stylua', '--lsp'], 'allowlist': ['lua']},
         \   {'name': 'taplo', 'cmd': ['taplo', 'lsp', 'stdio'], 'allowlist': ['toml']},
         \   {'name': 'marksman', 'cmd': ['marksman', 'server'], 'allowlist': ['markdown']},
         \   {
         \     'name': 'markdownlint-lsp',
         \     'cmd': ['markdownlint-lsp-server', '--stdio'],
+        \     'allowlist': ['markdown', 'markdown.mdx'],
+        \   },
+        \   {
+        \     'name': 'vale-ls',
+        \     'cmd': ['vale-ls'],
         \     'allowlist': ['markdown', 'markdown.mdx'],
         \   },
         \   {'name': 'efm-langserver', 'cmd': ['efm-langserver'], 'allowlist': ['yaml']},

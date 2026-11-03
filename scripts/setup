@@ -1,7 +1,6 @@
 #!/bin/sh
 #
 # Reference: https://github.com/git/git
-# Reference: https://wezfurlong.org/wezterm/
 # Reference: https://iterm2.com/
 # Reference: https://github.com/ThomasDickey/xterm-snapshots
 # Reference: https://github.com/robertknight/konsole
@@ -47,8 +46,6 @@ readonly QUERY_COLOR_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-s
 readonly QUERY_DYNAMIC_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/query-dynamic.pl"
 readonly QUERY_FONTS_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/query-fonts.pl"
 readonly TEST_FONTS_URL="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/bin/scripts/test-fonts.sh"
-readonly WEZTERM_SHELL_INTEGRATION_DIR="${XDG_DATA_HOME}/wezterm/shell-integration"
-readonly WEZTERM_SHELL_INTEGRATION_URL="https://raw.githubusercontent.com/wezterm/wezterm/main/assets/shell-integration/wezterm.sh"
 readonly ZSH_COMPLETION_DIR="${XDG_DATA_HOME}/zsh/site-functions"
 
 OS="$(detect_os)"
@@ -107,8 +104,6 @@ download "${QUERY_COLOR_URL}" "${BIN_DIR}/query-color" "+x"
 download "${QUERY_DYNAMIC_URL}" "${BIN_DIR}/query-dynamic" "+x"
 download "${QUERY_FONTS_URL}" "${BIN_DIR}/query-fonts" "+x"
 download "${TEST_FONTS_URL}" "${BIN_DIR}/test-fonts" "+x"
-download "${WEZTERM_SHELL_INTEGRATION_URL}" \
-  "${WEZTERM_SHELL_INTEGRATION_DIR}/wezterm.sh"
 
 readonly MADR_FILES=".markdownlint.yml \
   0000-use-markdown-architectural-decision-records.md \

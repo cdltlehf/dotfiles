@@ -105,7 +105,7 @@ repo = "https://github.com/biomejs/pre-commit"
 rev = "v2.6.4"
 
 [[repos.hooks]]
-additional_dependencies = ["@biomejs/biome@2.6.3"]
+additional_dependencies = ["@biomejs/biome@2.6.4"]
 id = "biome-format"
 types_or = ["javascript", "json", "jsx", "ts", "tsx"]
 
@@ -126,7 +126,7 @@ rev = "v4.19.3"
 
 [[repos]]
 repo = "https://github.com/vale-cli/vale"
-rev = "v3.25.1"
+rev = "v3.26.0"
 
 [[repos.hooks]]
 args = ["sync"]
@@ -135,5 +135,5 @@ name = "vale sync"
 pass_filenames = false
 
 [[repos.hooks]]
-args = ["--output=line", "--minAlertLevel=error"]
+args = ["--output=line"]
 id = "vale"

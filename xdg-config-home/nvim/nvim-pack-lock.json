@@ -20,9 +20,21 @@
       "rev": "1e9d0fbfe7ff848bc402d2c2e2854fb4eff2dce7",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
+    "nvim-lspconfig": {
+      "rev": "adfbb74472f6c231b651b650a89f414c2680fb31",
+      "src": "https://github.com/neovim/nvim-lspconfig"
+    },
+    "nvim-web-devicons": {
+      "rev": "ec309a0eaff6ea967e58c275996155ab5c16938d",
+      "src": "https://github.com/nvim-tree/nvim-web-devicons"
+    },
     "oil.nvim": {
       "rev": "d3733d933833a0e59b813ecec99341527adf0c28",
       "src": "https://github.com/stevearc/oil.nvim"
+    },
+    "smear-cursor.nvim": {
+      "rev": "f6cb57c342268177f719acc3968b9d8de3ecc969",
+      "src": "https://github.com/sphamba/smear-cursor.nvim"
     },
     "styleguide": {
       "rev": "70d70c93c9cc6dd18c66a37ed72de3c7642722bd",
@@ -37,6 +49,10 @@
       "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
       "src": "https://github.com/tpope/vim-fugitive"
     },
+    "vim-gitgutter": {
+      "rev": "90b75207bd9b55d8ac4af15f72b4e935462014d0",
+      "src": "https://github.com/airblade/vim-gitgutter"
+    },
     "vim-numbertoggle": {
       "rev": "075b7478777e694fbac330ee34a74590dad0fee1",
       "src": "https://github.com/jeffkreeftmeijer/vim-numbertoggle"
@@ -44,6 +60,10 @@
     "vim-obsession": {
       "rev": "dad3b5a1f9b661e27cb77fc69308287349d3cf30",
       "src": "https://github.com/tpope/vim-obsession"
+    },
+    "vim-oscyank": {
+      "rev": "d67d76b2f19b868b70a1cf33a779d71dc092cb30",
+      "src": "https://github.com/ojroques/vim-oscyank"
     },
     "vim-projectionist": {
       "rev": "5ff7bf79a6ef741036d2038a226bcb5f8b1cd296",
@@ -64,6 +84,10 @@
     "vim-unimpaired": {
       "rev": "db65482581a28e4ccf355be297f1864a4e66985c",
       "src": "https://github.com/tpope/vim-unimpaired"
+    },
+    "vim-vinegar": {
+      "rev": "bb1bcddf43cfebe05eb565a84ab069b357d0b3d6",
+      "src": "https://github.com/tpope/vim-vinegar"
     },
     "vimtex": {
       "rev": "3f96503904db6acdb7108cd93a9580dd41e88555",
