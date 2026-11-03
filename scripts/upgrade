@@ -23,7 +23,7 @@ if command -v brew >/dev/null; then
   if [ -f "${BASE_DIR}/platforms/${OS}/Brewfile" ]; then
     brew bundle --file "${BASE_DIR}/platforms/${OS}/Brewfile"
   fi
-  brew upgrade
+  brew upgrade --yes
 fi
 
 if command -v mise >/dev/null; then
