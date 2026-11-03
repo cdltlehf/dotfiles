@@ -7,13 +7,11 @@ background-blur = macos-glass-regular
 background-opacity = 0.9
 copy-on-select = clipboard
 keybind = shift+space=ignore
+macos-titlebar-style = tabs
 mouse-hide-while-typing = true
 shell-integration-features = no-title
-theme = "Modus Vivendi"
+theme = "flavours,Modus Vivendi"
 title = ""
-window-padding-balance = true
-window-padding-x = 6
-window-padding-y = 6
 
 font-family = "JetBrains Mono"
 font-family = "Symbols Nerd Font"

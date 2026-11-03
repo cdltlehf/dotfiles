@@ -17,3 +17,8 @@ template = "ghostty"
 file = "${XDG_STATE_HOME:-~/.local/state}/alacritty/colors.toml"
 rewrite = true
 template = "alacritty"
+
+[[items]]
+file = "${XDG_STATE_HOME:-~/.local/state}/kitty/colors.conf"
+rewrite = true
+template = "kitty"

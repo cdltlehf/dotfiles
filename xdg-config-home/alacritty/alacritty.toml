@@ -6,11 +6,12 @@ LC_TERMINAL_GLYPHS = "nerdfont"
 [window]
 blur = true
 decorations = "Transparent"
-dimensions = { columns = 80, lines = 24 }
 opacity = 0.9
-padding = { x = 0, y = 25 }
 
 [font]
+bold = { family = "JetBrains Mono", style = "Bold" }
+bold_italic = { family = "Victor Mono", style = "Bold Italic" }
+italic = { family = "Victor Mono", style = "Medium Italic" }
 normal = { family = "JetBrains Mono" }
 offset = { x = 0, y = 2 }
 size = 13
