@@ -4,16 +4,6 @@ rewrite = true
 template = "shell"
 
 [[items]]
-file = "${XDG_STATE_HOME:-~/.local/state}/wezterm/colorschemes/colors.toml"
-rewrite = true
-template = "wezterm"
-
-[[items]]
 file = "${XDG_CONFIG_HOME:-~/.config}/ghostty/themes/flavours"
 rewrite = true
 template = "ghostty"
-
-[[items]]
-file = "${XDG_STATE_HOME:-~/.local/state}/kitty/colors.conf"
-rewrite = true
-template = "kitty"
