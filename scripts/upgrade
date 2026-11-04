@@ -27,6 +27,7 @@ if command -v brew >/dev/null; then
 fi
 
 if command -v mise >/dev/null; then
+  mise self-update --yes 2>/dev/null || true
   mise install --yes
   mise upgrade --bump
 fi
