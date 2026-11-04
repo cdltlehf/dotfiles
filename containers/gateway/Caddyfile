@@ -2,11 +2,7 @@
 # Reference: https://platform.openai.com/docs/api-reference
 
 :8000 {
-	@unauthorized {
-		path /v1/*
-		expression `"{$API_KEY}" != ""`
-		not header Authorization "Bearer {$API_KEY}"
-	}
+	@unauthorized not header Authorization "Bearer {$API_KEY}"
 	handle @unauthorized {
 		respond 401
 	}
@@ -30,16 +26,16 @@
 }
 
 :3001 {
+	header Access-Control-Allow-Origin *
+	header Access-Control-Allow-Headers "Authorization, Content-Type, Accept"
+	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+
 	@options method OPTIONS
 	handle @options {
-		header Access-Control-Allow-Origin *
-		header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-		header Access-Control-Allow-Headers "Authorization, Content-Type, Accept"
 		respond 204
 	}
 
 	@unauthorized {
-		expression `"{$API_KEY}" != ""`
 		not header Authorization "Bearer {$API_KEY}"
 		not query api_key={$API_KEY}
 	}
@@ -48,8 +44,6 @@
 	}
 
 	handle {
-		header Access-Control-Allow-Origin *
-		header Access-Control-Allow-Headers "Authorization, Content-Type, Accept"
 		reverse_proxy mcp-server:8080 {
 			flush_interval -1
 		}
