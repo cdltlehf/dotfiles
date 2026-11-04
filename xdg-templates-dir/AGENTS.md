@@ -13,10 +13,6 @@ several deviations.
 
 *   Documentation decisions that no tool enforces SHOULD adhere to the [Google
     Developer Documentation Style Guide](https://developers.google.com/style).
-*   File references and copyright metadata SHOULD adhere to the
-    [Machine-readable Debian copyright file
-    format](https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/)
-    (DEP-5).
 
 ## Coding conventions
 
@@ -37,17 +33,10 @@ several deviations.
     Scripts targeting `/bin/sh` MUST adhere to the [POSIX Shell Command
     Language](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html).
 *   Web user interfaces:
-    *   HTML documents MUST use elements for their intended purpose according to
-        the [WHATWG HTML Living Standard](https://html.spec.whatwg.org/).
     *   Accessible markup and dynamic states SHOULD adhere to [W3C
         WAI-ARIA](https://www.w3.org/TR/wai-aria/).
-    *   Styling SHOULD separate structure from presentation according to [WHATWG
-        HTML § Presentational
-        markup](https://html.spec.whatwg.org/multipage/introduction.html#presentational-markup).
     *   Interfaces MUST conform to [W3C WCAG 2.2](https://www.w3.org/TR/WCAG22/)
         Level AA and SHOULD conform to Level AAA.
-    *   Dynamic interactions SHOULD adhere to [htmx](https://htmx.org/) when the
-        project uses it.
 *   Version numbers and dependency constraints SHOULD adhere to [Semantic
     Versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -62,8 +51,9 @@ several deviations.
 *   Newly created files SHOULD start from the templates in `XDG_TEMPLATES_DIR`
     ([xdg-user-dirs](https://gitlab.freedesktop.org/xdg/xdg-user-dirs)) when a
     matching template exists.
-*   Branches SHOULD follow [Git
-    Flow](https://nvie.com/posts/a-successful-git-branching-model/).
+*   Branches SHOULD follow the project's branching model (such as [Git
+    Flow](https://nvie.com/posts/a-successful-git-branching-model/) or [GitHub
+    Flow](https://docs.github.com/en/get-started/using-github/github-flow)).
 *   Commit messages SHOULD adhere to [Conventional
     Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 *   Architecturally significant decisions MAY be recorded in `docs/decisions/`

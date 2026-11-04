@@ -24,6 +24,13 @@ Project instructions take precedence over this document.
     [Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
     when a language server is configured.
 
+## Coding conventions
+
+*   Comments and documentation SHOULD explain intent and rationale ("why"),
+    rather than restating what code does ("what").
+*   Tests SHOULD verify behavior through public interfaces rather than
+    implementation details.
+
 ## Changes
 
 * Agents SHOULD ask the user before they commit, amend, rebase, or push.
