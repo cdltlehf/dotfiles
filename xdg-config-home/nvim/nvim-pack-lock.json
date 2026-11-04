@@ -37,7 +37,7 @@
       "src": "https://github.com/sphamba/smear-cursor.nvim"
     },
     "styleguide": {
-      "rev": "70d70c93c9cc6dd18c66a37ed72de3c7642722bd",
+      "rev": "f8e2b0f7c8b0456b8c199166b13640d3eb36df87",
       "src": "https://github.com/google/styleguide",
       "version": "'gh-pages'"
     },
