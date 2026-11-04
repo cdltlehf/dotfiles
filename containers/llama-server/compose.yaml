@@ -12,7 +12,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     environment:
-      - LLAMA_API_KEY=${API_KEY:-}
+      - LLAMA_API_KEY=${API_KEY:?API_KEY is required}
     volumes:
       - ~/.local/share/models/responses:/models:ro
     command: [
@@ -41,7 +41,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     environment:
-      - LLAMA_API_KEY=${API_KEY:-}
+      - LLAMA_API_KEY=${API_KEY:?API_KEY is required}
     volumes:
       - ~/.local/share/models/embeddings:/models:ro
     command: [
