@@ -9,7 +9,7 @@
       "src": "https://github.com/github/copilot.vim"
     },
     "fzf": {
-      "rev": "26ff936df038b6a62ec42cf18db27b2ea2bb8ec3",
+      "rev": "99bfd5aa0f66133d7dcfbf18f8044eb765f04649",
       "src": "https://github.com/junegunn/fzf"
     },
     "fzf.vim": {
@@ -17,7 +17,7 @@
       "src": "https://github.com/junegunn/fzf.vim"
     },
     "gitsigns.nvim": {
-      "rev": "1e9d0fbfe7ff848bc402d2c2e2854fb4eff2dce7",
+      "rev": "4bcd99167c265f135886b282baad77afe06206b2",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "nvim-lspconfig": {
@@ -37,7 +37,7 @@
       "src": "https://github.com/sphamba/smear-cursor.nvim"
     },
     "styleguide": {
-      "rev": "70d70c93c9cc6dd18c66a37ed72de3c7642722bd",
+      "rev": "f8e2b0f7c8b0456b8c199166b13640d3eb36df87",
       "src": "https://github.com/google/styleguide",
       "version": "'gh-pages'"
     },
