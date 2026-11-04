@@ -37,6 +37,7 @@ readonly COLOR_256_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-sna
 readonly COLOR_SPACES_URL="https://raw.githubusercontent.com/robertknight/konsole/master/tests/color-spaces.pl"
 readonly GIT_COMPLETION_DIR="${XDG_DATA_HOME}/git/completion"
 readonly GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
+readonly HIDDEN_ALIAS_TEMPLATES="vale.ini"
 readonly IMGCAT_URL="https://iterm2.com/utilities/imgcat"
 readonly IMGLS_URL="https://iterm2.com/utilities/imgls"
 readonly MADR_TEMPLATE_URL="https://raw.githubusercontent.com/adr/madr/4.0.0/template"
@@ -128,6 +129,10 @@ for item in "${BASE_DIR}/xdg-templates-dir"/*; do
   *) ;;
   esac
   symlink "${item}" "${XDG_TEMPLATES_DIR}/${name}"
+  case " ${HIDDEN_ALIAS_TEMPLATES} " in
+  *" ${name} "*) symlink "${item}" "${XDG_TEMPLATES_DIR}/.${name}" ;;
+  *) ;;
+  esac
 done
 
 if command -v claude >/dev/null; then
