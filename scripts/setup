@@ -106,17 +106,17 @@ download "${QUERY_DYNAMIC_URL}" "${BIN_DIR}/query-dynamic" "+x"
 download "${QUERY_FONTS_URL}" "${BIN_DIR}/query-fonts" "+x"
 download "${TEST_FONTS_URL}" "${BIN_DIR}/test-fonts" "+x"
 
-readonly MADR_FILES=".markdownlint.yml \
-  0000-use-markdown-architectural-decision-records.md \
+readonly MADR_FILES="0000-use-markdown-architectural-decision-records.md \
   adr-template-bare-minimal.md \
   adr-template-bare.md \
   adr-template-minimal.md \
   adr-template.md"
 
+download "${MADR_TEMPLATE_URL}/.markdownlint.yml" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/.markdownlint.yaml"
 for file in ${MADR_FILES}; do
   download "${MADR_TEMPLATE_URL}/${file}" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/${file}"
 done
-symlink "adr-template-minimal.md" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/{}.md"
+symlink "adr-template.md" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/{}.md"
 symlink "{}.h.tmpl" "${BASE_DIR}/xdg-templates-dir/c/include/{}.hpp.tmpl"
 
 [ -L "${XDG_TEMPLATES_DIR}" ] && rm "${XDG_TEMPLATES_DIR}"

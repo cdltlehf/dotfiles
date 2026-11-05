@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-10-21
+---
+
 # Use Modus colors through the terminal palette
 
 ## Context and Problem Statement
@@ -18,3 +23,7 @@ Chosen option: "[Modus Themes](https://protesilaos.com/emacs/modus-themes), defi
 * Good, because the colors meet the WCAG AAA contrast that the project conventions prefer.
 * Good, because one palette keeps every program consistent.
 * Bad, because the programs in the terminal are limited to 16 colors.
+
+## More Information
+
+Revisit the theme choice or the 16-color ANSI constraint if an alternative color scheme provides accessible contrast (WCAG AA/AAA), or if terminal color-scheme negotiation protocols enable dynamic truecolor theming across editors and tools.

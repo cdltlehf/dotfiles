@@ -63,5 +63,6 @@ A `config.build.toml` enables the `asdf` backend and adds Vim, and `MISE_ENV=bui
 
 ## More Information
 
+Revisit tool installations when mise backends offer prebuilt binaries for tools that currently require Homebrew, or when an existing prebuilt backend is deprecated.
 Revisit the build tier when several tools need a build.
 The `conda` backend installed Vim without `libsodium` on macOS, as [jdx/mise#8336](https://github.com/jdx/mise/discussions/8336) reports.
