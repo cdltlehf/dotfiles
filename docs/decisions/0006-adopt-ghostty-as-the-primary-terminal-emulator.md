@@ -22,3 +22,7 @@ Chosen option: "Ghostty," because its native Swift/AppKit user interface provide
 * Good, because Ghostty provides native macOS windowing, tabs, and blur with zero custom Lua boilerplate.
 * Good, because Korean IME input operates reliably through macOS text input services without decomposed jamo issues.
 * Good, because maintaining a single terminal configuration simplifies dotfiles maintenance.
+
+## More Information
+
+Revisit the terminal emulator choice if future Ghostty releases regress in CJK IME composition stability or native macOS integration.

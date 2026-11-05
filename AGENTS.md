@@ -1,4 +1,4 @@
-# AGENTS.md
+# Agent instructions
 
 The key words in this document are to be interpreted as described in [BCP
 14](https://www.rfc-editor.org/info/bcp14) (RFC 2119 and RFC 8174).
@@ -20,6 +20,9 @@ deviation. One decision record MAY state the reasons for several deviations.
     declares no language version, agents SHOULD ask the user to declare one.
 *   Coding decisions that no tool enforces SHOULD adhere to the relevant [Google
     Style Guides](https://google.github.io/styleguide/).
+*   Engineering decisions that no tool enforces SHOULD adhere to the [Google
+    Engineering Practices
+    Documentation](https://google.github.io/eng-practices/).
 *   Makefiles:
     *   When a [GNU standard
         target](https://www.gnu.org/prep/standards/html_node/Standard-Targets.html)
@@ -29,20 +32,23 @@ deviation. One decision record MAY state the reasons for several deviations.
         make](https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html).
     *   Makefiles SHOULD set `SHELL := /bin/bash` for recipe execution.
 *   Shell scripts SHOULD target Bash, unless they may run where Bash is missing.
-    Scripts targeting `/bin/sh` MUST adhere to the [POSIX Shell Command
+    Scripts targeting `/bin/sh` MUST adhere to the [Portable Operating System
+    Interface (POSIX) Shell Command
     Language](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html).
 *   Web user interfaces:
-    *   Accessible markup and dynamic states SHOULD adhere to [W3C
-        WAI-ARIA](https://www.w3.org/TR/wai-aria/).
-    *   Interfaces MUST conform to [W3C WCAG 2.2](https://www.w3.org/TR/WCAG22/)
-        Level AA and SHOULD conform to Level AAA.
+    *   Accessible markup and dynamic states SHOULD adhere to [W3C Web
+        Accessibility Initiative Accessible Rich Internet Applications
+        (WAI-ARIA)](https://www.w3.org/TR/wai-aria/).
+    *   Interfaces MUST conform to [W3C Web Content Accessibility
+        Guidelines (WCAG) 2.2](https://www.w3.org/TR/WCAG22/) Level AA and
+        SHOULD conform to Level AAA.
 *   Version numbers and dependency constraints SHOULD adhere to [Semantic
     Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## File conventions
 
 *   Projects SHOULD place configuration, data, state, and cache files according
-    to the [XDG Base Directory
+    to the [X Desktop Group (XDG) Base Directory
     Specification](https://specifications.freedesktop.org/basedir-spec/latest/).
 
 ## Workflow
@@ -50,14 +56,17 @@ deviation. One decision record MAY state the reasons for several deviations.
 *   Newly created files SHOULD start from the templates in `XDG_TEMPLATES_DIR`
     ([xdg-user-dirs](https://gitlab.freedesktop.org/xdg/xdg-user-dirs)) when a
     matching template exists.
-*   Branches SHOULD follow the project's branching model (such as [Git
+*   Branches SHOULD follow a branching model such as [Git
     Flow](https://nvie.com/posts/a-successful-git-branching-model/) or [GitHub
-    Flow](https://docs.github.com/en/get-started/using-github/github-flow)).
+    Flow](https://docs.github.com/en/get-started/using-github/github-flow).
 *   Commit messages SHOULD adhere to [Conventional
     Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 *   Projects MAY record architecturally significant decisions in
-    `docs/decisions/` with [MADR](https://adr.github.io/madr/), keeping only the
-    sections the decision needs.
+    `docs/decisions/` with [Markdown Architectural Decision
+    Records (MADR)](https://adr.github.io/madr/), keeping only the sections
+    the decision needs.
+*   Decision records depending on external tools SHOULD specify revisit
+    criteria.
 
 ## This repository
 
@@ -66,7 +75,7 @@ names a rule. The preceding conventions MUST stay identical to
 `xdg-templates-dir/AGENTS.md`.
 
 *   `REFERENCES` lists the sources of templates, which carry no `Reference:`
-    comments, and of files that cannot carry them, in
+    comments, and of files that can't carry them, in
     [deb822](https://manpages.debian.org/trixie/dpkg-dev/deb822.5.en.html)
     paragraph syntax. Its `Files` patterns follow
     [gitignore](https://git-scm.com/docs/gitignore#_pattern_format). It carries

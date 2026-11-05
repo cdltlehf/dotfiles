@@ -1,4 +1,4 @@
-# AGENTS.md
+# Agent instructions
 
 The key words in this document are to be interpreted as described in
 [BCP 14](https://www.rfc-editor.org/info/bcp14) (RFC 2119 and RFC 8174).
@@ -24,12 +24,13 @@ Project instructions take precedence over this document.
     [Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
     when a language server is configured.
 
-## Coding conventions
+## Evaluation
 
-*   Comments and documentation SHOULD explain intent and rationale ("why"),
-    rather than restating what code does ("what").
-*   Tests SHOULD verify behavior through public interfaces rather than
-    implementation details.
+*   Evaluations of changes, designs, or solutions SHOULD use a contextless
+    subagent to ensure objective judgment.
+*   Comparative evaluations, such as A/B testing, SHOULD invoke contextless
+    subagents twice with alternating presentation order to eliminate position
+    bias.
 
 ## Changes
 
