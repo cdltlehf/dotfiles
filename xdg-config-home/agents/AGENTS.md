@@ -1,28 +1,25 @@
 # Agent instructions
 
 The key words in this document are to be interpreted as described in
-[BCP 14](https://www.rfc-editor.org/info/bcp14) (RFC 2119 and RFC 8174).
+[BCP 14][bcp-14] (RFC 2119 and RFC 8174).
 
 Project instructions take precedence over this document.
 
 ## Writing conventions
 
-*   Prompts and specifications SHOULD adhere to
-    [BCP 14](https://www.rfc-editor.org/info/bcp14).
+*   Prompts and specifications SHOULD adhere to [BCP 14][bcp-14].
 *   Prompts SHOULD adhere to the
-    [OpenAI Prompt Engineering Guide](https://developers.openai.com/api/docs/guides/prompt-engineering).
-*   Agent instructions SHOULD adhere to [AGENTS.md](https://agents.md/).
+    [OpenAI Prompt Engineering Guide][openai-prompt-guide].
+*   Agent instructions SHOULD adhere to [AGENTS.md][agents-md].
 *   Agent skills SHOULD adhere to the
-    [Agent Skills specification](https://agentskills.io/specification).
+    [Agent Skills specification][agent-skills].
 
 ## Tools
 
-*   Code exploration and impact analysis SHOULD use
-    [CodeGraph](https://github.com/colbymchenry/codegraph)
+*   Code exploration and impact analysis SHOULD use [CodeGraph][codegraph]
     when the repository has a `.codegraph/` index.
 *   Code refactoring and diagnostics SHOULD use the
-    [Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
-    when a language server is configured.
+    [Language Server Protocol][lsp] when a language server is configured.
 
 ## Evaluation
 
@@ -36,3 +33,10 @@ Project instructions take precedence over this document.
 
 * Agents SHOULD ask the user before they commit, amend, rebase, or push.
 * Agents SHOULD ask the user before they create or change a decision record.
+
+[agent-skills]: https://agentskills.io/specification
+[agents-md]: https://agents.md/
+[bcp-14]: https://www.rfc-editor.org/info/bcp14
+[codegraph]: https://github.com/colbymchenry/codegraph
+[lsp]: https://microsoft.github.io/language-server-protocol/
+[openai-prompt-guide]: https://developers.openai.com/api/docs/guides/prompt-engineering
