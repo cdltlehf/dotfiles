@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-10-26
+---
+
 # Keep configurations and services user-agnostic
 
 ## Context and Problem Statement

@@ -116,7 +116,7 @@ download "${MADR_TEMPLATE_URL}/.markdownlint.yml" "${BASE_DIR}/xdg-templates-dir
 for file in ${MADR_FILES}; do
   download "${MADR_TEMPLATE_URL}/${file}" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/${file}"
 done
-symlink "adr-template-minimal.md" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/{}.md"
+symlink "adr-template.md" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/{}.md"
 symlink "{}.h.tmpl" "${BASE_DIR}/xdg-templates-dir/c/include/{}.hpp.tmpl"
 
 [ -L "${XDG_TEMPLATES_DIR}" ] && rm "${XDG_TEMPLATES_DIR}"

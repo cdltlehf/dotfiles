@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-10-21
+---
+
 # Branch with Git Flow
 
 ## Context and Problem Statement
@@ -27,3 +32,7 @@ The `no-commit-to-branch` hook blocks direct commits to both, in this repository
 
 * Good, because `main` always holds a released state.
 * Bad, because every change needs a branch and a merge, which agents can handle but which adds steps.
+
+## More Information
+
+Revisit the branching model if continuous deployment or automated release tagging makes maintaining a dual-branch structure (`main` and `develop`) an unnecessary operational overhead compared to a single-branch workflow.

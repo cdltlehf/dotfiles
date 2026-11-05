@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-10-21
+---
+
 # Draw glyphs by terminal tier with Codicons
 
 ## Context and Problem Statement
@@ -23,3 +28,7 @@ Chosen option: "Three glyph tiers, with Codicons in the Nerd Font tier," because
 
 * Good, because the same configuration works in every terminal.
 * Bad, because each program that draws glyphs needs a branch for each tier.
+
+## More Information
+
+Revisit glyph tiering when terminal protocols natively support querying font capabilities, or when standard system monospace fonts universally bundle developer icons without custom patching.

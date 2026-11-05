@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-11-05
+---
+
 # Prefer unhidden configuration files
 
 ## Context and Problem Statement

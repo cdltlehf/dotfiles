@@ -1,3 +1,8 @@
+---
+status: accepted
+date: 2026-11-03
+---
+
 # Adopt Ghostty as the primary terminal emulator
 
 ## Context and Problem Statement
