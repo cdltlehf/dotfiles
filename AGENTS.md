@@ -3,11 +3,10 @@
 The key words in this document are to be interpreted as described in [BCP
 14](https://www.rfc-editor.org/info/bcp14) (RFC 2119 and RFC 8174).
 
-A rule does not apply where its condition does not hold. Deviations from a
-SHOULD, a SHOULD NOT, or a lint rule in committed work MUST be approved by the
-user. Each deviated rule MUST have its reason stated in a decision record or in
-a comment at the deviation. One decision record MAY state the reasons for
-several deviations.
+A rule does not apply where its condition does not hold. The user MUST approve
+deviations from a SHOULD, a SHOULD NOT, or a lint rule in committed work. Each
+deviated rule MUST state its reason in a decision record or in a comment at the
+deviation. One decision record MAY state the reasons for several deviations.
 
 ## Documentation conventions
 
@@ -42,8 +41,8 @@ several deviations.
 
 ## File conventions
 
-*   Configuration, data, state, and cache files SHOULD be placed according to
-    the [XDG Base Directory
+*   Projects SHOULD place configuration, data, state, and cache files according
+    to the [XDG Base Directory
     Specification](https://specifications.freedesktop.org/basedir-spec/latest/).
 
 ## Workflow
@@ -56,9 +55,9 @@ several deviations.
     Flow](https://docs.github.com/en/get-started/using-github/github-flow)).
 *   Commit messages SHOULD adhere to [Conventional
     Commits](https://www.conventionalcommits.org/en/v1.0.0/).
-*   Architecturally significant decisions MAY be recorded in `docs/decisions/`
-    with [MADR](https://adr.github.io/madr/), keeping only the sections the
-    decision needs.
+*   Projects MAY record architecturally significant decisions in
+    `docs/decisions/` with [MADR](https://adr.github.io/madr/), keeping only the
+    sections the decision needs.
 
 ## This repository
 
