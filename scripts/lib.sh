@@ -2,6 +2,7 @@
 #
 # Reference: https://pubs.opengroup.org/onlinepubs/9799919799/utilities/tput.html
 # Reference: https://no-color.org/
+# Reference: https://force-color.org/
 # Reference: https://protesilaos.com/emacs/modus-themes-colors
 
 # shellcheck source=xdg-config-home/sh/lib.sh
@@ -13,7 +14,7 @@ _c_cyan=''
 _c_magenta=''
 _c_reset=''
 
-if [ -z "${NO_COLOR:-}" ] && [ "${TERM:-dumb}" != "dumb" ]; then
+if [ -n "${FORCE_COLOR:-}" ] || { [ -z "${NO_COLOR:-}" ] && [ "${TERM:-dumb}" != "dumb" ]; }; then
   if command -v tput >/dev/null 2>&1; then
     _ncolors="$(tput colors 2>/dev/null || echo 0)"
     if [ "${_ncolors}" -ge 8 ] 2>/dev/null; then

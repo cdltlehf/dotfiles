@@ -31,4 +31,9 @@ if command -v mise >/dev/null; then
   mise doctor || true
 fi
 
+if command -v skills >/dev/null; then
+  printf "\nskills:\n"
+  skills ls -g || true
+fi
+
 run_hook post-doctor

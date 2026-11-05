@@ -10,4 +10,4 @@ skills-diff: ## Diff agent skills against skills.json
 	@diff -u --color=auto \
 		--label "skills.json" --label "installed" \
 		<(jq . $(SKILLS_JSON) 2>/dev/null || echo "[]") \
-		<(jq -r '.skills[].source // empty' $(SKILLS_LOCK) 2>/dev/null | sort -u | jq -nR '[inputs] | sort') || true
+		<(jq -r '.skills | to_entries[] | "\(.value.source)@\(.key)"' $(SKILLS_LOCK) 2>/dev/null | sort -u | jq -nR '[inputs] | sort') || true

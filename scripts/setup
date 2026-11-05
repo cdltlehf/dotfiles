@@ -199,12 +199,14 @@ if command -v mise >/dev/null; then
 
   if command -v skills >/dev/null && [ -f "${XDG_CONFIG_HOME}/agents/skills.json" ]; then
     skills_lock="${XDG_STATE_HOME}/skills/.skill-lock.json"
-    for repo in $(jq -r '.[]? // empty' "${XDG_CONFIG_HOME}/agents/skills.json"); do
-      if [ ! -f "${skills_lock}" ] || ! jq -e --arg r "${repo}" '.skills[]? | select(.source == $r)' "${skills_lock}" >/dev/null 2>&1; then
-        skills add "${repo}" -g -y >/dev/null 2>&1 || true
+    for spec in $(jq -r '.[]? // empty' "${XDG_CONFIG_HOME}/agents/skills.json"); do
+      repo="${spec%@*}"
+      skill="${spec#*@}"
+      if [ ! -f "${skills_lock}" ] || ! jq -e --arg s "${skill}" '.skills[$s] != null' "${skills_lock}" >/dev/null 2>&1; then
+        skills add "${repo}" --skill "${skill}" -g -y >/dev/null 2>&1 || true
       fi
     done
-    unset skills_lock repo
+    unset skills_lock spec repo skill
   fi
 fi
 
