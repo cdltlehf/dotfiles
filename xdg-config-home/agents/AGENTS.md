@@ -20,6 +20,9 @@ Project instructions take precedence over this document.
     when the repository has a `.codegraph/` index.
 *   Code refactoring and diagnostics SHOULD use the
     [Language Server Protocol][lsp] when a language server is configured.
+*   Branch management SHOULD use [Git Flow][git-flow] when the repository is
+    configured for Git Flow.
+*   Pre-commit validation SHOULD use [prek][prek] when configured.
 
 ## Evaluation
 
@@ -38,5 +41,7 @@ Project instructions take precedence over this document.
 [agents-md]: https://agents.md/
 [bcp-14]: https://www.rfc-editor.org/info/bcp14
 [codegraph]: https://github.com/colbymchenry/codegraph
+[git-flow]: https://github.com/gittower/git-flow-next
 [lsp]: https://microsoft.github.io/language-server-protocol/
 [openai-prompt-guide]: https://developers.openai.com/api/docs/guides/prompt-engineering
+[prek]: https://github.com/jdx/prek
