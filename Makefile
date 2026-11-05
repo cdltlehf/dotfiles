@@ -99,7 +99,15 @@ check: bats-test ## Run tests
 lint: prek-run ## Run linters
 
 .PHONY: diff
-diff: brew-diff defaults-diff karabiner-diff links-diff mise-diff skills-diff templates-diff ## Diff package manifests and repository configs
+diff: ## Diff package manifests and repository configs
+diff: \
+	brew-diff \
+	defaults-diff \
+	karabiner-diff \
+	links-diff \
+	mise-diff \
+	skills-diff \
+	templates-diff
 
 ##@ Diagnostics
 
