@@ -1,0 +1,8 @@
+{
+  "repositories": [
+    "AminBlg/SimpleEnglish",
+    "mattpocock/skills",
+    "vercel-labs/skills"
+  ],
+  "custom": ["git-flow", "grill-before-deviating"]
+}

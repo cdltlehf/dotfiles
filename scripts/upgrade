@@ -54,6 +54,10 @@ if command -v nvim >/dev/null; then
     -c "qall!"
 fi
 
+if command -v skills >/dev/null; then
+  skills update -g -y 2>/dev/null || true
+fi
+
 readonly DOWNLOADS="${XDG_STATE_HOME:-${HOME}/.local/state}/dotfiles/downloads"
 if [ -f "${DOWNLOADS}" ]; then
   tab="$(printf '\t')"

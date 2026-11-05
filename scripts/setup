@@ -146,6 +146,10 @@ if command -v agy >/dev/null; then
   symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.gemini/GEMINI.md"
   symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.gemini/config/AGENTS.md"
   symlink "${HOME}/.agents/skills" "${HOME}/.gemini/config/skills"
+  mkdir -p "${HOME}/.gemini/antigravity" "${HOME}/.gemini/antigravity-cli"
+  symlink "${HOME}/.agents/skills" "${HOME}/.gemini/skills"
+  symlink "${HOME}/.agents/skills" "${HOME}/.gemini/antigravity/skills"
+  symlink "${HOME}/.agents/skills" "${HOME}/.gemini/antigravity-cli/skills"
 fi
 
 if command -v codex >/dev/null; then
@@ -192,6 +196,16 @@ if command -v mise >/dev/null; then
   zsh_completion taplo taplo completions zsh
   zsh_completion uv uv generate-shell-completion zsh
   zsh_completion uvx uvx --generate-shell-completion zsh
+
+  if command -v skills >/dev/null && [ -f "${XDG_CONFIG_HOME}/agents/skills.json" ]; then
+    skills_lock="${XDG_STATE_HOME}/skills/.skill-lock.json"
+    for repo in $(jq -r '.repositories[]? // empty' "${XDG_CONFIG_HOME}/agents/skills.json"); do
+      if [ ! -f "${skills_lock}" ] || ! jq -e --arg r "${repo}" '.skills[]? | select(.source == $r)' "${skills_lock}" >/dev/null 2>&1; then
+        skills add "${repo}" -g -y >/dev/null 2>&1 || true
+      fi
+    done
+    unset skills_lock repo
+  fi
 fi
 
 run_hook post-setup
