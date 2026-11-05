@@ -135,23 +135,29 @@ for item in "${BASE_DIR}/xdg-templates-dir"/*; do
   esac
 done
 
+mkdir -p "${HOME}/.agents/skills"
+
 if command -v claude >/dev/null; then
   symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.claude/CLAUDE.md"
+  symlink "${HOME}/.agents/skills" "${HOME}/.claude/skills"
 fi
 
 if command -v agy >/dev/null; then
   symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.gemini/GEMINI.md"
   symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.gemini/config/AGENTS.md"
+  symlink "${HOME}/.agents/skills" "${HOME}/.gemini/config/skills"
 fi
 
 if command -v codex >/dev/null; then
   symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${CODEX_HOME:-${HOME}/.codex}/AGENTS.md"
+  symlink "${HOME}/.agents/skills" "${CODEX_HOME:-${HOME}/.codex}/skills"
 fi
 
 if command -v pi >/dev/null; then
   mkdir -p "${HOME}/.pi/agent"
   symlink "${XDG_CONFIG_HOME}/pi/agent/settings.json" "${HOME}/.pi/agent/settings.json"
   symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.pi/agent/AGENTS.md"
+  symlink "${HOME}/.agents/skills" "${HOME}/.pi/agent/skills"
 fi
 
 if ! command -v mise >/dev/null; then
