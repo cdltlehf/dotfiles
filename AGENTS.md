@@ -16,7 +16,7 @@ deviation. One decision record MAY state the reasons for several deviations.
 ## Coding conventions
 
 *   Code SHOULD use the newest features available in the language version that
-    the project declares, and MUST NOT use deprecated syntax. If the project
+    the project declares, and MUST use current, supported syntax. If the project
     declares no language version, agents SHOULD ask the user to declare one.
 *   Coding decisions that no tool enforces SHOULD adhere to the relevant [Google
     Style Guides][google-style-guides].
@@ -25,7 +25,8 @@ deviation. One decision record MAY state the reasons for several deviations.
 *   Makefiles:
     *   When a [GNU standard target][gnu-targets] clearly matches a target's
         purpose, the target SHOULD use that name.
-    *   A target MUST NOT use a GNU standard target name for another purpose.
+    *   A target that uses a GNU standard target name MUST serve that standard
+        purpose.
     *   Makefiles SHOULD use the predefined variables of [GNU make][gnu-make].
     *   Makefiles SHOULD set `SHELL := /bin/bash` for recipe execution.
 *   Shell scripts SHOULD target Bash, unless they may run where Bash is missing.
