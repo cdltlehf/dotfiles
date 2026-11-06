@@ -9,13 +9,13 @@
 # ///
 
 # SPDX-License-Identifier: MIT
-# Reference: https://modelcontextprotocol.io/specification/2025-03-26
-# Reference: https://google.github.io/styleguide/pyguide.html
-"""Local image and audio tools MCP server."""
+"""Local AI tools MCP server."""
 
+import asyncio
 import base64
 import os
-from typing import Literal, TypedDict
+from typing import Any, Literal, TypedDict
+import uuid
 
 import anyio
 import httpx
@@ -39,6 +39,9 @@ mcp = mcpserver.MCPServer("local-ai-tools")
 ImageResolution = Literal["512x512", "768x768", "1024x1024"]
 AudioResponseFormat = Literal["json", "text", "srt", "vtt"]
 
+JOBS: dict[str, dict[str, Any]] = {}
+RUNNING_TASKS: set[asyncio.Task[None]] = set()
+
 
 class GenerateImagePayload(TypedDict):
     """Image generation payload."""
@@ -49,35 +52,52 @@ class GenerateImagePayload(TypedDict):
     response_format: Literal["b64_json"]
 
 
+async def _run_generation(job_id: str, payload: GenerateImagePayload) -> None:
+    try:
+        async with httpx.AsyncClient(timeout=300.0) as client:
+            resp = await client.post(SD_ENDPOINT, json=payload)
+            resp.raise_for_status()
+            b64_data = resp.json()["data"][0]["b64_json"]
+            JOBS[job_id] = {
+                "status": "completed",
+                "data": base64.b64decode(b64_data),
+            }
+    except (httpx.HTTPError, KeyError, ValueError) as err:
+        JOBS[job_id] = {"status": "failed", "error": str(err)}
+
+
 @mcp.tool()
-async def generate_image(
+def start_image_generation(
     tags: list[str],
     negative_tags: list[str] | None = None,
     size: ImageResolution = "1024x1024",
-) -> mcpserver.Image:
-    """Generate an image from descriptive tags.
-
-    Args:
-        tags: Descriptive keywords (for example, ['cat', 'sunny room']).
-        negative_tags: Elements to avoid (for example, ['blurry']).
-        size: Output image dimensions.
-
-    Returns:
-        The generated PNG image.
-    """
-    merged_prompt = ", ".join(p.strip() for p in tags if p.strip())
-    merged_negative_prompt = ", ".join(negative_tags or DEFAULT_NEGATIVE_PROMPT)
+) -> str:
+    """Start asynchronous image generation."""
+    job_id = uuid.uuid4().hex[:8]
+    JOBS[job_id] = {"status": "pending"}
     payload = GenerateImagePayload(
-        prompt=merged_prompt,
-        negative_prompt=merged_negative_prompt,
+        prompt=", ".join(p.strip() for p in tags if p.strip()),
+        negative_prompt=", ".join(negative_tags or DEFAULT_NEGATIVE_PROMPT),
         size=size,
         response_format="b64_json",
     )
-    async with httpx.AsyncClient(timeout=300.0) as client:
-        resp = await client.post(SD_ENDPOINT, json=payload)
-        resp.raise_for_status()
-        b64_data = resp.json()["data"][0]["b64_json"]
-        return mcpserver.Image(data=base64.b64decode(b64_data), format="png")
+    task = asyncio.create_task(_run_generation(job_id, payload))
+    RUNNING_TASKS.add(task)
+    task.add_done_callback(RUNNING_TASKS.discard)
+    return job_id
+
+
+@mcp.tool()
+def get_image_result(job_id: str) -> mcpserver.Image | str:
+    """Fetch status or completed image for a job ID."""
+    job = JOBS.get(job_id)
+    if not job:
+        return "job not found"
+    if job["status"] == "pending":
+        return "processing"
+    if job["status"] == "failed":
+        return f"failed: {job.get('error')}"
+    return mcpserver.Image(data=job["data"], format="png")
 
 
 @mcp.tool()
@@ -85,15 +105,7 @@ async def transcribe_audio(
     audio_path_or_url: str,
     response_format: AudioResponseFormat = "json",
 ) -> str:
-    """Transcribe speech audio into text using Whisper.
-
-    Args:
-        audio_path_or_url: Path to an audio file or URL.
-        response_format: Output format ('json', 'text', 'srt', 'vtt').
-
-    Returns:
-        Transcribed speech text.
-    """
+    """Transcribe speech audio into text using Whisper."""
     async with httpx.AsyncClient(timeout=180.0) as client:
         if audio_path_or_url.startswith(("http://", "https://")):
             audio_resp = await client.get(audio_path_or_url)
