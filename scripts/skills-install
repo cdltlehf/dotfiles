@@ -22,5 +22,5 @@ while IFS= read -r line <&3 || [ -n "${line}" ]; do
   source="${line%@*}"
   skill="${line#*@}"
 
-  skills add "${source}" --skill "${skill}" -g -a '*' -y </dev/null
+  skills add "${source}" --skill "${skill}" -g -y -a universal </dev/null
 done 3<"${SKILLSFILE}"
