@@ -13,6 +13,18 @@ readonly BASE_DIR
 [ -f "${SKILLSFILE}" ] || exit 0
 command -v skills >/dev/null 2>&1 || exit 0
 
+install_skill() {
+  _source="$1"
+  _skill="$2"
+
+  if skills add "${_source}" --skill "${_skill}" -g -y -a universal >/dev/null 2>&1; then
+    printf 'skills: %s\n' "${_skill}"
+  else
+    printf 'skills: failed to install %s (%s)\n' "${_skill}" "${_source}" >&2
+    return 1
+  fi
+}
+
 while IFS= read -r line <&3 || [ -n "${line}" ]; do
   case "${line}" in
   \#* | "") continue ;;
@@ -22,5 +34,7 @@ while IFS= read -r line <&3 || [ -n "${line}" ]; do
   source="${line%@*}"
   skill="${line#*@}"
 
-  skills add "${source}" --skill "${skill}" -g -y -a universal </dev/null
+  install_skill "${source}" "${skill}"
 done 3<"${SKILLSFILE}"
+
+unset -f install_skill
