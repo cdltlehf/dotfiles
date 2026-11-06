@@ -112,4 +112,4 @@ async def transcribe_audio(
 
 
 if __name__ == "__main__":
-    mcp.run(transport="sse", host=HOST, port=PORT)
+    mcp.run(transport="streamable-http", host=HOST, port=PORT)
