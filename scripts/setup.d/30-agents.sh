@@ -10,6 +10,8 @@ readonly BASE_DIR
 . "${BASE_DIR}/scripts/lib.sh"
 
 : "${XDG_CONFIG_HOME:="${HOME}/.config"}"
+: "${PI_CODING_AGENT_DIR:="${XDG_CONFIG_HOME}/pi/agent"}"
+export PI_CODING_AGENT_DIR
 
 mkdir -p "${HOME}/.agents/skills"
 symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.agents/AGENTS.md"
@@ -28,7 +30,7 @@ if command -v codex >/dev/null; then
 fi
 
 if command -v pi >/dev/null; then
-  symlink "${HOME}/.agents/AGENTS.md" "${HOME}/.pi/agent/AGENTS.md"
+  symlink "${HOME}/.agents/AGENTS.md" "${PI_CODING_AGENT_DIR}/AGENTS.md"
 fi
 
 if [ -n "${MCP_SERVER_URL:-}" ] && [ -n "${MCP_API_KEY:-}" ]; then
