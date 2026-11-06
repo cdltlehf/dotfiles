@@ -2,22 +2,31 @@
 # Reference: https://platform.openai.com/docs/api-reference
 
 :8000 {
-	@unauthorized not header Authorization "Bearer {$API_KEY}"
-	handle @unauthorized {
-		respond 401
-	}
-
 	handle /v1/embeddings* {
 		reverse_proxy llama-embedding-server:8080
 	}
 
 	handle /v1/audio/* {
-		rewrite /v1/audio/transcriptions /inference
-		reverse_proxy whisper-server:8080
+		@unauthorized not header Authorization "Bearer {$API_KEY}"
+		handle @unauthorized {
+			respond 401
+		}
+
+		handle {
+			rewrite /v1/audio/transcriptions /inference
+			reverse_proxy whisper-server:8080
+		}
 	}
 
 	handle /v1/images/* {
-		reverse_proxy sd-server:8080
+		@unauthorized not header Authorization "Bearer {$API_KEY}"
+		handle @unauthorized {
+			respond 401
+		}
+
+		handle {
+			reverse_proxy sd-server:8080
+		}
 	}
 
 	handle {
