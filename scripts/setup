@@ -159,7 +159,6 @@ fi
 
 if command -v pi >/dev/null; then
   mkdir -p "${HOME}/.pi/agent"
-  symlink "${XDG_CONFIG_HOME}/pi/agent/settings.json" "${HOME}/.pi/agent/settings.json"
   symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.pi/agent/AGENTS.md"
   symlink "${HOME}/.agents/skills" "${HOME}/.pi/agent/skills"
 fi
