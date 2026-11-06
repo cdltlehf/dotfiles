@@ -1,0 +1,8 @@
+export API_KEY="your-secret-api-key"
+
+export LLM_BASE_URL="https://api.example.com/v1"
+export LLM_MODEL="your-model-id"
+export LLM_API_KEY="${API_KEY}"
+
+export MCP_SERVER_URL="https://mcp.example.com/mcp"
+export MCP_API_KEY="${LLM_API_KEY}"

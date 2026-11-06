@@ -30,8 +30,8 @@ fi
 if command -v pi >/dev/null; then
   mkdir -p "${HOME}/.pi/agent"
   symlink "${HOME}/.agents/AGENTS.md" "${HOME}/.pi/agent/AGENTS.md"
-  if [ -n "${MCP_BASE_URL:-}" ]; then
-    pi mcp add remote-tools --url "${MCP_BASE_URL}" --bearer-token-env-var LLM_API_KEY
+  if [ -n "${MCP_SERVER_URL:-}" ]; then
+    pi mcp add remote-tools --url "${MCP_SERVER_URL}" --bearer-token-env-var MCP_API_KEY
   fi
 fi
 
