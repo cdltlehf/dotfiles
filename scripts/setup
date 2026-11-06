@@ -1,12 +1,7 @@
 #!/bin/sh
 #
 # Reference: https://github.com/git/git
-# Reference: https://iterm2.com/
-# Reference: https://github.com/ThomasDickey/xterm-snapshots
-# Reference: https://github.com/robertknight/konsole
-# Reference: https://github.com/ryanoasis/nerd-fonts
 # Reference: https://mise.jdx.dev/
-# Reference: https://adr.github.io/madr/
 
 set -o nounset
 set -o errexit
@@ -32,22 +27,8 @@ export XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME
 : "${RUSTUP_HOME:="${XDG_DATA_HOME}/rustup"}"
 export CARGO_HOME RUSTUP_HOME
 
-readonly BOLD_ITALICS_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/bold-italics.pl"
-readonly COLOR_256_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/256colors2.pl"
-readonly COLOR_SPACES_URL="https://raw.githubusercontent.com/robertknight/konsole/master/tests/color-spaces.pl"
 readonly GIT_COMPLETION_DIR="${XDG_DATA_HOME}/git/completion"
 readonly GIT_PROMPT_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
-readonly HIDDEN_ALIAS_TEMPLATES="vale.ini"
-readonly IMGCAT_URL="https://iterm2.com/utilities/imgcat"
-readonly IMGLS_URL="https://iterm2.com/utilities/imgls"
-readonly MADR_TEMPLATE_URL="https://raw.githubusercontent.com/adr/madr/4.0.0/template"
-readonly MISE_INSTALL_URL="https://mise.run"
-readonly OTHER_SGR_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/other-sgr.sh"
-readonly QUERY_COLOR_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/query-color.pl"
-readonly QUERY_DYNAMIC_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/query-dynamic.pl"
-readonly QUERY_FONTS_URL="https://raw.githubusercontent.com/ThomasDickey/xterm-snapshots/master/vttests/query-fonts.pl"
-readonly TEST_FONTS_URL="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/bin/scripts/test-fonts.sh"
-readonly ZSH_COMPLETION_DIR="${XDG_DATA_HOME}/zsh/site-functions"
 
 OS="$(detect_os)"
 ARCH="$(detect_arch)"
@@ -77,11 +58,6 @@ for item in "${BASE_DIR}/xdg-config-home"/*; do
   symlink "${item}" "${XDG_CONFIG_HOME}/$(basename "${item}")"
 done
 
-# shellcheck source=/dev/null
-[ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ] && . "${XDG_CONFIG_HOME}/user-dirs.dirs"
-: "${XDG_TEMPLATES_DIR:="${HOME}/Templates"}"
-export XDG_TEMPLATES_DIR
-
 symlink "${XDG_CONFIG_HOME}/sh/dot_profile" "${HOME}/.profile"
 symlink "${XDG_CONFIG_HOME}/bash/dot_bash_profile" "${HOME}/.bash_profile"
 symlink "${XDG_CONFIG_HOME}/bash/dot_bashrc" "${HOME}/.bashrc"
@@ -94,74 +70,9 @@ for script in "${BASE_DIR}/bin"/*; do
   symlink "${script}" "${BIN_DIR}/$(basename "${script}")"
 done
 
-download "${BOLD_ITALICS_URL}" "${BIN_DIR}/bold-italics" "+x"
-download "${COLOR_256_URL}" "${BIN_DIR}/256colors2" "+x"
-download "${COLOR_SPACES_URL}" "${BIN_DIR}/color-spaces" "+x"
 download "${GIT_PROMPT_URL}" "${GIT_COMPLETION_DIR}/git-prompt.sh"
-download "${IMGCAT_URL}" "${BIN_DIR}/imgcat" "+x"
-download "${IMGLS_URL}" "${BIN_DIR}/imgls" "+x"
-download "${OTHER_SGR_URL}" "${BIN_DIR}/other-sgr" "+x"
-download "${QUERY_COLOR_URL}" "${BIN_DIR}/query-color" "+x"
-download "${QUERY_DYNAMIC_URL}" "${BIN_DIR}/query-dynamic" "+x"
-download "${QUERY_FONTS_URL}" "${BIN_DIR}/query-fonts" "+x"
-download "${TEST_FONTS_URL}" "${BIN_DIR}/test-fonts" "+x"
 
-readonly MADR_FILES="0000-use-markdown-architectural-decision-records.md \
-  adr-template-bare-minimal.md \
-  adr-template-bare.md \
-  adr-template-minimal.md \
-  adr-template.md"
-
-download "${MADR_TEMPLATE_URL}/.markdownlint.yml" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/.markdownlint.yaml"
-for file in ${MADR_FILES}; do
-  download "${MADR_TEMPLATE_URL}/${file}" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/${file}"
-done
-symlink "adr-template.md" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/{}.md"
-symlink "{}.h.tmpl" "${BASE_DIR}/xdg-templates-dir/c/include/{}.hpp.tmpl"
-
-[ -L "${XDG_TEMPLATES_DIR}" ] && rm "${XDG_TEMPLATES_DIR}"
-mkdir -p "${XDG_TEMPLATES_DIR}"
-for item in "${BASE_DIR}/xdg-templates-dir"/*; do
-  [ -e "${item}" ] || continue
-  name="$(basename "${item}")"
-  case "${name}" in
-  dot_*) name=".${name#dot_}" ;;
-  *) ;;
-  esac
-  symlink "${item}" "${XDG_TEMPLATES_DIR}/${name}"
-  case " ${HIDDEN_ALIAS_TEMPLATES} " in
-  *" ${name} "*) symlink "${item}" "${XDG_TEMPLATES_DIR}/.${name}" ;;
-  *) ;;
-  esac
-done
-
-mkdir -p "${HOME}/.agents/skills"
-
-if command -v claude >/dev/null; then
-  symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.claude/CLAUDE.md"
-  symlink "${HOME}/.agents/skills" "${HOME}/.claude/skills"
-fi
-
-if command -v agy >/dev/null; then
-  symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.gemini/GEMINI.md"
-  symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.gemini/config/AGENTS.md"
-  symlink "${HOME}/.agents/skills" "${HOME}/.gemini/config/skills"
-  mkdir -p "${HOME}/.gemini/antigravity" "${HOME}/.gemini/antigravity-cli"
-  symlink "${HOME}/.agents/skills" "${HOME}/.gemini/skills"
-  symlink "${HOME}/.agents/skills" "${HOME}/.gemini/antigravity/skills"
-  symlink "${HOME}/.agents/skills" "${HOME}/.gemini/antigravity-cli/skills"
-fi
-
-if command -v codex >/dev/null; then
-  symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${CODEX_HOME:-${HOME}/.codex}/AGENTS.md"
-  symlink "${HOME}/.agents/skills" "${CODEX_HOME:-${HOME}/.codex}/skills"
-fi
-
-if command -v pi >/dev/null; then
-  mkdir -p "${HOME}/.pi/agent"
-  symlink "${XDG_CONFIG_HOME}/agents/AGENTS.md" "${HOME}/.pi/agent/AGENTS.md"
-  symlink "${HOME}/.agents/skills" "${HOME}/.pi/agent/skills"
-fi
+readonly MISE_INSTALL_URL="https://mise.run"
 
 if ! command -v mise >/dev/null; then
   tmpdir="$(mktemp -d)"
@@ -170,43 +81,13 @@ if ! command -v mise >/dev/null; then
   rm -rf "${tmpdir}"
 fi
 
-zsh_completion() {
-  _name="$1"
-  shift
-  if mise exec -- "$@" >"${ZSH_COMPLETION_DIR}/_${_name}.tmp" 2>/dev/null; then
-    mv "${ZSH_COMPLETION_DIR}/_${_name}.tmp" "${ZSH_COMPLETION_DIR}/_${_name}"
-  fi
-  rm -f "${ZSH_COMPLETION_DIR}/_${_name}.tmp"
-  unset _name
-}
-
 if command -v mise >/dev/null; then
   mise install --yes || true
-  mkdir -p "${ZSH_COMPLETION_DIR}"
-  zsh_completion bat bat --completion zsh
-  zsh_completion bun bun completions
-  zsh_completion cargo rustup completions zsh cargo
-  zsh_completion deno deno completions zsh
-  zsh_completion fd fd --gen-completions zsh
-  zsh_completion gh gh completion -s zsh
-  zsh_completion rg rg --generate complete-zsh
-  zsh_completion ruff ruff generate-shell-completion zsh
-  zsh_completion rustup rustup completions zsh rustup
-  zsh_completion taplo taplo completions zsh
-  zsh_completion uv uv generate-shell-completion zsh
-  zsh_completion uvx uvx --generate-shell-completion zsh
-
-  if command -v skills >/dev/null && [ -f "${XDG_CONFIG_HOME}/agents/skills.json" ]; then
-    skills_lock="${XDG_STATE_HOME}/skills/.skill-lock.json"
-    for spec in $(jq -r '.[]? // empty' "${XDG_CONFIG_HOME}/agents/skills.json"); do
-      repo="${spec%@*}"
-      skill="${spec#*@}"
-      if [ ! -f "${skills_lock}" ] || ! jq -e --arg s "${skill}" '.skills[$s] != null' "${skills_lock}" >/dev/null 2>&1; then
-        skills add "${repo}" --skill "${skill}" -g -y >/dev/null 2>&1 || true
-      fi
-    done
-    unset skills_lock spec repo skill
-  fi
 fi
+
+for script in "${BASE_DIR}/scripts/setup.d"/*.sh; do
+  [ -e "${script}" ] || continue
+  "${script}"
+done
 
 run_hook post-setup

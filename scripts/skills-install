@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# Reference: https://skills.sh/
+
+set -o nounset
+set -o errexit
+
+BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+readonly BASE_DIR
+
+: "${SKILLSFILE:="${BASE_DIR}/platforms/Skillsfile"}"
+
+[ -f "${SKILLSFILE}" ] || exit 0
+command -v skills >/dev/null 2>&1 || exit 0
+
+while IFS= read -r line <&3 || [ -n "${line}" ]; do
+  case "${line}" in
+  \#* | "") continue ;;
+  *) ;;
+  esac
+
+  source="${line%@*}"
+  skill="${line#*@}"
+
+  skills add "${source}" --skill "${skill}" -g -a '*' -y </dev/null
+done 3<"${SKILLSFILE}"

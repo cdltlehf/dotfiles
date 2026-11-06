@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# Reference: https://skills.sh/
+
+set -o nounset
+set -o errexit
+
+BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+readonly BASE_DIR
+
+: "${SKILLSFILE:="${BASE_DIR}/platforms/Skillsfile"}"
+: "${SKILLS_DIR:="${HOME}/.agents/skills"}"
+
+[ -f "${SKILLSFILE}" ] || exit 0
+
+while IFS= read -r line || [ -n "${line}" ]; do
+  case "${line}" in
+  \#* | "") continue ;;
+  *) ;;
+  esac
+
+  source="${line%@*}"
+  skill="${line#*@}"
+
+  if [ ! -d "${SKILLS_DIR}/${skill}" ]; then
+    echo "Missing skill: ${skill} (${source})"
+  fi
+done <"${SKILLSFILE}"

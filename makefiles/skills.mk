@@ -2,12 +2,12 @@
 
 ##@ Skills
 
-SKILLS_JSON ?= $(XDG_CONFIG_HOME)/agents/skills.json
-SKILLS_LOCK ?= $(XDG_STATE_HOME)/skills/.skill-lock.json
+SKILLSFILE ?= platforms/Skillsfile
 
 .PHONY: skills-diff
-skills-diff: ## Diff agent skills against skills.json
-	@diff -u --color=auto \
-		--label "skills.json" --label "installed" \
-		<(jq . $(SKILLS_JSON) 2>/dev/null || echo "[]") \
-		<(jq -r '.skills | to_entries[] | "\(.value.source)@\(.key)"' $(SKILLS_LOCK) 2>/dev/null | sort -u | jq -nR '[inputs] | sort') || true
+skills-diff: ## Diff agent skills against Skillsfile
+	@./scripts/skills-diff
+
+.PHONY: skills-install
+skills-install: ## Install agent skills from Skillsfile
+	@./scripts/skills-install
