@@ -28,9 +28,20 @@ if command -v codex >/dev/null; then
 fi
 
 if command -v pi >/dev/null; then
-  mkdir -p "${HOME}/.pi/agent"
   symlink "${HOME}/.agents/AGENTS.md" "${HOME}/.pi/agent/AGENTS.md"
-  if [ -n "${MCP_SERVER_URL:-}" ]; then
+fi
+
+if [ -n "${MCP_SERVER_URL:-}" ] && [ -n "${MCP_API_KEY:-}" ]; then
+  if command -v claude >/dev/null; then
+    claude mcp remove --scope user remote-tools 2>/dev/null || true
+    claude mcp add --scope user --transport http remote-tools "${MCP_SERVER_URL}" --header "Authorization: Bearer ${MCP_API_KEY}"
+  fi
+
+  if command -v agy >/dev/null; then
+    agy mcp add --header "Authorization: Bearer ${MCP_API_KEY}" remote-tools "${MCP_SERVER_URL}"
+  fi
+
+  if command -v pi >/dev/null; then
     pi mcp add remote-tools --url "${MCP_SERVER_URL}" --bearer-token-env-var MCP_API_KEY
   fi
 fi
