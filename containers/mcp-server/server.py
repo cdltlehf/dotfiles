@@ -77,7 +77,7 @@ async def _run_generation(job_id: str, payload: GenerateImagePayload) -> None:
 
 
 @mcp.tool()
-def start_image_generation(
+async def start_image_generation(
     tags: list[str],
     negative_tags: list[str] | None = None,
     size: ImageResolution = "1024x1024",
@@ -103,6 +103,7 @@ def start_image_generation(
     task = asyncio.create_task(_run_generation(job_id, payload))
     RUNNING_TASKS.add(task)
     task.add_done_callback(RUNNING_TASKS.discard)
+    await asyncio.sleep(0)
     return job_id
 
 
