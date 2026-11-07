@@ -9,12 +9,13 @@
 # ///
 
 # SPDX-License-Identifier: MIT
+# Reference: https://modelcontextprotocol.io/specification/2025-03-26
 """Local AI tools MCP server."""
 
 import asyncio
 import base64
 import os
-from typing import Any, Literal, TypedDict
+from typing import Literal, TypedDict
 import uuid
 
 import anyio
@@ -39,7 +40,16 @@ mcp = mcpserver.MCPServer("local-ai-tools")
 ImageResolution = Literal["512x512", "768x768", "1024x1024"]
 AudioResponseFormat = Literal["json", "text", "srt", "vtt"]
 
-JOBS: dict[str, dict[str, Any]] = {}
+
+class Job(TypedDict, total=False):
+    """Image generation job state."""
+
+    status: Literal["pending", "completed", "failed"]
+    data: bytes
+    error: str
+
+
+JOBS: dict[str, Job] = {}
 RUNNING_TASKS: set[asyncio.Task[None]] = set()
 
 
@@ -72,7 +82,16 @@ def start_image_generation(
     negative_tags: list[str] | None = None,
     size: ImageResolution = "1024x1024",
 ) -> str:
-    """Start asynchronous image generation."""
+    """Start asynchronous image generation.
+
+    Args:
+        tags: Descriptive keywords (for example, ['cat', 'sunny room']).
+        negative_tags: Elements to avoid (for example, ['blurry']).
+        size: Output image dimensions.
+
+    Returns:
+        The job ID for checking status and retrieving the result.
+    """
     job_id = uuid.uuid4().hex[:8]
     JOBS[job_id] = {"status": "pending"}
     payload = GenerateImagePayload(
@@ -89,7 +108,15 @@ def start_image_generation(
 
 @mcp.tool()
 def get_image_result(job_id: str) -> mcpserver.Image | str:
-    """Fetch status or completed image for a job ID."""
+    """Fetch status or completed image for a job ID.
+
+    Args:
+        job_id: The job ID returned by start_image_generation.
+
+    Returns:
+        The generated PNG image if completed, 'processing' if pending,
+        or an error message if failed or not found.
+    """
     job = JOBS.get(job_id)
     if not job:
         return "job not found"
@@ -105,7 +132,15 @@ async def transcribe_audio(
     audio_path_or_url: str,
     response_format: AudioResponseFormat = "json",
 ) -> str:
-    """Transcribe speech audio into text using Whisper."""
+    """Transcribe speech audio into text using Whisper.
+
+    Args:
+        audio_path_or_url: Path to an audio file or URL.
+        response_format: Output format ('json', 'text', 'srt', 'vtt').
+
+    Returns:
+        Transcribed speech text.
+    """
     async with httpx.AsyncClient(timeout=180.0) as client:
         if audio_path_or_url.startswith(("http://", "https://")):
             audio_resp = await client.get(audio_path_or_url)
