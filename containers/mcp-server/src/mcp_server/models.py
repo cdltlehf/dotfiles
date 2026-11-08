@@ -26,8 +26,10 @@ ImageSize = Annotated[
         "1536x640",
         "1024x1536",
         "1536x1024",
+        "1536x1536",
         "1024x1792",
         "1792x1024",
+        "2048x2048",
     ],
     pydantic.Field(description="Output image dimensions in pixels."),
 ]
@@ -38,6 +40,12 @@ AudioResponseFormat = Annotated[
 ImagePrompt = Annotated[
     str,
     pydantic.Field(description="Visual description of the desired image."),
+]
+UpscalePrompt = Annotated[
+    str,
+    pydantic.Field(
+        description="Optional visual description to guide fine detail refinement."
+    ),
 ]
 EditPrompt = Annotated[
     str,

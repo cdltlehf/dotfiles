@@ -136,6 +136,41 @@ async def start_image_edit(
 
 
 @mcp.tool()
+async def start_image_upscale(
+    image_url: models.ImageUrl,
+    *,
+    prompt: models.UpscalePrompt = "",
+    negative_prompt: models.NegativePrompt = "",
+    strength: models.EditStrength = 0.55,
+    size: models.ImageSize = "2048x2048",
+) -> models.JobStatus:
+    """Start an asynchronous high-resolution image upscaling job."""
+    state = mcp.state
+    await asyncio.sleep(0)
+    job_id = uuid.uuid4().hex
+    job = services.create_job(state.jobs, job_id)
+    formatted_prompt = services.format_image_prompt(
+        prompt,
+        negative_prompt=negative_prompt,
+        default_positive_prompt=state.default_positive_prompt,
+        default_negative_prompt=state.default_negative_prompt,
+        strength=strength,
+    )
+    coro = services.run_image_edit(
+        job,
+        state.openai_client,
+        state.http_client,
+        image_url,
+        formatted_prompt,
+        size,
+    )
+    task = asyncio.create_task(coro)
+    state.running_tasks.add(task)
+    task.add_done_callback(state.running_tasks.discard)
+    return models.JobStatus(job_id=job_id, status=job.status)
+
+
+@mcp.tool()
 async def get_image_result(
     job_id: models.JobId,
     wait_seconds: models.WaitSeconds = 0.0,
