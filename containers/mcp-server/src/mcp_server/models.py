@@ -1,164 +1,77 @@
 # SPDX-License-Identifier: MIT
-"""Data models and type definitions for MCP requests and responses."""
+"""Data models and state definitions for the MCP server."""
 
 import asyncio
 import dataclasses
-import typing
+import enum
+from typing import Literal
 
 import httpx
+import openai
 import pydantic
 
-type ImageResolution = typing.Literal[
+type ImageSize = Literal[
+    "256x256",
     "512x512",
     "768x768",
     "1024x1024",
+    "896x1152",
+    "1152x896",
+    "832x1216",
+    "1216x832",
+    "768x1344",
+    "1344x768",
+    "640x1536",
+    "1536x640",
+    "1024x1536",
+    "1536x1024",
+    "1024x1792",
+    "1792x1024",
 ]
-type AudioResponseFormat = typing.Literal[
-    "json",
-    "text",
-    "srt",
-    "vtt",
-]
-type JobStatusType = typing.Literal[
-    "pending",
-    "processing",
-    "completed",
-    "failed",
-]
+type AudioResponseFormat = Literal["json", "text", "srt", "vtt"]
 
 
-class JobRecord(typing.TypedDict):
-    """Internal record for tracking asynchronous image generation jobs.
+class JobState(enum.StrEnum):
+    """Lifecycle states for an asynchronous image job."""
 
-    Attributes:
-        status: Current lifecycle state of the processing job.
-        data: Decoded raw binary data of the completed image.
-        error: Descriptive error message if processing failed.
-        event: Synchronization event signaled on completion or failure.
-    """
-
-    status: JobStatusType
-    data: typing.NotRequired[bytes]
-    error: typing.NotRequired[str]
-    event: typing.NotRequired[asyncio.Event]
+    PENDING = "pending"
+    PROCESSING = "processing"
+    COMPLETED = "completed"
+    FAILED = "failed"
 
 
-@dataclasses.dataclass(slots=True)
+@dataclasses.dataclass
+class ImageJob:
+    """Represents an asynchronous image generation or editing job."""
+
+    status: JobState = JobState.PENDING
+    event: asyncio.Event = dataclasses.field(default_factory=asyncio.Event)
+    image_bytes: bytes = b""
+    error: str | None = None
+
+
+@dataclasses.dataclass
 class AppState:
-    """Application state holding in-memory job records and active tasks.
+    """Holds application-scoped clients, configuration, and active jobs."""
 
-    Attributes:
-        jobs: Registry mapping job identifiers to JobRecord dictionaries.
-        running_tasks: Set of active asynchronous background tasks.
-        http_client: Shared HTTP client session for upstream API requests.
-    """
-
-    jobs: dict[str, JobRecord] = dataclasses.field(
-        default_factory=dict[str, JobRecord]
+    openai_client: openai.AsyncClient
+    http_client: httpx.AsyncClient
+    mcp_base_url: str
+    audio_model: str
+    default_positive_prompt: str
+    default_negative_prompt: str
+    jobs: dict[str, ImageJob] = dataclasses.field(
+        default_factory=dict[str, ImageJob]
     )
     running_tasks: set[asyncio.Task[None]] = dataclasses.field(
         default_factory=set[asyncio.Task[None]]
     )
-    http_client: httpx.AsyncClient | None = None
-
-
-class ImageGenerationPayload(pydantic.BaseModel):
-    """Request payload for image generation.
-
-    Attributes:
-        prompt: Text description of the desired image.
-        negative_prompt: Elements to avoid in the generated image.
-        size: Output image dimensions.
-        response_format: Expected response format from the backend.
-    """
-
-    prompt: str = pydantic.Field(
-        description="Text description of the desired image."
-    )
-    negative_prompt: str = pydantic.Field(
-        description="Elements to avoid in the generated image."
-    )
-    size: ImageResolution = pydantic.Field(
-        default="1024x1024", description="Output image dimensions."
-    )
-    response_format: typing.Literal["b64_json"] = "b64_json"
-
-
-class ImageEditPayload(pydantic.BaseModel):
-    """Request payload for image-to-image editing.
-
-    Attributes:
-        prompt: Description of the desired modification.
-        negative_prompt: Elements to avoid in the generated image.
-        strength: Denoising strength between 0.0 and 1.0.
-        size: Output image dimensions.
-        response_format: Expected response format from the backend.
-    """
-
-    prompt: str = pydantic.Field(
-        description="Description of the desired modification."
-    )
-    negative_prompt: str = pydantic.Field(
-        description="Elements to avoid in the generated image."
-    )
-    strength: float = pydantic.Field(
-        default=0.75,
-        ge=0.0,
-        le=1.0,
-        description=(
-            "Denoising strength (0.0 keeps original, 1.0 completely redraws)."
-        ),
-    )
-    size: ImageResolution = pydantic.Field(
-        default="1024x1024", description="Output image dimensions."
-    )
-    response_format: typing.Literal["b64_json"] = "b64_json"
 
 
 class JobStatus(pydantic.BaseModel):
-    """Status of an asynchronous image processing job.
+    """Represents the serialized status of an asynchronous image job."""
 
-    Attributes:
-        job_id: Unique identifier for the job.
-        status: Current job status.
-        error: Error message if the job failed.
-    """
-
-    job_id: str = pydantic.Field(description="Unique identifier for the job.")
-    status: JobStatusType = pydantic.Field(description="Current job status.")
-    error: str | None = pydantic.Field(
-        default=None, description="Error message if failed."
-    )
-
-
-class AudioTranscriptionPayload(pydantic.BaseModel):
-    """Request payload for audio transcription.
-
-    Attributes:
-        response_format: Output format ('json', 'text', 'srt', 'vtt').
-    """
-
-    response_format: AudioResponseFormat = pydantic.Field(
-        default="json",
-        description="Output format ('json', 'text', 'srt', 'vtt').",
-    )
-
-
-class GeneratedImageItem(pydantic.BaseModel):
-    """Single image item returned by image service backend.
-
-    Attributes:
-        b64_json: Base64-encoded image payload string.
-    """
-
-    b64_json: str
-
-
-class ImageServiceResponse(pydantic.BaseModel):
-    """Response payload from image service backend endpoints.
-
-    Attributes:
-        data: List of generated image payloads.
-    """
-
-    data: list[GeneratedImageItem]
+    job_id: str
+    status: JobState
+    image_url: str | None = None
+    error: str | None = None

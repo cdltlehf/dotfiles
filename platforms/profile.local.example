@@ -8,5 +8,6 @@ export MCP_SERVER_URL="https://mcp.example.com/mcp"
 export MCP_BASE_URL="https://mcp.example.com"
 export MCP_API_KEY="${LLM_API_KEY}"
 
+export AUDIO_MODEL="your-audio-model-id"
 export IMAGE_DEFAULT_POSITIVE_PROMPT=""
 export IMAGE_DEFAULT_NEGATIVE_PROMPT=""

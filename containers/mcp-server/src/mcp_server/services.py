@@ -1,181 +1,166 @@
 # SPDX-License-Identifier: MIT
-"""Background job runners and backend client integrations."""
+"""Business logic and external API clients for image and audio tasks."""
 
 import base64
+import json
+from typing import Final
 
 import httpx
+import openai
 import pydantic
 
-from mcp_server import config
 from mcp_server import models
 
-
-async def post_generation(
-    payload: models.ImageGenerationPayload,
-    client: httpx.AsyncClient | None = None,
-) -> bytes:
-    """Send image generation request to image backend.
-
-    Args:
-        payload: Image generation request payload.
-        client: Optional shared HTTP client for the request.
-
-    Returns:
-        Decoded image bytes.
-    """
-    if client is None:
-        async with httpx.AsyncClient() as local_client:
-            return await post_generation(payload, client=local_client)
-
-    response = await client.post(
-        config.IMAGE_GENERATION_ENDPOINT,
-        json=payload.model_dump(),
-        timeout=config.IMAGE_TIMEOUT_SECONDS,
-    )
-    response.raise_for_status()
-    parsed = models.ImageServiceResponse.model_validate(response.json())
-    return base64.b64decode(parsed.data[0].b64_json)
+MAX_JOBS: Final[int] = 4
 
 
-async def run_generation(
+def create_job(
+    jobs: dict[str, models.ImageJob],
     job_id: str,
-    payload: models.ImageGenerationPayload,
-    jobs: dict[str, models.JobRecord],
-    client: httpx.AsyncClient | None = None,
-) -> None:
-    """Execute image generation in the background.
-
-    Args:
-        job_id: Identifier of the job record to update.
-        payload: Image generation parameters.
-        jobs: In-memory registry of image jobs.
-        client: Optional shared HTTP client for the request.
-    """
-    jobs[job_id]["status"] = "processing"
-    try:
-        image_bytes = await post_generation(payload, client=client)
-    except (
-        httpx.HTTPError,
-        IndexError,
-        KeyError,
-        pydantic.ValidationError,
-        TypeError,
-        ValueError,
-    ) as err:
-        jobs[job_id]["status"] = "failed"
-        jobs[job_id]["error"] = str(err)
-    else:
-        jobs[job_id]["status"] = "completed"
-        jobs[job_id]["data"] = image_bytes
-    finally:
-        event = jobs[job_id].get("event")
-        if event is not None:
-            event.set()
+) -> models.ImageJob:
+    """Register a new image job and evict the oldest finished job when full."""
+    if len(jobs) >= MAX_JOBS:
+        finished_states = {models.JobState.COMPLETED, models.JobState.FAILED}
+        evictable_jobs = (
+            existing_id
+            for existing_id, existing_job in jobs.items()
+            if existing_job.status in finished_states
+        )
+        evictable_job_id = next(evictable_jobs, None)
+        if evictable_job_id is None:
+            raise RuntimeError("Server is busy.")
+        jobs.pop(evictable_job_id)
+    job = models.ImageJob()
+    jobs[job_id] = job
+    return job
 
 
-async def post_editing(
-    payload: models.ImageEditPayload,
-    image_bytes: bytes,
-    client: httpx.AsyncClient | None = None,
-) -> bytes:
-    """Send image editing request to image backend.
-
-    Args:
-        payload: Image editing request payload.
-        image_bytes: Raw bytes of the source image to edit.
-        client: Optional shared HTTP client for the request.
-
-    Returns:
-        Decoded modified image bytes.
-    """
-    if client is None:
-        async with httpx.AsyncClient() as local_client:
-            return await post_editing(payload, image_bytes, client=local_client)
-
-    form_data = {k: str(v) for k, v in payload.model_dump().items()}
-    files = {"image": ("source.png", image_bytes, "image/png")}
-    response = await client.post(
-        config.IMAGE_EDIT_ENDPOINT,
-        files=files,
-        data=form_data,
-        timeout=config.IMAGE_TIMEOUT_SECONDS,
-    )
-    response.raise_for_status()
-    parsed = models.ImageServiceResponse.model_validate(response.json())
-    return base64.b64decode(parsed.data[0].b64_json)
-
-
-async def run_editing(
-    job_id: str,
-    payload: models.ImageEditPayload,
-    image_bytes: bytes,
-    jobs: dict[str, models.JobRecord],
-    client: httpx.AsyncClient | None = None,
-) -> None:
-    """Execute image editing in the background.
-
-    Args:
-        job_id: Identifier of the job record to update.
-        payload: Image edit parameters.
-        image_bytes: Raw bytes of the source image to edit.
-        jobs: In-memory registry of image jobs.
-        client: Optional shared HTTP client for the request.
-    """
-    jobs[job_id]["status"] = "processing"
-    try:
-        edited_bytes = await post_editing(payload, image_bytes, client=client)
-    except (
-        httpx.HTTPError,
-        IndexError,
-        KeyError,
-        pydantic.ValidationError,
-        TypeError,
-        ValueError,
-    ) as err:
-        jobs[job_id]["status"] = "failed"
-        jobs[job_id]["error"] = str(err)
-    else:
-        jobs[job_id]["status"] = "completed"
-        jobs[job_id]["data"] = edited_bytes
-    finally:
-        event = jobs[job_id].get("event")
-        if event is not None:
-            event.set()
-
-
-async def transcribe_audio_data(
-    audio_bytes: bytes,
-    payload: models.AudioTranscriptionPayload,
-    client: httpx.AsyncClient | None = None,
+def format_image_prompt(
+    prompt: str,
+    *,
+    negative_prompt: str,
+    default_positive_prompt: str,
+    default_negative_prompt: str,
+    strength: float | None = None,
 ) -> str:
-    """Send audio bytes to transcription backend.
+    """Combine user prompts with configured defaults and extra arguments."""
 
-    Args:
-        audio_bytes: Raw audio binary content.
-        payload: Transcription request configuration.
-        client: Optional shared HTTP client for the request.
+    def strip_and_combine(user_prompt: str, default_prompt: str) -> str:
+        user_prompt = user_prompt.strip()
+        if user_prompt and default_prompt:
+            return f"{user_prompt}, {default_prompt}"
+        return user_prompt or default_prompt
 
-    Returns:
-        Transcribed speech text.
-    """
-    if client is None:
-        async with httpx.AsyncClient() as local_client:
-            return await transcribe_audio_data(
-                audio_bytes, payload, client=local_client
-            )
-
-    files = {"file": ("audio.wav", audio_bytes, "audio/wav")}
-    form_data = {k: str(v) for k, v in payload.model_dump().items()}
-    response = await client.post(
-        config.AUDIO_TRANSCRIPTION_ENDPOINT,
-        files=files,
-        data=form_data,
-        timeout=config.AUDIO_TIMEOUT_SECONDS,
+    prompt = strip_and_combine(prompt, default_positive_prompt)
+    negative_prompt = strip_and_combine(
+        negative_prompt, default_negative_prompt
     )
-    response.raise_for_status()
-    if payload.response_format == "json":
-        json_response = response.json()
-        if isinstance(json_response, dict):
-            return str(json_response.get("text", response.text))
-        return str(json_response)
-    return response.text
+    extra_arguments: dict[str, pydantic.JsonValue] = {}
+    if negative_prompt:
+        extra_arguments["negative_prompt"] = negative_prompt
+    if strength is not None:
+        extra_arguments["strength"] = strength
+
+    if extra_arguments:
+        sd_cpp_extra_args = json.dumps(extra_arguments)
+        return f"{prompt} <sd_cpp_extra_args>{sd_cpp_extra_args}</sd_cpp_extra_args>"
+    return prompt
+
+
+async def _generate_image(
+    openai_client: openai.AsyncClient,
+    prompt: str,
+    size: models.ImageSize,
+) -> bytes:
+    response = await openai_client.images.generate(
+        prompt=prompt,
+        size=size,
+        response_format="b64_json",
+    )
+    if not response.data or not response.data[0].b64_json:
+        raise ValueError("Missing image data in response.")
+    return base64.b64decode(response.data[0].b64_json)
+
+
+async def run_image_generation(
+    job: models.ImageJob,
+    openai_client: openai.AsyncClient,
+    prompt: str,
+    size: models.ImageSize,
+) -> None:
+    """Execute an image generation job and record its outcome."""
+    job.status = models.JobState.PROCESSING
+    try:
+        job.image_bytes = await _generate_image(openai_client, prompt, size)
+        job.status = models.JobState.COMPLETED
+    except (openai.OpenAIError, ValueError) as error:
+        job.status = models.JobState.FAILED
+        job.error = str(error)
+    finally:
+        job.event.set()
+
+
+async def _edit_image(
+    openai_client: openai.AsyncClient,
+    http_client: httpx.AsyncClient,
+    image_url: str,
+    prompt: str,
+    size: models.ImageSize,
+) -> bytes:
+    image_response = await http_client.get(image_url)
+    image_response.raise_for_status()
+    response = await openai_client.images.edit(
+        image=image_response.content,
+        prompt=prompt,
+        size=size,
+        response_format="b64_json",
+    )
+    if not response.data or not response.data[0].b64_json:
+        raise ValueError("Missing image data in response.")
+    return base64.b64decode(response.data[0].b64_json)
+
+
+async def run_image_edit(
+    job: models.ImageJob,
+    openai_client: openai.AsyncClient,
+    http_client: httpx.AsyncClient,
+    image_url: str,
+    prompt: str,
+    size: models.ImageSize,
+) -> None:
+    """Execute an image editing job and record its outcome."""
+    job.status = models.JobState.PROCESSING
+    try:
+        job.image_bytes = await _edit_image(
+            openai_client,
+            http_client,
+            image_url,
+            prompt,
+            size,
+        )
+        job.status = models.JobState.COMPLETED
+    except (httpx.HTTPError, openai.OpenAIError, ValueError) as error:
+        job.status = models.JobState.FAILED
+        job.error = str(error)
+    finally:
+        job.event.set()
+
+
+async def transcribe_audio(
+    openai_client: openai.AsyncClient,
+    http_client: httpx.AsyncClient,
+    audio_url: str,
+    model: str,
+    response_format: models.AudioResponseFormat,
+) -> str:
+    """Download an audio file and transcribe it via the backend."""
+    audio_response = await http_client.get(audio_url)
+    audio_response.raise_for_status()
+    transcription = await openai_client.audio.transcriptions.create(
+        model=model,
+        file=("audio.wav", audio_response.content, "audio/wav"),
+        response_format=response_format,
+    )
+    return (
+        transcription if isinstance(transcription, str) else transcription.text
+    )

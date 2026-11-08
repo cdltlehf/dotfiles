@@ -4,7 +4,12 @@ requires = ["uv_build>=0.13.0,<0.14.0"]
 
 [project]
 authors = [{ name = "cdltlehf" }]
-dependencies = ["httpx>=0.28.1", "mcp[cli]>=2.3.0", "pydantic>=2.0.0"]
+dependencies = [
+  "httpx>=0.28.1",
+  "mcp[cli]>=2.3.0",
+  "openai>=1.0.0",
+  "pydantic>=2.0.0",
+]
 description = "Local AI Model Context Protocol server"
 license = "MIT"
 name = "mcp-server"

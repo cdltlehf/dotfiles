@@ -16,6 +16,7 @@ services:
     command: [
       "--model", "/models/${IMAGE_MODEL:-image.gguf}",
       "--vae-tiling",
+      "--seed", "-1",
       "--listen-ip", "0.0.0.0",
       "--listen-port", "8080"
     ]

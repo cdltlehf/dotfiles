@@ -11,12 +11,12 @@ services:
     environment:
       - HOST=${HOST:-0.0.0.0}
       - PORT=${PORT:-8080}
-      - MCP_BASE_URL=${MCP_BASE_URL:-}
-      - IMAGE_GENERATION_ENDPOINT=${IMAGE_GENERATION_ENDPOINT:-http://sd-server:8080/v1/images/generations}
-      - IMAGE_EDIT_ENDPOINT=${IMAGE_EDIT_ENDPOINT:-http://sd-server:8080/v1/images/edits}
+      - MCP_BASE_URL=${MCP_BASE_URL:?MCP_BASE_URL is required}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-http://gateway:8000/v1}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-${API_KEY:?API_KEY is required}}
+      - AUDIO_MODEL=${AUDIO_MODEL:-audio.bin}
       - IMAGE_DEFAULT_POSITIVE_PROMPT=${IMAGE_DEFAULT_POSITIVE_PROMPT:-}
       - IMAGE_DEFAULT_NEGATIVE_PROMPT=${IMAGE_DEFAULT_NEGATIVE_PROMPT:-}
-      - AUDIO_TRANSCRIPTION_ENDPOINT=${AUDIO_TRANSCRIPTION_ENDPOINT:-http://whisper-server:8080/inference}
     profiles:
       - mcp
     depends_on:
