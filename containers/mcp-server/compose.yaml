@@ -8,6 +8,15 @@ services:
     image: local/mcp-server:latest
     container_name: mcp-server
     restart: unless-stopped
+    environment:
+      - HOST=${HOST:-0.0.0.0}
+      - PORT=${PORT:-8080}
+      - MCP_BASE_URL=${MCP_BASE_URL:-}
+      - IMAGE_GENERATION_ENDPOINT=${IMAGE_GENERATION_ENDPOINT:-}
+      - IMAGE_EDIT_ENDPOINT=${IMAGE_EDIT_ENDPOINT:-}
+      - IMAGE_DEFAULT_POSITIVE_PROMPT=${IMAGE_DEFAULT_POSITIVE_PROMPT:-}
+      - IMAGE_DEFAULT_NEGATIVE_PROMPT=${IMAGE_DEFAULT_NEGATIVE_PROMPT:-}
+      - AUDIO_TRANSCRIPTION_ENDPOINT=${AUDIO_TRANSCRIPTION_ENDPOINT:-}
     profiles:
       - mcp
     depends_on:

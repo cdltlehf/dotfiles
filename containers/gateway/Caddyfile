@@ -45,6 +45,10 @@
 		respond 204
 	}
 
+	handle /images/* {
+		reverse_proxy mcp-server:8080
+	}
+
 	@unauthorized not header Authorization "Bearer {$API_KEY}"
 	handle @unauthorized {
 		respond 401

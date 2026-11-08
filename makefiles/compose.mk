@@ -4,8 +4,8 @@ COMPOSE ?= $(shell command -v podman >/dev/null 2>&1 && echo "podman compose" ||
 
 COMPOSE_RESPONSES_FILES  := $(wildcard $(XDG_DATA_HOME)/models/responses/*)
 COMPOSE_EMBEDDINGS_FILES := $(wildcard $(XDG_DATA_HOME)/models/embeddings/*)
-COMPOSE_AUDIO_FILE       := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/audio/*)))
-COMPOSE_IMAGE_FILE       := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/images/*)))
+COMPOSE_AUDIO_FILE := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/audio/*)))
+COMPOSE_IMAGE_FILE := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/images/*)))
 
 COMPOSE_PROFILES :=
 COMPOSE_ENV :=
@@ -55,6 +55,8 @@ compose-logs: ## Follow service logs (alias: logs)
 	@$(COMPOSE) $(COMPOSE_PROFILES) logs -f
 logs: compose-logs
 
+MODAL ?= text
+
 .PHONY: models-download
-models-download: ## Download a model from Hugging Face into ~/.local/share/models (REPO=... PATTERN=... DEST=...)
-	@./scripts/models-download "$(REPO)" "$(PATTERN)" "$(DEST)"
+models-download: ## Download model from Hugging Face (REPO=... [MODAL=text|audio|image|embedding] [FILE=...])
+	@./scripts/models-download "$(REPO)" "$(MODAL)" "$(FILE)" "$(PATTERN)"

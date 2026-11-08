@@ -22,6 +22,8 @@ deviation. One decision record MAY state the reasons for several deviations.
     Style Guides][google-style-guides].
 *   Engineering decisions that no tool enforces SHOULD adhere to the [Google
     Engineering Practices Documentation][google-eng-practices].
+*   Code and configurations SHOULD maintain vendor neutrality and avoid
+    coupling to specific implementations.
 *   Makefiles:
     *   When a [GNU standard target][gnu-targets] clearly matches a target's
         purpose, the target SHOULD use that name.

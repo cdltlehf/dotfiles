@@ -1,6 +1,4 @@
-#!/bin/sh
-#
-# Reference: https://huggingface.co/docs/huggingface_hub/guides/cli
+#!/bin/bash
 
 set -o nounset
 set -o errexit
@@ -12,60 +10,59 @@ readonly BASE_DIR
 . "${BASE_DIR}/scripts/lib.sh"
 
 REPO="${1:-}"
-PATTERN="${2:-}"
-DEST="${3:-responses}"
+MODAL="${2:-text}"
+FILE="${3:-}"
+PATTERN="${4:-}"
 
-usage() {
-  cat <<'EOF'
+if [[ -z "${REPO}" ]]; then
+  cat <<'EOF' >&2
 Usage:
-  make models-download REPO=<repo> [PATTERN=<pattern>] [DEST=<endpoint>]
+  make models-download REPO=<repo> [MODAL=text|audio|image|embedding] [FILE=<file>|PATTERN=<pattern>]
 
 Arguments:
-  REPO     Hugging Face repository (e.g. unsloth/gemma-4-12b-it-GGUF)
-  PATTERN  File pattern to download (e.g. "*Q4_K_M.gguf", defaults to "*")
-  DEST     Model category under ~/.local/share/models:
-           responses, embeddings, audio, images (defaults to "responses")
-
-Examples:
-  make models-download REPO=unsloth/gemma-4-12b-it-GGUF PATTERN="*Q4_K_M.gguf" DEST=responses
-  make models-download REPO=BAAI/bge-m3 PATTERN="*.gguf" DEST=embeddings
-  make models-download REPO=ggerganov/whisper.cpp PATTERN="ggml-base.bin" DEST=audio
-  make models-download REPO=stabilityai/sd-turbo PATTERN="*.safetensors" DEST=images
+  REPO     Hugging Face repository (e.g. owner/name)
+  MODAL    Model category: text, audio, image, embedding (defaults to "text")
+  FILE     Specific filename to download
+  PATTERN  Include glob pattern (e.g. "*.gguf")
 EOF
-}
-
-if [ -z "${REPO}" ]; then
-  usage
-  exit 0
-fi
-
-if command -v hf >/dev/null 2>&1; then
-  HF_CMD="hf download"
-elif command -v huggingface-cli >/dev/null 2>&1; then
-  HF_CMD="huggingface-cli download"
-else
-  error "Neither 'hf' nor 'huggingface-cli' is installed."
-  echo "Install it via your package manager, mise, or pip (e.g. brew install huggingface-cli)" >&2
   exit 1
 fi
 
-case "${DEST}" in
-responses | embeddings | audio | images) ;;
+case "${MODAL}" in
+text | responses)
+  dest="${XDG_DATA_HOME:-${HOME}/.local/share}/models/responses"
+  ;;
+audio)
+  dest="${XDG_DATA_HOME:-${HOME}/.local/share}/models/audio"
+  ;;
+image | images)
+  dest="${XDG_DATA_HOME:-${HOME}/.local/share}/models/images"
+  ;;
+embedding | embeddings)
+  dest="${XDG_DATA_HOME:-${HOME}/.local/share}/models/embeddings"
+  ;;
 *)
-  error "invalid DEST '${DEST}'. Must be one of: responses, embeddings, audio, images"
+  error "Invalid MODAL '${MODAL}'. Must be one of: text, audio, image, embedding"
   exit 1
   ;;
 esac
 
-MODELS_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}/models/${DEST}"
-mkdir -p "${MODELS_DIR}"
+mkdir -p "${dest}"
 
-printf "Downloading from %s (%s) into %s ...\n" "${REPO}" "${PATTERN:-*.*}" "${MODELS_DIR}"
-
-if [ -n "${PATTERN}" ]; then
-  # shellcheck disable=SC2086
-  ${HF_CMD} "${REPO}" --include "${PATTERN}" --local-dir "${MODELS_DIR}"
+if command -v hf >/dev/null 2>&1; then
+  hf_cmd="hf"
+elif command -v huggingface-cli >/dev/null 2>&1; then
+  hf_cmd="huggingface-cli"
 else
-  # shellcheck disable=SC2086
-  ${HF_CMD} "${REPO}" --local-dir "${MODELS_DIR}"
+  error "Neither 'hf' nor 'huggingface-cli' is installed."
+  exit 1
 fi
+
+args=("${hf_cmd}" download "${REPO}" --local-dir "${dest}")
+if [[ -n "${FILE}" ]]; then
+  args+=("${FILE}")
+elif [[ -n "${PATTERN}" ]]; then
+  args+=(--include "${PATTERN}")
+fi
+
+"${args[@]}"
