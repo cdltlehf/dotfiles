@@ -7,17 +7,17 @@ HOST = (
     os.environ.get("HOST") or "0.0.0.0"  # ruff: ignore[hardcoded-bind-all-interfaces]
 )
 PORT = int(os.environ.get("PORT") or 8080)
-IMAGE_GENERATION_ENDPOINT = os.environ.get(
-    "IMAGE_GENERATION_ENDPOINT",
-    "http://sd-server:8080/v1/images/generations",
+IMAGE_GENERATION_ENDPOINT = (
+    os.environ.get("IMAGE_GENERATION_ENDPOINT")
+    or "http://sd-server:8080/v1/images/generations"
 )
-IMAGE_EDIT_ENDPOINT = os.environ.get(
-    "IMAGE_EDIT_ENDPOINT",
-    "http://sd-server:8080/v1/images/edits",
+IMAGE_EDIT_ENDPOINT = (
+    os.environ.get("IMAGE_EDIT_ENDPOINT")
+    or "http://sd-server:8080/v1/images/edits"
 )
-AUDIO_TRANSCRIPTION_ENDPOINT = os.environ.get(
-    "AUDIO_TRANSCRIPTION_ENDPOINT",
-    "http://whisper-server:8080/inference",
+AUDIO_TRANSCRIPTION_ENDPOINT = (
+    os.environ.get("AUDIO_TRANSCRIPTION_ENDPOINT")
+    or "http://whisper-server:8080/inference"
 )
 MCP_BASE_URL = (
     os.environ.get("MCP_BASE_URL") or "http://localhost:3001"
