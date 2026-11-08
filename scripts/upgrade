@@ -48,6 +48,10 @@ if command -v prek >/dev/null; then
   prek_update_projection "${BASE_DIR}/xdg-templates-dir/python/prek.toml.tmpl"
 fi
 
+if command -v vale >/dev/null; then
+  vale --config="${BASE_DIR}/vale.ini" sync || true
+fi
+
 if command -v nvim >/dev/null; then
   nvim --headless \
     -c "lua vim.pack.update(nil, { force = true })" \
