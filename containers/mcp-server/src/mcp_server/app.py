@@ -72,21 +72,12 @@ mcp = AppServer("local-ai-tools", lifespan=lifespan)
 
 @mcp.tool()
 async def start_image_generation(
-    prompt: str,
+    prompt: models.ImagePrompt,
     *,
-    negative_prompt: str = "",
+    negative_prompt: models.NegativePrompt = "",
     size: models.ImageSize = "1024x1024",
 ) -> models.JobStatus:
-    """Start an asynchronous image generation job.
-
-    Args:
-        prompt: A comma-separated list of descriptive visual tags.
-        negative_prompt: A comma-separated list of visual tags to avoid.
-        size: Output image dimensions in pixels.
-
-    Returns:
-        Initial job status containing the assigned job_id.
-    """
+    """Start an asynchronous image generation job."""
     state = mcp.state
     await asyncio.sleep(0)
     job_id = uuid.uuid4().hex
@@ -111,28 +102,14 @@ async def start_image_generation(
 
 @mcp.tool()
 async def start_image_edit(
-    image_url: str,
-    prompt: str,
+    image_url: models.ImageUrl,
+    prompt: models.EditPrompt,
     *,
-    negative_prompt: str = "",
-    strength: float = 0.75,
+    negative_prompt: models.NegativePrompt = "",
+    strength: models.EditStrength = 0.75,
     size: models.ImageSize = "1024x1024",
 ) -> models.JobStatus:
-    """Start an asynchronous image editing job from an existing image URL.
-
-    Args:
-        image_url: HTTP or HTTPS URL of the source image to edit.
-        prompt: A comma-separated list of visual tags describing the desired
-            target image only, excluding any subjects being removed.
-        negative_prompt: A comma-separated list of visual tags to avoid or
-            remove, such as original subjects being replaced.
-        strength: Denoising strength between 0.0 and 1.0 controlling how much
-            the output diverges from the source image.
-        size: Output image dimensions in pixels.
-
-    Returns:
-        Initial job status containing the assigned job_id.
-    """
+    """Start an asynchronous image editing job from an existing image URL."""
     state = mcp.state
     await asyncio.sleep(0)
     job_id = uuid.uuid4().hex
@@ -160,19 +137,10 @@ async def start_image_edit(
 
 @mcp.tool()
 async def get_image_result(
-    job_id: str,
-    wait_seconds: float = 0.0,
+    job_id: models.JobId,
+    wait_seconds: models.WaitSeconds = 0.0,
 ) -> models.JobStatus:
-    """Retrieve the status or completed output URL of an image job.
-
-    Args:
-        job_id: Identifier returned when the image job was started.
-        wait_seconds: Maximum time in seconds to wait for completion before
-            returning the current job status.
-
-    Returns:
-        Current job status, including image_url when status is completed.
-    """
+    """Retrieve the status or completed output URL of an image job."""
     state = mcp.state
     job = state.jobs.get(job_id)
     if job is None:
@@ -204,18 +172,10 @@ async def get_image_result(
 
 @mcp.tool()
 async def transcribe_audio(
-    audio_url: str,
+    audio_url: models.AudioUrl,
     response_format: models.AudioResponseFormat = "json",
 ) -> str:
-    """Transcribe an audio file from a URL into text or subtitles.
-
-    Args:
-        audio_url: HTTP or HTTPS URL of the source audio file.
-        response_format: Output format for the transcription response.
-
-    Returns:
-        Transcribed text or formatted subtitle content.
-    """
+    """Transcribe an audio file from a URL into text or subtitles."""
     state = mcp.state
     return await services.transcribe_audio(
         state.openai_client,

@@ -4,31 +4,80 @@
 import asyncio
 import dataclasses
 import enum
-from typing import Literal
+from typing import Annotated, Literal
 
 import httpx
 import openai
 import pydantic
 
-type ImageSize = Literal[
-    "256x256",
-    "512x512",
-    "768x768",
-    "1024x1024",
-    "896x1152",
-    "1152x896",
-    "832x1216",
-    "1216x832",
-    "768x1344",
-    "1344x768",
-    "640x1536",
-    "1536x640",
-    "1024x1536",
-    "1536x1024",
-    "1024x1792",
-    "1792x1024",
+ImageSize = Annotated[
+    Literal[
+        "256x256",
+        "512x512",
+        "768x768",
+        "1024x1024",
+        "896x1152",
+        "1152x896",
+        "832x1216",
+        "1216x832",
+        "768x1344",
+        "1344x768",
+        "640x1536",
+        "1536x640",
+        "1024x1536",
+        "1536x1024",
+        "1024x1792",
+        "1792x1024",
+    ],
+    pydantic.Field(description="Output image dimensions in pixels."),
 ]
-type AudioResponseFormat = Literal["json", "text", "srt", "vtt"]
+AudioResponseFormat = Annotated[
+    Literal["json", "text", "srt", "vtt"],
+    pydantic.Field(description="Output format for the transcription response."),
+]
+ImagePrompt = Annotated[
+    str,
+    pydantic.Field(description="Visual description of the desired image."),
+]
+EditPrompt = Annotated[
+    str,
+    pydantic.Field(
+        description="Target image description excluding removed subjects."
+    ),
+]
+NegativePrompt = Annotated[
+    str,
+    pydantic.Field(
+        description="Visual elements or subjects to exclude or remove."
+    ),
+]
+EditStrength = Annotated[
+    float,
+    pydantic.Field(
+        ge=0.0,
+        le=1.0,
+        description="Denoising strength between 0.0 and 1.0.",
+    ),
+]
+ImageUrl = Annotated[
+    str,
+    pydantic.Field(description="HTTP or HTTPS URL of the source image."),
+]
+JobId = Annotated[
+    str,
+    pydantic.Field(description="Identifier of the asynchronous image job."),
+]
+WaitSeconds = Annotated[
+    float,
+    pydantic.Field(
+        ge=0.0,
+        description="Maximum seconds to wait for job completion.",
+    ),
+]
+AudioUrl = Annotated[
+    str,
+    pydantic.Field(description="HTTP or HTTPS URL of the source audio file."),
+]
 
 
 class JobState(enum.StrEnum):
