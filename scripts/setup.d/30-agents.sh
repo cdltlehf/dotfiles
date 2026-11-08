@@ -31,6 +31,7 @@ fi
 
 if command -v pi >/dev/null; then
   symlink "${HOME}/.agents/AGENTS.md" "${PI_CODING_AGENT_DIR}/AGENTS.md"
+  symlink "${XDG_CONFIG_HOME}/agents/pi/settings.json" "${PI_CODING_AGENT_DIR}/settings.json"
 fi
 
 if [ -n "${MCP_SERVER_URL:-}" ] && [ -n "${API_KEY:-}" ]; then
