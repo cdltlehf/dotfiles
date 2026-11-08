@@ -12,9 +12,10 @@ services:
       - HOST=${HOST:-0.0.0.0}
       - PORT=${PORT:-8080}
       - MCP_BASE_URL=${MCP_BASE_URL:?MCP_BASE_URL is required}
-      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-http://gateway:8000/v1}
-      - OPENAI_API_KEY=${OPENAI_API_KEY:-${API_KEY:?API_KEY is required}}
-      - AUDIO_MODEL=${AUDIO_MODEL:-audio.bin}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:?ALLOWED_HOSTS is required}
+      - OPENAI_BASE_URL=http://gateway:8000/v1
+      - OPENAI_API_KEY=${API_KEY:?API_KEY is required}
+      - AUDIO_MODEL=${AUDIO_MODEL:?AUDIO_MODEL is required}
       - IMAGE_DEFAULT_POSITIVE_PROMPT=${IMAGE_DEFAULT_POSITIVE_PROMPT:-}
       - IMAGE_DEFAULT_NEGATIVE_PROMPT=${IMAGE_DEFAULT_NEGATIVE_PROMPT:-}
     profiles:

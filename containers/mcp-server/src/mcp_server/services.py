@@ -2,6 +2,7 @@
 """Business logic and external API clients for image and audio tasks."""
 
 import base64
+from collections.abc import Mapping
 import json
 from typing import Final
 
@@ -100,17 +101,59 @@ async def run_image_generation(
         job.event.set()
 
 
+def resolve_base_url(
+    headers: Mapping[str, str] | None,
+    allowed_hosts: frozenset[str],
+    fallback_base_url: str,
+) -> str:
+    """Resolve the effective base URL from request headers if permitted."""
+    if not headers:
+        return fallback_base_url
+    raw_host = headers.get("x-forwarded-host") or headers.get("host")
+    if not raw_host:
+        return fallback_base_url
+    hostname = raw_host.split(":", 1)[0].lower()
+    if hostname not in allowed_hosts:
+        return fallback_base_url
+    scheme = headers.get("x-forwarded-proto") or "http"
+    return f"{scheme}://{raw_host}"
+
+
+async def resolve_input_image(
+    http_client: httpx.AsyncClient,
+    jobs: Mapping[str, models.ImageJob],
+    *,
+    job_id: str | None = None,
+    image_url: str | None = None,
+) -> bytes:
+    """Resolve input image bytes from an existing completed job or external URL."""
+    if job_id:
+        source_job = jobs.get(job_id)
+        if source_job is None:
+            raise ValueError(f"Job {job_id} not found.")
+        if (
+            source_job.status != models.JobState.COMPLETED
+            or not source_job.image_bytes
+        ):
+            raise ValueError(f"Job {job_id} is not completed.")
+        return source_job.image_bytes
+
+    if image_url:
+        response = await http_client.get(image_url)
+        response.raise_for_status()
+        return response.content
+
+    raise ValueError("Either job_id or image_url must be provided.")
+
+
 async def _edit_image(
     openai_client: openai.AsyncClient,
-    http_client: httpx.AsyncClient,
-    image_url: str,
+    image_bytes: bytes,
     prompt: str,
     size: models.ImageSize,
 ) -> bytes:
-    image_response = await http_client.get(image_url)
-    image_response.raise_for_status()
     response = await openai_client.images.edit(
-        image=image_response.content,
+        image=image_bytes,
         prompt=prompt,
         size=size,
         response_format="b64_json",
@@ -122,19 +165,25 @@ async def _edit_image(
 
 async def run_image_edit(
     job: models.ImageJob,
-    openai_client: openai.AsyncClient,
-    http_client: httpx.AsyncClient,
-    image_url: str,
+    state: models.AppState,
     prompt: str,
     size: models.ImageSize,
+    *,
+    job_id: str | None = None,
+    image_url: str | None = None,
 ) -> None:
     """Execute an image editing job and record its outcome."""
     job.status = models.JobState.PROCESSING
     try:
+        image_bytes = await resolve_input_image(
+            state.http_client,
+            state.jobs,
+            job_id=job_id,
+            image_url=image_url,
+        )
         job.image_bytes = await _edit_image(
-            openai_client,
-            http_client,
-            image_url,
+            state.openai_client,
+            image_bytes,
             prompt,
             size,
         )

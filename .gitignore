@@ -1,6 +1,7 @@
 .DS_Store
 .env
 __pycache__/
+/images/
 xdg-config-home/karabiner/assets/complex_modifications/*.json
 xdg-config-home/karabiner/automatic_backups
 xdg-config-home/karabiner/karabiner.json

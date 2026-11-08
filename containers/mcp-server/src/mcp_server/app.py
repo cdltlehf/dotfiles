@@ -36,9 +36,16 @@ async def lifespan(
     openai_client = openai.AsyncClient(
         base_url=os.environ["OPENAI_BASE_URL"],
         api_key=os.environ["OPENAI_API_KEY"],
+        timeout=1800.0,
     )
-    http_client = httpx.AsyncClient()
+    http_client = httpx.AsyncClient(timeout=1800.0)
     mcp_base_url = os.environ["MCP_BASE_URL"].rstrip("/")
+    raw_allowed_hosts = os.environ["ALLOWED_HOSTS"]
+    allowed_hosts = frozenset(
+        host.strip().lower()
+        for host in raw_allowed_hosts.split(",")
+        if host.strip()
+    )
     audio_model = os.environ["AUDIO_MODEL"]
     default_positive_prompt = os.environ.get(
         "IMAGE_DEFAULT_POSITIVE_PROMPT", ""
@@ -50,6 +57,7 @@ async def lifespan(
         openai_client=openai_client,
         http_client=http_client,
         mcp_base_url=mcp_base_url,
+        allowed_hosts=frozenset(allowed_hosts),
         audio_model=audio_model,
         default_positive_prompt=default_positive_prompt,
         default_negative_prompt=default_negative_prompt,
@@ -102,18 +110,21 @@ async def start_image_generation(
 
 @mcp.tool()
 async def start_image_edit(
-    image_url: models.ImageUrl,
     prompt: models.EditPrompt,
     *,
+    job_id: models.JobId | None = None,
+    image_url: models.ImageUrl | None = None,
     negative_prompt: models.NegativePrompt = "",
     strength: models.EditStrength = 0.75,
     size: models.ImageSize = "1024x1024",
 ) -> models.JobStatus:
-    """Start an asynchronous image editing job from an existing image URL."""
+    """Start an asynchronous image editing job from an existing job ID or image URL."""
+    if not job_id and not image_url:
+        raise ValueError("Either job_id or image_url must be provided.")
     state = mcp.state
     await asyncio.sleep(0)
-    job_id = uuid.uuid4().hex
-    job = services.create_job(state.jobs, job_id)
+    new_job_id = uuid.uuid4().hex
+    job = services.create_job(state.jobs, new_job_id)
     formatted_prompt = services.format_image_prompt(
         prompt,
         negative_prompt=negative_prompt,
@@ -123,57 +134,43 @@ async def start_image_edit(
     )
     coro = services.run_image_edit(
         job,
-        state.openai_client,
-        state.http_client,
-        image_url,
+        state,
         formatted_prompt,
         size,
+        job_id=job_id,
+        image_url=image_url,
     )
     task = asyncio.create_task(coro)
     state.running_tasks.add(task)
     task.add_done_callback(state.running_tasks.discard)
-    return models.JobStatus(job_id=job_id, status=job.status)
+    return models.JobStatus(job_id=new_job_id, status=job.status)
 
 
 @mcp.tool()
 async def start_image_upscale(
-    image_url: models.ImageUrl,
     *,
-    prompt: models.UpscalePrompt = "",
+    job_id: models.JobId | None = None,
+    image_url: models.ImageUrl | None = None,
     negative_prompt: models.NegativePrompt = "",
     strength: models.EditStrength = 0.55,
-    size: models.ImageSize = "2048x2048",
+    size: models.ImageSize = "1536x1536",
 ) -> models.JobStatus:
     """Start an asynchronous high-resolution image upscaling job."""
-    state = mcp.state
-    await asyncio.sleep(0)
-    job_id = uuid.uuid4().hex
-    job = services.create_job(state.jobs, job_id)
-    formatted_prompt = services.format_image_prompt(
-        prompt,
+    return await start_image_edit(
+        "",
+        job_id=job_id,
+        image_url=image_url,
         negative_prompt=negative_prompt,
-        default_positive_prompt=state.default_positive_prompt,
-        default_negative_prompt=state.default_negative_prompt,
         strength=strength,
+        size=size,
     )
-    coro = services.run_image_edit(
-        job,
-        state.openai_client,
-        state.http_client,
-        image_url,
-        formatted_prompt,
-        size,
-    )
-    task = asyncio.create_task(coro)
-    state.running_tasks.add(task)
-    task.add_done_callback(state.running_tasks.discard)
-    return models.JobStatus(job_id=job_id, status=job.status)
 
 
 @mcp.tool()
 async def get_image_result(
     job_id: models.JobId,
     wait_seconds: models.WaitSeconds = 0.0,
+    ctx: mcpserver.Context[models.AppState] | None = None,
 ) -> models.JobStatus:
     """Retrieve the status or completed output URL of an image job."""
     state = mcp.state
@@ -192,8 +189,14 @@ async def get_image_result(
         with contextlib.suppress(TimeoutError):
             await asyncio.wait_for(job.event.wait(), timeout=wait_seconds)
 
+    headers = ctx.headers if ctx else None
+    base_url = services.resolve_base_url(
+        headers,
+        state.allowed_hosts,
+        state.mcp_base_url,
+    )
     image_url = (
-        f"{state.mcp_base_url}/images/{job_id}.png"
+        f"{base_url}/images/{job_id}.png"
         if job.status == models.JobState.COMPLETED
         else None
     )

@@ -41,12 +41,6 @@ ImagePrompt = Annotated[
     str,
     pydantic.Field(description="Visual description of the desired image."),
 ]
-UpscalePrompt = Annotated[
-    str,
-    pydantic.Field(
-        description="Optional visual description to guide fine detail refinement."
-    ),
-]
 EditPrompt = Annotated[
     str,
     pydantic.Field(
@@ -69,11 +63,15 @@ EditStrength = Annotated[
 ]
 ImageUrl = Annotated[
     str,
-    pydantic.Field(description="HTTP or HTTPS URL of the source image."),
+    pydantic.Field(
+        description="HTTP or HTTPS URL of an external source image."
+    ),
 ]
 JobId = Annotated[
     str,
-    pydantic.Field(description="Identifier of the asynchronous image job."),
+    pydantic.Field(
+        description="Identifier of an image job (for status checking or input source)."
+    ),
 ]
 WaitSeconds = Annotated[
     float,
@@ -114,6 +112,7 @@ class AppState:
     openai_client: openai.AsyncClient
     http_client: httpx.AsyncClient
     mcp_base_url: str
+    allowed_hosts: frozenset[str]
     audio_model: str
     default_positive_prompt: str
     default_negative_prompt: str
