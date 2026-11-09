@@ -4,5 +4,6 @@
     "keepRecentTokens": 2048,
     "reserveTokens": 8192
   },
-  "defaultThinkingLevel": "off"
+  "defaultThinkingLevel": "off",
+  "lastChangelogVersion": "1.5.0"
 }

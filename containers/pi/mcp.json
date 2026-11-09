@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "remote-tools": {
+      "url": "http://gateway:8001/mcp",
+      "headers": {
+        "Authorization": "Bearer ${API_KEY}"
+      }
+    }
+  }
+}

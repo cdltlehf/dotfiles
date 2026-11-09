@@ -2,13 +2,11 @@ FROM docker.io/library/alpine:latest
 
 RUN apk add --no-cache \
     ttyd \
-    nodejs \
-    npm \
-    git \
-    curl \
-    ca-certificates
+    npm
 
 RUN npm install -g @earendil-works/pi-coding-agent
+
+RUN mkdir -p /root/.config/pi/agent
 
 ENV PI_CODING_AGENT_DIR=/root/.config/pi/agent
 
