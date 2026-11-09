@@ -1,0 +1,18 @@
+FROM docker.io/library/alpine:latest
+
+RUN apk add --no-cache \
+    ttyd \
+    nodejs \
+    npm \
+    git \
+    curl \
+    ca-certificates
+
+RUN npm install -g @earendil-works/pi-coding-agent
+
+ENV PI_CODING_AGENT_DIR=/root/.config/pi/agent
+
+WORKDIR /workspace
+
+EXPOSE 7681
+CMD ["ttyd", "-W", "--", "pi", "-c"]

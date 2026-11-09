@@ -17,6 +17,5 @@ services:
       - ~/.local/share/models/audio:/models:ro
     command: [
       "--model", "/models/${AUDIO_MODEL:-audio.bin}",
-      "--host", "0.0.0.0",
-      "--port", "8080"
+      "--host", "0.0.0.0"
     ]

@@ -24,7 +24,6 @@ services:
       "--models-dir", "/models",
       "--models-max", "1",
       "--parallel", "1",
-      "--port", "8080",
       "--sleep-idle-seconds", "300",
       "--ubatch-size", "512",
     ]
@@ -44,7 +43,6 @@ services:
       - ~/.local/share/models/embeddings:/models:ro
     command: [
       "--host", "0.0.0.0",
-      "--port", "8080",
       "--models-dir", "/models",
       "--models-max", "1",
       "--ctx-size", "2048",

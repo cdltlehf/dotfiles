@@ -111,8 +111,8 @@ class AppState:
 
     openai_client: openai.AsyncClient
     http_client: httpx.AsyncClient
-    mcp_base_url: str
     allowed_hosts: frozenset[str]
+    mcp_base_url: str
     audio_model: str
     default_positive_prompt: str
     default_negative_prompt: str

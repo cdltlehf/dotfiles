@@ -6,3 +6,4 @@ include:
   - containers/whisper-server/compose.yaml
   - containers/sd-server/compose.yaml
   - containers/mcp-server/compose.yaml
+  - containers/pi/compose.yaml

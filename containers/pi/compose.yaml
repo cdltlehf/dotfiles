@@ -1,0 +1,18 @@
+services:
+  pi:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: local/pi:latest
+    container_name: pi
+    restart: unless-stopped
+    profiles:
+      - pi
+      - sandbox
+    environment:
+      - LLAMA_BASE_URL=http://gateway:8000
+      - LLAMA_API_KEY=${API_KEY:?API_KEY is required}
+      - MCP_SERVER_URL=http://gateway:8001/mcp
+    volumes:
+      - ${XDG_DATA_HOME:-${HOME}/.local/share}/sandbox:/workspace:rw
+      - ${XDG_CONFIG_HOME:-${HOME}/.config}/agents/pi/settings.json:/root/.config/pi/agent/settings.json:ro

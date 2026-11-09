@@ -29,7 +29,7 @@
 	handle /v1/embeddings* {
 		import allow-api-cors
 		import protect
-		reverse_proxy llama-embedding-server:8080
+		reverse_proxy llama-embedding-server:9931
 	}
 
 	handle /v1/audio/* {
@@ -42,13 +42,25 @@
 	handle /v1/images/* {
 		import allow-api-cors
 		import protect
-		reverse_proxy sd-server:8080
+		reverse_proxy sd-server:1234
 	}
 
-	handle /v1/* {
+	handle {
 		import allow-api-cors
+		reverse_proxy llama-server:9931
+	}
+}
+
+:8001 {
+	handle /mcp {
+		import allow-mcp-cors
 		import protect
-		reverse_proxy llama-server:8080
+		reverse_proxy mcp-server:8000
+	}
+
+	handle /images/* {
+		import allow-mcp-cors
+		reverse_proxy mcp-server:8000
 	}
 
 	handle {
@@ -56,19 +68,8 @@
 	}
 }
 
-:3001 {
-	handle /mcp {
-		import allow-mcp-cors
-		import protect
-		reverse_proxy mcp-server:8080
-	}
-
-	handle /images/* {
-		import allow-mcp-cors
-		reverse_proxy mcp-server:8080
-	}
-
+:7681 {
 	handle {
-		respond "Not Found" 404
+		reverse_proxy pi:7681
 	}
 }

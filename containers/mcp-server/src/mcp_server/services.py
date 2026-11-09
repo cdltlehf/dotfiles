@@ -104,7 +104,7 @@ async def run_image_generation(
 def resolve_base_url(
     headers: Mapping[str, str] | None,
     allowed_hosts: frozenset[str],
-    fallback_base_url: str,
+    fallback_base_url: str = "",
 ) -> str:
     """Resolve the effective base URL from request headers if permitted."""
     if not headers:

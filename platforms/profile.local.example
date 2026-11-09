@@ -1,14 +1,15 @@
 # Required by containers/{gateway,llama-server,mcp-server}/compose.yaml
-export API_BASE_URL="https://api.example.com/v1"
 export API_KEY="your-secret-api-key"
-export API_MODEL="your-model-id"
 
 # Required by scripts/setup.d/30-agents.sh
-export MCP_SERVER_URL="https://mcp.example.com/mcp"
+export MCP_SERVER_URL="http://localhost:8001/mcp"
 
 # Required by containers/mcp-server/compose.yaml
-export ALLOWED_HOSTS="localhost,127.0.0.1,mcp.example.com"
+export ALLOWED_HOSTS=""
 export AUDIO_MODEL="your-audio-model-id"
 export IMAGE_DEFAULT_NEGATIVE_PROMPT=""
 export IMAGE_DEFAULT_POSITIVE_PROMPT=""
-export MCP_BASE_URL="https://mcp.example.com"
+
+# Required by pi-agent
+export LLAMA_BASE_URL="http://localhost:8000"
+export LLAMA_API_KEY="${API_KEY}"

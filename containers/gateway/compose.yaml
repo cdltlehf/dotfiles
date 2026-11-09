@@ -7,7 +7,8 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
-      - "3001:3001"
+      - "8001:8001"
+      - "7681:7681"
     environment:
       - API_KEY=${API_KEY:?API_KEY is required}
     volumes:
@@ -26,5 +27,8 @@ services:
         condition: service_started
         required: false
       mcp-server:
+        condition: service_started
+        required: false
+      pi:
         condition: service_started
         required: false

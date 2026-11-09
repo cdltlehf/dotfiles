@@ -7,6 +7,7 @@ from collections.abc import AsyncGenerator, Sequence
 import contextlib
 import logging
 import os
+import urllib.parse
 import uuid
 
 import httpx
@@ -39,13 +40,18 @@ async def lifespan(
         timeout=1800.0,
     )
     http_client = httpx.AsyncClient(timeout=1800.0)
-    mcp_base_url = os.environ["MCP_BASE_URL"].rstrip("/")
-    raw_allowed_hosts = os.environ["ALLOWED_HOSTS"]
-    allowed_hosts = frozenset(
-        host.strip().lower()
-        for host in raw_allowed_hosts.split(",")
-        if host.strip()
-    )
+    mcp_base_url = os.environ.get(
+        "MCP_BASE_URL", "http://localhost:8001"
+    ).rstrip("/")
+    allowed_hosts = {"localhost", "127.0.0.1", "gateway"}
+    if mcp_base_url:
+        parsed_host = urllib.parse.urlsplit(mcp_base_url).hostname
+        if parsed_host:
+            allowed_hosts.add(parsed_host.lower())
+    for host in os.environ.get("ALLOWED_HOSTS", "").split(","):
+        stripped = host.strip().lower()
+        if stripped:
+            allowed_hosts.add(stripped)
     audio_model = os.environ["AUDIO_MODEL"]
     default_positive_prompt = os.environ.get(
         "IMAGE_DEFAULT_POSITIVE_PROMPT", ""
@@ -56,8 +62,8 @@ async def lifespan(
     state = models.AppState(
         openai_client=openai_client,
         http_client=http_client,
-        mcp_base_url=mcp_base_url,
         allowed_hosts=frozenset(allowed_hosts),
+        mcp_base_url=mcp_base_url,
         audio_model=audio_model,
         default_positive_prompt=default_positive_prompt,
         default_negative_prompt=default_negative_prompt,
@@ -254,9 +260,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="mcp-server")
     parser.parse_args(argv)
 
-    host = os.environ["HOST"]
-    port = int(os.environ["PORT"])
-    mcp.run(transport="streamable-http", host=host, port=port)
+    mcp.run(
+        transport="streamable-http",
+        host="0.0.0.0",  # ruff: ignore[hardcoded-bind-all-interfaces]
+    )
 
     return 0
 
