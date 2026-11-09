@@ -14,21 +14,19 @@ services:
     environment:
       - LLAMA_API_KEY=${API_KEY:?API_KEY is required}
     volumes:
-      - ~/.local/share/models/responses:/models:ro
+      - ${XDG_DATA_HOME:-${HOME}/.local/share}/models/responses:/models:ro
     command: [
-      "--host", "0.0.0.0",
-      "--port", "8080",
-      "--models-dir", "/models",
-      "--models-max", "1",
-      "--ctx-size", "16384",
-      "--ubatch-size", "512",
-      "--parallel", "1",
       "--cache-type-k", "q4_0",
       "--cache-type-v", "q4_0",
-      "--sleep-idle-seconds", "300",
+      "--ctx-size", "16384",
+      "--host", "0.0.0.0",
       "--metrics",
-      "--ui-mcp-proxy",
-      "--cors-origins", "*",
+      "--models-dir", "/models",
+      "--models-max", "1",
+      "--parallel", "1",
+      "--port", "8080",
+      "--sleep-idle-seconds", "300",
+      "--ubatch-size", "512",
     ]
 
   llama-embedding-server:

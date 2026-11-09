@@ -1,60 +1,74 @@
 # Reference: https://caddyserver.com/docs/caddyfile
 # Reference: https://platform.openai.com/docs/api-reference
 
-:8000 {
-	handle /v1/embeddings* {
-		reverse_proxy llama-embedding-server:8080
-	}
+(allow-api-cors) {
+	header Access-Control-Allow-Origin *
+	header Access-Control-Allow-Headers "Authorization, Content-Type, Accept"
+	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
 
-	handle /v1/audio/* {
-		@unauthorized not header Authorization "Bearer {$API_KEY}"
-		handle @unauthorized {
-			respond 401
-		}
-
-		handle {
-			rewrite /v1/audio/transcriptions /inference
-			reverse_proxy whisper-server:8080
-		}
-	}
-
-	handle /v1/images/* {
-		@unauthorized not header Authorization "Bearer {$API_KEY}"
-		handle @unauthorized {
-			respond 401
-		}
-
-		handle {
-			reverse_proxy sd-server:8080
-		}
-	}
-
-	handle {
-		reverse_proxy llama-server:8080
-	}
+	@options method OPTIONS
+	respond @options 204
 }
 
-:3001 {
+(allow-mcp-cors) {
 	header Access-Control-Allow-Origin *
 	header Access-Control-Allow-Headers "Authorization, Content-Type, Accept, mcp-session-id, mcp-protocol-version"
 	header Access-Control-Expose-Headers "mcp-session-id, mcp-protocol-version"
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
 
 	@options method OPTIONS
-	handle @options {
-		respond 204
-	}
+	respond @options 204
+}
 
-	handle /images/* {
-		reverse_proxy mcp-server:8080
-	}
-
+(protect) {
 	@unauthorized not header Authorization "Bearer {$API_KEY}"
-	handle @unauthorized {
-		respond 401
+	respond @unauthorized 401
+}
+
+:8000 {
+	handle /v1/embeddings* {
+		import allow-api-cors
+		import protect
+		reverse_proxy llama-embedding-server:8080
+	}
+
+	handle /v1/audio/* {
+		import allow-api-cors
+		import protect
+		rewrite /v1/audio/transcriptions /inference
+		reverse_proxy whisper-server:8080
+	}
+
+	handle /v1/images/* {
+		import allow-api-cors
+		import protect
+		reverse_proxy sd-server:8080
+	}
+
+	handle /v1/* {
+		import allow-api-cors
+		import protect
+		reverse_proxy llama-server:8080
 	}
 
 	handle {
+		respond "Not Found" 404
+	}
+}
+
+:3001 {
+	handle /mcp {
+		import allow-mcp-cors
+		import protect
 		reverse_proxy mcp-server:8080
+	}
+
+	handle /images/* {
+		import allow-mcp-cors
+		reverse_proxy mcp-server:8080
+	}
+
+	handle {
+		respond "Not Found" 404
 	}
 }
