@@ -15,7 +15,5 @@ COPY --from=builder /install /usr/local
 
 WORKDIR /app
 
-ENV HOST=0.0.0.0
-
 EXPOSE 8000
-ENTRYPOINT ["mcp-server"]
+ENTRYPOINT ["mcp-server", "--host", "0.0.0.0"]

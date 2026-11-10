@@ -258,13 +258,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         format="%(asctime)s [%(levelname)s] %(message)s",
     )
     parser = argparse.ArgumentParser(description="mcp-server")
-    parser.parse_args(argv)
-
-    mcp.run(
-        transport="streamable-http",
-        host="0.0.0.0",  # ruff: ignore[hardcoded-bind-all-interfaces]
-    )
-
+    parser.add_argument("--host", type=str, default="127.0.0.1")
+    args = parser.parse_args(argv)
+    mcp.run(transport="streamable-http", host=args.host)
     return 0
 
 
