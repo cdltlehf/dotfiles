@@ -7,6 +7,7 @@ setup() {
 
 @test "zsh: idempotency" {
   local run1 run2
+  [[ -e "${XDG_CONFIG_HOME}/zsh/.zshrc" ]]
   run1="$(PATH="/usr/bin:/bin:/usr/sbin:/sbin" zsh -c '. "${XDG_CONFIG_HOME}/sh/shrc" >/dev/null; . "${XDG_CONFIG_HOME}/zsh/.zshrc" >/dev/null 2>&1; alias | sort; echo "PATH:${PATH}"' || true)"
   run2="$(PATH="/usr/bin:/bin:/usr/sbin:/sbin" zsh -c '. "${XDG_CONFIG_HOME}/sh/shrc" >/dev/null; . "${XDG_CONFIG_HOME}/zsh/.zshrc" >/dev/null 2>&1; . "${XDG_CONFIG_HOME}/sh/shrc" >/dev/null; . "${XDG_CONFIG_HOME}/zsh/.zshrc" >/dev/null 2>&1; alias | sort; echo "PATH:${PATH}"' || true)"
   [[ "${run1}" = "${run2}" ]]

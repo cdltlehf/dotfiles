@@ -45,3 +45,6 @@ for item in "${BASE_DIR}/xdg-templates-dir"/*; do
     *) ;;
   esac
 done
+
+# The project template doubles as the global default style.
+symlink "${XDG_TEMPLATES_DIR}/.editorconfig" "${HOME}/.editorconfig"

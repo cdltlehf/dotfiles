@@ -96,6 +96,7 @@ symlink() {
     fi
     mkdir -p "$(dirname "${_dest}")"
     ln -s "${_src}" "${_dest}"
+    [ -L "${_dest}" ] || die "Failed to link ${_dest} to ${_src}"
   fi
   unset _src _dest
 }
