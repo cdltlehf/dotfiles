@@ -37,11 +37,11 @@ Project instructions take precedence over this document.
 * Agents SHOULD ask the user before they commit, amend, rebase, or push.
 * Agents SHOULD ask the user before they create or change a decision record.
 
-[agent-skills]: https://agentskills.io/specification
+[agent-skills]: https://agentskills.io/specification.md
 [agents-md]: https://agents.md/
 [bcp-14]: https://www.rfc-editor.org/info/bcp14
 [codegraph]: https://github.com/colbymchenry/codegraph
 [git-flow]: https://github.com/gittower/git-flow-next
 [lsp]: https://microsoft.github.io/language-server-protocol/
-[openai-prompt-guide]: https://developers.openai.com/api/docs/guides/prompt-engineering
+[openai-prompt-guide]: https://developers.openai.com/api/docs/guides/prompt-engineering.md
 [prek]: https://github.com/jdx/prek
