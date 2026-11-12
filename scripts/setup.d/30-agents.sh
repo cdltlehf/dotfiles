@@ -34,18 +34,19 @@ if command -v pi >/dev/null; then
   symlink "${XDG_CONFIG_HOME}/agents/pi/settings.json" "${PI_CODING_AGENT_DIR}/settings.json"
 fi
 
-if [ -n "${MCP_SERVER_URL:-}" ] && [ -n "${API_KEY:-}" ]; then
+if [ -n "${MCP_SERVER_URL:-}" ] && [ -n "${MCP_SERVER_API_KEY:-}" ]; then
   if command -v claude >/dev/null; then
     claude mcp remove --scope user remote-tools 2>/dev/null || true
-    claude mcp add --scope user --transport http remote-tools "${MCP_SERVER_URL}" --header "Authorization: Bearer ${API_KEY}"
+    claude mcp add --scope user --transport http remote-tools "${MCP_SERVER_URL}" --header "Authorization: Bearer \${MCP_SERVER_API_KEY}"
   fi
 
+  # agy 1.5.5 neither takes the key by name nor expands ${VAR} in headers.
   if command -v agy >/dev/null; then
-    agy mcp add --header "Authorization: Bearer ${API_KEY}" remote-tools "${MCP_SERVER_URL}"
+    agy mcp add --header "Authorization: Bearer ${MCP_SERVER_API_KEY}" remote-tools "${MCP_SERVER_URL}"
   fi
 
   if command -v pi >/dev/null; then
-    pi mcp add remote-tools --url "${MCP_SERVER_URL}" --bearer-token-env-var API_KEY
+    pi mcp add remote-tools --url "${MCP_SERVER_URL}" --bearer-token-env-var MCP_SERVER_API_KEY
   fi
 fi
 

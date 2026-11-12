@@ -17,6 +17,9 @@ git clone https://github.com/cdltlehf/dotfiles.git --depth 1 && cd dotfiles && m
 
 Run `make check` to verify.
 
+Set machine-local variables in `~/.profile.local`, using `profile.local.example`
+as a reference.
+
 ## References
 
 * [POSIX.1-2024 Shell & Utilities](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/)

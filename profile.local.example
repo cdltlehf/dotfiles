@@ -3,9 +3,11 @@ export API_KEY="your-secret-api-key"
 
 # Required by scripts/setup.d/30-agents.sh
 export MCP_SERVER_URL="http://localhost:8001/mcp"
+export MCP_SERVER_API_KEY="${API_KEY}"
 
 # Required by containers/mcp-server/compose.yaml
 export ALLOWED_HOSTS=""
+export MCP_BASE_URL="http://localhost:8001"
 export AUDIO_MODEL="your-audio-model-id"
 export IMAGE_DEFAULT_NEGATIVE_PROMPT=""
 export IMAGE_DEFAULT_POSITIVE_PROMPT=""
