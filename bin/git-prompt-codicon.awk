@@ -28,7 +28,6 @@ BEGIN {
         ICON_AHEAD = "↑"
         ICON_BEHIND = "↓"
         ICON_STASH = "≡ "
-        ICON_CONFLICT = "×"
     } else if (charset == "nerdfont") {
         ICON_BRANCH = " "
         ICON_TAG = " "
@@ -50,7 +49,6 @@ BEGIN {
         ICON_AHEAD = ">"
         ICON_BEHIND = "<"
         ICON_STASH = "$ "
-        ICON_CONFLICT = "x"
     }
 }
 
@@ -136,30 +134,6 @@ END {
 
     if (stash > 0) {
         status_str = join(status_str, C_GRAY ICON_STASH stash C_RESET)
-    }
-
-    if (charset == "nerdfont") {
-        if (staged > 0 && (unstaged > 0 || untracked > 0)) {
-            status_str = join(status_str, C_OK "+" C_RESET)
-        }
-    } else {
-        flags = ""
-        if (conflicted > 0) {
-            flags = flags C_BAD ICON_CONFLICT C_RESET
-        }
-        if (staged > 0) {
-            flags = flags C_OK "+" C_RESET
-        }
-        if (unstaged > 0) {
-            flags = flags C_BAD "*" C_RESET
-        }
-        if (untracked > 0) {
-            flags = flags C_BAD "?" C_RESET
-        }
-
-        if (flags != "") {
-            status_str = join(status_str, flags)
-        }
     }
 
     if (status_str != "") {
