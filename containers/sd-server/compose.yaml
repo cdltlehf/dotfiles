@@ -12,7 +12,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     volumes:
-      - ~/.local/share/models/images:/models:ro
+      - ${XDG_DATA_HOME:-${HOME}/.local/share}/models/images:/models:ro
     command: [
       "--model", "/models/${IMAGE_MODEL:-image.gguf}",
       "--vae-tiling",

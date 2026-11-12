@@ -4,14 +4,15 @@ FROM docker.io/library/python:alpine AS builder
 
 RUN pip install --no-cache-dir uv
 
-WORKDIR /build
+WORKDIR /app
 COPY pyproject.toml uv.lock ./
 COPY src/ ./src/
-RUN uv pip install --no-cache-dir --prefix=/install .
+RUN UV_PYTHON_DOWNLOADS=never uv sync --locked --no-dev --no-editable
 
 FROM docker.io/library/python:alpine
 
-COPY --from=builder /install /usr/local
+COPY --from=builder /app/.venv /app/.venv
+ENV PATH="/app/.venv/bin:${PATH}"
 
 WORKDIR /app
 
