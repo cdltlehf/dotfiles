@@ -5,7 +5,6 @@ disable_backends = ["asdf", "conda"]
 
 [tools]
 "aqua:mattn/efm-langserver" = "0.0.57"
-"aqua:tmux/tmux-builds" = "3.7c"
 bat = "0.26.1"
 bats = "1.14.0"
 biome = "2.6.4"
