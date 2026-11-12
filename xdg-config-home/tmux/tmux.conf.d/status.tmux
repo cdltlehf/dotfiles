@@ -40,8 +40,8 @@ set-option -g window-status-separator " #[fg=brightblack]· "
 
 %else
 set-option -g @separator "·"
-set-option -g @session_label " #{session_name}"
-set-option -g @disabled_session_label " #{session_name}"
+set-option -g @session_label "[#{session_name}]"
+set-option -g @disabled_session_label "[#{session_name}]"
 
 set-option -g window-status-current-format "#I:#W*#{?pane_synchronized, #[fg=brightred]#[default],#{?window_zoomed_flag, ,#{?window_marked_flag, ,}}}"
 set-option -g window-status-format "#I:#W#{?window_bell_flag, #[fg=yellow]#[default],#{?window_activity_flag, ,#{?window_silence_flag, ,#{?window_last_flag, ,}}}}"
