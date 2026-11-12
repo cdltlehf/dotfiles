@@ -44,7 +44,7 @@ compose-build: ## Build services (SERVICE=...)
 
 .PHONY: compose-rebuild
 compose-rebuild: ## Rebuild services ignoring layer cache (SERVICE=...)
-	@$(COMPOSE) --profile "*" build --no-cache $(SERVICE)
+	@$(COMPOSE) --profile "*" build --pull --no-cache $(SERVICE)
 
 .PHONY: compose-ps
 compose-ps: ## Status of services
