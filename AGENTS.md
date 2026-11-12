@@ -24,6 +24,7 @@ deviation. One decision record MAY state the reasons for several deviations.
     Engineering Practices Documentation][google-eng-practices].
 *   Code and configurations SHOULD maintain vendor neutrality and avoid
     coupling to specific implementations.
+*   Services SHOULD adhere to [The Twelve-Factor App][twelve-factor].
 *   Makefiles:
     *   When a [GNU standard target][gnu-targets] clearly matches a target's
         purpose, the target SHOULD use that name.
@@ -74,6 +75,7 @@ deviation. One decision record MAY state the reasons for several deviations.
 [madr]: https://adr.github.io/madr/
 [posix-shell]: https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html
 [semver]: https://semver.org/spec/v2.0.0.md
+[twelve-factor]: https://12factor.net/
 [wai-aria]: https://www.w3.org/TR/wai-aria/
 [wcag-2.2]: https://www.w3.org/TR/WCAG22/
 [xdg-basedir]: https://specifications.freedesktop.org/basedir-spec/latest/
