@@ -70,8 +70,10 @@ update: ## Update package indexes
 	@./scripts/update
 
 .PHONY: upgrade
+upgrade: SUBPROJECTS := containers/mcp-server
 upgrade: ## Upgrade tools
 	@./scripts/upgrade
+	@for d in $(SUBPROJECTS); do $(MAKE) -C "$$d" upgrade || exit; done
 
 .PHONY: clean
 clean: TARGET_DIRS := $(XDG_CONFIG_HOME) $(XDG_TEMPLATES_DIR) $(BIN_DIR) $(CURDIR)

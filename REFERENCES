@@ -7,9 +7,11 @@ Reference:
  https://editorconfig.org/
  https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
  https://github.com/koalaman/shellcheck/blob/master/shellcheck.1.md
+ https://github.com/kubernetes-sigs/kubebuilder/blob/master/Makefile
  https://google.github.io/styleguide/docguide/style.html
  https://prek.j178.dev/
  https://taplo.tamasfe.dev/configuration/file.html
+ https://tech.davis-hansson.com/p/make/
  https://vale.sh/docs/vale-ini
  https://www.shellcheck.net/wiki/
  https://yamllint.readthedocs.io/en/stable/configuration.html
