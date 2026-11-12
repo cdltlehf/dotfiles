@@ -41,9 +41,9 @@ async def lifespan(
     )
     http_client = httpx.AsyncClient(timeout=1800.0)
     mcp_base_url = os.environ.get(
-        "MCP_BASE_URL", "http://localhost:8001"
+        "MCP_BASE_URL", "http://localhost:8000"
     ).rstrip("/")
-    allowed_hosts = {"localhost", "127.0.0.1", "gateway"}
+    allowed_hosts = {"localhost", "127.0.0.1"}
     if mcp_base_url:
         parsed_host = urllib.parse.urlsplit(mcp_base_url).hostname
         if parsed_host:
