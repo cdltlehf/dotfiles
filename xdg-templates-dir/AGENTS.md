@@ -38,6 +38,8 @@ deviation. One decision record MAY state the reasons for several deviations.
 *   User interfaces:
     *   Visual design and structure SHOULD adhere to [Ten Principles for Good
         Design][good-design].
+    *   Interactive behavior and usability SHOULD adhere to [10 Usability
+        Heuristics for User Interface Design][usability-heuristics].
     *   Accessible markup and dynamic states SHOULD adhere to [W3C Web
         Accessibility Initiative Accessible Rich Internet Applications
         (WAI-ARIA)][wai-aria].
@@ -79,6 +81,7 @@ deviation. One decision record MAY state the reasons for several deviations.
 [posix-shell]: https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html
 [semver]: https://semver.org/spec/v2.0.0.md
 [twelve-factor]: https://12factor.net/
+[usability-heuristics]: https://www.nngroup.com/articles/ten-usability-heuristics/
 [wai-aria]: https://www.w3.org/TR/wai-aria/
 [wcag-2.2]: https://www.w3.org/TR/WCAG22/
 [xdg-basedir]: https://specifications.freedesktop.org/basedir-spec/latest/
