@@ -35,7 +35,9 @@ deviation. One decision record MAY state the reasons for several deviations.
 *   Shell scripts SHOULD target Bash, unless they may run where Bash is missing.
     Scripts targeting `/bin/sh` MUST adhere to the [Portable Operating System
     Interface (POSIX) Shell Command Language][posix-shell].
-*   Web user interfaces:
+*   User interfaces:
+    *   Visual design and structure SHOULD adhere to [Ten Principles for Good
+        Design][good-design].
     *   Accessible markup and dynamic states SHOULD adhere to [W3C Web
         Accessibility Initiative Accessible Rich Internet Applications
         (WAI-ARIA)][wai-aria].
@@ -69,6 +71,7 @@ deviation. One decision record MAY state the reasons for several deviations.
 [github-flow]: https://docs.github.com/en/get-started/using-github/github-flow.md
 [gnu-make]: https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
 [gnu-targets]: https://www.gnu.org/prep/standards/html_node/Standard-Targets.html
+[good-design]: https://www.vitsoe.com/us/about/good-design
 [google-doc-style]: https://developers.google.com/style
 [google-eng-practices]: https://google.github.io/eng-practices/README.md
 [google-style-guides]: https://google.github.io/styleguide/README.md
