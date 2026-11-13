@@ -12,6 +12,7 @@ deviation. One decision record MAY state the reasons for several deviations.
 
 *   Documentation decisions that no tool enforces SHOULD adhere to the [Google
     Developer Documentation Style Guide][google-doc-style].
+*   Markdown documents MAY use [GitHub Flavored Markdown][gfm] extensions.
 
 ## Coding conventions
 
@@ -69,6 +70,7 @@ deviation. One decision record MAY state the reasons for several deviations.
 
 [bcp-14]: https://www.rfc-editor.org/info/bcp14
 [conventional-commits]: https://www.conventionalcommits.org/en/v1.0.0/
+[gfm]: https://github.github.com/gfm/
 [git-flow]: https://nvie.com/posts/a-successful-git-branching-model/
 [github-flow]: https://docs.github.com/en/get-started/using-github/github-flow.md
 [gnu-make]: https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
