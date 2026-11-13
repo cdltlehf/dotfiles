@@ -53,6 +53,8 @@ deviation. One decision record MAY state the reasons for several deviations.
 
 *   Projects SHOULD place configuration, data, state, and cache files according
     to the [X Desktop Group (XDG) Base Directory Specification][xdg-basedir].
+    macOS GUI applications SHOULD instead follow [macOS Library Directory
+    Details][macos-library].
 
 ## Workflow
 
@@ -80,6 +82,7 @@ deviation. One decision record MAY state the reasons for several deviations.
 [google-eng-practices]: https://google.github.io/eng-practices/README.md
 [google-style-guides]: https://google.github.io/styleguide/README.md
 [madr]: https://adr.github.io/madr/
+[macos-library]: https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/MacOSXDirectories/MacOSXDirectories.html
 [posix-shell]: https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html
 [semver]: https://semver.org/spec/v2.0.0.md
 [twelve-factor]: https://12factor.net/
