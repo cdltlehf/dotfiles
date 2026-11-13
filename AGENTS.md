@@ -101,6 +101,8 @@ names a rule. The preceding conventions MUST stay identical to
     It carries no copyright metadata.
 *   Agents MUST ask the user before they add or change a `Reference:` comment or
     a `REFERENCES` entry.
+*   Links in `AGENTS.md` files SHOULD point to the public Markdown version of a
+    document when one exists.
 
 [deb822]: https://manpages.debian.org/trixie/dpkg-dev/deb822.5.en.html
 [gitignore]: https://git-scm.com/docs/gitignore#_pattern_format
