@@ -4,6 +4,7 @@ Reference:
 
 Files: xdg-templates-dir/*
 Reference:
+ https://commitizen-tools.github.io/commitizen/config/configuration_file/
  https://editorconfig.org/
  https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
  https://github.com/koalaman/shellcheck/blob/master/shellcheck.1.md
