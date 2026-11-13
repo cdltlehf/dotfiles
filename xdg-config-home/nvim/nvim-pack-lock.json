@@ -9,7 +9,7 @@
       "src": "https://github.com/github/copilot.vim"
     },
     "fzf": {
-      "rev": "99bfd5aa0f66133d7dcfbf18f8044eb765f04649",
+      "rev": "4499615fe9c06c0651aa5650e5d0d0a5face99a8",
       "src": "https://github.com/junegunn/fzf"
     },
     "fzf.vim": {
@@ -17,15 +17,15 @@
       "src": "https://github.com/junegunn/fzf.vim"
     },
     "gitsigns.nvim": {
-      "rev": "4bcd99167c265f135886b282baad77afe06206b2",
+      "rev": "ef707fb93301a9b856f36eae4c8f56f5b988a794",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "nvim-lspconfig": {
-      "rev": "adfbb74472f6c231b651b650a89f414c2680fb31",
+      "rev": "443d92c6bea761ab54cdde46fb197a2b4d614bdd",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-web-devicons": {
-      "rev": "ec309a0eaff6ea967e58c275996155ab5c16938d",
+      "rev": "0dc0cfb0c6858041174a53c7aa4adaf65e994b3c",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "oil.nvim": {
@@ -37,7 +37,7 @@
       "src": "https://github.com/sphamba/smear-cursor.nvim"
     },
     "styleguide": {
-      "rev": "f8e2b0f7c8b0456b8c199166b13640d3eb36df87",
+      "rev": "102d363fce6d18674d605430e3ddb5eb91487f85",
       "src": "https://github.com/google/styleguide",
       "version": "'gh-pages'"
     },
@@ -90,7 +90,7 @@
       "src": "https://github.com/tpope/vim-vinegar"
     },
     "vimtex": {
-      "rev": "3f96503904db6acdb7108cd93a9580dd41e88555",
+      "rev": "9745f3b467f5c24d0d5133e82537a74434da8ae3",
       "src": "https://github.com/lervag/vimtex"
     },
     "wgsl.vim": {
