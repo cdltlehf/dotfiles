@@ -1,6 +1,12 @@
 # Reference: https://caddyserver.com/docs/caddyfile
 # Reference: https://platform.openai.com/docs/api-reference
 
+{
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
 (allow-api-cors) {
 	header Access-Control-Allow-Origin *
 	header Access-Control-Allow-Headers "Authorization, Content-Type, Accept"
