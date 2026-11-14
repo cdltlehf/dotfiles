@@ -19,10 +19,12 @@ Project instructions take precedence over this document.
 *   Code exploration and impact analysis SHOULD use [CodeGraph][codegraph]
     when the repository has a `.codegraph/` index.
 *   Code refactoring and diagnostics SHOULD use the
-    [Language Server Protocol][lsp] when a language server is configured.
-*   Branch management SHOULD use [Git Flow][git-flow] when the repository is
-    configured for Git Flow.
-*   Pre-commit validation SHOULD use [prek][prek] when configured.
+    [Language Server Protocol][lsp] when the repository configures a language
+    server.
+*   Branch management SHOULD use [Git Flow][git-flow] when the repository uses
+    Git Flow.
+*   Pre-commit validation SHOULD use [prek][prek] when the repository
+    configures prek.
 
 ## Evaluation
 
