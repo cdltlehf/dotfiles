@@ -41,9 +41,11 @@ deviation. One decision record MAY state the reasons for several deviations.
         Design][good-design].
     *   Interactive behavior and usability SHOULD adhere to [10 Usability
         Heuristics for User Interface Design][usability-heuristics].
+    *   Markup SHOULD use semantic elements and avoid generic containers, such
+        as `<div>` and `<span>`, when a semantic element exists.
     *   Accessible markup and dynamic states SHOULD adhere to [W3C Web
         Accessibility Initiative Accessible Rich Internet Applications
-        (WAI-ARIA)][wai-aria].
+        (WAI-ARIA)][wai-aria] when native semantic elements are insufficient.
     *   Interfaces MUST conform to [W3C Web Content Accessibility Guidelines
         (WCAG) 2.2][wcag-2.2] Level AA and SHOULD conform to Level AAA.
 *   Version numbers and dependency constraints SHOULD adhere to [Semantic
@@ -95,15 +97,15 @@ deviation. One decision record MAY state the reasons for several deviations.
 ## This repository
 
 This section adds to the preceding conventions, and overrides them where it
-names a rule. The preceding conventions MUST stay identical to
+names a rule. Everything before this section MUST stay identical to
 `xdg-templates-dir/AGENTS.md`.
 
-*   `REFERENCES` lists the sources of templates, which carry no `Reference:`
+*   `REFERENCES` MUST list the sources of templates, which carry no `Reference:`
     comments, and of files that can't carry them, in [deb822][deb822] paragraph
-    syntax. Its `Files` patterns follow [gitignore][gitignore] paragraph syntax.
-    It carries no copyright metadata.
-*   Agents MUST ask the user before they add or change a `Reference:` comment or
-    a `REFERENCES` entry.
+    syntax. Its `Files` patterns MUST follow [gitignore][gitignore] pattern
+    syntax, and `REFERENCES` MUST omit copyright metadata.
+*   Agents MUST ask the user before they add, change, or remove a `Reference:`
+    comment or a `REFERENCES` entry, unless the user explicitly requested it.
 *   Links in `AGENTS.md` files SHOULD point to the public Markdown version of a
     document when one exists.
 

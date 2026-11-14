@@ -3,7 +3,8 @@
 The key words in this document are to be interpreted as described in
 [BCP 14][bcp-14] (RFC 2119 and RFC 8174).
 
-Project instructions take precedence over this document.
+Agents MUST adhere to the [OpenAI Model Spec][openai-model-spec]. Project
+instructions take precedence over this document.
 
 ## Writing conventions
 
@@ -36,8 +37,14 @@ Project instructions take precedence over this document.
 
 ## Changes
 
-* Agents SHOULD ask the user before they commit, amend, rebase, or push.
-* Agents SHOULD ask the user before they create or change a decision record.
+*   Agents MUST answer informational questions and investigations without editing
+    files until the user approves.
+*   Agents MUST ask the user before taking irreversible actions, unless the user
+    explicitly requested them.
+*   Agents MUST ask the user before they commit, amend, rebase, or push, unless
+    the user explicitly requested it.
+*   Agents MUST ask the user before they create or change a decision record,
+    unless the user explicitly requested it.
 
 [agent-skills]: https://agentskills.io/specification.md
 [agents-md]: https://agents.md/
@@ -45,5 +52,6 @@ Project instructions take precedence over this document.
 [codegraph]: https://github.com/colbymchenry/codegraph
 [git-flow]: https://github.com/gittower/git-flow-next
 [lsp]: https://microsoft.github.io/language-server-protocol/
+[openai-model-spec]: https://github.com/openai/model_spec/blob/main/model_spec.md
 [openai-prompt-guide]: https://developers.openai.com/api/docs/guides/prompt-engineering.md
 [prek]: https://github.com/jdx/prek

@@ -41,9 +41,11 @@ deviation. One decision record MAY state the reasons for several deviations.
         Design][good-design].
     *   Interactive behavior and usability SHOULD adhere to [10 Usability
         Heuristics for User Interface Design][usability-heuristics].
+    *   Markup SHOULD use semantic elements and avoid generic containers, such
+        as `<div>` and `<span>`, when a semantic element exists.
     *   Accessible markup and dynamic states SHOULD adhere to [W3C Web
         Accessibility Initiative Accessible Rich Internet Applications
-        (WAI-ARIA)][wai-aria].
+        (WAI-ARIA)][wai-aria] when native semantic elements are insufficient.
     *   Interfaces MUST conform to [W3C Web Content Accessibility Guidelines
         (WCAG) 2.2][wcag-2.2] Level AA and SHOULD conform to Level AAA.
 *   Version numbers and dependency constraints SHOULD adhere to [Semantic
