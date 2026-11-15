@@ -114,7 +114,6 @@ class AppState:
     http_client: httpx.AsyncClient
     allowed_hosts: frozenset[str]
     mcp_base_url: str
-    image_base_url: str
     image_dir: pathlib.Path
     audio_model: str
     default_positive_prompt: str

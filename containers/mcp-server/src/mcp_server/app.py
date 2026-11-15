@@ -41,12 +41,7 @@ async def lifespan(
         timeout=1800.0,
     )
     http_client = httpx.AsyncClient(timeout=1800.0)
-    mcp_base_url = os.environ.get(
-        "MCP_BASE_URL", "http://localhost:8000"
-    ).rstrip("/")
-    image_base_url = (
-        os.environ.get("MCP_IMAGE_BASE_URL", "").strip().rstrip("/")
-    )
+    mcp_base_url = os.environ.get("MCP_BASE_URL", "").strip().rstrip("/")
     allowed_hosts = {"localhost", "127.0.0.1"}
     if mcp_base_url:
         parsed_host = urllib.parse.urlsplit(mcp_base_url).hostname
@@ -70,7 +65,6 @@ async def lifespan(
         http_client=http_client,
         allowed_hosts=frozenset(allowed_hosts),
         mcp_base_url=mcp_base_url,
-        image_base_url=image_base_url,
         image_dir=image_dir,
         audio_model=audio_model,
         default_positive_prompt=default_positive_prompt,
@@ -197,7 +191,6 @@ async def get_image_result(
                 headers,
                 state.allowed_hosts,
                 state.mcp_base_url,
-                state.image_base_url,
             )
             return models.JobStatus(
                 job_id=job_id,
@@ -222,7 +215,6 @@ async def get_image_result(
         headers,
         state.allowed_hosts,
         state.mcp_base_url,
-        state.image_base_url,
     )
     image_url = (
         f"{base_url}/images/{job_id}.png"

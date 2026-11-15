@@ -1,18 +1,24 @@
-# Required by containers/{gateway,llama-server,mcp-server}/compose.yaml
-export API_KEY="your-secret-api-key"
+# ==============================================================================
+# Providers (containers/*/compose.yaml)
+# ==============================================================================
 
-# Required by scripts/setup.d/30-agents.sh
-export MCP_SERVER_URL="http://localhost:8001/mcp"
-export MCP_SERVER_API_KEY="${API_KEY}"
+# Shared API key for gateway, llama-server, mcp-server, pi, and a2a
+export COMPOSE_API_KEY="your-secret-api-key"
 
-# Required by containers/mcp-server/compose.yaml
-export ALLOWED_HOSTS=""
-export MCP_BASE_URL="http://localhost:8001"
-export MCP_IMAGE_BASE_URL=""
-export AUDIO_MODEL="your-audio-model-id"
-export IMAGE_DEFAULT_NEGATIVE_PROMPT=""
-export IMAGE_DEFAULT_POSITIVE_PROMPT=""
+# mcp-server (containers/mcp-server/compose.yaml)
+export COMPOSE_MCP_ALLOWED_HOSTS=""
+export COMPOSE_MCP_BASE_URL=""
+export COMPOSE_MCP_IMAGE_POSITIVE_PROMPT=""
+export COMPOSE_MCP_IMAGE_NEGATIVE_PROMPT=""
 
-# Required by pi-agent
+# ==============================================================================
+# Consumers (host CLI tools & scripts/setup.d/30-agents.sh)
+# ==============================================================================
+
+# Host agents (claude, agy, pi) connecting to mcp-server
+export AGENT_MCP_URL="http://localhost:8001/mcp"
+export AGENT_MCP_API_KEY="${COMPOSE_API_KEY}"
+
+# pi-agent (local LLM client)
 export LLAMA_BASE_URL="http://localhost:8000"
-export LLAMA_API_KEY="${API_KEY}"
+export LLAMA_API_KEY="${COMPOSE_API_KEY}"

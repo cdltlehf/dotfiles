@@ -128,20 +128,19 @@ async def run_image_generation(
 def resolve_base_url(
     headers: Mapping[str, str] | None,
     allowed_hosts: frozenset[str],
-    fallback_base_url: str = "",
-    override_base_url: str = "",
+    base_url: str = "",
 ) -> str:
-    """Resolve the effective base URL from override or request headers."""
-    if override_base_url:
-        return override_base_url
+    """Resolve the effective base URL from config or request headers."""
+    if base_url:
+        return base_url
     if not headers:
-        return fallback_base_url
+        return ""
     raw_host = headers.get("x-forwarded-host") or headers.get("host")
     if not raw_host:
-        return fallback_base_url
+        return ""
     hostname = raw_host.split(":", 1)[0].lower()
     if hostname not in allowed_hosts:
-        return fallback_base_url
+        return ""
     scheme = headers.get("x-forwarded-proto") or "http"
     return f"{scheme}://{raw_host}"
 
