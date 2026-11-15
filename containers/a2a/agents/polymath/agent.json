@@ -1,0 +1,25 @@
+{
+  "name": "polymath",
+  "description": "Versatile local assistant integrated with gateway LLM and MCP server.",
+  "version": "0.1.0",
+  "supportedInterfaces": [
+    {
+      "url": "http://localhost:9999/a2a/polymath",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "capabilities": {
+    "streaming": true
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain"],
+  "skills": [
+    {
+      "id": "polymath",
+      "name": "polymath",
+      "description": "Versatile assistant with local LLM and full MCP tools.",
+      "tags": ["polymath", "assistant", "mcp"]
+    }
+  ]
+}
