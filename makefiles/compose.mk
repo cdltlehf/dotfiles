@@ -49,24 +49,24 @@ up: compose-up
 
 .PHONY: compose-down down
 compose-down: ## Stop services (alias: down)
-	@$(COMPOSE) $(COMPOSE_PROFILES) down
+	@$(COMPOSE_ENV) $(COMPOSE) $(COMPOSE_PROFILES) down
 down: compose-down
 
 .PHONY: compose-build
 compose-build: ## Build services (SERVICE=...)
-	@$(COMPOSE) --profile "*" build $(SERVICE)
+	@$(COMPOSE_ENV) $(COMPOSE) --profile "*" build $(SERVICE)
 
 .PHONY: compose-rebuild
 compose-rebuild: ## Rebuild services ignoring layer cache (SERVICE=...)
-	@$(COMPOSE) --profile "*" build --pull --no-cache $(SERVICE)
+	@$(COMPOSE_ENV) $(COMPOSE) --profile "*" build --pull --no-cache $(SERVICE)
 
 .PHONY: compose-ps
 compose-ps: ## Status of services
-	@$(COMPOSE) $(COMPOSE_PROFILES) ps
+	@$(COMPOSE_ENV) $(COMPOSE) $(COMPOSE_PROFILES) ps
 
 .PHONY: compose-logs logs
 compose-logs: ## Follow service logs (alias: logs)
-	@$(COMPOSE) $(COMPOSE_PROFILES) logs -f
+	@$(COMPOSE_ENV) $(COMPOSE) $(COMPOSE_PROFILES) logs -f
 logs: compose-logs
 
 MODAL ?= text
