@@ -1,0 +1,25 @@
+{
+  "name": "ethos",
+  "description": "Principled agent focused on credibility, ethics, and verification.",
+  "version": "0.1.0",
+  "supportedInterfaces": [
+    {
+      "url": "http://localhost:9999/a2a/ethos",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "capabilities": {
+    "streaming": true
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain"],
+  "skills": [
+    {
+      "id": "ethos",
+      "name": "ethos",
+      "description": "Credibility, principles, and claim verification.",
+      "tags": ["ethics", "verification"]
+    }
+  ]
+}

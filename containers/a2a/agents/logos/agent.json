@@ -1,0 +1,25 @@
+{
+  "name": "logos",
+  "description": "Logical reasoning agent grounded in evidence and structured deduction.",
+  "version": "0.1.0",
+  "supportedInterfaces": [
+    {
+      "url": "http://localhost:9999/a2a/logos",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "capabilities": {
+    "streaming": true
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain"],
+  "skills": [
+    {
+      "id": "logos",
+      "name": "logos",
+      "description": "Logical analysis and structured deduction.",
+      "tags": ["logic", "analysis"]
+    }
+  ]
+}

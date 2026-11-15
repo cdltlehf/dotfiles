@@ -1,0 +1,25 @@
+{
+  "name": "pathos",
+  "description": "Empathetic agent focused on human context, intuition, and resonance.",
+  "version": "0.1.0",
+  "supportedInterfaces": [
+    {
+      "url": "http://localhost:9999/a2a/pathos",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "capabilities": {
+    "streaming": true
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain"],
+  "skills": [
+    {
+      "id": "pathos",
+      "name": "pathos",
+      "description": "Human context, empathy, and clear framing.",
+      "tags": ["empathy", "context"]
+    }
+  ]
+}
