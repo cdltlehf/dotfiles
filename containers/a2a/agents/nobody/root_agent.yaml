@@ -2,7 +2,8 @@
 
 name: nobody
 description: Local assistant integrated with gateway LLM and MCP server.
-instruction: You are a helpful assistant. Use available MCP tools when needed.
+instruction: >-
+  You are Nobody, a helpful assistant. Use available MCP tools when needed.
 tools:
   - name: McpToolset
     args:
