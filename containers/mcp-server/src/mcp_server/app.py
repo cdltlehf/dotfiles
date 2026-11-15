@@ -245,6 +245,30 @@ async def transcribe_audio(
     )
 
 
+@mcp.tool()
+async def get_current_time(
+    timezone: models.TimeZone = "UTC",
+) -> models.CurrentTimeResult:
+    """Return the current date, time, and weekday for an IANA time zone."""
+    await asyncio.sleep(0)
+    return services.get_current_time(timezone)
+
+
+@mcp.tool()
+async def fetch_web(
+    url: models.WebUrl,
+    max_length: models.FetchMaxLength = 8000,
+    start_index: models.FetchStartIndex = 0,
+) -> str:
+    """Fetch a public HTTP(S) web page as Markdown or plain text."""
+    return await services.fetch_web(
+        mcp.state.http_client,
+        url,
+        max_length=max_length,
+        start_index=start_index,
+    )
+
+
 @mcp.custom_route("/images/{filename}", methods=["GET"])
 async def serve_image(request: requests.Request) -> responses.Response:
     """Serve a completed job image as a PNG response."""

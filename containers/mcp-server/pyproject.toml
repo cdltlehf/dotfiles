@@ -5,7 +5,9 @@ requires = ["uv_build>=0.13.0,<0.14.0"]
 [project]
 authors = [{ name = "cdltlehf" }]
 dependencies = [
+  "beautifulsoup4>=4.12.0",
   "httpx>=0.28.1",
+  "markdownify>=0.14.0",
   "mcp[cli]>=2.3.0",
   "openai>=1.0.0",
   "pydantic>=2.0.0",
