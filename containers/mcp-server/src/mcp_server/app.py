@@ -7,6 +7,7 @@ from collections.abc import AsyncGenerator, Sequence
 import contextlib
 import logging
 import os
+import pathlib
 import urllib.parse
 import uuid
 
@@ -59,11 +60,14 @@ async def lifespan(
     default_negative_prompt = os.environ.get(
         "IMAGE_DEFAULT_NEGATIVE_PROMPT", ""
     ).strip()
+    image_dir = pathlib.Path(os.environ.get("IMAGE_DIR", "/data/images"))
+    await asyncio.to_thread(image_dir.mkdir, parents=True, exist_ok=True)
     state = models.AppState(
         openai_client=openai_client,
         http_client=http_client,
         allowed_hosts=frozenset(allowed_hosts),
         mcp_base_url=mcp_base_url,
+        image_dir=image_dir,
         audio_model=audio_model,
         default_positive_prompt=default_positive_prompt,
         default_negative_prompt=default_negative_prompt,
@@ -104,7 +108,7 @@ async def start_image_generation(
     )
     coro = services.run_image_generation(
         job,
-        state.openai_client,
+        state,
         formatted_prompt,
         size,
     )
@@ -182,6 +186,19 @@ async def get_image_result(
     state = mcp.state
     job = state.jobs.get(job_id)
     if job is None:
+        persisted_path = services.image_path(state.image_dir, job_id)
+        if persisted_path is not None and persisted_path.is_file():
+            headers = ctx.headers if ctx else None
+            base_url = services.resolve_base_url(
+                headers,
+                state.allowed_hosts,
+                state.mcp_base_url,
+            )
+            return models.JobStatus(
+                job_id=job_id,
+                status=models.JobState.COMPLETED,
+                image_url=f"{base_url}/images/{job_id}.png",
+            )
         return models.JobStatus(
             job_id=job_id,
             status=models.JobState.FAILED,
@@ -235,20 +252,21 @@ async def serve_image(request: requests.Request) -> responses.Response:
     """Serve a completed job image as a PNG response."""
     await asyncio.sleep(0)
     filename = str(request.path_params.get("filename", ""))
+    if not filename.endswith(".png"):
+        return responses.Response(
+            content="Image not found.",
+            status_code=404,
+            media_type="text/plain",
+        )
     job_id = filename.removesuffix(".png")
-    job = mcp.state.jobs.get(job_id)
-    match job:
-        case models.ImageJob(status=models.JobState.COMPLETED):
-            return responses.Response(
-                content=job.image_bytes,
-                media_type="image/png",
-            )
-        case _:
-            return responses.Response(
-                content="Image not found.",
-                status_code=404,
-                media_type="text/plain",
-            )
+    image_path = services.image_path(mcp.state.image_dir, job_id)
+    if image_path is not None and image_path.is_file():
+        return responses.FileResponse(image_path, media_type="image/png")
+    return responses.Response(
+        content="Image not found.",
+        status_code=404,
+        media_type="text/plain",
+    )
 
 
 def main(argv: Sequence[str] | None = None) -> int:

@@ -1,9 +1,12 @@
 # SPDX-License-Identifier: MIT
 """Business logic and external API clients for image and audio tasks."""
 
+import asyncio
 import base64
 from collections.abc import Mapping
 import json
+import pathlib
+import re
 from typing import Final
 
 import httpx
@@ -13,6 +16,14 @@ import pydantic
 from mcp_server import models
 
 MAX_JOBS: Final[int] = 4
+_JOB_ID_PATTERN: Final[re.Pattern[str]] = re.compile(r"^[0-9a-f]{32}$")
+
+
+def image_path(image_dir: pathlib.Path, job_id: str) -> pathlib.Path | None:
+    """Return the validated PNG path for a job ID, or None if invalid."""
+    if not _JOB_ID_PATTERN.fullmatch(job_id):
+        return None
+    return image_dir / f"{job_id}.png"
 
 
 def create_job(
@@ -31,7 +42,7 @@ def create_job(
         if evictable_job_id is None:
             raise RuntimeError("Server is busy.")
         jobs.pop(evictable_job_id)
-    job = models.ImageJob()
+    job = models.ImageJob(job_id=job_id)
     jobs[job_id] = job
     return job
 
@@ -83,18 +94,31 @@ async def _generate_image(
     return base64.b64decode(response.data[0].b64_json)
 
 
+async def write_image(
+    image_dir: pathlib.Path,
+    job_id: str,
+    image_bytes: bytes,
+) -> None:
+    """Validate the job ID and persist PNG bytes to disk."""
+    output_path = image_path(image_dir, job_id)
+    if output_path is None:
+        raise ValueError(f"Invalid job ID: {job_id}")
+    await asyncio.to_thread(output_path.write_bytes, image_bytes)
+
+
 async def run_image_generation(
     job: models.ImageJob,
-    openai_client: openai.AsyncClient,
+    state: models.AppState,
     prompt: str,
     size: models.ImageSize,
 ) -> None:
-    """Execute an image generation job and record its outcome."""
+    """Execute an image generation job and persist its output to disk."""
     job.status = models.JobState.PROCESSING
     try:
-        job.image_bytes = await _generate_image(openai_client, prompt, size)
+        image_bytes = await _generate_image(state.openai_client, prompt, size)
+        await write_image(state.image_dir, job.job_id, image_bytes)
         job.status = models.JobState.COMPLETED
-    except (openai.OpenAIError, ValueError) as error:
+    except (OSError, openai.OpenAIError, ValueError) as error:
         job.status = models.JobState.FAILED
         job.error = str(error)
     finally:
@@ -120,26 +144,26 @@ def resolve_base_url(
 
 
 async def resolve_input_image(
-    http_client: httpx.AsyncClient,
-    jobs: Mapping[str, models.ImageJob],
+    state: models.AppState,
     *,
     job_id: str | None = None,
     image_url: str | None = None,
 ) -> bytes:
     """Resolve input image bytes from an existing completed job or external URL."""
     if job_id:
-        source_job = jobs.get(job_id)
-        if source_job is None:
-            raise ValueError(f"Job {job_id} not found.")
+        source_job = state.jobs.get(job_id)
         if (
-            source_job.status != models.JobState.COMPLETED
-            or not source_job.image_bytes
+            source_job is not None
+            and source_job.status != models.JobState.COMPLETED
         ):
             raise ValueError(f"Job {job_id} is not completed.")
-        return source_job.image_bytes
+        source_path = image_path(state.image_dir, job_id)
+        if source_path is None or not source_path.is_file():
+            raise ValueError(f"Job {job_id} not found.")
+        return await asyncio.to_thread(source_path.read_bytes)
 
     if image_url:
-        response = await http_client.get(image_url)
+        response = await state.http_client.get(image_url)
         response.raise_for_status()
         return response.content
 
@@ -172,23 +196,23 @@ async def run_image_edit(
     job_id: str | None = None,
     image_url: str | None = None,
 ) -> None:
-    """Execute an image editing job and record its outcome."""
+    """Execute an image editing job and persist its output to disk."""
     job.status = models.JobState.PROCESSING
     try:
         image_bytes = await resolve_input_image(
-            state.http_client,
-            state.jobs,
+            state,
             job_id=job_id,
             image_url=image_url,
         )
-        job.image_bytes = await _edit_image(
+        edited_bytes = await _edit_image(
             state.openai_client,
             image_bytes,
             prompt,
             size,
         )
+        await write_image(state.image_dir, job.job_id, edited_bytes)
         job.status = models.JobState.COMPLETED
-    except (httpx.HTTPError, openai.OpenAIError, ValueError) as error:
+    except (OSError, httpx.HTTPError, openai.OpenAIError, ValueError) as error:
         job.status = models.JobState.FAILED
         job.error = str(error)
     finally:

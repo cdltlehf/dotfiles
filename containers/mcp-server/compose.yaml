@@ -10,12 +10,15 @@ services:
     restart: unless-stopped
     environment:
       - ALLOWED_HOSTS=gateway,${ALLOWED_HOSTS:-}
+      - IMAGE_DIR=/data/images
       - MCP_BASE_URL=${MCP_BASE_URL:-http://localhost:8001}
       - OPENAI_BASE_URL=http://gateway:8000/v1
       - OPENAI_API_KEY=${API_KEY:?API_KEY is required}
       - AUDIO_MODEL=${AUDIO_MODEL:?AUDIO_MODEL is required}
       - IMAGE_DEFAULT_POSITIVE_PROMPT=${IMAGE_DEFAULT_POSITIVE_PROMPT:-}
       - IMAGE_DEFAULT_NEGATIVE_PROMPT=${IMAGE_DEFAULT_NEGATIVE_PROMPT:-}
+    volumes:
+      - ${XDG_DATA_HOME:-${HOME}/.local/share}/mcp-server/images:/data/images:rw
     profiles:
       - mcp
     depends_on:

@@ -4,6 +4,7 @@
 import asyncio
 import dataclasses
 import enum
+import pathlib
 from typing import Annotated, Literal
 
 import httpx
@@ -99,9 +100,9 @@ class JobState(enum.StrEnum):
 class ImageJob:
     """Represents an asynchronous image generation or editing job."""
 
+    job_id: str
     status: JobState = JobState.PENDING
     event: asyncio.Event = dataclasses.field(default_factory=asyncio.Event)
-    image_bytes: bytes = b""
     error: str | None = None
 
 
@@ -113,6 +114,7 @@ class AppState:
     http_client: httpx.AsyncClient
     allowed_hosts: frozenset[str]
     mcp_base_url: str
+    image_dir: pathlib.Path
     audio_model: str
     default_positive_prompt: str
     default_negative_prompt: str
