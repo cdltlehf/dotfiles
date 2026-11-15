@@ -8,6 +8,7 @@ export MCP_SERVER_API_KEY="${API_KEY}"
 # Required by containers/mcp-server/compose.yaml
 export ALLOWED_HOSTS=""
 export MCP_BASE_URL="http://localhost:8001"
+export MCP_IMAGE_BASE_URL=""
 export AUDIO_MODEL="your-audio-model-id"
 export IMAGE_DEFAULT_NEGATIVE_PROMPT=""
 export IMAGE_DEFAULT_POSITIVE_PROMPT=""

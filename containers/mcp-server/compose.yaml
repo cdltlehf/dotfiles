@@ -12,6 +12,7 @@ services:
       - ALLOWED_HOSTS=gateway,mcp-server,${ALLOWED_HOSTS:-}
       - IMAGE_DIR=/data/images
       - MCP_BASE_URL=${MCP_BASE_URL:-http://localhost:8001}
+      - MCP_IMAGE_BASE_URL=${MCP_IMAGE_BASE_URL:-}
       - OPENAI_BASE_URL=http://gateway:8000/v1
       - OPENAI_API_KEY=${API_KEY:?API_KEY is required}
       - AUDIO_MODEL=${AUDIO_MODEL:?AUDIO_MODEL is required}

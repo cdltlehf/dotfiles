@@ -129,8 +129,11 @@ def resolve_base_url(
     headers: Mapping[str, str] | None,
     allowed_hosts: frozenset[str],
     fallback_base_url: str = "",
+    override_base_url: str = "",
 ) -> str:
-    """Resolve the effective base URL from request headers if permitted."""
+    """Resolve the effective base URL from override or request headers."""
+    if override_base_url:
+        return override_base_url
     if not headers:
         return fallback_base_url
     raw_host = headers.get("x-forwarded-host") or headers.get("host")
