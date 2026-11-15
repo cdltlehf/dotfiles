@@ -1,0 +1,65 @@
+[build-system]
+build-backend = "uv_build"
+requires = ["uv_build>=0.13.0,<0.14.0"]
+
+[project]
+authors = [{ name = "cdltlehf" }]
+dependencies = ["httpx>=0.28.1", "uvicorn>=0.34.0"]
+description = "OpenAI-compatible reverse proxy disabling reasoning by default"
+license = "MIT"
+name = "llm-proxy"
+requires-python = ">=3.12"
+version = "0.1.0"
+
+[project.scripts]
+llm-proxy = "llm_proxy.app:main"
+
+[tool.ruff]
+line-length = 80
+preview = true
+
+[tool.ruff.lint]
+ignore = [
+  "avoidable-escaped-quote",
+  "bad-quotes-docstring",
+  "bad-quotes-inline-string",
+  "bad-quotes-multiline-string",
+  "docstring-tab-indentation",
+  "indentation-with-invalid-multiple",
+  "indentation-with-invalid-multiple-comment",
+  "line-too-long",
+  "missing-trailing-comma",
+  "over-indented",
+  "prohibited-trailing-comma",
+  "tab-indentation",
+  "triple-single-quotes",
+  "unnecessary-escaped-quote",
+  "future-required-type-annotation",
+  "future-rewritable-type-annotation",
+  "typing-only-first-party-import",
+  "typing-only-standard-library-import",
+  "typing-only-third-party-import",
+  "docstring-missing-exception",
+  "docstring-missing-returns",
+  "docstring-missing-yields",
+  "line-contains-todo",
+  "missing-todo-author",
+  "missing-todo-link",
+  "f-string-in-exception",
+  "raise-vanilla-args",
+  "raw-string-in-exception",
+  "print",
+]
+select = ["ALL"]
+
+[tool.ruff.lint.flake8-copyright]
+notice-rgx = "SPDX-License-Identifier: "
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+force-single-line = true
+force-sort-within-sections = true
+order-by-type = false
+single-line-exclusions = ["collections.abc", "typing", "typing_extensions"]

@@ -12,7 +12,7 @@ services:
       - a2a
       - responses
     environment:
-      - UPSTREAM_BASE_URL=http://llama-server:9931
+      - UPSTREAM_BASE_URL=${COMPOSE_LLM_UPSTREAM_URL:-http://llama-server:9931}
     depends_on:
       llama-server:
         condition: service_started
