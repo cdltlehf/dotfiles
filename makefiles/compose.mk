@@ -7,11 +7,12 @@ COMPOSE_EMBEDDINGS_FILES := $(wildcard $(XDG_DATA_HOME)/models/embeddings/*)
 COMPOSE_AUDIO_FILE := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/audio/*)))
 COMPOSE_IMAGE_FILE := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/images/*)))
 
-COMPOSE_PROFILES :=
+COMPOSE_PROFILES := --profile pi
 COMPOSE_ENV :=
 
 ifneq ($(strip $(COMPOSE_RESPONSES_FILES)),)
-  COMPOSE_PROFILES += --profile responses --profile mcp
+  COMPOSE_PROFILES += --profile responses --profile mcp --profile a2a
+  COMPOSE_ENV += RESPONSES_MODEL="$(notdir $(firstword $(COMPOSE_RESPONSES_FILES)))"
 endif
 
 ifneq ($(strip $(COMPOSE_EMBEDDINGS_FILES)),)

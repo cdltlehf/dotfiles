@@ -9,7 +9,7 @@ services:
     container_name: mcp-server
     restart: unless-stopped
     environment:
-      - ALLOWED_HOSTS=gateway,${ALLOWED_HOSTS:-}
+      - ALLOWED_HOSTS=gateway,mcp-server,${ALLOWED_HOSTS:-}
       - IMAGE_DIR=/data/images
       - MCP_BASE_URL=${MCP_BASE_URL:-http://localhost:8001}
       - OPENAI_BASE_URL=http://gateway:8000/v1

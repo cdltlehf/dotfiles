@@ -7,3 +7,4 @@ include:
   - containers/sd-server/compose.yaml
   - containers/mcp-server/compose.yaml
   - containers/pi/compose.yaml
+  - containers/a2a/compose.yaml

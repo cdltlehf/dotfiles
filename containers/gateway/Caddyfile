@@ -79,3 +79,14 @@
 		reverse_proxy pi:7681
 	}
 }
+
+:9999 {
+	handle /a2a* {
+		import protect
+		reverse_proxy a2a:8000
+	}
+
+	handle {
+		reverse_proxy a2a:8000
+	}
+}
