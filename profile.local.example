@@ -5,6 +5,17 @@
 # Shared API key for gateway, llama-server, mcp-server, pi, and a2a
 export COMPOSE_API_KEY="your-secret-api-key"
 
+# Optional model overrides (default: first entry in $XDG_DATA_HOME/models/*)
+export RESPONSES_MODEL=""
+export AUDIO_MODEL=""
+export IMAGE_MODEL=""
+
+# a2a (containers/a2a/compose.yaml)
+export COMPOSE_A2A_API_KEY=""
+export COMPOSE_A2A_LLM_PROVIDER=""
+export COMPOSE_A2A_LLM_BASE_URL=""
+export COMPOSE_A2A_MODEL=""
+
 # mcp-server (containers/mcp-server/compose.yaml)
 export COMPOSE_MCP_ALLOWED_HOSTS=""
 export COMPOSE_MCP_BASE_URL=""

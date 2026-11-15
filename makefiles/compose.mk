@@ -12,7 +12,10 @@ COMPOSE_ENV :=
 
 ifneq ($(strip $(COMPOSE_RESPONSES_FILES)),)
   COMPOSE_PROFILES += --profile responses --profile mcp --profile a2a
-  COMPOSE_ENV += RESPONSES_MODEL="$(notdir $(firstword $(COMPOSE_RESPONSES_FILES)))"
+  ifeq ($(strip $(RESPONSES_MODEL)),)
+    RESPONSES_MODEL := $(notdir $(firstword $(COMPOSE_RESPONSES_FILES)))
+  endif
+  COMPOSE_ENV += RESPONSES_MODEL="$(RESPONSES_MODEL)"
 endif
 
 ifneq ($(strip $(COMPOSE_EMBEDDINGS_FILES)),)
@@ -21,12 +24,18 @@ endif
 
 ifneq ($(COMPOSE_AUDIO_FILE),)
   COMPOSE_PROFILES += --profile audio
-  COMPOSE_ENV += AUDIO_MODEL="$(COMPOSE_AUDIO_FILE)"
+  ifeq ($(strip $(AUDIO_MODEL)),)
+    AUDIO_MODEL := $(COMPOSE_AUDIO_FILE)
+  endif
+  COMPOSE_ENV += AUDIO_MODEL="$(AUDIO_MODEL)"
 endif
 
 ifneq ($(COMPOSE_IMAGE_FILE),)
   COMPOSE_PROFILES += --profile images
-  COMPOSE_ENV += IMAGE_MODEL="$(COMPOSE_IMAGE_FILE)"
+  ifeq ($(strip $(IMAGE_MODEL)),)
+    IMAGE_MODEL := $(COMPOSE_IMAGE_FILE)
+  endif
+  COMPOSE_ENV += IMAGE_MODEL="$(IMAGE_MODEL)"
 endif
 
 .PHONY: compose-up up

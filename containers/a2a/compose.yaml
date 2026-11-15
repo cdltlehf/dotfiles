@@ -11,11 +11,11 @@ services:
     profiles:
       - a2a
     environment:
-      - OPENAI_API_KEY=${COMPOSE_API_KEY:?COMPOSE_API_KEY is required}
-      - OPENAI_API_BASE=${LLM_BASE_URL:-http://gateway:8000/no-think/v1}
+      - OPENAI_API_KEY=${COMPOSE_A2A_API_KEY:-${COMPOSE_API_KEY:?required}}
+      - OPENAI_API_BASE=${COMPOSE_A2A_LLM_BASE_URL:-http://gateway:8000/v1}
     volumes:
       - ./agents:/app/agents:ro
     command:
       - "--default_llm_model"
-      - "openai/${RESPONSES_MODEL:-default}"
+      - "${COMPOSE_A2A_LLM_PROVIDER:-openai}/${COMPOSE_A2A_MODEL:-${RESPONSES_MODEL:-default}}"
       - "/app/agents"
