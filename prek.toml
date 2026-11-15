@@ -126,3 +126,4 @@ rev = "v3.27.0"
 [[repos.hooks]]
 args = ["--output=line"]
 id = "vale"
+types = ["markdown"]
