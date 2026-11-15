@@ -1,0 +1,19 @@
+# Reference: https://compose-spec.io/
+
+services:
+  llm-proxy:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: local/llm-proxy:latest
+    container_name: llm-proxy
+    restart: unless-stopped
+    profiles:
+      - a2a
+      - responses
+    environment:
+      - UPSTREAM_BASE_URL=http://llama-server:9931
+    depends_on:
+      llama-server:
+        condition: service_started
+        required: false

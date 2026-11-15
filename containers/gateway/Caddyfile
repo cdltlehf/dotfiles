@@ -51,6 +51,11 @@
 		reverse_proxy sd-server:1234
 	}
 
+	handle_path /no-think/* {
+		import allow-api-cors
+		reverse_proxy llm-proxy:8000
+	}
+
 	handle {
 		import allow-api-cors
 		reverse_proxy llama-server:9931
