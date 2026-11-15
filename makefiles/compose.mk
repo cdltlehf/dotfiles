@@ -2,7 +2,11 @@
 
 COMPOSE ?= $(shell command -v podman >/dev/null 2>&1 && echo "podman compose" || echo "docker compose")
 
-COMPOSE_RESPONSES_FILES  := $(wildcard $(XDG_DATA_HOME)/models/responses/*)
+ifeq ($(strip $(COMPOSE_RESPONSES_DIR)),)
+  COMPOSE_RESPONSES_DIR := $(XDG_DATA_HOME)/models/responses
+endif
+
+COMPOSE_RESPONSES_FILES  := $(wildcard $(COMPOSE_RESPONSES_DIR)/*)
 COMPOSE_EMBEDDINGS_FILES := $(wildcard $(XDG_DATA_HOME)/models/embeddings/*)
 COMPOSE_AUDIO_FILE := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/audio/*)))
 COMPOSE_IMAGE_FILE := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/images/*)))
@@ -12,10 +16,10 @@ COMPOSE_ENV :=
 
 ifneq ($(strip $(COMPOSE_RESPONSES_FILES)),)
   COMPOSE_PROFILES += --profile responses --profile mcp --profile a2a
-  ifeq ($(strip $(RESPONSES_MODEL)),)
-    RESPONSES_MODEL := $(notdir $(firstword $(COMPOSE_RESPONSES_FILES)))
+  ifeq ($(strip $(COMPOSE_RESPONSES_MODEL)),)
+    COMPOSE_RESPONSES_MODEL := $(notdir $(firstword $(COMPOSE_RESPONSES_FILES)))
   endif
-  COMPOSE_ENV += RESPONSES_MODEL="$(RESPONSES_MODEL)"
+  COMPOSE_ENV += COMPOSE_RESPONSES_DIR="$(COMPOSE_RESPONSES_DIR)" COMPOSE_RESPONSES_MODEL="$(COMPOSE_RESPONSES_MODEL)"
 endif
 
 ifneq ($(strip $(COMPOSE_EMBEDDINGS_FILES)),)
@@ -24,18 +28,18 @@ endif
 
 ifneq ($(COMPOSE_AUDIO_FILE),)
   COMPOSE_PROFILES += --profile audio
-  ifeq ($(strip $(AUDIO_MODEL)),)
-    AUDIO_MODEL := $(COMPOSE_AUDIO_FILE)
+  ifeq ($(strip $(COMPOSE_AUDIO_MODEL)),)
+    COMPOSE_AUDIO_MODEL := $(COMPOSE_AUDIO_FILE)
   endif
-  COMPOSE_ENV += AUDIO_MODEL="$(AUDIO_MODEL)"
+  COMPOSE_ENV += COMPOSE_AUDIO_MODEL="$(COMPOSE_AUDIO_MODEL)"
 endif
 
 ifneq ($(COMPOSE_IMAGE_FILE),)
   COMPOSE_PROFILES += --profile images
-  ifeq ($(strip $(IMAGE_MODEL)),)
-    IMAGE_MODEL := $(COMPOSE_IMAGE_FILE)
+  ifeq ($(strip $(COMPOSE_IMAGE_MODEL)),)
+    COMPOSE_IMAGE_MODEL := $(COMPOSE_IMAGE_FILE)
   endif
-  COMPOSE_ENV += IMAGE_MODEL="$(IMAGE_MODEL)"
+  COMPOSE_ENV += COMPOSE_IMAGE_MODEL="$(COMPOSE_IMAGE_MODEL)"
 endif
 
 .PHONY: compose-up up

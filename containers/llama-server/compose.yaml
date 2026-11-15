@@ -14,7 +14,7 @@ services:
     environment:
       - LLAMA_API_KEY=${COMPOSE_API_KEY:?COMPOSE_API_KEY is required}
     volumes:
-      - ${XDG_DATA_HOME:-${HOME}/.local/share}/models/responses:/models:ro
+      - ${COMPOSE_RESPONSES_DIR:-${XDG_DATA_HOME:-${HOME}/.local/share}/models/responses}:/models:ro
     command: [
       "--cache-type-k", "q4_0",
       "--cache-type-v", "q4_0",

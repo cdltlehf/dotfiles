@@ -16,6 +16,6 @@ services:
     volumes:
       - ${XDG_DATA_HOME:-${HOME}/.local/share}/models/audio:/models:ro
     command: [
-      "--model", "/models/${AUDIO_MODEL:-audio.bin}",
+      "--model", "/models/${COMPOSE_AUDIO_MODEL:-audio.bin}",
       "--host", "0.0.0.0"
     ]

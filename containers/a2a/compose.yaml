@@ -17,5 +17,5 @@ services:
       - ./agents:/app/agents:ro
     command:
       - "--default_llm_model"
-      - "${COMPOSE_A2A_LLM_PROVIDER:-openai}/${COMPOSE_A2A_MODEL:-${RESPONSES_MODEL:-default}}"
+      - "${COMPOSE_A2A_LLM_PROVIDER:-openai}/${COMPOSE_A2A_MODEL:-${COMPOSE_RESPONSES_MODEL:-default}}"
       - "/app/agents"

@@ -6,9 +6,10 @@
 export COMPOSE_API_KEY="your-secret-api-key"
 
 # Optional model overrides (default: first entry in $XDG_DATA_HOME/models/*)
-export RESPONSES_MODEL=""
-export AUDIO_MODEL=""
-export IMAGE_MODEL=""
+export COMPOSE_RESPONSES_DIR=""
+export COMPOSE_RESPONSES_MODEL=""
+export COMPOSE_AUDIO_MODEL=""
+export COMPOSE_IMAGE_MODEL=""
 
 # a2a (containers/a2a/compose.yaml)
 export COMPOSE_A2A_API_KEY=""

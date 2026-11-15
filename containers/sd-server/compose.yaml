@@ -14,7 +14,7 @@ services:
     volumes:
       - ${XDG_DATA_HOME:-${HOME}/.local/share}/models/images:/models:ro
     command: [
-      "--model", "/models/${IMAGE_MODEL:-image.gguf}",
+      "--model", "/models/${COMPOSE_IMAGE_MODEL:-image.gguf}",
       "--vae-tiling",
       "--seed", "-1",
       "--listen-ip", "0.0.0.0"
