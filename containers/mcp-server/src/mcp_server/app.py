@@ -41,17 +41,16 @@ async def lifespan(
         timeout=1800.0,
     )
     http_client = httpx.AsyncClient(timeout=1800.0)
-    mcp_base_url = os.environ.get("MCP_BASE_URL", "").strip().rstrip("/")
+    public_url = os.environ.get("PUBLIC_URL", "").strip().rstrip("/")
     allowed_hosts = {"localhost", "127.0.0.1"}
-    if mcp_base_url:
-        parsed_host = urllib.parse.urlsplit(mcp_base_url).hostname
+    if public_url:
+        parsed_host = urllib.parse.urlsplit(public_url).hostname
         if parsed_host:
             allowed_hosts.add(parsed_host.lower())
     for host in os.environ.get("ALLOWED_HOSTS", "").split(","):
         stripped = host.strip().lower()
         if stripped:
             allowed_hosts.add(stripped)
-    audio_model = os.environ["AUDIO_MODEL"]
     default_positive_prompt = os.environ.get(
         "IMAGE_DEFAULT_POSITIVE_PROMPT", ""
     ).strip()
@@ -64,9 +63,8 @@ async def lifespan(
         openai_client=openai_client,
         http_client=http_client,
         allowed_hosts=frozenset(allowed_hosts),
-        mcp_base_url=mcp_base_url,
+        public_url=public_url,
         image_dir=image_dir,
-        audio_model=audio_model,
         default_positive_prompt=default_positive_prompt,
         default_negative_prompt=default_negative_prompt,
     )
@@ -190,7 +188,7 @@ async def get_image_result(
             base_url = services.resolve_base_url(
                 headers,
                 state.allowed_hosts,
-                state.mcp_base_url,
+                state.public_url,
             )
             return models.JobStatus(
                 job_id=job_id,
@@ -214,7 +212,7 @@ async def get_image_result(
     base_url = services.resolve_base_url(
         headers,
         state.allowed_hosts,
-        state.mcp_base_url,
+        state.public_url,
     )
     image_url = (
         f"{base_url}/images/{job_id}.png"
@@ -240,7 +238,6 @@ async def transcribe_audio(
         state.openai_client,
         state.http_client,
         audio_url,
-        state.audio_model,
         response_format,
     )
 

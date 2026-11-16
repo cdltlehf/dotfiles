@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "supportedInterfaces": [
     {
-      "url": "http://localhost:9999/a2a/ethos",
+      "url": "${PUBLIC_URL}/a2a/ethos",
       "protocolBinding": "JSONRPC",
       "protocolVersion": "1.0"
     }

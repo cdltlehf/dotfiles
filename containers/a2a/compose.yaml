@@ -11,11 +11,13 @@ services:
     profiles:
       - a2a
     environment:
-      - OPENAI_API_KEY=${COMPOSE_A2A_API_KEY:-${COMPOSE_API_KEY:?required}}
-      - OPENAI_API_BASE=${COMPOSE_A2A_LLM_BASE_URL:-http://gateway:8000/v1}
+      - PUBLIC_URL=${SELFHOST_A2A_PUBLIC_URL:-http://localhost:9999}
+      - "OPENAI_API_KEY=${SELFHOST_A2A_LLM_API_KEY:-\
+        ${SELFHOST_API_KEY:?SELFHOST_API_KEY is required}}"
+      - OPENAI_API_BASE=${SELFHOST_A2A_LLM_BASE_URL:-http://gateway:8000/v1}
     volumes:
-      - ./agents:/app/agents:ro
+      - ./agents:/app/agents-src:ro
     command:
       - "--default_llm_model"
-      - "${COMPOSE_A2A_LLM_PROVIDER:-openai}/${COMPOSE_A2A_MODEL:-${COMPOSE_RESPONSES_MODEL:-default}}"
+      - "${SELFHOST_A2A_LLM_PROVIDER:-openai}/${SELFHOST_A2A_LLM_MODEL:-${SELFHOST_RESPONSES_MODEL:-default}}"
       - "/app/agents"

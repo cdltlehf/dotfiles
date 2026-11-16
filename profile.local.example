@@ -1,36 +1,52 @@
+# Naming:
+#   SELFHOST_<NAME>                   a value several services share
+#   SELFHOST_<SERVICE>_PUBLIC_URL     where a service is itself reachable
+#                                     (origin, no trailing slash)
+#   SELFHOST_<CONSUMER>_<TARGET>_URL  an endpoint a consumer calls as is
+#   SELFHOST_<CONSUMER>_<TARGET>_BASE_URL
+#                                     a base a consumer appends paths to
+# Inside a container the service is implied: PUBLIC_URL, <TARGET>_BASE_URL.
+# Calls between services inside compose are fixed in the compose files; only
+# public URLs and targets that may live outside compose are variables.
+#
+# Fallbacks, first match wins: a service-specific value set here; the shared
+# value it overrides; a compose default; otherwise the service fails to start.
+# Only SELFHOST_API_KEY is required; uncomment the rest to override.
+
 # ==============================================================================
 # Providers (containers/*/compose.yaml)
 # ==============================================================================
 
-# Shared API key for gateway, llama-server, mcp-server, pi, and a2a
-export COMPOSE_API_KEY="your-secret-api-key"
-
-# Optional model overrides (default: first entry in $XDG_DATA_HOME/models/*)
-export COMPOSE_RESPONSES_DIR=""
-export COMPOSE_RESPONSES_MODEL=""
-export COMPOSE_AUDIO_MODEL=""
-export COMPOSE_IMAGE_MODEL=""
-
-# a2a (containers/a2a/compose.yaml)
-export COMPOSE_A2A_API_KEY=""
-export COMPOSE_A2A_LLM_PROVIDER=""
-export COMPOSE_A2A_LLM_BASE_URL=""
-export COMPOSE_A2A_MODEL=""
+# Shared
+export SELFHOST_API_KEY="your-secret-api-key"
+# Model overrides (default: first entry in $XDG_DATA_HOME/models/*)
+# export SELFHOST_RESPONSES_DIR=""
+# export SELFHOST_RESPONSES_MODEL=""
+# export SELFHOST_AUDIO_MODEL=""
+# export SELFHOST_IMAGE_MODEL=""
 
 # mcp-server (containers/mcp-server/compose.yaml)
-export COMPOSE_MCP_ALLOWED_HOSTS=""
-export COMPOSE_MCP_BASE_URL=""
-export COMPOSE_MCP_IMAGE_POSITIVE_PROMPT=""
-export COMPOSE_MCP_IMAGE_NEGATIVE_PROMPT=""
+# export SELFHOST_MCP_PUBLIC_URL=""  # default: each request's host
+# export SELFHOST_MCP_ALLOWED_HOSTS=""
+# export SELFHOST_MCP_IMAGE_POSITIVE_PROMPT=""
+# export SELFHOST_MCP_IMAGE_NEGATIVE_PROMPT=""
+
+# a2a (containers/a2a/compose.yaml); agents are served at /a2a/<agent>
+# export SELFHOST_A2A_PUBLIC_URL="http://localhost:9999"
+# export SELFHOST_A2A_LLM_API_KEY=""  # default: SELFHOST_API_KEY
+# export SELFHOST_A2A_LLM_PROVIDER="openai"
+# export SELFHOST_A2A_LLM_MODEL=""  # default: SELFHOST_RESPONSES_MODEL
+# export SELFHOST_A2A_LLM_BASE_URL="http://gateway:8000/v1"
 
 # ==============================================================================
 # Consumers (host CLI tools & scripts/setup.d/30-agents.sh)
 # ==============================================================================
+# Host tools read these directly, so their defaults are spelled out here.
 
 # Host agents (claude, agy, pi) connecting to mcp-server
-export AGENT_MCP_URL="http://localhost:8001/mcp"
-export AGENT_MCP_API_KEY="${COMPOSE_API_KEY}"
+export AGENT_MCP_URL="${SELFHOST_MCP_PUBLIC_URL:-http://localhost:8001}/mcp"
+export AGENT_MCP_API_KEY="${SELFHOST_API_KEY}"
 
-# pi-agent (local LLM client)
+# pi (local LLM client): pi's built-in llama.cpp provider reads these names.
 export LLAMA_BASE_URL="http://localhost:8000"
-export LLAMA_API_KEY="${COMPOSE_API_KEY}"
+export LLAMA_API_KEY="${SELFHOST_API_KEY}"

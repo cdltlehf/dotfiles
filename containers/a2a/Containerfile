@@ -5,6 +5,8 @@ RUN pip install --no-cache-dir "google-adk[a2a,mcp]" litellm && \
 
 WORKDIR /app
 
+COPY --chmod=0755 entrypoint.sh /app/entrypoint.sh
+
 EXPOSE 8000
-ENTRYPOINT ["adk", "web", "--host", "0.0.0.0", "--port", "8000", "--a2a"]
+ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["/app/agents"]

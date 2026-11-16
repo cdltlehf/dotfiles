@@ -232,14 +232,14 @@ async def transcribe_audio(
     openai_client: openai.AsyncClient,
     http_client: httpx.AsyncClient,
     audio_url: str,
-    model: str,
     response_format: models.AudioResponseFormat,
 ) -> str:
     """Download an audio file and transcribe it via the backend."""
     audio_response = await http_client.get(audio_url)
     audio_response.raise_for_status()
     transcription = await openai_client.audio.transcriptions.create(
-        model=model,
+        # The backend serves the one model it loaded and ignores this name.
+        model="whisper-1",
         file=("audio.wav", audio_response.content, "audio/wav"),
         response_format=response_format,
     )
