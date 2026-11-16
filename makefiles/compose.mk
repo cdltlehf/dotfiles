@@ -6,67 +6,74 @@ ifeq ($(strip $(SELFHOST_RESPONSES_DIR)),)
   SELFHOST_RESPONSES_DIR := $(XDG_DATA_HOME)/models/responses
 endif
 
-COMPOSE_RESPONSES_FILES  := $(wildcard $(SELFHOST_RESPONSES_DIR)/*)
-COMPOSE_EMBEDDINGS_FILES := $(wildcard $(XDG_DATA_HOME)/models/embeddings/*)
-COMPOSE_AUDIO_FILE := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/audio/*)))
-COMPOSE_IMAGE_FILE := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/images/*)))
+responses_files  := $(wildcard $(SELFHOST_RESPONSES_DIR)/*)
+embeddings_files := $(wildcard $(XDG_DATA_HOME)/models/embeddings/*)
+audio_file := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/audio/*)))
+image_file := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/images/*)))
 
-COMPOSE_PROFILES := --profile pi
-COMPOSE_ENV :=
+detected_profiles := pi
+compose_env :=
 
-ifneq ($(strip $(COMPOSE_RESPONSES_FILES)),)
-  COMPOSE_PROFILES += --profile responses --profile mcp --profile a2a
+ifneq ($(strip $(responses_files)),)
+  detected_profiles := $(detected_profiles),responses,mcp,a2a
   ifeq ($(strip $(SELFHOST_RESPONSES_MODEL)),)
-    SELFHOST_RESPONSES_MODEL := $(patsubst %.gguf,%,$(notdir $(firstword $(COMPOSE_RESPONSES_FILES))))
+    SELFHOST_RESPONSES_MODEL := $(patsubst %.gguf,%,$(notdir $(firstword $(responses_files))))
   endif
-  COMPOSE_ENV += SELFHOST_RESPONSES_DIR="$(SELFHOST_RESPONSES_DIR)" SELFHOST_RESPONSES_MODEL="$(SELFHOST_RESPONSES_MODEL)"
+  compose_env += SELFHOST_RESPONSES_DIR="$(SELFHOST_RESPONSES_DIR)" SELFHOST_RESPONSES_MODEL="$(SELFHOST_RESPONSES_MODEL)"
 endif
 
-ifneq ($(strip $(COMPOSE_EMBEDDINGS_FILES)),)
-  COMPOSE_PROFILES += --profile embeddings
+ifneq ($(strip $(embeddings_files)),)
+  detected_profiles := $(detected_profiles),embeddings
 endif
 
-ifneq ($(COMPOSE_AUDIO_FILE),)
-  COMPOSE_PROFILES += --profile audio
+ifneq ($(audio_file),)
+  detected_profiles := $(detected_profiles),audio
   ifeq ($(strip $(SELFHOST_AUDIO_MODEL)),)
-    SELFHOST_AUDIO_MODEL := $(COMPOSE_AUDIO_FILE)
+    SELFHOST_AUDIO_MODEL := $(audio_file)
   endif
-  COMPOSE_ENV += SELFHOST_AUDIO_MODEL="$(SELFHOST_AUDIO_MODEL)"
+  compose_env += SELFHOST_AUDIO_MODEL="$(SELFHOST_AUDIO_MODEL)"
 endif
 
-ifneq ($(COMPOSE_IMAGE_FILE),)
-  COMPOSE_PROFILES += --profile images
+ifneq ($(image_file),)
+  detected_profiles := $(detected_profiles),images
   ifeq ($(strip $(SELFHOST_IMAGE_MODEL)),)
-    SELFHOST_IMAGE_MODEL := $(COMPOSE_IMAGE_FILE)
+    SELFHOST_IMAGE_MODEL := $(image_file)
   endif
-  COMPOSE_ENV += SELFHOST_IMAGE_MODEL="$(SELFHOST_IMAGE_MODEL)"
+  compose_env += SELFHOST_IMAGE_MODEL="$(SELFHOST_IMAGE_MODEL)"
 endif
+
+# Compose reads COMPOSE_PROFILES itself; set it in the shell or on the command
+# line to replace the profiles detected from the model files.
+ifeq ($(strip $(COMPOSE_PROFILES)),)
+  COMPOSE_PROFILES := $(detected_profiles)
+endif
+export COMPOSE_PROFILES
 
 .PHONY: compose-up up
-compose-up: ## Start services (alias: up)
-	@$(COMPOSE_ENV) $(COMPOSE) $(COMPOSE_PROFILES) up -d
+compose-up: ## Start services (alias: up) (COMPOSE_PROFILES=...)
+	@$(compose_env) $(COMPOSE) up -d
 up: compose-up
 
 .PHONY: compose-down down
 compose-down: ## Stop services (alias: down)
-	@$(COMPOSE_ENV) $(COMPOSE) $(COMPOSE_PROFILES) down
+	@$(compose_env) $(COMPOSE) down
 down: compose-down
 
 .PHONY: compose-build
 compose-build: ## Build services (SERVICE=...)
-	@$(COMPOSE_ENV) $(COMPOSE) --profile "*" build $(SERVICE)
+	@$(compose_env) $(COMPOSE) --profile "*" build $(SERVICE)
 
 .PHONY: compose-rebuild
 compose-rebuild: ## Rebuild services ignoring layer cache (SERVICE=...)
-	@$(COMPOSE_ENV) $(COMPOSE) --profile "*" build --pull --no-cache $(SERVICE)
+	@$(compose_env) $(COMPOSE) --profile "*" build --pull --no-cache $(SERVICE)
 
 .PHONY: compose-ps
 compose-ps: ## Status of services
-	@$(COMPOSE_ENV) $(COMPOSE) $(COMPOSE_PROFILES) ps
+	@$(compose_env) $(COMPOSE) ps
 
 .PHONY: compose-logs logs
 compose-logs: ## Follow service logs (alias: logs)
-	@$(COMPOSE_ENV) $(COMPOSE) $(COMPOSE_PROFILES) logs -f
+	@$(compose_env) $(COMPOSE) logs -f
 logs: compose-logs
 
 MODAL ?= text
