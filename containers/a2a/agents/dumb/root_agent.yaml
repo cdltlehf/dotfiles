@@ -1,0 +1,8 @@
+# Reference: https://google.github.io/adk-docs/agents/config/
+
+name: dumb
+description: Bare model with no tools, no instructions, and no reasoning.
+generate_content_config:
+  http_options:
+    extra_body:
+      reasoning_effort: none

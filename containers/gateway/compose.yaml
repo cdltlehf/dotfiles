@@ -18,9 +18,6 @@ services:
       llama-server:
         condition: service_started
         required: false
-      llm-proxy:
-        condition: service_started
-        required: false
       llama-embedding-server:
         condition: service_started
         required: false

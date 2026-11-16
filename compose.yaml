@@ -3,7 +3,6 @@
 include:
   - containers/gateway/compose.yaml
   - containers/llama-server/compose.yaml
-  - containers/llm-proxy/compose.yaml
   - containers/whisper-server/compose.yaml
   - containers/sd-server/compose.yaml
   - containers/mcp-server/compose.yaml
