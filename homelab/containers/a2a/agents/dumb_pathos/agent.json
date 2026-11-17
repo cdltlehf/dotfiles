@@ -1,0 +1,25 @@
+{
+  "name": "dumb_pathos",
+  "description": "Empathetic agent focused on human context, intuition, and resonance, with model reasoning off.",
+  "version": "0.1.0",
+  "supportedInterfaces": [
+    {
+      "url": "${PUBLIC_URL}/a2a/dumb_pathos",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "capabilities": {
+    "streaming": true
+  },
+  "defaultInputModes": ["text/plain", "image/png", "image/jpeg", "image/gif"],
+  "defaultOutputModes": ["text/plain"],
+  "skills": [
+    {
+      "id": "dumb_pathos",
+      "name": "dumb_pathos",
+      "description": "Human context, empathy, and clear framing, with model reasoning off.",
+      "tags": ["empathy", "context"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "dumb_logos",
+  "description": "Logical reasoning agent grounded in evidence and structured deduction, with model reasoning off.",
+  "version": "0.1.0",
+  "supportedInterfaces": [
+    {
+      "url": "${PUBLIC_URL}/a2a/dumb_logos",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "capabilities": {
+    "streaming": true
+  },
+  "defaultInputModes": ["text/plain", "image/png", "image/jpeg", "image/gif"],
+  "defaultOutputModes": ["text/plain"],
+  "skills": [
+    {
+      "id": "dumb_logos",
+      "name": "dumb_logos",
+      "description": "Logical analysis and structured deduction, with model reasoning off.",
+      "tags": ["logic", "analysis"]
+    }
+  ]
+}
