@@ -30,6 +30,12 @@ done
 symlink "adr-template.md" "${BASE_DIR}/xdg-templates-dir/madr/docs/decisions/{}.md"
 symlink "{}.h.tmpl" "${BASE_DIR}/xdg-templates-dir/c/include/{}.hpp.tmpl"
 
+# The commit template comes from commitizen, so it shows the format that
+# the commit-msg hook checks.
+schema="$(cd "${BASE_DIR}" && mise exec -- cz schema)"
+mkdir -p "${BASE_DIR}/xdg-templates-dir/git"
+printf '%s\n' "${schema}" | sed 's/^/# /' >"${BASE_DIR}/xdg-templates-dir/git/gitmessage"
+
 [ -L "${XDG_TEMPLATES_DIR}" ] && rm "${XDG_TEMPLATES_DIR}"
 mkdir -p "${XDG_TEMPLATES_DIR}"
 for item in "${BASE_DIR}/xdg-templates-dir"/*; do
@@ -48,3 +54,4 @@ done
 
 # The project template doubles as the global default style.
 symlink "${XDG_TEMPLATES_DIR}/.editorconfig" "${HOME}/.editorconfig"
+symlink "${XDG_TEMPLATES_DIR}/git/gitmessage" "${XDG_CONFIG_HOME}/git/gitmessage"

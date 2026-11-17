@@ -2,6 +2,7 @@
 .env
 __pycache__/
 /images/
+xdg-config-home/git/gitmessage
 xdg-config-home/karabiner/assets/complex_modifications/*.json
 xdg-config-home/karabiner/automatic_backups
 xdg-config-home/karabiner/karabiner.json
@@ -10,4 +11,5 @@ xdg-config-home/zsh/.zshrc
 # macOS Terminal saves zsh sessions in ${ZDOTDIR}, which links here.
 xdg-config-home/zsh/.zsh_sessions/
 xdg-templates-dir/c/include/{}.hpp.tmpl
+xdg-templates-dir/git
 xdg-templates-dir/madr
