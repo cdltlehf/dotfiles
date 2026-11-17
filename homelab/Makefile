@@ -68,32 +68,29 @@ ifeq ($(strip $(COMPOSE_PROFILES)),)
 endif
 export COMPOSE_PROFILES
 
-.PHONY: compose-up up
-compose-up: ## Start services (alias: up) (COMPOSE_PROFILES=...)
+.PHONY: up
+up: ## Start services (COMPOSE_PROFILES=...)
 	@$(compose_env) $(COMPOSE) up -d
-up: compose-up
 
-.PHONY: compose-down down
-compose-down: ## Stop services (alias: down)
+.PHONY: down
+down: ## Stop services
 	@$(compose_env) $(COMPOSE) down
-down: compose-down
 
-.PHONY: compose-build
-compose-build: ## Build services (SERVICE=...)
+.PHONY: build
+build: ## Build services (SERVICE=...)
 	@$(compose_env) $(COMPOSE) --profile "*" build $(SERVICE)
 
-.PHONY: compose-rebuild
-compose-rebuild: ## Rebuild services ignoring layer cache (SERVICE=...)
+.PHONY: rebuild
+rebuild: ## Rebuild services ignoring layer cache (SERVICE=...)
 	@$(compose_env) $(COMPOSE) --profile "*" build --pull --no-cache $(SERVICE)
 
-.PHONY: compose-ps
-compose-ps: ## Status of services
+.PHONY: ps
+ps: ## Status of services
 	@$(compose_env) $(COMPOSE) ps
 
-.PHONY: compose-logs logs
-compose-logs: ## Follow service logs (alias: logs)
+.PHONY: logs
+logs: ## Follow service logs
 	@$(compose_env) $(COMPOSE) logs -f
-logs: compose-logs
 
 MODAL ?= text
 
