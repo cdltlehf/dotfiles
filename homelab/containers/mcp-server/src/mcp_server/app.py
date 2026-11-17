@@ -183,12 +183,12 @@ async def _settle(job: models.ImageJob, wait_seconds: float) -> None:
 
 
 @mcp.tool()
-async def get_image_result(
+async def get_image_url(
     job_id: models.JobId,
     wait_seconds: models.WaitSeconds = 0.0,
     ctx: mcpserver.Context[models.AppState] | None = None,
 ) -> models.JobStatus:
-    """Retrieve the status or completed output URL of an image job."""
+    """Return an image job's status and, once finished, its URL."""
     state = mcp.state
     job = state.jobs.get(job_id)
     if job is None:
@@ -232,11 +232,11 @@ async def get_image_result(
 
 
 @mcp.tool()
-async def view_image(
+async def get_image_result(
     job_id: models.JobId,
     wait_seconds: models.WaitSeconds = 0.0,
 ) -> mcpserver.Image:
-    """Return a job's image itself, for models that read images."""
+    """Return a finished image job's image."""
     state = mcp.state
     if job := state.jobs.get(job_id):
         await _settle(job, wait_seconds)
