@@ -40,6 +40,10 @@ condition does not hold.
 
 *   Engineering decisions that no tool enforces SHOULD adhere to the [Google
     Engineering Practices Documentation][google-eng-practices].
+*   Before committing, agents SHOULD check changed code for [code
+    smells][code-smells].
+*   Code smells that agents find SHOULD be removed with refactorings from
+    the [Refactoring catalog][refactoring-catalog].
 *   Code and configurations SHOULD maintain vendor neutrality and avoid
     coupling to specific implementations.
 *   Scripts targeting `/bin/sh` MUST adhere to the [Portable Operating System
@@ -64,6 +68,7 @@ condition does not hold.
 [agent-skills]: https://agentskills.io/specification.md
 [agents-md]: https://agents.md/
 [bcp-14]: https://www.rfc-editor.org/info/bcp14
+[code-smells]: https://refactoring.guru/refactoring/smells
 [codegraph]: https://github.com/colbymchenry/codegraph
 [git-flow]: https://github.com/gittower/git-flow-next
 [google-eng-practices]: https://google.github.io/eng-practices/README.md
@@ -72,5 +77,6 @@ condition does not hold.
 [openai-prompt-guide]: https://developers.openai.com/api/docs/guides/prompt-engineering.md
 [posix-shell]: https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html
 [prek]: https://github.com/jdx/prek
+[refactoring-catalog]: https://refactoring.com/catalog/
 [swe-book-testing]: https://abseil.io/resources/swe-book/html/ch11.html
 [swe-book-unit-testing]: https://abseil.io/resources/swe-book/html/ch12.html
