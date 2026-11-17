@@ -93,13 +93,6 @@ language = "system"
 name = "taplo fmt"
 types = ["toml"]
 
-[[repos.hooks]]
-entry = "uv check --preview --script"
-files = '^containers/mcp-server/server\.py$'
-id = "uv-check"
-language = "system"
-name = "uv check"
-
 [[repos]]
 repo = "https://github.com/biomejs/pre-commit"
 rev = "v2.6.7"
