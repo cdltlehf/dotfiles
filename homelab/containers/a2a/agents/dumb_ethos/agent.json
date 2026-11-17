@@ -1,6 +1,6 @@
 {
   "name": "dumb_ethos",
-  "description": "Principled agent focused on credibility, ethics, and verification, with no tools and model reasoning off.",
+  "description": "Ethos without tools or reasoning.",
   "version": "0.1.0",
   "supportedInterfaces": [
     {
@@ -18,7 +18,7 @@
     {
       "id": "dumb_ethos",
       "name": "dumb_ethos",
-      "description": "Credibility, principles, and claim verification, with no tools and model reasoning off.",
+      "description": "Ethos without tools or reasoning.",
       "tags": ["ethics", "verification"]
     }
   ]

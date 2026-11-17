@@ -1,6 +1,6 @@
 {
   "name": "dumb_logos",
-  "description": "Logical reasoning agent grounded in evidence and structured deduction, with no tools and model reasoning off.",
+  "description": "Logos without tools or reasoning.",
   "version": "0.1.0",
   "supportedInterfaces": [
     {
@@ -18,7 +18,7 @@
     {
       "id": "dumb_logos",
       "name": "dumb_logos",
-      "description": "Logical analysis and structured deduction, with no tools and model reasoning off.",
+      "description": "Logos without tools or reasoning.",
       "tags": ["logic", "analysis"]
     }
   ]
