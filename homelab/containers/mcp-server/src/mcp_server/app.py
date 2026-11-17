@@ -228,6 +228,16 @@ async def get_image_result(
 
 
 @mcp.tool()
+async def view_image(job_id: models.JobId) -> mcpserver.Image:
+    """Return a completed job's image itself, for models that read images."""
+    await asyncio.sleep(0)
+    image_path = services.image_path(mcp.state.image_dir, job_id)
+    if image_path is None or not image_path.is_file():
+        raise ValueError(f"Job {job_id} has no finished image.")
+    return mcpserver.Image(path=image_path)
+
+
+@mcp.tool()
 async def transcribe_audio(
     audio_url: models.AudioUrl,
     response_format: models.AudioResponseFormat = "json",
