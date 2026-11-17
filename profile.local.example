@@ -1,17 +1,4 @@
-# Naming:
-#   SELFHOST_<NAME>                   a value several services share
-#   SELFHOST_<SERVICE>_PUBLIC_URL     where a service is itself reachable
-#                                     (origin, no trailing slash)
-#   SELFHOST_<CONSUMER>_<TARGET>_URL  an endpoint a consumer calls as is
-#   SELFHOST_<CONSUMER>_<TARGET>_BASE_URL
-#                                     a base a consumer appends paths to
-# Inside a container the service is implied: PUBLIC_URL, <TARGET>_BASE_URL.
-# Calls between services inside compose are fixed in the compose files; only
-# public URLs and targets that may live outside compose are variables.
-#
-# Fallbacks, first match wins: a service-specific value set here; the shared
-# value it overrides; a compose default; otherwise the service fails to start.
-# Only SELFHOST_API_KEY is required; uncomment the rest to override.
+# shellcheck shell=sh
 
 # ==============================================================================
 # Providers (homelab/containers/*/compose.yaml)
@@ -19,6 +6,7 @@
 
 # Shared
 export SELFHOST_API_KEY="your-secret-api-key"
+
 # Model overrides (default: first entry in $XDG_DATA_HOME/models/*)
 # export SELFHOST_RESPONSES_DIR=""
 # export SELFHOST_RESPONSES_MODEL=""
