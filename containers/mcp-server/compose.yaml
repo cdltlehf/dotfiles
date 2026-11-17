@@ -1,5 +1,3 @@
-# Reference: https://compose-spec.io/
-
 services:
   mcp-server:
     build:

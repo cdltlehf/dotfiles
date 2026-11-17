@@ -1,5 +1,3 @@
-# Reference: https://compose-spec.io/
-
 services:
   gateway:
     image: docker.io/library/caddy:alpine
