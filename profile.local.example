@@ -22,7 +22,6 @@ export SELFHOST_API_KEY="your-secret-api-key"
 # a2a (homelab/containers/a2a/compose.yaml); agents are served at /a2a/<agent>
 # export SELFHOST_A2A_PUBLIC_URL="http://localhost:9999"
 # export SELFHOST_A2A_LLM_API_KEY=""  # default: SELFHOST_API_KEY
-# export SELFHOST_A2A_LLM_PROVIDER="openai"
 # export SELFHOST_A2A_LLM_MODEL=""  # default: SELFHOST_RESPONSES_MODEL
 # export SELFHOST_A2A_LLM_BASE_URL="http://gateway:8000/v1"
 

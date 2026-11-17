@@ -17,5 +17,7 @@ services:
       - ./agents:/app/agents-src:ro
     command:
       - "--default_llm_model"
-      - "${SELFHOST_A2A_LLM_PROVIDER:-openai}/${SELFHOST_A2A_LLM_MODEL:-${SELFHOST_RESPONSES_MODEL:-default}}"
+      # openai/ is LiteLLM's prefix for any OpenAI-compatible API, which is
+      # what the OPENAI_* variables above configure.
+      - "openai/${SELFHOST_A2A_LLM_MODEL:-${SELFHOST_RESPONSES_MODEL:-default}}"
       - "/app/agents"
