@@ -31,7 +31,7 @@ Chosen option: "Name variables by direction under their own prefix, and make onl
 
 * Variables that compose reads use the `SELFHOST_` prefix.
 * Three kinds of setting are variables: values that several services share, the public address of a service, and a target that may live outside compose, such as the LLM that a2a calls.
-* Calls between services inside compose stay fixed in the compose files, such as `http://mcp-server:8000/mcp`.
+* Calls between services inside compose stay fixed in the compose files, such as `http://mcp-gateway:3000/mcp`.
 * `SELFHOST_<NAME>` holds a shared value, such as `SELFHOST_API_KEY`.
 * `SELFHOST_<SERVICE>_PUBLIC_URL` holds the origin at which a service is reachable, without a trailing slash.
 * `SELFHOST_<CONSUMER>_<TARGET>_URL` holds an endpoint that the consumer calls as is, and `SELFHOST_<CONSUMER>_<TARGET>_BASE_URL` holds a base to which the consumer appends paths.
