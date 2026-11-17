@@ -141,7 +141,7 @@ class ImageJob:
 
 @dataclasses.dataclass
 class AppState:
-    """Holds application-scoped clients, configuration, and active jobs."""
+    """Holds app-scoped clients, configuration, and active jobs."""
 
     openai_client: openai.AsyncClient
     http_client: httpx.AsyncClient

@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class AppServer(mcpserver.MCPServer[models.AppState]):
-    """MCP server that retains a reference to active application state."""
+    """MCP server that retains a reference to active app state."""
 
     state: models.AppState
 
@@ -33,7 +33,7 @@ class AppServer(mcpserver.MCPServer[models.AppState]):
 async def lifespan(
     server: mcpserver.MCPServer[models.AppState],
 ) -> AsyncGenerator[models.AppState]:
-    """Manage application-scoped HTTP clients and background tasks."""
+    """Manage app-scoped HTTP clients and background tasks."""
     del server
     openai_client = openai.AsyncClient(
         base_url=os.environ["OPENAI_BASE_URL"],
@@ -257,7 +257,7 @@ async def fetch_web(
     max_length: models.FetchMaxLength = 8000,
     start_index: models.FetchStartIndex = 0,
 ) -> str:
-    """Fetch a public HTTP(S) web page as Markdown or plain text."""
+    """Fetch a public HTTP or HTTPS web page as Markdown or plain text."""
     return await services.fetch_web(
         mcp.state.http_client,
         url,
@@ -289,7 +289,7 @@ async def serve_image(request: requests.Request) -> responses.Response:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Execute main application logic."""
+    """Run the MCP server over streamable HTTP."""
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",

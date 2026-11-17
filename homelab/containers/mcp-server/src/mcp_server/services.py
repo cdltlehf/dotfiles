@@ -278,7 +278,7 @@ def _check_public_host(hostname: str) -> None:
 
 
 async def _validate_public_url(url: str) -> None:
-    """Validate that url is an HTTP(S) URL pointing to a public host."""
+    """Validate that a URL uses HTTP or HTTPS and points to a public host."""
     parsed = urllib.parse.urlsplit(url)
     if parsed.scheme not in {"http", "https"} or not parsed.hostname:
         raise ValueError(f"Invalid HTTP(S) URL: {url}")
