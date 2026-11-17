@@ -7,7 +7,7 @@ date: 2026-11-16
 
 ## Context and Problem Statement
 
-The compose files under `containers/` read their settings from `~/.profile.local`, which starts from `profile.local.example`.
+The compose files under `homelab/containers/` read their settings from `~/.profile.local`, which starts from `profile.local.example`.
 The variables shared the `COMPOSE_` prefix, which Docker Compose also uses for its own settings, such as `COMPOSE_FILE` and `COMPOSE_PROJECT_NAME`.
 `BASE_URL` meant both the address at which a service is reachable and the address of a service it calls.
 No variable held the A2A server's public address, so its agent cards advertised `http://localhost:9999` to every client.
@@ -53,7 +53,7 @@ Chosen option: "Name variables by direction under their own prefix, and make onl
 
 ### Confirmation
 
-`git grep -E '\$\{COMPOSE_' -- 'containers/*/compose.yaml'` finds nothing.
+`git grep -E '\$\{COMPOSE_' -- 'homelab/containers/*/compose.yaml'` finds nothing.
 Every address between services inside a compose file is a literal service name, not a variable.
 
 ## More Information

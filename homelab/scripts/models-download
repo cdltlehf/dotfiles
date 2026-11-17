@@ -3,7 +3,7 @@
 set -o nounset
 set -o errexit
 
-BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+BASE_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 readonly BASE_DIR
 
 # shellcheck source=scripts/lib.sh

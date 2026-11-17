@@ -70,10 +70,8 @@ update: ## Update package indexes
 	@./scripts/update
 
 .PHONY: upgrade
-upgrade: SUBPROJECTS := containers/mcp-server
 upgrade: ## Upgrade tools
 	@./scripts/upgrade
-	@for d in $(SUBPROJECTS); do $(MAKE) -C "$$d" upgrade || exit; done
 
 .PHONY: clean
 clean: TARGET_DIRS := $(XDG_CONFIG_HOME) $(XDG_TEMPLATES_DIR) $(BIN_DIR) $(CURDIR)
@@ -89,7 +87,7 @@ clean: ## Clean dangling symlinks and cache
 	@rm -rf "$(XDG_CACHE_HOME)/evalcache"
 
 .PHONY: distclean
-distclean: clean compose-down ## Clean all artifacts, caches, and running containers
+distclean: clean ## Clean all artifacts and caches
 
 .PHONY: installcheck
 installcheck: brew-check mise-check nvim-lsp-check ## Check that declared packages and language servers are installed

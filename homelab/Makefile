@@ -1,3 +1,22 @@
+SHELL := /bin/bash
+.DEFAULT_GOAL := help
+
+XDG_DATA_HOME ?= $(HOME)/.local/share
+
+##@ General
+
+.PHONY: help
+help: ## Display help
+	@awk ' \
+		BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} \
+		/^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } \
+		/^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } \
+	' $(MAKEFILE_LIST)
+
+.PHONY: upgrade
+upgrade: ## Upgrade locked dependencies of every container
+	@for d in $(dir $(wildcard containers/*/Makefile)); do $(MAKE) -C "$$d" upgrade || exit; done
+
 ##@ Compose
 
 COMPOSE ?= $(shell command -v podman >/dev/null 2>&1 && echo "podman compose" || echo "docker compose")
