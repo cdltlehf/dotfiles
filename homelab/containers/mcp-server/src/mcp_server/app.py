@@ -172,6 +172,16 @@ async def start_image_upscale(
     )
 
 
+async def _settle(job: models.ImageJob, wait_seconds: float) -> None:
+    """Wait up to ``wait_seconds`` for an unfinished job to finish."""
+    if wait_seconds > 0 and job.status in {
+        models.JobState.PENDING,
+        models.JobState.PROCESSING,
+    }:
+        with contextlib.suppress(TimeoutError):
+            await asyncio.wait_for(job.event.wait(), timeout=wait_seconds)
+
+
 @mcp.tool()
 async def get_image_result(
     job_id: models.JobId,
@@ -201,13 +211,7 @@ async def get_image_result(
             error=f"Job {job_id} not found.",
         )
 
-    if wait_seconds > 0 and job.status in {
-        models.JobState.PENDING,
-        models.JobState.PROCESSING,
-    }:
-        with contextlib.suppress(TimeoutError):
-            await asyncio.wait_for(job.event.wait(), timeout=wait_seconds)
-
+    await _settle(job, wait_seconds)
     headers = ctx.headers if ctx else None
     base_url = services.resolve_base_url(
         headers,
@@ -228,12 +232,21 @@ async def get_image_result(
 
 
 @mcp.tool()
-async def view_image(job_id: models.JobId) -> mcpserver.Image:
-    """Return a completed job's image itself, for models that read images."""
-    await asyncio.sleep(0)
-    image_path = services.image_path(mcp.state.image_dir, job_id)
+async def view_image(
+    job_id: models.JobId,
+    wait_seconds: models.WaitSeconds = 0.0,
+) -> mcpserver.Image:
+    """Return a job's image itself, for models that read images."""
+    state = mcp.state
+    if job := state.jobs.get(job_id):
+        await _settle(job, wait_seconds)
+        if job.status == models.JobState.FAILED:
+            raise ValueError(f"Job {job_id} failed: {job.error}")
+        if job.status != models.JobState.COMPLETED:
+            raise ValueError(f"Job {job_id} is still {job.status}.")
+    image_path = services.image_path(state.image_dir, job_id)
     if image_path is None or not image_path.is_file():
-        raise ValueError(f"Job {job_id} has no finished image.")
+        raise ValueError(f"Job {job_id} not found.")
     return mcpserver.Image(path=image_path)
 
 
