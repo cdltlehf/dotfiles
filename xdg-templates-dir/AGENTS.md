@@ -55,6 +55,9 @@ The key words in this document are to be interpreted as described in [BCP
     [GitHub Flow][github-flow].
 *   Commit messages SHOULD adhere to [Conventional
     Commits][conventional-commits].
+*   Commit message subjects SHOULD be at most 50 characters, as
+    [`git commit`][git-commit] advises, and bodies SHOULD wrap at 72
+    characters.
 *   Projects MAY record architecturally significant decisions in
     `docs/decisions/` with [Markdown Architectural Decision Records
     (MADR)][madr], keeping only the sections the decision needs.
@@ -72,6 +75,7 @@ The key words in this document are to be interpreted as described in [BCP
 [bcp-14]: https://www.rfc-editor.org/info/bcp14
 [conventional-commits]: https://www.conventionalcommits.org/en/v1.0.0/
 [gfm]: https://github.github.com/gfm/
+[git-commit]: https://git-scm.com/docs/git-commit#_discussion
 [git-flow]: https://nvie.com/posts/a-successful-git-branching-model/
 [github-flow]: https://docs.github.com/en/get-started/using-github/github-flow.md
 [gnu-make]: https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
