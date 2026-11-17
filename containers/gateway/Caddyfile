@@ -61,7 +61,7 @@
 	handle /mcp {
 		import allow-mcp-cors
 		import protect
-		reverse_proxy mcp-server:8000
+		reverse_proxy mcp-gateway:3000
 	}
 
 	handle /images/* {

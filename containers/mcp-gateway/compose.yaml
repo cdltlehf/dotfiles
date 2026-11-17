@@ -1,0 +1,18 @@
+services:
+  mcp-gateway:
+    image: cr.agentgateway.dev/agentgateway:v1.7.0
+    container_name: mcp-gateway
+    restart: unless-stopped
+    command: ["-f", "/config.yaml"]
+    environment:
+      # Stateless mode keeps no sessions to protect; this silences the
+      # missing-key warning.
+      - SESSION_KEY=disabled
+    volumes:
+      - ./config.yaml:/config.yaml:ro
+    profiles:
+      - mcp
+    depends_on:
+      mcp-server:
+        condition: service_started
+        required: false

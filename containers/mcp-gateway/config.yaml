@@ -1,0 +1,15 @@
+# Reference:
+# https://agentgateway.dev/docs/standalone/latest/documentation/configuration/overview/
+# https://agentgateway.dev/docs/standalone/latest/integrations/mcp/servers/virtual/
+
+mcp:
+  port: 3000
+  # Keep serving the other targets' tools while one is down or its profile
+  # is off; the default, failClosed, fails every session instead.
+  failureMode: failOpen
+  # The tools keep no per-session state, so sessions need not be tracked.
+  statefulMode: stateless
+  targets:
+    - name: mcp-server
+      mcp:
+        host: http://mcp-server:8000/mcp

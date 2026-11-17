@@ -9,6 +9,6 @@ tools:
   - name: McpToolset
     args:
       streamable_http_connection_params:
-        url: http://mcp-server:8000/mcp
+        url: http://mcp-gateway:3000/mcp
       tool_filter:
         - get_current_time

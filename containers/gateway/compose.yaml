@@ -28,6 +28,9 @@ services:
       mcp-server:
         condition: service_started
         required: false
+      mcp-gateway:
+        condition: service_started
+        required: false
       pi:
         condition: service_started
         required: false
