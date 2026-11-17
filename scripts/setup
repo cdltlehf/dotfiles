@@ -88,7 +88,7 @@ if command -v mise >/dev/null; then
   mise install --yes || true
 fi
 
-if command -v vale >/dev/null && [ ! -d "${XDG_DATA_HOME}/vale/styles/Google" ]; then
+if command -v vale >/dev/null; then
   vale --config="${BASE_DIR}/vale.ini" sync || true
 fi
 
