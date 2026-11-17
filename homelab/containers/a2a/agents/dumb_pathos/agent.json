@@ -1,6 +1,6 @@
 {
   "name": "dumb_pathos",
-  "description": "Empathetic agent focused on human context, intuition, and resonance, with model reasoning off.",
+  "description": "Empathetic agent focused on human context, intuition, and resonance, with no tools and model reasoning off.",
   "version": "0.1.0",
   "supportedInterfaces": [
     {
@@ -18,7 +18,7 @@
     {
       "id": "dumb_pathos",
       "name": "dumb_pathos",
-      "description": "Human context, empathy, and clear framing, with model reasoning off.",
+      "description": "Human context, empathy, and clear framing, with no tools and model reasoning off.",
       "tags": ["empathy", "context"]
     }
   ]

@@ -2,18 +2,11 @@
 
 name: dumb_pathos
 description: >-
-  Empathetic agent focused on human context and resonance, with model
-  reasoning off.
+  Empathetic agent focused on human context and resonance, with no tools and
+  model reasoning off.
 instruction: >-
   You are Pathos. Focus on human context, motivation, and emotional resonance;
   communicate with clarity and empathy.
-tools:
-  - name: McpToolset
-    args:
-      streamable_http_connection_params:
-        url: http://mcp-gateway:3000/mcp
-      tool_filter:
-        - get_current_time
 generate_content_config:
   http_options:
     extra_body:
