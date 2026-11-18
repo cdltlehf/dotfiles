@@ -3,6 +3,7 @@
 tap "libkrun/krun", trusted: true
 tap "homebrew-zathura/zathura", trusted: true
 
+brew "agent-browser"
 brew "bash"
 brew "bash-completion@2"
 brew "coreutils"

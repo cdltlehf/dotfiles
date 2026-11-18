@@ -28,7 +28,6 @@ export SELFHOST_API_KEY="your-secret-api-key"
 # ==============================================================================
 # Consumers (host CLI tools & scripts/setup.d/30-agents.sh)
 # ==============================================================================
-# Host tools read these directly, so their defaults are spelled out here.
 
 # Host agents (claude, agy, pi) connecting to mcp-server
 export AGENT_MCP_URL="${SELFHOST_MCP_PUBLIC_URL:-http://localhost:8001}/mcp"
