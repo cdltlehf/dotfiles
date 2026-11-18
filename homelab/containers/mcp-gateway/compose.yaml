@@ -13,6 +13,12 @@ services:
     profiles:
       - mcp
     depends_on:
-      mcp-server:
+      mcp-image:
+        condition: service_started
+        required: false
+      mcp-audio:
+        condition: service_started
+        required: false
+      mcp-web:
         condition: service_started
         required: false

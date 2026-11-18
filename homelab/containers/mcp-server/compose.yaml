@@ -1,13 +1,17 @@
+x-mcp-server: &mcp-server
+  build:
+    context: .
+    dockerfile: Containerfile
+  image: local/mcp-server:latest
+  restart: unless-stopped
+
 services:
-  mcp-server:
-    build:
-      context: .
-      dockerfile: Containerfile
-    image: local/mcp-server:latest
-    container_name: mcp-server
-    restart: unless-stopped
+  mcp-image:
+    <<: *mcp-server
+    container_name: mcp-image
+    command: ["--mode", "image", "--json-response"]
     environment:
-      - ALLOWED_HOSTS=gateway,mcp-server,${SELFHOST_MCP_ALLOWED_HOSTS:-}
+      - ALLOWED_HOSTS=gateway,mcp-image,${SELFHOST_MCP_ALLOWED_HOSTS:-}
       - IMAGE_DIR=/data/images
       - PUBLIC_URL=${SELFHOST_MCP_PUBLIC_URL:-}
       - OPENAI_BASE_URL=http://gateway:8000/v1
@@ -17,11 +21,32 @@ services:
     volumes:
       - ${XDG_DATA_HOME:-${HOME}/.local/share}/mcp-server/images:/data/images:rw
     profiles:
-      - mcp
+      - images
     depends_on:
       sd-server:
         condition: service_started
         required: false
+
+  mcp-audio:
+    <<: *mcp-server
+    container_name: mcp-audio
+    command: ["--mode", "audio", "--json-response"]
+    environment:
+      - ALLOWED_HOSTS=gateway,mcp-audio,${SELFHOST_MCP_ALLOWED_HOSTS:-}
+      - OPENAI_BASE_URL=http://gateway:8000/v1
+      - OPENAI_API_KEY=${SELFHOST_API_KEY:?SELFHOST_API_KEY is required}
+    profiles:
+      - audio
+    depends_on:
       whisper-server:
         condition: service_started
         required: false
+
+  mcp-web:
+    <<: *mcp-server
+    container_name: mcp-web
+    command: ["--mode", "web", "--json-response"]
+    environment:
+      - ALLOWED_HOSTS=gateway,mcp-web,${SELFHOST_MCP_ALLOWED_HOSTS:-}
+    profiles:
+      - mcp

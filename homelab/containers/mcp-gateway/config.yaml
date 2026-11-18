@@ -1,6 +1,7 @@
-# Reference:
-# https://agentgateway.dev/docs/standalone/latest/documentation/configuration/overview/
-# https://agentgateway.dev/docs/standalone/latest/integrations/mcp/servers/virtual/
+# yamllint disable rule:line-length
+# Reference: https://agentgateway.dev/docs/standalone/latest/documentation/configuration/overview/
+# Reference: https://agentgateway.dev/docs/standalone/latest/integrations/mcp/servers/virtual/
+# yamllint enable rule:line-length
 
 mcp:
   port: 3000
@@ -10,6 +11,12 @@ mcp:
   # The tools keep no per-session state, so sessions need not be tracked.
   statefulMode: stateless
   targets:
-    - name: mcp-server
+    - name: mcp-image
       mcp:
-        host: http://mcp-server:8000/mcp
+        host: http://mcp-image:8000/mcp
+    - name: mcp-audio
+      mcp:
+        host: http://mcp-audio:8000/mcp
+    - name: mcp-web
+      mcp:
+        host: http://mcp-web:8000/mcp
