@@ -235,18 +235,24 @@ async def get_image_url(
 async def get_image_result(
     job_id: models.JobId,
     wait_seconds: models.WaitSeconds = 0.0,
-) -> mcpserver.Image:
-    """Return a finished image job's image."""
+) -> mcpserver.Image | models.JobStatus:
+    """Return a finished image job's image, or its status if unfinished."""
     state = mcp.state
     if job := state.jobs.get(job_id):
         await _settle(job, wait_seconds)
-        if job.status == models.JobState.FAILED:
-            raise ValueError(f"Job {job_id} failed: {job.error}")
         if job.status != models.JobState.COMPLETED:
-            raise ValueError(f"Job {job_id} is still {job.status}.")
+            return models.JobStatus(
+                job_id=job_id,
+                status=job.status,
+                error=job.error,
+            )
     image_path = services.image_path(state.image_dir, job_id)
     if image_path is None or not image_path.is_file():
-        raise ValueError(f"Job {job_id} not found.")
+        return models.JobStatus(
+            job_id=job_id,
+            status=models.JobState.FAILED,
+            error=f"Job {job_id} not found.",
+        )
     return mcpserver.Image(path=image_path)
 
 
