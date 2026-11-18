@@ -11,4 +11,4 @@ tools:
       streamable_http_connection_params:
         url: http://mcp-gateway:3000/mcp
       tool_filter:
-        - get_current_time
+        - mcp-web_get_current_time

@@ -53,7 +53,7 @@ def _make_lifespan(
         openai_api_key = (
             os.environ["OPENAI_API_KEY"]
             if require_openai
-            else os.environ.get("OPENAI_API_KEY", "")
+            else os.environ.get("OPENAI_API_KEY") or "unused"
         )
         openai_client = openai.AsyncClient(
             base_url=openai_base_url,
