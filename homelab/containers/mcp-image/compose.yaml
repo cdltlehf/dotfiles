@@ -1,0 +1,24 @@
+services:
+  mcp-image:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: local/mcp-image:latest
+    container_name: mcp-image
+    restart: unless-stopped
+    environment:
+      - ALLOWED_HOSTS=gateway,mcp-image,${SELFHOST_MCP_ALLOWED_HOSTS:-}
+      - IMAGE_DIR=/data/images
+      - PUBLIC_URL=${SELFHOST_MCP_PUBLIC_URL:-}
+      - OPENAI_BASE_URL=http://gateway:8000/v1
+      - OPENAI_API_KEY=${SELFHOST_API_KEY:?SELFHOST_API_KEY is required}
+      - IMAGE_DEFAULT_POSITIVE_PROMPT=${SELFHOST_MCP_IMAGE_POSITIVE_PROMPT:-}
+      - IMAGE_DEFAULT_NEGATIVE_PROMPT=${SELFHOST_MCP_IMAGE_NEGATIVE_PROMPT:-}
+    volumes:
+      - ${XDG_DATA_HOME:-${HOME}/.local/share}/mcp-server/images:/data/images:rw
+    profiles:
+      - images
+    depends_on:
+      sd-server:
+        condition: service_started
+        required: false

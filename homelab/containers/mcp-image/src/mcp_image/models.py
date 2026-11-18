@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Data models and state definitions for the MCP server."""
+"""Data models and state definitions for the image MCP server."""
 
 import asyncio
 import dataclasses
@@ -10,6 +10,16 @@ from typing import Annotated, Literal
 import httpx
 import openai
 import pydantic
+
+
+class JobState(enum.StrEnum):
+    """Represents the execution state of an asynchronous image job."""
+
+    PENDING = "pending"
+    PROCESSING = "processing"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
 
 ImageSize = Annotated[
     Literal[
@@ -33,10 +43,6 @@ ImageSize = Annotated[
         "2048x2048",
     ],
     pydantic.Field(description="Output image dimensions in pixels."),
-]
-AudioResponseFormat = Annotated[
-    Literal["json", "text", "srt", "vtt"],
-    pydantic.Field(description="Output format for the transcription response."),
 ]
 ImagePrompt = Annotated[
     str,
@@ -81,52 +87,6 @@ WaitSeconds = Annotated[
         description="Maximum seconds to wait for job completion.",
     ),
 ]
-AudioUrl = Annotated[
-    str,
-    pydantic.Field(description="HTTP or HTTPS URL of the source audio file."),
-]
-TimeZone = Annotated[
-    str,
-    pydantic.Field(
-        description="IANA time zone name (e.g., 'UTC', 'Asia/Seoul')."
-    ),
-]
-WebUrl = Annotated[
-    str,
-    pydantic.Field(description="HTTP or HTTPS URL of a public web page."),
-]
-FetchMaxLength = Annotated[
-    int,
-    pydantic.Field(
-        gt=0,
-        le=50000,
-        description="Maximum number of characters to return.",
-    ),
-]
-FetchStartIndex = Annotated[
-    int,
-    pydantic.Field(
-        ge=0,
-        description="Character offset to start reading from.",
-    ),
-]
-
-
-class CurrentTimeResult(pydantic.BaseModel):
-    """Current wall-clock time in the requested IANA time zone."""
-
-    timezone: str
-    iso_datetime: str
-    weekday: str
-
-
-class JobState(enum.StrEnum):
-    """Lifecycle states for an asynchronous image job."""
-
-    PENDING = "pending"
-    PROCESSING = "processing"
-    COMPLETED = "completed"
-    FAILED = "failed"
 
 
 @dataclasses.dataclass

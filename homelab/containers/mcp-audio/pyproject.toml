@@ -5,21 +5,19 @@ requires = ["uv_build>=0.13.0,<0.14.0"]
 [project]
 authors = [{ name = "cdltlehf" }]
 dependencies = [
-  "beautifulsoup4>=4.12.0",
   "httpx>=0.28.1",
-  "markdownify>=0.14.0",
   "mcp[cli]>=2.3.0",
   "openai>=1.0.0",
   "pydantic>=2.0.0",
 ]
-description = "Local AI Model Context Protocol server"
+description = "Local AI Audio Model Context Protocol server"
 license = "MIT"
-name = "mcp-server"
+name = "mcp-audio"
 requires-python = ">=3.12"
 version = "0.1.0"
 
 [project.scripts]
-mcp-server = "mcp_server.app:main"
+mcp-audio = "mcp_audio.app:main"
 
 [tool.ruff]
 line-length = 80
@@ -58,6 +56,7 @@ ignore = [
   "missing-todo-link",
   "f-string-in-exception",
   "raise-vanilla-args",
+  "raise-vanilla-class",
   "raw-string-in-exception",
   "print",
 ]
@@ -77,14 +76,6 @@ force-single-line = true
 force-sort-within-sections = true
 order-by-type = false
 single-line-exclusions = ["collections.abc", "typing", "typing_extensions"]
-
-[tool.ruff.lint.per-file-ignores]
-"tests/**/*" = [
-  "assert",
-  "implicit-namespace-package",
-  "magic-value-comparison",
-  "private-member-access",
-]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

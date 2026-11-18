@@ -1,0 +1,17 @@
+services:
+  mcp-audio:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: local/mcp-audio:latest
+    container_name: mcp-audio
+    restart: unless-stopped
+    environment:
+      - OPENAI_BASE_URL=http://gateway:8000/v1
+      - OPENAI_API_KEY=${SELFHOST_API_KEY:?SELFHOST_API_KEY is required}
+    profiles:
+      - audio
+    depends_on:
+      whisper-server:
+        condition: service_started
+        required: false

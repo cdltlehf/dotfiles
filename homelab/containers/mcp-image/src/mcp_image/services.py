@@ -1,26 +1,19 @@
 # SPDX-License-Identifier: MIT
-"""Business logic and external API clients for image and audio tasks."""
+"""Business logic and external API clients for image tasks."""
 
 import asyncio
 import base64
 from collections.abc import Mapping
-import datetime as dt
-import ipaddress
 import json
 import pathlib
 import re
-import socket
 from typing import Final
-import urllib.parse
-import zoneinfo
 
-import bs4
 import httpx
-import markdownify
 import openai
 import pydantic
 
-from mcp_server import models
+from mcp_image import models
 
 MAX_JOBS: Final[int] = 4
 _JOB_ID_PATTERN: Final[re.Pattern[str]] = re.compile(r"^[0-9a-f]{32}$")
@@ -226,111 +219,3 @@ async def run_image_edit(
         job.error = str(error)
     finally:
         job.event.set()
-
-
-async def transcribe_audio(
-    openai_client: openai.AsyncClient,
-    http_client: httpx.AsyncClient,
-    audio_url: str,
-    response_format: models.AudioResponseFormat,
-) -> str:
-    """Download an audio file and transcribe it via the backend."""
-    audio_response = await http_client.get(audio_url)
-    audio_response.raise_for_status()
-    transcription = await openai_client.audio.transcriptions.create(
-        # The backend serves the one model it loaded and ignores this name.
-        model="whisper-1",
-        file=("audio.wav", audio_response.content, "audio/wav"),
-        response_format=response_format,
-    )
-    return (
-        transcription if isinstance(transcription, str) else transcription.text
-    )
-
-
-def get_current_time(timezone: str = "UTC") -> models.CurrentTimeResult:
-    """Return the current date, time, and weekday for an IANA time zone."""
-    try:
-        tz = zoneinfo.ZoneInfo(timezone)
-    except zoneinfo.ZoneInfoNotFoundError as error:
-        raise ValueError(f"Unknown time zone: {timezone}") from error
-    now = dt.datetime.now(tz=tz)
-    return models.CurrentTimeResult(
-        timezone=timezone,
-        iso_datetime=now.isoformat(),
-        weekday=now.strftime("%A"),
-    )
-
-
-def _check_public_host(hostname: str) -> None:
-    """Verify that every resolved IP for hostname is globally routable."""
-    try:
-        addr_info = socket.getaddrinfo(hostname, None, type=socket.SOCK_STREAM)
-    except socket.gaierror as error:
-        raise ValueError(f"Could not resolve host: {hostname}") from error
-    if not addr_info:
-        raise ValueError(f"Could not resolve host: {hostname}")
-    for entry in addr_info:
-        raw_ip = entry[4][0]
-        ip = ipaddress.ip_address(raw_ip.split("%", 1)[0])
-        if not ip.is_global:
-            raise ValueError(f"Refusing non-public IP address: {ip}")
-
-
-async def _validate_public_url(url: str) -> None:
-    """Validate that a URL uses HTTP or HTTPS and points to a public host."""
-    parsed = urllib.parse.urlsplit(url)
-    if parsed.scheme not in {"http", "https"} or not parsed.hostname:
-        raise ValueError(f"Invalid HTTP(S) URL: {url}")
-    await asyncio.to_thread(_check_public_host, parsed.hostname)
-
-
-def _html_to_markdown(html: str) -> str:
-    """Strip non-content tags and convert HTML to compact Markdown."""
-    soup = bs4.BeautifulSoup(html, "html.parser")
-    for tag in soup(["script", "style", "noscript", "svg"]):
-        tag.decompose()
-    rendered = markdownify.markdownify(str(soup), heading_style="ATX")
-    return re.sub(r"\n{3,}", "\n\n", rendered).strip()
-
-
-async def fetch_web(
-    http_client: httpx.AsyncClient,
-    url: str,
-    *,
-    max_length: int = 8000,
-    start_index: int = 0,
-) -> str:
-    """Fetch a public web page and return Markdown or text within max_length."""
-    current_url = url
-    response: httpx.Response | None = None
-    for _ in range(5):
-        await _validate_public_url(current_url)
-        response = await http_client.get(current_url, follow_redirects=False)
-        if response.is_redirect and "location" in response.headers:
-            current_url = urllib.parse.urljoin(
-                current_url, response.headers["location"]
-            )
-            continue
-        break
-    if response is None or response.is_redirect:
-        raise ValueError(f"Too many redirects fetching: {url}")
-    response.raise_for_status()
-
-    content_type = response.headers.get("content-type", "").lower()
-    if "html" in content_type or not content_type:
-        content = _html_to_markdown(response.text)
-    else:
-        content = response.text
-
-    total = len(content)
-    if start_index >= total:
-        return ""
-    end = min(start_index + max_length, total)
-    snippet = content[start_index:end]
-    if end < total:
-        snippet += (
-            f"\n\n[Truncated; total {total} chars. "
-            f"Call with start_index={end} to read more.]"
-        )
-    return snippet

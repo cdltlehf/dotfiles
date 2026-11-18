@@ -1,0 +1,10 @@
+services:
+  mcp-web:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: local/mcp-web:latest
+    container_name: mcp-web
+    restart: unless-stopped
+    profiles:
+      - mcp
