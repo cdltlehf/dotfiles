@@ -15,7 +15,7 @@ help: ## Display help
 
 .PHONY: upgrade
 upgrade: ## Upgrade locked dependencies of every container
-	@for d in $(dir $(wildcard containers/*/Makefile)); do $(MAKE) -C "$$d" upgrade || exit; done
+	@for d in $(dir $(wildcard containers/*/Makefile containers/*/*/Makefile)); do $(MAKE) -C "$$d" upgrade || exit; done
 
 ##@ Compose
 
