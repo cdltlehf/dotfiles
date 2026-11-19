@@ -6,9 +6,6 @@
 
 # Shared
 export SELFHOST_API_KEY="your-secret-api-key"
-export SELFHOST_WEBUI_USER="admin"
-# Generate hash with: caddy hash-password
-export SELFHOST_WEBUI_PASSWORD_HASH=""
 
 # Model overrides (default: first entry in $XDG_DATA_HOME/models/*)
 # export SELFHOST_RESPONSES_DIR=""
