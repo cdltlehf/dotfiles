@@ -18,7 +18,7 @@ services:
     command: [
       "--cache-type-k", "q4_0",
       "--cache-type-v", "q4_0",
-      "--ctx-size", "16384",
+      "--ctx-size", "32768",
       "--host", "0.0.0.0",
       "--metrics",
       "--models-dir", "/models",

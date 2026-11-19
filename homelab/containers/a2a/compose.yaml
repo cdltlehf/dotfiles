@@ -13,11 +13,15 @@ services:
       - "OPENAI_API_KEY=${SELFHOST_A2A_LLM_API_KEY:-\
         ${SELFHOST_API_KEY:?SELFHOST_API_KEY is required}}"
       - OPENAI_API_BASE=${SELFHOST_A2A_LLM_BASE_URL:-http://gateway:8000/v1}
+      - "ADK_HISTORY_TOKEN_LIMIT=${SELFHOST_A2A_HISTORY_TOKEN_LIMIT:-16384}"
     volumes:
       - ./agents:/app/agents-src:ro
+      - ./plugins.py:/app/plugins.py:ro
     command:
       - "--default_llm_model"
       # openai/ is LiteLLM's prefix for any OpenAI-compatible API, which is
       # what the OPENAI_* variables above configure.
       - "openai/${SELFHOST_A2A_LLM_MODEL:-${SELFHOST_RESPONSES_MODEL:-default}}"
+      - "--extra_plugins"
+      - "plugins.context_filter"
       - "/app/agents"
