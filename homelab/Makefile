@@ -31,11 +31,11 @@ speech_files     := $(wildcard $(XDG_DATA_HOME)/models/speech/*)
 audio_file := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/audio/*)))
 image_file := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/images/*)))
 
-detected_profiles := pi
+detected_profiles :=
 compose_env :=
 
 ifneq ($(strip $(responses_files)),)
-  detected_profiles := $(detected_profiles),responses,mcp,a2a
+  detected_profiles += responses mcp a2a
   ifeq ($(strip $(SELFHOST_RESPONSES_MODEL)),)
     SELFHOST_RESPONSES_MODEL := $(patsubst %.gguf,%,$(notdir $(firstword $(responses_files))))
   endif
@@ -43,11 +43,11 @@ ifneq ($(strip $(responses_files)),)
 endif
 
 ifneq ($(strip $(embeddings_files)),)
-  detected_profiles := $(detected_profiles),embeddings
+  detected_profiles += embeddings
 endif
 
 ifneq ($(strip $(speech_files)),)
-  detected_profiles := $(detected_profiles),speech
+  detected_profiles += speech
   ifeq ($(strip $(SELFHOST_SPEECH_MODEL)),)
     SELFHOST_SPEECH_MODEL := $(patsubst %.gguf,%,$(notdir $(firstword $(speech_files))))
   endif
@@ -55,7 +55,7 @@ ifneq ($(strip $(speech_files)),)
 endif
 
 ifneq ($(audio_file),)
-  detected_profiles := $(detected_profiles),audio
+  detected_profiles += audio
   ifeq ($(strip $(SELFHOST_AUDIO_MODEL)),)
     SELFHOST_AUDIO_MODEL := $(audio_file)
   endif
@@ -63,7 +63,7 @@ ifneq ($(audio_file),)
 endif
 
 ifneq ($(image_file),)
-  detected_profiles := $(detected_profiles),images
+  detected_profiles += images
   ifeq ($(strip $(SELFHOST_IMAGE_MODEL)),)
     SELFHOST_IMAGE_MODEL := $(image_file)
   endif
@@ -72,8 +72,11 @@ endif
 
 # Compose reads COMPOSE_PROFILES itself; set it in the shell or on the command
 # line to replace the profiles detected from the model files.
+comma := ,
+empty :=
+space := $(empty) $(empty)
 ifeq ($(strip $(COMPOSE_PROFILES)),)
-  COMPOSE_PROFILES := $(detected_profiles)
+  COMPOSE_PROFILES := $(subst $(space),$(comma),$(strip $(detected_profiles)))
 endif
 export COMPOSE_PROFILES
 

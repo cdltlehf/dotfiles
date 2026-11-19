@@ -90,12 +90,6 @@
 	}
 }
 
-:7681 {
-	handle {
-		reverse_proxy pi:7681
-	}
-}
-
 :9999 {
 	handle /a2a* {
 		import protect
