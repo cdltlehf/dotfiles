@@ -72,17 +72,17 @@
 	handle /mcp {
 		import allow-mcp-cors
 		import protect
-		reverse_proxy mcp-gateway:3000
+		reverse_proxy mcp-server:8000
 	}
 
 	handle /images/* {
 		import allow-mcp-cors
-		reverse_proxy mcp-image:8000
+		reverse_proxy mcp-server:8000
 	}
 
 	handle /audio/* {
 		import allow-mcp-cors
-		reverse_proxy mcp-audio:8000
+		reverse_proxy mcp-server:8000
 	}
 
 	handle {

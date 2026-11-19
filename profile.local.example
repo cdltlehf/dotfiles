@@ -11,9 +11,10 @@ export SELFHOST_API_KEY="your-secret-api-key"
 # export SELFHOST_RESPONSES_DIR=""
 # export SELFHOST_RESPONSES_MODEL=""
 # export SELFHOST_AUDIO_MODEL=""
+# export SELFHOST_SPEECH_MODEL=""
 # export SELFHOST_IMAGE_MODEL=""
 
-# mcp-image (homelab/containers/mcp/image/compose.yaml)
+# mcp-server (homelab/containers/mcp-server/compose.yaml)
 # export SELFHOST_MCP_PUBLIC_URL=""  # default: each request's host
 # export SELFHOST_MCP_ALLOWED_HOSTS=""
 # export SELFHOST_MCP_IMAGE_POSITIVE_PROMPT=""

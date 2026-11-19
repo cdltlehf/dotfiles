@@ -5,5 +5,5 @@ include:
   - containers/llama-server/compose.yaml
   - containers/whisper-server/compose.yaml
   - containers/sd-server/compose.yaml
-  - containers/mcp/compose.yaml
+  - containers/mcp-server/compose.yaml
   - containers/a2a/compose.yaml

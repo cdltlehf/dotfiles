@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Data models and state definitions for the image MCP server."""
+"""Shared data models and server state for mcp-server."""
 
 import asyncio
 import dataclasses
@@ -8,6 +8,7 @@ import pathlib
 from typing import Annotated, Literal
 
 import httpx
+from mcp.server import mcpserver
 import openai
 import pydantic
 
@@ -44,49 +45,9 @@ ImageSize = Annotated[
     ],
     pydantic.Field(description="Output image dimensions in pixels."),
 ]
-ImagePrompt = Annotated[
-    str,
-    pydantic.Field(description="Visual description of the desired image."),
-]
-EditPrompt = Annotated[
-    str,
-    pydantic.Field(
-        description="Target image description excluding removed subjects."
-    ),
-]
-NegativePrompt = Annotated[
-    str,
-    pydantic.Field(
-        description="Visual elements or subjects to exclude or remove."
-    ),
-]
-EditStrength = Annotated[
-    float,
-    pydantic.Field(
-        ge=0.0,
-        le=1.0,
-        description="Denoising strength between 0.0 and 1.0.",
-    ),
-]
-ImageUrl = Annotated[
-    str,
-    pydantic.Field(
-        description="HTTP or HTTPS URL of an external source image."
-    ),
-]
-JobId = Annotated[
-    str,
-    pydantic.Field(
-        description="Identifier of an image job (for status checking or input source)."
-    ),
-]
-WaitSeconds = Annotated[
-    float,
-    pydantic.Field(
-        ge=0.0,
-        le=30.0,
-        description="Maximum seconds to wait for job completion.",
-    ),
+AudioResponseFormat = Annotated[
+    Literal["json", "text", "srt", "vtt"],
+    pydantic.Field(description="Output format for the transcription response."),
 ]
 
 
@@ -100,15 +61,42 @@ class ImageJob:
     error: str | None = None
 
 
+class JobStatus(pydantic.BaseModel):
+    """Represents the serialized status of an asynchronous image job."""
+
+    job_id: str
+    status: JobState
+    image_url: str | None = None
+    error: str | None = None
+
+
+class SpeechResult(pydantic.BaseModel):
+    """Represents a synthesized speech audio file and its URL."""
+
+    audio_id: str
+    audio_url: str
+
+
+class CurrentTimeResult(pydantic.BaseModel):
+    """Represents the current local date, time, and weekday."""
+
+    timezone: str
+    iso_datetime: str
+    weekday: str
+
+
 @dataclasses.dataclass
 class AppState:
     """Holds app-scoped clients, configuration, and active jobs."""
 
     openai_client: openai.AsyncClient
+    image_client: openai.AsyncClient
     http_client: httpx.AsyncClient
     allowed_hosts: frozenset[str]
     public_url: str
     image_dir: pathlib.Path
+    audio_dir: pathlib.Path
+    speech_model: str
     default_positive_prompt: str
     default_negative_prompt: str
     jobs: dict[str, ImageJob] = dataclasses.field(
@@ -119,10 +107,7 @@ class AppState:
     )
 
 
-class JobStatus(pydantic.BaseModel):
-    """Represents the serialized status of an asynchronous image job."""
+class AppServer(mcpserver.MCPServer[AppState]):
+    """MCP server that retains a reference to active app state."""
 
-    job_id: str
-    status: JobState
-    image_url: str | None = None
-    error: str | None = None
+    state: AppState

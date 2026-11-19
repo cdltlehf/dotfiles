@@ -27,16 +27,7 @@ services:
       sd-server:
         condition: service_started
         required: false
-      mcp-image:
-        condition: service_started
-        required: false
-      mcp-audio:
-        condition: service_started
-        required: false
-      mcp-web:
-        condition: service_started
-        required: false
-      mcp-gateway:
+      mcp-server:
         condition: service_started
         required: false
       a2a:

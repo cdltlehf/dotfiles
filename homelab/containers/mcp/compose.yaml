@@ -1,7 +1,0 @@
-# Reference: https://compose-spec.io/
-
-include:
-  - gateway/compose.yaml
-  - image/compose.yaml
-  - audio/compose.yaml
-  - web/compose.yaml
