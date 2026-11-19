@@ -10,8 +10,8 @@ services:
       - ALLOWED_HOSTS=gateway,mcp-image,${SELFHOST_MCP_ALLOWED_HOSTS:-}
       - IMAGE_DIR=/data/images
       - PUBLIC_URL=${SELFHOST_MCP_PUBLIC_URL:-}
-      - OPENAI_BASE_URL=http://gateway:8000/v1
-      - OPENAI_API_KEY=${SELFHOST_API_KEY:?SELFHOST_API_KEY is required}
+      - OPENAI_BASE_URL=http://sd-server:1234/v1
+      - OPENAI_API_KEY=unused
       - IMAGE_DEFAULT_POSITIVE_PROMPT=${SELFHOST_MCP_IMAGE_POSITIVE_PROMPT:-}
       - IMAGE_DEFAULT_NEGATIVE_PROMPT=${SELFHOST_MCP_IMAGE_NEGATIVE_PROMPT:-}
     volumes:
