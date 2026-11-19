@@ -3,6 +3,7 @@
 set -euo pipefail
 
 : "${PUBLIC_URL:?PUBLIC_URL is required}"
+PUBLIC_URL="${PUBLIC_URL%/}"
 
 source_dir=/app/agents-src
 target_dir=/app/agents

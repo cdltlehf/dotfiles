@@ -7,7 +7,9 @@ import contextlib
 import dataclasses
 import logging
 import os
+import pathlib
 from typing import Annotated, Literal
+import urllib.parse
 
 import httpx
 from mcp.server import mcpserver
@@ -73,10 +75,18 @@ async def transcribe_audio(
     state = mcp.state
     audio_response = await state.http_client.get(audio_url)
     audio_response.raise_for_status()
+    filename = pathlib.PurePosixPath(urllib.parse.urlsplit(audio_url).path).name
+    content_type = (
+        audio_response.headers.get("content-type", "").split(";", 1)[0].strip()
+    )
     transcription = await state.openai_client.audio.transcriptions.create(
         # The backend serves the one model it loaded and ignores this name.
         model="whisper-1",
-        file=("audio.wav", audio_response.content, "audio/wav"),
+        file=(
+            filename or "audio.wav",
+            audio_response.content,
+            content_type or "application/octet-stream",
+        ),
         response_format=response_format,
     )
     return (
