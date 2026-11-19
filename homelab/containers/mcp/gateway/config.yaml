@@ -11,6 +11,11 @@ mcp:
   # The tools keep no per-session state, so sessions need not be tracked.
   statefulMode: stateless
   policies:
+    buffer:
+      request:
+        maxBytes: 16777216
+      response:
+        maxBytes: 33554432
     timeout:
       requestTimeout: 60s
       backendRequestTimeout: 60s
