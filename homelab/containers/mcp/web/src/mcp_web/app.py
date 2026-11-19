@@ -11,7 +11,7 @@ import ipaddress
 import logging
 import re
 import socket
-from typing import Annotated
+from typing import Annotated, Final
 import urllib.parse
 import zoneinfo
 
@@ -22,6 +22,7 @@ from mcp.server import mcpserver
 import pydantic
 
 logger = logging.getLogger(__name__)
+_MAX_WEB_BYTES: Final[int] = 2 * 1024 * 1024
 
 TimeZone = Annotated[
     str,
@@ -139,6 +140,38 @@ async def get_current_time(
     )
 
 
+async def _fetch_limited_text(
+    http_client: httpx.AsyncClient,
+    url: str,
+) -> tuple[str, str]:
+    """Fetch a public HTTP(S) URL with redirect checks and a byte cap."""
+    current_url = url
+    for _ in range(5):
+        await _validate_public_url(current_url)
+        async with http_client.stream(
+            "GET", current_url, follow_redirects=False
+        ) as response:
+            if response.is_redirect and "location" in response.headers:
+                current_url = urllib.parse.urljoin(
+                    current_url, response.headers["location"]
+                )
+                continue
+            response.raise_for_status()
+            chunks: list[bytes] = []
+            total_bytes = 0
+            async for chunk in response.aiter_bytes():
+                total_bytes += len(chunk)
+                if total_bytes > _MAX_WEB_BYTES:
+                    raise ValueError("Response body exceeds size limit.")
+                chunks.append(chunk)
+            encoding = response.encoding or "utf-8"
+            content_type = response.headers.get("content-type", "").lower()
+            return b"".join(chunks).decode(
+                encoding, errors="replace"
+            ), content_type
+    raise ValueError(f"Too many redirects fetching: {url}")
+
+
 @mcp.tool()
 async def fetch_web(
     url: WebUrl,
@@ -146,28 +179,13 @@ async def fetch_web(
     start_index: FetchStartIndex = 0,
 ) -> str:
     """Fetch a public HTTP or HTTPS web page as Markdown or plain text."""
-    current_url = url
-    response: httpx.Response | None = None
-    for _ in range(5):
-        await _validate_public_url(current_url)
-        response = await mcp.state.http_client.get(
-            current_url, follow_redirects=False
-        )
-        if response.is_redirect and "location" in response.headers:
-            current_url = urllib.parse.urljoin(
-                current_url, response.headers["location"]
-            )
-            continue
-        break
-    if response is None or response.is_redirect:
-        raise ValueError(f"Too many redirects fetching: {url}")
-    response.raise_for_status()
-
-    content_type = response.headers.get("content-type", "").lower()
+    raw_text, content_type = await _fetch_limited_text(
+        mcp.state.http_client, url
+    )
     if "html" in content_type or not content_type:
-        content = _html_to_markdown(response.text)
+        content = _html_to_markdown(raw_text)
     else:
-        content = response.text
+        content = raw_text
 
     total = len(content)
     if start_index >= total:

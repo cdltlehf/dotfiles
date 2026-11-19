@@ -31,6 +31,12 @@
 	respond @unauthorized 401
 }
 
+(protect-webui) {
+	basic_auth {
+		{$WEBUI_USER} {$WEBUI_PASSWORD_HASH}
+	}
+}
+
 :8000 {
 	handle /v1/embeddings* {
 		import allow-api-cors
@@ -51,8 +57,14 @@
 		reverse_proxy sd-server:1234
 	}
 
-	handle {
+	handle /v1/* {
 		import allow-api-cors
+		import protect
+		reverse_proxy llama-server:9931
+	}
+
+	handle {
+		import protect-webui
 		reverse_proxy llama-server:9931
 	}
 }
@@ -76,6 +88,7 @@
 
 :7681 {
 	handle {
+		import protect-webui
 		reverse_proxy pi:7681
 	}
 }
@@ -87,6 +100,7 @@
 	}
 
 	handle {
+		import protect-webui
 		reverse_proxy a2a:8000
 	}
 }

@@ -2,13 +2,16 @@
 """Provides the audio transcription MCP server."""
 
 import argparse
+import asyncio
 from collections.abc import AsyncGenerator, Sequence
 import contextlib
 import dataclasses
+import ipaddress
 import logging
 import os
 import pathlib
-from typing import Annotated, Literal
+import socket
+from typing import Annotated, Final, Literal
 import urllib.parse
 
 import httpx
@@ -17,6 +20,7 @@ import openai
 import pydantic
 
 logger = logging.getLogger(__name__)
+_MAX_AUDIO_BYTES: Final[int] = 20 * 1024 * 1024
 
 AudioResponseFormat = Annotated[
     Literal["json", "text", "srt", "vtt"],
@@ -66,6 +70,70 @@ async def lifespan(
 mcp = AppServer("local-ai-audio", lifespan=lifespan)
 
 
+def _check_public_host(hostname: str) -> None:
+    """Verify that every resolved IP for hostname is globally routable."""
+    try:
+        addr_info = socket.getaddrinfo(hostname, None, type=socket.SOCK_STREAM)
+    except socket.gaierror as error:
+        raise ValueError(f"Could not resolve host: {hostname}") from error
+    if not addr_info:
+        raise ValueError(f"Could not resolve host: {hostname}")
+    for entry in addr_info:
+        raw_ip = entry[4][0]
+        ip = ipaddress.ip_address(raw_ip.split("%", 1)[0])
+        if not ip.is_global:
+            raise ValueError(f"Refusing non-public IP address: {ip}")
+
+
+async def _validate_public_url(url: str) -> None:
+    """Validate that a URL uses HTTP or HTTPS and points to a public host."""
+    parsed = urllib.parse.urlsplit(url)
+    if parsed.scheme not in {"http", "https"} or not parsed.hostname:
+        raise ValueError(f"Invalid HTTP(S) URL: {url}")
+    await asyncio.to_thread(_check_public_host, parsed.hostname)
+
+
+async def _fetch_limited_audio(
+    http_client: httpx.AsyncClient,
+    url: str,
+) -> tuple[bytes, str, str]:
+    """Fetch a public audio URL with redirect checks and a byte cap."""
+    current_url = url
+    for _ in range(5):
+        await _validate_public_url(current_url)
+        async with http_client.stream(
+            "GET", current_url, follow_redirects=False
+        ) as response:
+            if response.is_redirect and "location" in response.headers:
+                current_url = urllib.parse.urljoin(
+                    current_url, response.headers["location"]
+                )
+                continue
+            response.raise_for_status()
+            chunks: list[bytes] = []
+            total_bytes = 0
+            async for chunk in response.aiter_bytes():
+                total_bytes += len(chunk)
+                if total_bytes > _MAX_AUDIO_BYTES:
+                    raise ValueError("Audio file exceeds size limit.")
+                chunks.append(chunk)
+            filename = (
+                pathlib.PurePosixPath(
+                    urllib.parse.urlsplit(current_url).path
+                ).name
+                or "audio.wav"
+            )
+            content_type = (
+                response.headers
+                .get("content-type", "")
+                .split(";", 1)[0]
+                .strip()
+                or "application/octet-stream"
+            )
+            return b"".join(chunks), filename, content_type
+    raise ValueError(f"Too many redirects fetching: {url}")
+
+
 @mcp.tool()
 async def transcribe_audio(
     audio_url: AudioUrl,
@@ -73,20 +141,13 @@ async def transcribe_audio(
 ) -> str:
     """Transcribe an audio file from a URL into text or subtitles."""
     state = mcp.state
-    audio_response = await state.http_client.get(audio_url)
-    audio_response.raise_for_status()
-    filename = pathlib.PurePosixPath(urllib.parse.urlsplit(audio_url).path).name
-    content_type = (
-        audio_response.headers.get("content-type", "").split(";", 1)[0].strip()
+    audio_bytes, filename, content_type = await _fetch_limited_audio(
+        state.http_client, audio_url
     )
     transcription = await state.openai_client.audio.transcriptions.create(
         # The backend serves the one model it loaded and ignores this name.
         model="whisper-1",
-        file=(
-            filename or "audio.wav",
-            audio_response.content,
-            content_type or "application/octet-stream",
-        ),
+        file=(filename, audio_bytes, content_type),
         response_format=response_format,
     )
     return (

@@ -10,6 +10,8 @@ services:
       - "127.0.0.1:7681:7681"
     environment:
       - API_KEY=${SELFHOST_API_KEY:?SELFHOST_API_KEY is required}
+      - WEBUI_USER=${SELFHOST_WEBUI_USER:-admin}
+      - WEBUI_PASSWORD_HASH=${SELFHOST_WEBUI_PASSWORD_HASH:?required}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
     depends_on:

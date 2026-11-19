@@ -4,10 +4,13 @@
 import asyncio
 import base64
 from collections.abc import Mapping
+import ipaddress
 import json
 import pathlib
 import re
+import socket
 from typing import Final
+import urllib.parse
 
 import httpx
 import openai
@@ -16,6 +19,7 @@ import pydantic
 from mcp_image import models
 
 MAX_JOBS: Final[int] = 4
+_MAX_IMAGE_BYTES: Final[int] = 20 * 1024 * 1024
 _JOB_ID_PATTERN: Final[re.Pattern[str]] = re.compile(r"^[0-9a-f]{32}$")
 
 
@@ -145,6 +149,57 @@ def resolve_base_url(
     return f"{scheme}://{raw_host}"
 
 
+def _check_public_host(hostname: str) -> None:
+    """Verify that every resolved IP for hostname is globally routable."""
+    try:
+        addr_info = socket.getaddrinfo(hostname, None, type=socket.SOCK_STREAM)
+    except socket.gaierror as error:
+        raise ValueError(f"Could not resolve host: {hostname}") from error
+    if not addr_info:
+        raise ValueError(f"Could not resolve host: {hostname}")
+    for entry in addr_info:
+        raw_ip = entry[4][0]
+        ip = ipaddress.ip_address(raw_ip.split("%", 1)[0])
+        if not ip.is_global:
+            raise ValueError(f"Refusing non-public IP address: {ip}")
+
+
+async def _validate_public_url(url: str) -> None:
+    """Validate that a URL uses HTTP or HTTPS and points to a public host."""
+    parsed = urllib.parse.urlsplit(url)
+    if parsed.scheme not in {"http", "https"} or not parsed.hostname:
+        raise ValueError(f"Invalid HTTP(S) URL: {url}")
+    await asyncio.to_thread(_check_public_host, parsed.hostname)
+
+
+async def _fetch_limited_image(
+    http_client: httpx.AsyncClient,
+    url: str,
+) -> bytes:
+    """Fetch a public image URL with redirect checks and a byte cap."""
+    current_url = url
+    for _ in range(5):
+        await _validate_public_url(current_url)
+        async with http_client.stream(
+            "GET", current_url, follow_redirects=False
+        ) as response:
+            if response.is_redirect and "location" in response.headers:
+                current_url = urllib.parse.urljoin(
+                    current_url, response.headers["location"]
+                )
+                continue
+            response.raise_for_status()
+            chunks: list[bytes] = []
+            total_bytes = 0
+            async for chunk in response.aiter_bytes():
+                total_bytes += len(chunk)
+                if total_bytes > _MAX_IMAGE_BYTES:
+                    raise ValueError("Image file exceeds size limit.")
+                chunks.append(chunk)
+            return b"".join(chunks)
+    raise ValueError(f"Too many redirects fetching: {url}")
+
+
 async def resolve_input_image(
     state: models.AppState,
     *,
@@ -165,9 +220,7 @@ async def resolve_input_image(
         return await asyncio.to_thread(source_path.read_bytes)
 
     if image_url:
-        response = await state.http_client.get(image_url)
-        response.raise_for_status()
-        return response.content
+        return await _fetch_limited_image(state.http_client, image_url)
 
     raise ValueError("Either job_id or image_url must be provided.")
 
