@@ -84,6 +84,7 @@ WaitSeconds = Annotated[
     float,
     pydantic.Field(
         ge=0.0,
+        le=30.0,
         description="Maximum seconds to wait for job completion.",
     ),
 ]
