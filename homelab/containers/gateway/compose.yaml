@@ -19,6 +19,9 @@ services:
       llama-embedding-server:
         condition: service_started
         required: false
+      llama-speech-server:
+        condition: service_started
+        required: false
       whisper-server:
         condition: service_started
         required: false

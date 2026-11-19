@@ -38,6 +38,12 @@
 		reverse_proxy llama-embedding-server:9931
 	}
 
+	handle /v1/audio/speech {
+		import allow-api-cors
+		import protect
+		reverse_proxy llama-speech-server:9931
+	}
+
 	handle /v1/audio/* {
 		import allow-api-cors
 		import protect
@@ -72,6 +78,11 @@
 	handle /images/* {
 		import allow-mcp-cors
 		reverse_proxy mcp-image:8000
+	}
+
+	handle /audio/* {
+		import allow-mcp-cors
+		reverse_proxy mcp-audio:8000
 	}
 
 	handle {

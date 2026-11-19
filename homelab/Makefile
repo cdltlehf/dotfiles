@@ -27,6 +27,7 @@ endif
 
 responses_files  := $(wildcard $(SELFHOST_RESPONSES_DIR)/*)
 embeddings_files := $(wildcard $(XDG_DATA_HOME)/models/embeddings/*)
+speech_files     := $(wildcard $(XDG_DATA_HOME)/models/speech/*)
 audio_file := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/audio/*)))
 image_file := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/images/*)))
 
@@ -43,6 +44,14 @@ endif
 
 ifneq ($(strip $(embeddings_files)),)
   detected_profiles := $(detected_profiles),embeddings
+endif
+
+ifneq ($(strip $(speech_files)),)
+  detected_profiles := $(detected_profiles),speech
+  ifeq ($(strip $(SELFHOST_SPEECH_MODEL)),)
+    SELFHOST_SPEECH_MODEL := $(patsubst %.gguf,%,$(notdir $(firstword $(speech_files))))
+  endif
+  compose_env += SELFHOST_SPEECH_MODEL="$(SELFHOST_SPEECH_MODEL)"
 endif
 
 ifneq ($(audio_file),)

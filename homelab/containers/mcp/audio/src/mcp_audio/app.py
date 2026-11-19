@@ -1,26 +1,31 @@
 # SPDX-License-Identifier: MIT
-"""Provides the audio transcription MCP server."""
+"""Provides the audio transcription and speech synthesis MCP server."""
 
 import argparse
 import asyncio
-from collections.abc import AsyncGenerator, Sequence
+from collections.abc import AsyncGenerator, Mapping, Sequence
 import contextlib
 import dataclasses
 import ipaddress
 import logging
 import os
 import pathlib
+import re
 import socket
 from typing import Annotated, Final, Literal
 import urllib.parse
+import uuid
 
 import httpx
 from mcp.server import mcpserver
 import openai
 import pydantic
+from starlette import requests
+from starlette import responses
 
 logger = logging.getLogger(__name__)
 _MAX_AUDIO_BYTES: Final[int] = 20 * 1024 * 1024
+_JOB_ID_PATTERN: Final[re.Pattern[str]] = re.compile(r"^[0-9a-f]{32}$")
 
 AudioResponseFormat = Annotated[
     Literal["json", "text", "srt", "vtt"],
@@ -30,14 +35,29 @@ AudioUrl = Annotated[
     str,
     pydantic.Field(description="HTTP or HTTPS URL of the source audio file."),
 ]
+SpeechText = Annotated[
+    str,
+    pydantic.Field(description="Text to synthesize into speech audio."),
+]
+
+
+class SpeechResult(pydantic.BaseModel):
+    """Represents a synthesized speech audio file and its URL."""
+
+    audio_id: str
+    audio_url: str
 
 
 @dataclasses.dataclass
 class AppState:
-    """Holds app-scoped HTTP and OpenAI clients."""
+    """Holds app-scoped HTTP and OpenAI clients and configuration."""
 
     openai_client: openai.AsyncClient
     http_client: httpx.AsyncClient
+    allowed_hosts: frozenset[str]
+    public_url: str
+    audio_dir: pathlib.Path
+    speech_model: str
 
 
 class AppServer(mcpserver.MCPServer[AppState]):
@@ -58,7 +78,27 @@ async def lifespan(
         timeout=1800.0,
     )
     http_client = httpx.AsyncClient(timeout=1800.0)
-    state = AppState(openai_client=openai_client, http_client=http_client)
+    public_url = os.environ.get("PUBLIC_URL", "").strip().rstrip("/")
+    allowed_hosts = {"localhost", "127.0.0.1"}
+    if public_url:
+        parsed_host = urllib.parse.urlsplit(public_url).hostname
+        if parsed_host:
+            allowed_hosts.add(parsed_host.lower())
+    for host in os.environ.get("ALLOWED_HOSTS", "").split(","):
+        stripped = host.strip().lower()
+        if stripped:
+            allowed_hosts.add(stripped)
+    audio_dir = pathlib.Path(os.environ.get("AUDIO_DIR", "/data/audio"))
+    await asyncio.to_thread(audio_dir.mkdir, parents=True, exist_ok=True)
+    speech_model = os.environ.get("SPEECH_MODEL", "default").strip()
+    state = AppState(
+        openai_client=openai_client,
+        http_client=http_client,
+        allowed_hosts=frozenset(allowed_hosts),
+        public_url=public_url,
+        audio_dir=audio_dir,
+        speech_model=speech_model,
+    )
     mcp.state = state
     try:
         yield state
@@ -68,6 +108,33 @@ async def lifespan(
 
 
 mcp = AppServer("local-ai-audio", lifespan=lifespan)
+
+
+def _audio_path(audio_dir: pathlib.Path, audio_id: str) -> pathlib.Path | None:
+    """Return the validated WAV path for an audio ID, or None if invalid."""
+    if not _JOB_ID_PATTERN.fullmatch(audio_id):
+        return None
+    return audio_dir / f"{audio_id}.wav"
+
+
+def _resolve_base_url(
+    headers: Mapping[str, str] | None,
+    allowed_hosts: frozenset[str],
+    base_url: str = "",
+) -> str:
+    """Resolve the effective base URL from config or request headers."""
+    if base_url:
+        return base_url
+    if not headers:
+        return ""
+    raw_host = headers.get("x-forwarded-host") or headers.get("host")
+    if not raw_host:
+        return ""
+    hostname = raw_host.split(":", 1)[0].lower()
+    if hostname not in allowed_hosts:
+        return ""
+    scheme = headers.get("x-forwarded-proto") or "http"
+    return f"{scheme}://{raw_host}"
 
 
 def _check_public_host(hostname: str) -> None:
@@ -152,6 +219,55 @@ async def transcribe_audio(
     )
     return (
         transcription if isinstance(transcription, str) else transcription.text
+    )
+
+
+@mcp.tool()
+async def generate_speech(
+    text: SpeechText,
+    ctx: mcpserver.Context[AppState] | None = None,
+) -> SpeechResult:
+    """Synthesize speech from text and return its WAV audio URL."""
+    state = mcp.state
+    audio_id = uuid.uuid4().hex
+    output_path = _audio_path(state.audio_dir, audio_id)
+    if output_path is None:
+        raise ValueError(f"Invalid audio ID: {audio_id}")
+
+    response = await state.openai_client.audio.speech.create(
+        model=state.speech_model,
+        voice="alloy",
+        input=text,
+        response_format="wav",
+    )
+    await asyncio.to_thread(output_path.write_bytes, response.content)
+    headers = ctx.headers if ctx else None
+    base_url = _resolve_base_url(headers, state.allowed_hosts, state.public_url)
+    return SpeechResult(
+        audio_id=audio_id,
+        audio_url=f"{base_url}/audio/{audio_id}.wav",
+    )
+
+
+@mcp.custom_route("/audio/{filename}", methods=["GET"])
+async def serve_audio(request: requests.Request) -> responses.Response:
+    """Serve a generated speech clip as a WAV response."""
+    await asyncio.sleep(0)
+    filename = str(request.path_params.get("filename", ""))
+    if not filename.endswith(".wav"):
+        return responses.Response(
+            content="Audio not found.",
+            status_code=404,
+            media_type="text/plain",
+        )
+    audio_id = filename.removesuffix(".wav")
+    audio_path = _audio_path(mcp.state.audio_dir, audio_id)
+    if audio_path is not None and audio_path.is_file():
+        return responses.FileResponse(audio_path, media_type="audio/wav")
+    return responses.Response(
+        content="Audio not found.",
+        status_code=404,
+        media_type="text/plain",
     )
 
 
