@@ -4,6 +4,7 @@
 import asyncio
 import base64
 import contextlib
+import io
 import json
 import pathlib
 from typing import Annotated, Final
@@ -12,6 +13,7 @@ import uuid
 import httpx
 from mcp.server import mcpserver
 import openai
+from PIL import Image as PilImage
 import pydantic
 from starlette import requests
 from starlette import responses
@@ -21,6 +23,7 @@ from mcp_server import net
 
 _MAX_JOBS: Final[int] = 4
 _MAX_IMAGE_BYTES: Final[int] = 20 * 1024 * 1024
+_MAX_INLINE_IMAGE_BYTES: Final[int] = 700 * 1024
 
 ImagePrompt = Annotated[
     str,
@@ -294,6 +297,32 @@ def _register_jobs(server: models.AppServer) -> None:
         return models.JobStatus(job_id=new_job_id, status=job.status)
 
 
+def _encode_inline_image(image_path: pathlib.Path) -> mcpserver.Image:
+    raw_bytes = image_path.read_bytes()
+    if len(raw_bytes) <= _MAX_INLINE_IMAGE_BYTES:
+        return mcpserver.Image(data=raw_bytes, format="png")
+
+    with PilImage.open(io.BytesIO(raw_bytes)) as img:
+        rgb = img.convert("RGB")
+        for scale in (1.0, 0.75, 0.5, 0.35):
+            candidate = rgb
+            if scale < 1.0:
+                size = (
+                    max(1, int(rgb.width * scale)),
+                    max(1, int(rgb.height * scale)),
+                )
+                candidate = rgb.resize(size, PilImage.Resampling.LANCZOS)
+            for quality in (85, 70, 55):
+                buf = io.BytesIO()
+                candidate.save(
+                    buf, format="JPEG", quality=quality, optimize=True
+                )
+                encoded = buf.getvalue()
+                if len(encoded) <= _MAX_INLINE_IMAGE_BYTES:
+                    return mcpserver.Image(data=encoded, format="jpeg")
+    return mcpserver.Image(data=encoded, format="jpeg")
+
+
 def _register_retrieval(server: models.AppServer) -> None:
     @server.tool()
     async def get_image_url(
@@ -357,7 +386,7 @@ def _register_retrieval(server: models.AppServer) -> None:
                 status=models.JobState.FAILED,
                 error=f"Job {job_id} not found.",
             )
-        return mcpserver.Image(path=image_path)
+        return await asyncio.to_thread(_encode_inline_image, image_path)
 
 
 def _register_routes(server: models.AppServer) -> None:
