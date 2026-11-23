@@ -85,6 +85,15 @@ class CurrentTimeResult(pydantic.BaseModel):
     weekday: str
 
 
+class SearchResultItem(pydantic.BaseModel):
+    """Represents a single web search result."""
+
+    title: str
+    url: str
+    snippet: str
+    engine: str | None = None
+
+
 @dataclasses.dataclass
 class AppState:
     """Holds app-scoped clients, configuration, and active jobs."""
@@ -94,6 +103,7 @@ class AppState:
     http_client: httpx.AsyncClient
     allowed_hosts: frozenset[str]
     public_url: str
+    searxng_base_url: str
     image_dir: pathlib.Path
     audio_dir: pathlib.Path
     speech_model: str

@@ -9,7 +9,7 @@ services:
     profiles:
       - a2a
     environment:
-      - PUBLIC_URL=${SELFHOST_A2A_PUBLIC_URL:-http://localhost:9999}
+      - PUBLIC_URL=${SELFHOST_A2A_PUBLIC_URL:-http://localhost:18002}
       - "OPENAI_API_KEY=${SELFHOST_A2A_LLM_API_KEY:-\
         ${SELFHOST_API_KEY:?SELFHOST_API_KEY is required}}"
       - OPENAI_API_BASE=${SELFHOST_A2A_LLM_BASE_URL:-http://gateway:8000/v1}

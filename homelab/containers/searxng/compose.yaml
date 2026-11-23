@@ -1,0 +1,9 @@
+services:
+  searxng:
+    image: docker.io/searxng/searxng:latest
+    container_name: searxng
+    restart: unless-stopped
+    environment:
+      - SEARXNG_SECRET=${SELFHOST_API_KEY:?SELFHOST_API_KEY is required}
+    volumes:
+      - ./settings.yml:/etc/searxng/settings.yml:ro

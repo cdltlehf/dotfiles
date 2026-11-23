@@ -100,3 +100,7 @@
 		reverse_proxy a2a:8000
 	}
 }
+
+:8080 {
+	reverse_proxy searxng:8080
+}

@@ -16,6 +16,7 @@ services:
       - MCP_ENABLE_AUDIO=${SELFHOST_AUDIO_MODEL:+1}
       - MCP_ENABLE_SPEECH=${SELFHOST_SPEECH_MODEL:+1}
       - IMAGE_BASE_URL=http://sd-server:1234/v1
+      - SEARXNG_BASE_URL=http://searxng:8080
       - OPENAI_BASE_URL=http://gateway:8000/v1
       - OPENAI_API_KEY=${SELFHOST_API_KEY:?SELFHOST_API_KEY is required}
       - IMAGE_DEFAULT_POSITIVE_PROMPT=${SELFHOST_MCP_IMAGE_POSITIVE_PROMPT:-}
@@ -33,5 +34,8 @@ services:
         condition: service_started
         required: false
       llama-speech-server:
+        condition: service_started
+        required: false
+      searxng:
         condition: service_started
         required: false

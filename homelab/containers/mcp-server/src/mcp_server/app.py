@@ -64,6 +64,10 @@ async def lifespan(
         http_client=http_client,
         allowed_hosts=frozenset(allowed_hosts),
         public_url=public_url,
+        searxng_base_url=os.environ
+        .get("SEARXNG_BASE_URL", "http://searxng:8080")
+        .strip()
+        .rstrip("/"),
         image_dir=image_dir,
         audio_dir=audio_dir,
         speech_model=os.environ.get("SPEECH_MODEL", "default").strip(),

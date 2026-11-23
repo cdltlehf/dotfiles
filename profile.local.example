@@ -21,7 +21,7 @@ export SELFHOST_API_KEY="your-secret-api-key"
 # export SELFHOST_MCP_IMAGE_NEGATIVE_PROMPT=""
 
 # a2a (homelab/containers/a2a/compose.yaml); agents are served at /a2a/<agent>
-# export SELFHOST_A2A_PUBLIC_URL="http://localhost:9999"
+# export SELFHOST_A2A_PUBLIC_URL="http://localhost:18002"
 # export SELFHOST_A2A_LLM_API_KEY=""  # default: SELFHOST_API_KEY
 # export SELFHOST_A2A_LLM_MODEL=""  # default: SELFHOST_RESPONSES_MODEL
 # export SELFHOST_A2A_LLM_BASE_URL="http://gateway:8000/v1"
@@ -32,9 +32,9 @@ export SELFHOST_API_KEY="your-secret-api-key"
 # ==============================================================================
 
 # Host agents (claude, agy, pi) connecting to mcp-server
-export AGENT_MCP_URL="${SELFHOST_MCP_PUBLIC_URL:-http://localhost:8001}/mcp"
+export AGENT_MCP_URL="${SELFHOST_MCP_PUBLIC_URL:-http://localhost:18001}/mcp"
 export AGENT_MCP_API_KEY="${SELFHOST_API_KEY}"
 
 # pi (local LLM client): pi's built-in llama.cpp provider reads these names.
-export LLAMA_BASE_URL="http://localhost:8000"
+export LLAMA_BASE_URL="http://localhost:18000"
 export LLAMA_API_KEY="${SELFHOST_API_KEY}"

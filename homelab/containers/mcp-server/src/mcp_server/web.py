@@ -41,6 +41,24 @@ FetchStartIndex = Annotated[
         description="Character offset to start reading from.",
     ),
 ]
+SearchQuery = Annotated[
+    str,
+    pydantic.Field(description="Search query string."),
+]
+SearchMaxResults = Annotated[
+    int,
+    pydantic.Field(
+        ge=1,
+        le=20,
+        description="Maximum number of search results to return.",
+    ),
+]
+SearchLanguage = Annotated[
+    str,
+    pydantic.Field(
+        description="Language code for search results (e.g., 'all', 'en', 'ko')."
+    ),
+]
 
 
 def _html_to_markdown(html: str) -> str:
@@ -98,3 +116,31 @@ def register(server: models.AppServer) -> None:
                 f"Call with start_index={end} to read more.]"
             )
         return snippet
+
+    @server.tool()
+    async def search_web(
+        query: SearchQuery,
+        max_results: SearchMaxResults = 5,
+        language: SearchLanguage = "all",
+    ) -> list[models.SearchResultItem]:
+        """Search the web via SearXNG and return matching titles, URLs, and snippets."""
+        response = await server.state.http_client.get(
+            f"{server.state.searxng_base_url}/search",
+            params={
+                "q": query,
+                "format": "json",
+                "language": language,
+            },
+        )
+        response.raise_for_status()
+        payload = response.json()
+        raw_results = payload.get("results", [])
+        return [
+            models.SearchResultItem(
+                title=str(item.get("title", "")),
+                url=str(item.get("url", "")),
+                snippet=str(item.get("content", "")),
+                engine=item.get("engine"),
+            )
+            for item in raw_results[:max_results]
+        ]
