@@ -15,5 +15,6 @@ services:
       - ${XDG_DATA_HOME:-${HOME}/.local/share}/models/audio:/models:ro
     command: [
       "--model", "/models/${SELFHOST_AUDIO_MODEL:-audio.bin}",
+      "--language", "auto",
       "--host", "0.0.0.0"
     ]

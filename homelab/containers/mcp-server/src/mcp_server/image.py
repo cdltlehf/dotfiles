@@ -293,28 +293,6 @@ def _register_jobs(server: models.AppServer) -> None:
         task.add_done_callback(state.running_tasks.discard)
         return models.JobStatus(job_id=new_job_id, status=job.status)
 
-    @server.tool()
-    async def start_image_upscale(
-        *,
-        job_id: JobId | None = None,
-        image_url: ImageUrl | None = None,
-        negative_prompt: NegativePrompt = "",
-        strength: EditStrength = 0.55,
-        size: models.ImageSize = "1536x1536",
-    ) -> models.JobStatus:
-        """Start an asynchronous image upscale job."""
-        return await start_image_edit(
-            prompt=(
-                "high resolution, sharp details, intricate textures, "
-                "clear focus"
-            ),
-            job_id=job_id,
-            image_url=image_url,
-            negative_prompt=negative_prompt,
-            strength=strength,
-            size=size,
-        )
-
 
 def _register_retrieval(server: models.AppServer) -> None:
     @server.tool()
