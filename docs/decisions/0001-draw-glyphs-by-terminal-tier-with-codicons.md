@@ -7,7 +7,7 @@ date: 2026-10-21
 
 ## Context and Problem Statement
 
-The shell prompts, tmux, Vim, and `ls` draw status with glyphs.
+The shell prompts, tmux, and Vim draw status with glyphs.
 Some terminals render Nerd Font icons, and others, such as a Linux console or a remote session, render only Unicode or ASCII.
 How do these programs draw glyphs that every terminal can render?
 
@@ -23,6 +23,7 @@ Chosen option: "Three glyph tiers, with Codicons in the Nerd Font tier," because
   Default system terminal fonts commonly cover all of these, but few characters of other blocks.
   Where these characters include no fitting symbol, the tier uses the text of the `ascii` tier.
 * The `nerdfont` tier draws icons from [Codicons](https://github.com/microsoft/vscode-codicons), because the set covers many icons and keeps a minimal design.
+* A glyph takes the place of text and never repeats the text beside it, such as an icon for a file type that the file name already shows, because a repeated glyph adds no information.
 
 ### Consequences
 
