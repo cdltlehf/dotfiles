@@ -1,5 +1,7 @@
 # Reference: https://github.com/lsd-rs/lsd
 
 hyperlink: auto
+icons:
+  when: never
 sorting:
   dir-grouping: first
