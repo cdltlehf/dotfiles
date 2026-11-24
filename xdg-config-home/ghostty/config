@@ -9,7 +9,9 @@ copy-on-select = clipboard
 keybind = shift+space=ignore
 macos-titlebar-style = tabs
 mouse-hide-while-typing = true
-shell-integration-features = no-title
+# The shell prompts emit the OSC 133 marks that tmux also reads, so
+# Ghostty's injected marks would only duplicate them.
+shell-integration = none
 theme = "Modus Vivendi"
 title = ""
 
