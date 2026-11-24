@@ -3,5 +3,7 @@
 hyperlink: auto
 icons:
   when: never
+indicators: true
 sorting:
   dir-grouping: first
+symlink-arrow: "->"
