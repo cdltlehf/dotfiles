@@ -37,9 +37,25 @@ __prompt_pretty_path() {
   fi
 }
 
+__prompt_report_cwd() {
+  local LC_ALL=C url_path="" char hex i
+  for ((i = 0; i < ${#PWD}; i++)); do
+    char="${PWD:i:1}"
+    case "${char}" in
+      [-/._~a-zA-Z0-9]) url_path+="${char}" ;;
+      *)
+        printf -v hex '%%%02X' "'${char}"
+        url_path+="${hex}"
+        ;;
+    esac
+  done
+  printf $'\e]7;file://%s%s\a' "${HOSTNAME}" "${url_path}"
+}
+
 __prompt_command() {
   local exit_code=$?
   printf $'\e]133;D;%s\a' "${exit_code}"
+  __prompt_report_cwd
   local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
   local sep="\[\e[90m\] . \[\e[0m\]"
   local err_icon="!"

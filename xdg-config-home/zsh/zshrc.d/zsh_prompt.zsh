@@ -70,9 +70,25 @@ __prompt_char() {
   print -n " "
 }
 
+__prompt_report_cwd() {
+  local LC_ALL=C url_path="" char hex i
+  for ((i = 1; i <= ${#PWD}; i++)); do
+    char="${PWD[i]}"
+    case "${char}" in
+    [-/._~a-zA-Z0-9]) url_path+="${char}" ;;
+    *)
+      printf -v hex '%%%02X' "'${char}"
+      url_path+="${hex}"
+      ;;
+    esac
+  done
+  print -n $'\e]7;file://'"${HOST}${url_path}"$'\a'
+}
+
 precmd() {
   local exit_code=$?
   print -n $'\e]133;D;'"${exit_code}"$'\a'
+  __prompt_report_cwd
   local glyphs="${LC_TERMINAL_GLYPHS:-ascii}"
   local sep="%F{8} . %f"
   local err_icon="!"
