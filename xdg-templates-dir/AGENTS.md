@@ -37,6 +37,8 @@ The key words in this document are to be interpreted as described in [BCP
         (WAI-ARIA)][wai-aria] when native semantic elements are insufficient.
     *   Interfaces MUST conform to [W3C Web Content Accessibility Guidelines
         (WCAG) 2.2][wcag-2.2] Level AA and SHOULD conform to Level AAA.
+    *   Colors SHOULD be represented and manipulated in a perceptually uniform
+        color space, such as Oklab or Oklch.
 *   Version numbers and dependency constraints SHOULD adhere to [Semantic
     Versioning][semver].
 
