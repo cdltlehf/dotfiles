@@ -4,7 +4,7 @@
 import asyncio
 import datetime as dt
 import re
-from typing import Annotated, Final
+from typing import Annotated, Final, Literal
 import zoneinfo
 
 import bs4
@@ -57,6 +57,21 @@ SearchLanguage = Annotated[
     str,
     pydantic.Field(
         description="Language code for search results (e.g., 'all', 'en', 'ko')."
+    ),
+]
+SearchTimeRange = Annotated[
+    Literal["day", "week", "month", "year"],
+    pydantic.Field(
+        description="Optional recency filter ('day', 'week', 'month', 'year')."
+    ),
+]
+SearchCategories = Annotated[
+    str,
+    pydantic.Field(
+        description=(
+            "Optional comma-separated SearXNG categories "
+            "(e.g., 'general', 'news', 'it', 'science')."
+        )
     ),
 ]
 
@@ -122,15 +137,22 @@ def register(server: models.AppServer) -> None:
         query: SearchQuery,
         max_results: SearchMaxResults = 5,
         language: SearchLanguage = "all",
+        time_range: SearchTimeRange | None = None,
+        categories: SearchCategories | None = None,
     ) -> list[models.SearchResultItem]:
         """Search the web via SearXNG and return matching titles, URLs, and snippets."""
+        params: dict[str, str] = {
+            "q": query,
+            "format": "json",
+            "language": language,
+        }
+        if time_range is not None:
+            params["time_range"] = time_range
+        if categories is not None:
+            params["categories"] = categories
         response = await server.state.http_client.get(
             f"{server.state.searxng_base_url}/search",
-            params={
-                "q": query,
-                "format": "json",
-                "language": language,
-            },
+            params=params,
         )
         response.raise_for_status()
         payload = response.json()

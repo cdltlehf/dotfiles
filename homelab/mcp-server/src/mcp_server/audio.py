@@ -21,6 +21,12 @@ AudioUrl = Annotated[
     str,
     pydantic.Field(description="HTTP or HTTPS URL of the source audio file."),
 ]
+AudioLanguage = Annotated[
+    str,
+    pydantic.Field(
+        description="Optional ISO-639-1 language code (e.g., 'ko', 'en')."
+    ),
+]
 SpeechText = Annotated[
     str,
     pydantic.Field(description="Text to synthesize into speech audio."),
@@ -32,6 +38,7 @@ def _register_transcribe(server: models.AppServer) -> None:
     async def transcribe_audio(
         audio_url: AudioUrl,
         response_format: models.AudioResponseFormat = "json",
+        language: AudioLanguage | None = None,
     ) -> str:
         """Transcribe an audio file from a URL into text or subtitles."""
         state = server.state
@@ -42,6 +49,9 @@ def _register_transcribe(server: models.AppServer) -> None:
             pathlib.PurePosixPath(urllib.parse.urlsplit(final_url).path).name
             or "audio.wav"
         )
+        optional_args: dict[str, str] = {}
+        if language is not None:
+            optional_args["language"] = language
         transcription = await state.openai_client.audio.transcriptions.create(
             # The backend serves the one model it loaded and ignores this name.
             model="whisper-1",
@@ -51,6 +61,7 @@ def _register_transcribe(server: models.AppServer) -> None:
                 content_type or "application/octet-stream",
             ),
             response_format=response_format,
+            **optional_args,
         )
         return (
             transcription

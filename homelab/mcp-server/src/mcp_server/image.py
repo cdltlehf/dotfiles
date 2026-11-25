@@ -71,6 +71,13 @@ WaitSeconds = Annotated[
         description="Maximum seconds to wait for job completion.",
     ),
 ]
+Seed = Annotated[
+    int,
+    pydantic.Field(
+        ge=0,
+        description="Optional random seed for reproducible generation.",
+    ),
+]
 
 
 def _create_job(
@@ -100,6 +107,7 @@ def _format_prompt(
     default_positive: str,
     default_negative: str,
     strength: float | None = None,
+    seed: int | None = None,
 ) -> str:
     def combine(user_val: str, default_val: str) -> str:
         stripped = user_val.strip()
@@ -114,6 +122,8 @@ def _format_prompt(
         extra["negative_prompt"] = neg
     if strength is not None:
         extra["strength"] = strength
+    if seed is not None:
+        extra["seed"] = seed
     if extra:
         return (
             f"{pos} <sd_cpp_extra_args>{json.dumps(extra)}</sd_cpp_extra_args>"
@@ -241,6 +251,7 @@ def _register_jobs(server: models.AppServer) -> None:
         *,
         negative_prompt: NegativePrompt = "",
         size: models.ImageSize = "1024x1024",
+        seed: Seed | None = None,
     ) -> models.JobStatus:
         """Start an asynchronous image generation job."""
         state = server.state
@@ -252,6 +263,7 @@ def _register_jobs(server: models.AppServer) -> None:
             negative_prompt=negative_prompt,
             default_positive=state.default_positive_prompt,
             default_negative=state.default_negative_prompt,
+            seed=seed,
         )
         task = asyncio.create_task(_run_generation(job, state, formatted, size))
         state.running_tasks.add(task)
