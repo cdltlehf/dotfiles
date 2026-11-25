@@ -1,10 +1,10 @@
 # Reference: https://compose-spec.io/
 
 include:
-  - containers/gateway/compose.yaml
-  - containers/llama-server/compose.yaml
-  - containers/whisper-server/compose.yaml
-  - containers/sd-server/compose.yaml
-  - containers/mcp-server/compose.yaml
-  - containers/searxng/compose.yaml
-  - containers/a2a/compose.yaml
+  - gateway/compose.yaml
+  - llama-server/compose.yaml
+  - whisper-server/compose.yaml
+  - sd-server/compose.yaml
+  - mcp-server/compose.yaml
+  - searxng/compose.yaml
+  - a2a/compose.yaml

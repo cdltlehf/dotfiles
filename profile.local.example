@@ -1,7 +1,7 @@
 # shellcheck shell=sh
 
 # ==============================================================================
-# Providers (homelab/containers/*/compose.yaml)
+# Providers (homelab/*/compose.yaml)
 # ==============================================================================
 
 # Shared
@@ -14,13 +14,13 @@ export SELFHOST_API_KEY="your-secret-api-key"
 # export SELFHOST_SPEECH_MODEL=""
 # export SELFHOST_IMAGE_MODEL=""
 
-# mcp-server (homelab/containers/mcp-server/compose.yaml)
+# mcp-server (homelab/mcp-server/compose.yaml)
 # export SELFHOST_MCP_PUBLIC_URL=""  # default: each request's host
 # export SELFHOST_MCP_ALLOWED_HOSTS=""
 # export SELFHOST_MCP_IMAGE_POSITIVE_PROMPT=""
 # export SELFHOST_MCP_IMAGE_NEGATIVE_PROMPT=""
 
-# a2a (homelab/containers/a2a/compose.yaml); agents are served at /a2a/<agent>
+# a2a (homelab/a2a/compose.yaml); agents are served at /a2a/<agent>
 # export SELFHOST_A2A_PUBLIC_URL="http://localhost:18002"
 # export SELFHOST_A2A_LLM_API_KEY=""  # default: SELFHOST_API_KEY
 # export SELFHOST_A2A_LLM_MODEL=""  # default: SELFHOST_RESPONSES_MODEL
