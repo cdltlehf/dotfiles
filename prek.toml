@@ -52,7 +52,7 @@ types_or = ["shell", "bats"]
 [[repos]]
 hooks = [{ id = "ruff-check", args = ["--fix"] }, { id = "ruff-format" }]
 repo = "https://github.com/astral-sh/ruff-pre-commit"
-rev = "v0.17.5"
+rev = "v0.17.6"
 
 [[repos]]
 hooks = [{ id = "stylua-github" }]
@@ -67,7 +67,7 @@ rev = "v1.38.0"
 [[repos]]
 hooks = [{ id = "markdownlint-cli2", args = ["--fix"] }]
 repo = "https://github.com/DavidAnson/markdownlint-cli2"
-rev = "v0.24.1"
+rev = "v0.24.2"
 
 [[repos]]
 repo = "local"
@@ -97,10 +97,10 @@ types = ["toml"]
 
 [[repos]]
 repo = "https://github.com/biomejs/pre-commit"
-rev = "v2.6.7"
+rev = "v2.6.8"
 
 [[repos.hooks]]
-additional_dependencies = ["@biomejs/biome@2.6.4"]
+additional_dependencies = ["@biomejs/biome@2.6.8"]
 id = "biome-format"
 types_or = ["javascript", "json", "jsx", "ts", "tsx"]
 
@@ -117,11 +117,11 @@ hooks = [
   ] },
 ]
 repo = "https://github.com/commitizen-tools/commitizen"
-rev = "v4.19.3"
+rev = "v4.20.1"
 
 [[repos]]
 repo = "https://github.com/vale-cli/vale"
-rev = "v3.27.0"
+rev = "v3.28.1"
 
 [[repos.hooks]]
 args = ["--output=line"]
