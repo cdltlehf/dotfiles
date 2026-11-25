@@ -16,7 +16,6 @@ services:
       - "ADK_HISTORY_TOKEN_LIMIT=${SELFHOST_A2A_HISTORY_TOKEN_LIMIT:-16384}"
     volumes:
       - ./agents:/app/agents-src:ro
-      - ./plugins.py:/app/plugins.py:ro
     command:
       - "--default_llm_model"
       # openai/ is LiteLLM's prefix for any OpenAI-compatible API, which is
@@ -24,4 +23,6 @@ services:
       - "openai/${SELFHOST_A2A_LLM_MODEL:-${SELFHOST_RESPONSES_MODEL:-default}}"
       - "--extra_plugins"
       - "plugins.context_filter"
+      - "--extra_plugins"
+      - "plugins.media_parts"
       - "/app/agents"

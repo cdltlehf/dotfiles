@@ -330,7 +330,7 @@ def _register_retrieval(server: models.AppServer) -> None:
         wait_seconds: WaitSeconds = 0.0,
         ctx: mcpserver.Context[models.AppState] | None = None,
     ) -> models.JobStatus:
-        """Return an image job's status and, once finished, its URL."""
+        """Return an image job's status and full-resolution PNG URL."""
         state = server.state
         headers = ctx.headers if ctx else None
         base_url = net.resolve_base_url(
@@ -369,7 +369,7 @@ def _register_retrieval(server: models.AppServer) -> None:
         job_id: JobId,
         wait_seconds: WaitSeconds = 0.0,
     ) -> mcpserver.Image | models.JobStatus:
-        """Return a finished image job's image, or its status if unfinished."""
+        """Return a compressed preview image for visual inspection, or job status."""
         state = server.state
         if job := state.jobs.get(job_id):
             await _settle(job, wait_seconds)
