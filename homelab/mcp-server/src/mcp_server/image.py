@@ -168,10 +168,14 @@ async def _run_generation(
             _decode_image_response(response),
         )
         job.status = models.JobState.COMPLETED
-    except (OSError, openai.OpenAIError, ValueError) as error:
+    except (OSError, httpx.HTTPError, openai.OpenAIError, ValueError) as error:
         job.status = models.JobState.FAILED
         job.error = str(error)
     finally:
+        if job.status != models.JobState.COMPLETED:
+            job.status = models.JobState.FAILED
+            if not job.error:
+                job.error = "Job failed unexpectedly."
         job.event.set()
 
 
@@ -232,6 +236,10 @@ async def _run_edit(
         job.status = models.JobState.FAILED
         job.error = str(error)
     finally:
+        if job.status != models.JobState.COMPLETED:
+            job.status = models.JobState.FAILED
+            if not job.error:
+                job.error = "Job failed unexpectedly."
         job.event.set()
 
 

@@ -8,14 +8,14 @@ services:
     restart: unless-stopped
     environment:
       - ALLOWED_HOSTS=gateway,mcp-server,${SELFHOST_MCP_ALLOWED_HOSTS:-}
-      - PUBLIC_URL=${SELFHOST_MCP_PUBLIC_URL:-}
+      - PUBLIC_URL=${SELFHOST_MCP_PUBLIC_URL:-http://localhost:18001}
       - IMAGE_DIR=/data/images
       - AUDIO_DIR=/data/audio
       - SPEECH_MODEL=${SELFHOST_SPEECH_MODEL:-}
       - MCP_ENABLE_IMAGE=${SELFHOST_IMAGE_MODEL:+1}
       - MCP_ENABLE_AUDIO=${SELFHOST_AUDIO_MODEL:+1}
       - MCP_ENABLE_SPEECH=${SELFHOST_SPEECH_MODEL:+1}
-      - IMAGE_BASE_URL=http://sd-server:1234/v1
+      - IMAGE_BASE_URL=http://gateway:8000/v1
       - SEARXNG_BASE_URL=http://searxng:8080
       - OPENAI_BASE_URL=http://gateway:8000/v1
       - OPENAI_API_KEY=${SELFHOST_API_KEY:?SELFHOST_API_KEY is required}

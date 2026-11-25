@@ -31,6 +31,10 @@ SpeechText = Annotated[
     str,
     pydantic.Field(description="Text to synthesize into speech audio."),
 ]
+SpeechVoice = Annotated[
+    str,
+    pydantic.Field(description="Optional voice identifier for speech output."),
+]
 
 
 def _register_transcribe(server: models.AppServer) -> None:
@@ -53,8 +57,7 @@ def _register_transcribe(server: models.AppServer) -> None:
         if language is not None:
             optional_args["language"] = language
         transcription = await state.openai_client.audio.transcriptions.create(
-            # The backend serves the one model it loaded and ignores this name.
-            model="whisper-1",
+            model=state.transcribe_model,
             file=(
                 filename,
                 audio_bytes,
@@ -74,6 +77,7 @@ def _register_speech(server: models.AppServer) -> None:
     @server.tool()
     async def generate_speech(
         text: SpeechText,
+        voice: SpeechVoice | None = None,
         ctx: mcpserver.Context[models.AppState] | None = None,
     ) -> models.SpeechResult:
         """Synthesize speech from text and return its WAV audio URL."""
@@ -85,7 +89,7 @@ def _register_speech(server: models.AppServer) -> None:
 
         response = await state.openai_client.audio.speech.create(
             model=state.speech_model,
-            voice="alloy",
+            voice=voice or "default",
             input=text,
             response_format="wav",
         )

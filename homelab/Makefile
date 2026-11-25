@@ -28,8 +28,8 @@ endif
 responses_files  := $(wildcard $(SELFHOST_RESPONSES_DIR)/*)
 embeddings_files := $(wildcard $(XDG_DATA_HOME)/models/embeddings/*)
 speech_files     := $(wildcard $(XDG_DATA_HOME)/models/speech/*)
-audio_file := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/audio/*)))
-image_file := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/images/*)))
+audio_file := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/audio/*.bin)))
+image_file := $(notdir $(firstword $(wildcard $(XDG_DATA_HOME)/models/images/*.gguf)))
 
 detected_profiles :=
 compose_env :=

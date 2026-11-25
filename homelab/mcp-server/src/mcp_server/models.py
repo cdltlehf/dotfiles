@@ -107,6 +107,7 @@ class AppState:
     image_dir: pathlib.Path
     audio_dir: pathlib.Path
     speech_model: str
+    transcribe_model: str
     default_positive_prompt: str
     default_negative_prompt: str
     jobs: dict[str, ImageJob] = dataclasses.field(

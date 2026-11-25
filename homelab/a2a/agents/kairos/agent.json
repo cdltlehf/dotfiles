@@ -13,7 +13,7 @@
     "streaming": true
   },
   "defaultInputModes": ["text/plain", "image/png", "image/jpeg", "image/gif"],
-  "defaultOutputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain", "image/png", "audio/wav"],
   "skills": [
     {
       "id": "kairos",

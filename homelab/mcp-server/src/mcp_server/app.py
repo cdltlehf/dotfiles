@@ -39,8 +39,8 @@ async def lifespan(
         timeout=1800.0,
     )
     image_client = openai.AsyncClient(
-        base_url=os.environ.get("IMAGE_BASE_URL", "http://sd-server:1234/v1"),
-        api_key="unused",
+        base_url=os.environ.get("IMAGE_BASE_URL", "http://gateway:8000/v1"),
+        api_key=os.environ.get("IMAGE_API_KEY", os.environ["OPENAI_API_KEY"]),
         timeout=1800.0,
     )
     http_client = httpx.AsyncClient(timeout=1800.0)
@@ -71,6 +71,9 @@ async def lifespan(
         image_dir=image_dir,
         audio_dir=audio_dir,
         speech_model=os.environ.get("SPEECH_MODEL", "default").strip(),
+        transcribe_model=(
+            os.environ.get("TRANSCRIBE_MODEL", "default").strip() or "default"
+        ),
         default_positive_prompt=os.environ.get(
             "IMAGE_DEFAULT_POSITIVE_PROMPT", ""
         ).strip(),

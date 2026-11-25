@@ -40,6 +40,12 @@ def _estimate_content_tokens(content: types.Content) -> int:
     return (total_chars // _CHARS_PER_TOKEN) + media_tokens + 4
 
 
+def _is_user_prompt(content: types.Content) -> bool:
+    return content.role == "user" and not any(
+        part.function_response is not None for part in (content.parts or ())
+    )
+
+
 def trim_context_by_tokens(
     contents: list[types.Content],
 ) -> list[types.Content]:
@@ -60,7 +66,7 @@ def trim_context_by_tokens(
         used_tokens += cost
 
     kept.reverse()
-    while len(kept) > 1 and kept[0].role != "user":
+    while len(kept) > 1 and not _is_user_prompt(kept[0]):
         kept.pop(0)
     return kept
 
@@ -159,6 +165,14 @@ class MediaPartPlugin(base_plugin.BasePlugin):
                 )
         event.content.parts = parts
         return event
+
+    async def after_run_callback(
+        self,
+        *,
+        invocation_context: invocation_context.InvocationContext,
+    ) -> None:
+        """Clear any pending media entries if an invocation exits early."""
+        self._pending.pop(invocation_context.invocation_id, None)
 
 
 media_parts = MediaPartPlugin()
