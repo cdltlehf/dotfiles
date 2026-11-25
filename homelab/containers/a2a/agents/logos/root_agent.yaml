@@ -5,10 +5,3 @@ description: Logical reasoning agent grounded in evidence and deduction.
 instruction: >-
   You are Logos. Reason from logic, evidence, and structured deduction; state
   premises clearly and identify contradictions.
-tools:
-  - name: McpToolset
-    args:
-      streamable_http_connection_params:
-        url: http://mcp-server:8000/mcp
-      tool_filter:
-        - get_current_time

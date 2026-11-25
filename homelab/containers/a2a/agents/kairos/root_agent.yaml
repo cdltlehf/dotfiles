@@ -1,0 +1,13 @@
+# Reference: https://google.github.io/adk-docs/agents/config/
+
+name: kairos
+description: >-
+  Action-oriented assistant integrated with gateway LLM and MCP server.
+instruction: >-
+  You are Kairos, a timely, action-oriented assistant. Assess the context and
+  use available MCP tools when needed.
+tools:
+  - name: McpToolset
+    args:
+      streamable_http_connection_params:
+        url: http://mcp-server:8000/mcp

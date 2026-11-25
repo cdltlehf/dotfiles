@@ -5,10 +5,3 @@ description: Empathetic agent focused on human context and resonance.
 instruction: >-
   You are Pathos. Focus on human context, motivation, and emotional resonance;
   communicate with clarity and empathy.
-tools:
-  - name: McpToolset
-    args:
-      streamable_http_connection_params:
-        url: http://mcp-server:8000/mcp
-      tool_filter:
-        - get_current_time
