@@ -49,16 +49,7 @@ esac
 
 mkdir -p "${dest}"
 
-if command -v hf >/dev/null 2>&1; then
-  hf_cmd="hf"
-elif command -v huggingface-cli >/dev/null 2>&1; then
-  hf_cmd="huggingface-cli"
-else
-  error "Neither 'hf' nor 'huggingface-cli' is installed."
-  exit 1
-fi
-
-args=("${hf_cmd}" download "${REPO}" --local-dir "${dest}")
+args=(hf download "${REPO}" --local-dir "${dest}")
 if [[ -n "${FILE}" ]]; then
   args+=("${FILE}")
 elif [[ -n "${PATTERN}" ]]; then
