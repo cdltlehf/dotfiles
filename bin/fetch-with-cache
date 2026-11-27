@@ -12,6 +12,7 @@ section 4.2.4 allows a disconnected cache to do.
 """
 
 import argparse
+from collections.abc import Sequence
 import logging
 import os
 import pathlib
@@ -45,12 +46,12 @@ def fetch(url: str, *, allow_stale: bool) -> httpx.Response:
         return response
 
 
-def main() -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     """Write the body of the URL to stdout."""
     logging.basicConfig(format="fetch-with-cache: %(levelname)s: %(message)s")
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("url")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     try:
         response = fetch(args.url, allow_stale=False)
     except httpx.TransportError:
@@ -62,4 +63,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())
