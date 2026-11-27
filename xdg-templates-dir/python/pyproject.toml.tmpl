@@ -33,13 +33,15 @@ ignore = [
   "docstring-tab-indentation",
   "indentation-with-invalid-multiple",
   "indentation-with-invalid-multiple-comment",
-  "line-too-long",
   "missing-trailing-comma",
   "over-indented",
   "prohibited-trailing-comma",
   "tab-indentation",
   "triple-single-quotes",
   "unnecessary-escaped-quote",
+  # Google 3.2 lets a line run past 80 columns when the formatter cannot
+  # shorten it.
+  "line-too-long",
   # Python 3.14 evaluates annotations lazily (PEP 649).
   "future-required-type-annotation",
   "future-rewritable-type-annotation",
@@ -85,6 +87,10 @@ single-line-exclusions = ["collections.abc", "typing", "typing_extensions"]
   "implicit-namespace-package",
   "magic-value-comparison",
   "private-member-access",
+  # Google 3.8.2.1 needs no docstring on a test module or a test_ method;
+  # pytest test_ functions are the same case. Helpers are left to review.
+  "undocumented-public-function",
+  "undocumented-public-module",
 ]
 
 [tool.ruff.lint.pydocstyle]
