@@ -39,13 +39,15 @@ ignore = [
   "docstring-tab-indentation",
   "indentation-with-invalid-multiple",
   "indentation-with-invalid-multiple-comment",
-  "line-too-long",
   "missing-trailing-comma",
   "over-indented",
   "prohibited-trailing-comma",
   "tab-indentation",
   "triple-single-quotes",
   "unnecessary-escaped-quote",
+  # Google 3.2 lets a line run past 80 columns when the formatter cannot
+  # shorten it.
+  "line-too-long",
   "future-required-type-annotation",
   "future-rewritable-type-annotation",
   "typing-only-first-party-import",
