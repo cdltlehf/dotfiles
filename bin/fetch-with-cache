@@ -1,0 +1,65 @@
+#!/usr/bin/env -S uv run --script
+# SPDX-License-Identifier: MIT
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["hishel[httpx]>=2,<3", "httpx>=0.28,<1"]
+# ///
+"""Fetch a URL through an HTTP cache and write the body to stdout.
+
+The cache follows RFC 9111: it reuses a fresh response and revalidates a
+stale one. When the network fails, it serves the stored response, as RFC 9111
+section 4.2.4 allows a disconnected cache to do.
+"""
+
+import argparse
+import logging
+import os
+import pathlib
+import sys
+
+import hishel
+import hishel.httpx
+import httpx
+
+logger = logging.getLogger(__name__)
+
+
+def cache_path() -> pathlib.Path:
+    """Return the SQLite file that stores the cached responses."""
+    root = os.environ.get("XDG_CACHE_HOME") or pathlib.Path.home() / ".cache"
+    path = pathlib.Path(root) / "fetch-with-cache" / "http.db"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def fetch(url: str, *, allow_stale: bool) -> httpx.Response:
+    """Return the response for url, from the cache when RFC 9111 allows."""
+    storage = hishel.SqliteStorage(database_path=cache_path())
+    # hishel ignores Cache-Control unless rfc carries options.
+    options = hishel.CacheOptions(shared=False, allow_stale=allow_stale)
+    with hishel.httpx.CacheClient(
+        storage=storage, rfc=options, follow_redirects=True
+    ) as client:
+        response = client.get(url)
+        response.read()
+        return response
+
+
+def main() -> int:
+    """Write the body of the URL to stdout."""
+    logging.basicConfig(format="fetch-with-cache: %(levelname)s: %(message)s")
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("url")
+    args = parser.parse_args()
+    try:
+        response = fetch(args.url, allow_stale=False)
+    except httpx.TransportError:
+        logger.warning("network unreachable; serving the cached copy")
+        response = fetch(args.url, allow_stale=True)
+    response.raise_for_status()
+    sys.stdout.buffer.write(response.content)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
