@@ -64,5 +64,9 @@ single-line-exclusions = ["collections.abc", "typing", "typing_extensions"]
   "private-member-access",
 ]
 
+[lint.pycodestyle]
+# Google 3.2 keeps docstrings within 80 columns.
+max-doc-length = 80
+
 [lint.pydocstyle]
 convention = "google"

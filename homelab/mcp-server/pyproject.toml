@@ -80,5 +80,9 @@ force-sort-within-sections = true
 order-by-type = false
 single-line-exclusions = ["collections.abc", "typing", "typing_extensions"]
 
+[tool.ruff.lint.pycodestyle]
+# Google 3.2 keeps docstrings within 80 columns.
+max-doc-length = 80
+
 [tool.ruff.lint.pydocstyle]
 convention = "google"
