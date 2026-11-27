@@ -95,10 +95,10 @@ types = ["toml"]
 
 [[repos]]
 repo = "https://github.com/biomejs/pre-commit"
-rev = "v2.6.8"
+rev = "v2.6.9"
 
 [[repos.hooks]]
-additional_dependencies = ["@biomejs/biome@2.6.8"]
+additional_dependencies = ["@biomejs/biome@2.6.9"]
 id = "biome-format"
 types_or = ["javascript", "json", "jsx", "ts", "tsx"]
 
@@ -119,7 +119,7 @@ rev = "v4.20.1"
 
 [[repos]]
 repo = "https://github.com/vale-cli/vale"
-rev = "v3.28.1"
+rev = "v3.29.0"
 
 [[repos.hooks]]
 args = ["--output=line"]
