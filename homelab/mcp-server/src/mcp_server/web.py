@@ -140,7 +140,7 @@ def register(server: models.AppServer) -> None:
         time_range: SearchTimeRange | None = None,
         categories: SearchCategories | None = None,
     ) -> list[models.SearchResultItem]:
-        """Search the web via SearXNG and return matching titles, URLs, and snippets."""
+        """Search the web via SearXNG for titles, URLs, and snippets."""
         params: dict[str, str] = {
             "q": query,
             "format": "json",

@@ -389,7 +389,10 @@ def _register_retrieval(server: models.AppServer) -> None:
         job_id: JobId,
         wait_seconds: WaitSeconds = 0.0,
     ) -> mcpserver.Image | models.JobStatus:
-        """Return a compressed preview image for visual inspection, or job status."""
+        """Return a compressed preview image, or the job status.
+
+        The preview is meant for visual inspection.
+        """
         state = server.state
         if job := state.jobs.get(job_id):
             await _settle(job, wait_seconds)
