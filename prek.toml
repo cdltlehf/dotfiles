@@ -29,8 +29,6 @@ hooks = [
   { id = "no-commit-to-branch", args = [
     "--branch",
     "main",
-    "--branch",
-    "develop",
   ] },
 ]
 repo = "builtin"
